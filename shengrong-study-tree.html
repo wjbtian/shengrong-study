@@ -3,739 +3,848 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>📚 吴尚融学习知识树 - 语文·数学·英语·奥数</title>
+  <title>🌳 吴尚融学习星球 · 知识宇宙</title>
   <style>
+    /* ═══════════════════════════════════════════
+       COSMIC THEME — CSS Variables
+    ═══════════════════════════════════════════ */
     :root {
-      --bg: #0f1419;
-      --card-bg: #1a2332;
-      --card-border: #2d3a4f;
-      --text: #e8eaed;
-      --text-muted: #8899a6;
-      --red: #e74c3c;
-      --green: #2ecc71;
-      --blue: #3498db;
-      --orange: #e67e22;
-      --purple: #9b59b6;
-      --pink: #e91e8b;
-      --cyan: #00bcd4;
+      --bg:         #050818;
+      --bg2:        #0a0f2e;
+      --glass:      rgba(255,255,255,0.06);
+      --glass2:     rgba(255,255,255,0.04);
+      --border:     rgba(255,255,255,0.10);
+      --border2:    rgba(255,255,255,0.05);
+      --text:       #e8ecf8;
+      --muted:      rgba(232,236,248,0.55);
+      --red:        #ff6b6b;
+      --blue:       #4fc3f7;
+      --green:      #69f0ae;
+      --yellow:     #ffd54f;
+      --purple:     #ce93d8;
+      --orange:     #ffab40;
+      --cyan:       #18ffff;
+      --r-grad: linear-gradient(135deg,#ff6b6b,#c0392b);
+      --b-grad: linear-gradient(135deg,#4fc3f7,#0277bd);
+      --g-grad: linear-gradient(135deg,#69f0ae,#00c853);
+      --y-grad: linear-gradient(135deg,#ffd54f,#ff6f00);
+      --p-grad: linear-gradient(135deg,#ce93d8,#7b1fa2);
+      --o-grad: linear-gradient(135deg,#ffab40,#e64a19);
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.7;
-      padding-bottom: 100px;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Stars Background ── */
+    .stars {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse at 15% 20%, rgba(79,195,247,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 80%, rgba(206,147,216,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(5,8,24,1) 0%, var(--bg) 100%);
+    }
+    .stars::before, .stars::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.8) 0%, transparent 100%),
+        radial-gradient(1px 1px at 60% 70%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 80% 20%, rgba(255,255,255,0.9) 0%, transparent 100%),
+        radial-gradient(1px 1px at 40% 90%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 10% 60%, rgba(255,255,255,0.7) 0%, transparent 100%),
+        radial-gradient(1px 1px at 90% 40%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 30% 80%, rgba(255,255,255,0.8) 0%, transparent 100%),
+        radial-gradient(1px 1px at 70% 10%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 50% 50%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 5% 95%, rgba(255,255,255,0.7) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 95% 65%, rgba(255,255,255,0.8) 0%, transparent 100%),
+        radial-gradient(1px 1px at 25% 45%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 75% 55%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 45% 15%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 65% 85%, rgba(255,255,255,0.7) 0%, transparent 100%);
+    }
+    .stars::after {
+      background-image:
+        radial-gradient(1px 1px at 15% 85%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 85% 5%, rgba(255,255,255,0.7) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 55% 35%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 35% 65%, rgba(255,255,255,0.8) 0%, transparent 100%),
+        radial-gradient(1px 1px at 5% 15%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 98% 90%, rgba(255,255,255,0.6) 0%, transparent 100%);
+      animation: twinkle 4s ease-in-out infinite alternate;
+    }
+    @keyframes twinkle {
+      from { opacity: 0.5; }
+      to   { opacity: 1; }
+    }
+
+    /* Floating planets */
+    .planet {
+      position: fixed; border-radius: 50%; z-index: 0; pointer-events: none;
+    }
+    .planet-1 {
+      width: 120px; height: 120px;
+      top: -30px; right: -20px;
+      background: radial-gradient(circle at 35% 35%, rgba(255,200,100,0.3), rgba(180,80,0,0.2));
+      box-shadow: 0 0 40px rgba(255,160,50,0.2), inset 0 0 30px rgba(0,0,0,0.5);
+    }
+    .planet-2 {
+      width: 60px; height: 60px;
+      bottom: 15%; left: -10px;
+      background: radial-gradient(circle at 35% 35%, rgba(79,195,247,0.4), rgba(2,119,189,0.2));
+      box-shadow: 0 0 30px rgba(79,195,247,0.2);
     }
 
     /* ── Header ── */
     .header {
-      background: linear-gradient(135deg, #1a3a5c 0%, #0d2137 50%, #1a0a3a 100%);
-      padding: 36px 20px 24px;
+      position: relative; z-index: 10;
+      padding: 32px 20px 24px;
       text-align: center;
-      position: relative;
-      overflow: hidden;
     }
-    .header::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 30% 50%, rgba(52,152,219,0.15), transparent 60%),
-                  radial-gradient(ellipse at 70% 50%, rgba(155,89,182,0.15), transparent 60%);
+    .header-badge {
+      display: inline-block;
+      padding: 4px 14px; border-radius: 20px;
+      font-size: 0.72em; letter-spacing: 1px;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      margin-bottom: 10px;
     }
-    .header h1 { font-size: 1.6em; margin-bottom: 6px; position: relative; }
-    .header .subtitle { color: var(--text-muted); font-size: 0.88em; position: relative; }
-    .sync-bar {
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      margin-top: 12px; font-size: 0.75em; color: var(--text-muted);
-      position: relative;
+    .header h1 {
+      font-size: 1.55em; font-weight: 700;
+      background: linear-gradient(135deg, #fff 0%, #a8c8f0 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
     }
-    .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: #f39c12; }
-    .sync-dot.ok { background: var(--green); }
-    .sync-dot.err { background: var(--red); }
-    .sync-time { font-size: 0.7em; }
+    .header .subtitle { color: var(--muted); font-size: 0.82em; }
 
-    /* ── Nav ── */
+    /* Sync status */
+    .sync-row {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      margin-top: 10px; font-size: 0.73em; color: var(--muted);
+    }
+    .sync-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--yellow);
+      transition: background 0.5s;
+    }
+    .sync-dot.ok  { background: var(--green); }
+    .sync-dot.err { background: var(--red); }
+
+    /* ── Nav Tabs ── */
     .nav-tabs {
-      display: flex;
-      background: var(--card-bg);
-      border-bottom: 1px solid var(--card-border);
       position: sticky; top: 0; z-index: 100;
-      overflow-x: auto;
+      display: flex;
+      background: rgba(5,8,24,0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border2);
     }
     .nav-tabs::-webkit-scrollbar { display: none; }
     .tab-btn {
-      flex: 1; min-width: 72px;
-      padding: 12px 4px;
+      flex: 1; min-width: 64px;
+      padding: 13px 4px 11px;
       background: none; border: none;
-      color: var(--text-muted);
-      font-size: 0.76em; font-weight: 500;
-      cursor: pointer;
+      color: var(--muted);
+      font-size: 0.73em; font-weight: 600;
+      cursor: pointer; white-space: nowrap;
+      border-bottom: 2.5px solid transparent;
       transition: all 0.25s;
-      border-bottom: 3px solid transparent;
-      white-space: nowrap;
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
     }
-    .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
-    .tab-btn:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+    .tab-btn .tab-icon { font-size: 1.15em; }
+    .tab-btn.active { color: #fff; border-bottom-color: var(--blue); }
+    .tab-btn:hover { color: #fff; background: rgba(255,255,255,0.03); }
 
     /* ── Container ── */
-    .container { max-width: 960px; margin: 0 auto; padding: 14px 14px; }
-    .section { display: none; }
+    .container { max-width: 960px; margin: 0 auto; padding: 16px 14px 120px; position: relative; z-index: 10; }
+    .section { display: none; animation: fadeIn 0.35s ease; }
     .section.active { display: block; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
 
-    /* ── Cards ── */
+    /* ── Glass Card ── */
     .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 18px 18px 16px;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px 18px 18px;
       margin-bottom: 14px;
-      animation: fadeUp 0.4s ease;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: border-color 0.3s;
     }
-    .card-title { font-size: 1em; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+    .card:hover { border-color: rgba(255,255,255,0.18); }
+
+    /* ── Section Title ── */
+    .card-title {
+      font-size: 0.9em; font-weight: 700;
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
     }
+    .card-title .card-icon { font-size: 1.15em; }
 
-    /* ── Progress ── */
-    .progress-wrap { margin-bottom: 14px; }
-    .progress-wrap:last-child { margin-bottom: 0; }
-    .progress-label { display: flex; justify-content: space-between; font-size: 0.78em; color: var(--text-muted); margin-bottom: 5px; }
-    .progress-bar { height: 8px; background: var(--card-border); border-radius: 8px; overflow: hidden; }
-    .progress-fill { height: 100%; border-radius: 8px; transition: width 0.6s ease; }
-    .fill-chinese { background: linear-gradient(90deg, #e74c3c, #c0392b); }
-    .fill-math    { background: linear-gradient(90deg, #3498db, #2980b9); }
-    .fill-english  { background: linear-gradient(90deg, #2ecc71, #27ae60); }
-    .fill-oly      { background: linear-gradient(90deg, #9b59b6, #8e44ad); }
+    /* ── Progress Bars ── */
+    .prog-row { margin-bottom: 13px; }
+    .prog-row:last-child { margin-bottom: 0; }
+    .prog-label {
+      display: flex; justify-content: space-between;
+      font-size: 0.78em; color: var(--muted); margin-bottom: 7px;
+    }
+    .prog-label span:first-child { display: flex; align-items: center; gap: 6px; }
+    .prog-pct { font-weight: 700; color: #fff; min-width: 36px; text-align: right; }
+    .prog-bar {
+      height: 10px; border-radius: 10px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden; position: relative;
+    }
+    .prog-fill {
+      height: 100%; border-radius: 10px;
+      transition: width 1s cubic-bezier(0.4,0,0.2,1);
+      position: relative; overflow: hidden;
+    }
+    .prog-fill::after {
+      content: '';
+      position: absolute; top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      animation: shimmer 2s infinite;
+    }
+    @keyframes shimmer {
+      from { left: -100%; }
+      to   { left: 100%; }
+    }
+    .prog-fill.red    { background: var(--r-grad); box-shadow: 0 0 12px rgba(255,107,107,0.4); }
+    .prog-fill.blue   { background: var(--b-grad); box-shadow: 0 0 12px rgba(79,195,247,0.4); }
+    .prog-fill.green  { background: var(--g-grad); box-shadow: 0 0 12px rgba(105,240,174,0.4); }
+    .prog-fill.purple { background: var(--p-grad); box-shadow: 0 0 12px rgba(206,147,216,0.4); }
 
-    /* ── Tags ── */
-    .tag { display: inline-block; padding: 2px 9px; border-radius: 6px; font-size: 0.73em; margin: 2px; }
-    .tag-red    { background: rgba(231,76,60,0.15); color: var(--red); }
-    .tag-blue   { background: rgba(52,152,219,0.15); color: var(--blue); }
-    .tag-green  { background: rgba(46,204,113,0.15); color: var(--green); }
-    .tag-orange { background: rgba(230,126,34,0.15); color: var(--orange); }
-    .tag-purple { background: rgba(155,89,182,0.15); color: var(--purple); }
-    .tag-cyan   { background: rgba(0,188,212,0.15); color: var(--cyan); }
-    .tag.done   { background: rgba(46,204,113,0.2); color: var(--green); text-decoration: line-through; opacity: 0.7; }
+    /* ── Subject Chips ── */
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+    .chip {
+      display: inline-block; padding: 3px 10px; border-radius: 8px;
+      font-size: 0.72em; border: 1px solid;
+    }
+    .chip-red    { border-color: rgba(255,107,107,0.3); color: var(--red);    background: rgba(255,107,107,0.07); }
+    .chip-blue   { border-color: rgba(79,195,247,0.3);  color: var(--blue);   background: rgba(79,195,247,0.07); }
+    .chip-green  { border-color: rgba(105,240,174,0.3); color: var(--green);  background: rgba(105,240,174,0.07); }
+    .chip-purple { border-color: rgba(206,147,216,0.3); color: var(--purple); background: rgba(206,147,216,0.07); }
 
-    /* ── Unit Cards (3-col grid) ── */
-    .units-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: 12px; }
-    .unit-card {
-      background: rgba(255,255,255,0.025);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 14px 16px;
-      cursor: pointer;
+    /* ── Quick Nav ── */
+    .quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .quick-btn {
+      padding: 16px 12px; border-radius: 14px;
+      text-align: center; cursor: pointer; font-weight: 600;
+      font-size: 0.82em; border: 1px solid;
       transition: all 0.25s;
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
     }
-    .unit-card:hover { border-color: var(--blue); background: rgba(52,152,219,0.06); transform: translateY(-1px); }
-    .unit-card.done  { border-color: rgba(46,204,113,0.3); background: rgba(46,204,113,0.05); }
-    .unit-num { font-size: 0.72em; color: var(--text-muted); margin-bottom: 4px; }
-    .unit-title { font-size: 0.88em; font-weight: 600; margin-bottom: 6px; }
-    .unit-tags { display: flex; flex-wrap: wrap; gap: 3px; }
-    .unit-check { font-size: 0.7em; color: var(--green); margin-top: 6px; display: none; }
-    .unit-card.done .unit-check { display: block; }
+    .quick-btn:hover { transform: translateY(-2px); filter: brightness(1.15); }
+    .quick-btn .qbig { font-size: 1.5em; }
+    .quick-btn .qsub { font-size: 0.68em; opacity: 0.7; font-weight: 400; }
+    .qb-chinese {
+      background: rgba(255,107,107,0.08); border-color: rgba(255,107,107,0.25); color: var(--red);
+    }
+    .qb-math {
+      background: rgba(79,195,247,0.08); border-color: rgba(79,195,247,0.25); color: var(--blue);
+    }
+    .qb-english {
+      background: rgba(105,240,174,0.08); border-color: rgba(105,240,174,0.25); color: var(--green);
+    }
+    .qb-oly {
+      background: rgba(206,147,216,0.08); border-color: rgba(206,147,216,0.25); color: var(--purple);
+    }
 
-    /* ── Knowledge tree ── */
+    /* ── Unit Cards Grid ── */
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .unit-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .unit-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, rgba(79,195,247,0.5), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .unit-card:hover { border-color: rgba(79,195,247,0.3); background: rgba(79,195,247,0.05); transform: translateY(-2px); }
+    .unit-card:hover::before { opacity: 1; }
+    .unit-card.done  { border-color: rgba(105,240,174,0.25); background: rgba(105,240,174,0.04); }
+    .unit-card.done::before { background: linear-gradient(90deg,transparent,rgba(105,240,174,0.5),transparent); opacity: 1; }
+    .unit-num { font-size: 0.7em; color: var(--muted); margin-bottom: 5px; letter-spacing: 0.5px; }
+    .unit-title { font-size: 0.88em; font-weight: 700; margin-bottom: 8px; }
+    .unit-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+    .unit-tag { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 0.7em; }
+    .unit-tag-red    { background: rgba(255,107,107,0.1);  color: var(--red);    border: 1px solid rgba(255,107,107,0.2); }
+    .unit-tag-blue   { background: rgba(79,195,247,0.1);  color: var(--blue);   border: 1px solid rgba(79,195,247,0.2); }
+    .unit-tag-green  { background: rgba(105,240,174,0.1); color: var(--green);  border: 1px solid rgba(105,240,174,0.2); }
+    .unit-tag-orange { background: rgba(255,171,64,0.1);  color: var(--orange); border: 1px solid rgba(255,171,64,0.2); }
+    .unit-tag-purple { background: rgba(206,147,216,0.1); color: var(--purple); border: 1px solid rgba(206,147,216,0.2); }
+    .unit-done-badge {
+      display: none; margin-top: 8px; font-size: 0.75em; color: var(--green);
+      font-weight: 600;
+    }
+    .unit-card.done .unit-done-badge { display: block; }
+
+    /* ── Knowledge Tree ── */
     .tree { list-style: none; }
     .tree-item { margin-bottom: 8px; }
-    .tree-toggle {
-      display: flex; align-items: center; gap: 8px;
-      padding: 10px 14px;
-      border-radius: 9px;
-      cursor: pointer;
-      font-size: 0.86em; font-weight: 500;
-      transition: all 0.2s;
-      border: 1px solid;
-    }
-    .tree-toggle:hover { filter: brightness(1.15); }
-    .tree-toggle .arrow { margin-left: auto; transition: transform 0.25s; font-size: 0.7em; }
-    .tree-toggle.open .arrow { transform: rotate(90deg); }
-    .tree-children {
-      list-style: none; margin: 6px 0 6px 24px;
-      display: none;
-    }
-    .tree-children.open { display: block; }
-    .tree-child-item {
-      padding: 6px 10px; margin: 3px 0;
-      border-radius: 7px; font-size: 0.82em;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .tree-child-item.done { text-decoration: line-through; opacity: 0.55; }
-
-    /* ── Info chips ── */
-    .info-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-    .info-chip { display: inline-block; padding: 3px 10px; border-radius: 8px; font-size: 0.73em; border: 1px solid; }
-
-    /* ── Mini nav buttons ── */
-    .mini-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
-    .mini-btn {
-      padding: 12px 10px; border-radius: 10px; text-align: center;
-      font-size: 0.82em; cursor: pointer; font-weight: 500;
-      border: 1px solid; transition: all 0.2s;
-    }
-    .mini-btn:hover { filter: brightness(1.15); transform: translateY(-1px); }
-
-    /* ── Float actions ── */
-    .float-actions {
-      position: fixed; bottom: 20px; right: 20px;
-      display: flex; flex-direction: column; gap: 10px; z-index: 200;
-    }
-    .fab {
-      width: 46px; height: 46px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.1em; cursor: pointer;
-      border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-      transition: all 0.25s;
-    }
-    .fab:hover { transform: scale(1.1); }
-    .fab-sync  { background: var(--blue); color: white; }
-    .fab-up    { background: var(--green); color: white; }
-    .fab-down  { background: var(--orange); color: white; }
-
-    /* ── Modal ── */
-    .modal-overlay {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.65); z-index: 300;
-      align-items: center; justify-content: center; padding: 20px;
-    }
-    .modal-overlay.show { display: flex; }
-    .modal {
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 16px; padding: 24px; max-width: 480px; width: 100%;
-      max-height: 80vh; overflow-y: auto;
-    }
-    .modal h3 { margin-bottom: 14px; font-size: 1em; }
-    .modal-close {
-      float: right; background: none; border: none; color: var(--text-muted);
-      font-size: 1.2em; cursor: pointer;
-    }
-    .modal-item {
+    .tree-node {
       display: flex; align-items: center; gap: 10px;
-      padding: 9px 12px; border-radius: 8px; cursor: pointer;
-      font-size: 0.85em; margin: 4px 0;
-      border: 1px solid transparent; transition: all 0.2s;
+      padding: 12px 16px; border-radius: 12px;
+      cursor: pointer; font-size: 0.87em; font-weight: 600;
+      border: 1px solid; transition: all 0.25s;
+      position: relative;
     }
-    .modal-item:hover { background: rgba(255,255,255,0.05); border-color: var(--card-border); }
-    .modal-item.done { opacity: 0.5; }
-    .modal-item input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--green); }
+    .tree-node:hover { filter: brightness(1.12); transform: translateX(2px); }
+    .tree-node .tree-arrow {
+      margin-left: auto; font-size: 0.7em; transition: transform 0.3s;
+    }
+    .tree-node.open .tree-arrow { transform: rotate(90deg); }
+    .tree-node.red-node    { background: rgba(255,107,107,0.07); border-color: rgba(255,107,107,0.18); }
+    .tree-node.orange-node { background: rgba(255,171,64,0.07); border-color: rgba(255,171,64,0.18); }
+    .tree-node.cyan-node   { background: rgba(24,255,255,0.07); border-color: rgba(24,255,255,0.18); }
+    .tree-node.purple-node { background: rgba(206,147,216,0.07); border-color: rgba(206,147,216,0.18); }
+    .tree-node.blue-node   { background: rgba(79,195,247,0.07); border-color: rgba(79,195,247,0.18); }
+    .tree-node.green-node  { background: rgba(105,240,174,0.07); border-color: rgba(105,240,174,0.18); }
+    .tree-node.yellow-node { background: rgba(255,213,79,0.07); border-color: rgba(255,213,79,0.18); }
+    .tree-child-list { list-style: none; margin: 6px 0 6px 26px; display: none; }
+    .tree-child-list.open { display: block; }
+    .tree-child {
+      padding: 7px 12px; margin: 3px 0; border-radius: 8px;
+      font-size: 0.82em; cursor: pointer; display: flex;
+      align-items: center; gap: 7px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      transition: all 0.2s;
+    }
+    .tree-child:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); }
+    .tree-child.done  { opacity: 0.5; text-decoration: line-through; border-color: rgba(105,240,174,0.15); }
+    .tree-check {
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2);
+      flex-shrink: 0; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.6em;
+    }
+    .tree-child.done .tree-check {
+      background: var(--green); border-color: var(--green);
+      color: #000;
+    }
+
+    /* ── Recent Done ── */
+    .recent-empty { font-size: 0.82em; color: var(--muted); text-align: center; padding: 16px 0; }
+    .recent-count { color: var(--green); font-weight: 700; }
+    .recent-stars { font-size: 1.2em; margin-bottom: 6px; }
 
     /* ── Footer ── */
     .footer {
       text-align: center; padding: 24px 16px 16px;
-      color: var(--text-muted); font-size: 0.73em;
-      border-top: 1px solid var(--card-border); margin-top: 24px;
+      color: rgba(232,236,248,0.3); font-size: 0.7em;
+      border-top: 1px solid var(--border2); margin-top: 8px;
+      position: relative; z-index: 10;
     }
+
+    /* ── Float Actions ── */
+    .float-actions {
+      position: fixed; bottom: 24px; right: 20px;
+      display: flex; flex-direction: column; gap: 10px; z-index: 200;
+    }
+    .fab {
+      width: 48px; height: 48px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1em; cursor: pointer; border: none;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      transition: all 0.25s;
+    }
+    .fab:hover { transform: scale(1.1) translateY(-2px); }
+    .fab:active { transform: scale(0.95); }
+    .fab-sync { background: linear-gradient(135deg, #4fc3f7, #0277bd); color: #fff; }
+    .fab-down { background: linear-gradient(135deg, #ffab40, #e64a19); color: #fff; }
+    .fab-up   { background: linear-gradient(135deg, #69f0ae, #00c853); color: #000; }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.7); z-index: 300;
+      align-items: center; justify-content: center; padding: 16px;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 20px; padding: 24px;
+      max-width: 480px; width: 100%;
+      max-height: 75vh; overflow-y: auto;
+      backdrop-filter: blur(20px);
+    }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+    .modal-header h3 { font-size: 0.95em; font-weight: 700; }
+    .modal-close-btn {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--glass2); border: 1px solid var(--border);
+      color: var(--muted); cursor: pointer; font-size: 0.85em;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .modal-close-btn:hover { background: rgba(255,255,255,0.1); }
+    .modal-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 14px; margin: 5px 0; border-radius: 12px;
+      cursor: pointer; font-size: 0.85em;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: all 0.2s;
+    }
+    .modal-item:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.12); }
+    .modal-item.done { background: rgba(105,240,174,0.07); border-color: rgba(105,240,174,0.2); }
+    .modal-item .check-circle {
+      width: 22px; height: 22px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2);
+      flex-shrink: 0; display: flex; align-items: center;
+      justify-content: center; font-size: 0.65em;
+      transition: all 0.2s;
+    }
+    .modal-item.done .check-circle {
+      background: var(--green); border-color: var(--green); color: #000;
+    }
+    .modal-save-btn {
+      width: 100%; margin-top: 16px; padding: 13px;
+      border-radius: 12px; border: none;
+      background: linear-gradient(135deg, #4fc3f7, #0277bd);
+      color: #fff; font-size: 0.88em; font-weight: 700;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .modal-save-btn:hover { filter: brightness(1.15); transform: translateY(-1px); }
 
     /* ── Toast ── */
     .toast {
-      position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      padding: 8px 18px; border-radius: 20px; font-size: 0.8em;
-      z-index: 400; opacity: 0; transition: opacity 0.3s; pointer-events: none;
+      position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+      background: rgba(15,25,60,0.95);
+      border: 1px solid rgba(105,240,174,0.3);
+      padding: 9px 22px; border-radius: 24px;
+      font-size: 0.8em; z-index: 400;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      backdrop-filter: blur(10px);
+      white-space: nowrap;
     }
-    .toast.show { opacity: 1; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+
+    /* ── Mobile ── */
+    @media (max-width: 480px) {
+      .header h1 { font-size: 1.25em; }
+      .quick-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .units-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .quick-btn { padding: 12px 8px; }
+      .fab { width: 44px; height: 44px; }
+    }
   </style>
 </head>
 <body>
 
+<!-- Stars -->
+<div class="stars"></div>
+<div class="planet planet-1"></div>
+<div class="planet planet-2"></div>
+
 <!-- Header -->
 <div class="header">
-  <h1>🌳 吴尚融学习知识树</h1>
-  <div class="subtitle">四年级下册 · 语文 · 数学 · 英语 · 奥数</div>
-  <div class="sync-bar">
+  <div class="header-badge">🚀 四年级下册学习宇宙</div>
+  <h1>🌳 吴尚融学习星球</h1>
+  <div class="subtitle">语文 · 数学 · 英语 · 奥数 · 知识宇宙探索</div>
+  <div class="sync-row">
     <div class="sync-dot" id="syncDot"></div>
-    <span id="syncText">同步中…</span>
-    <span class="sync-time" id="syncTime"></span>
+    <span id="syncText">正在启动…</span>
+    <span id="syncTime" style="font-size:0.7em;"></span>
   </div>
 </div>
 
-<!-- Nav -->
+<!-- Tab Nav -->
 <div class="nav-tabs">
-  <button class="tab-btn active" onclick="showTab('overview')">🏠 概览</button>
-  <button class="tab-btn" onclick="showTab('chinese')">📖 语文</button>
-  <button class="tab-btn" onclick="showTab('math')">🔢 数学</button>
-  <button class="tab-btn" onclick="showTab('english')">🔤 英语</button>
-  <button class="tab-btn" onclick="showTab('oly')">🧠 奥数</button>
+  <button class="tab-btn active" onclick="switchTab('overview',this)">
+    <span class="tab-icon">🏠</span>概览
+  </button>
+  <button class="tab-btn" onclick="switchTab('chinese',this)">
+    <span class="tab-icon">📖</span>语文
+  </button>
+  <button class="tab-btn" onclick="switchTab('math',this)">
+    <span class="tab-icon">🔢</span>数学
+  </button>
+  <button class="tab-btn" onclick="switchTab('english',this)">
+    <span class="tab-icon">🔤</span>英语
+  </button>
+  <button class="tab-btn" onclick="switchTab('oly',this)">
+    <span class="tab-icon">🧠</span>奥数
+  </button>
 </div>
 
 <!-- Content -->
 <div class="container">
 
-  <!-- ── OVERVIEW ── -->
-  <div class="section active" id="tab-overview">
+  <!-- ═══ OVERVIEW ═══ -->
+  <div class="section active" id="sec-overview">
+
     <div class="card">
-      <div class="card-title">📊 总体进度</div>
-      <div class="progress-wrap">
-        <div class="progress-label"><span>📖 语文</span><span id="prog-chinese">0%</span></div>
-        <div class="progress-bar"><div class="progress-fill fill-chinese" id="bar-chinese" style="width:0%"></div></div>
+      <div class="card-title">
+        <span class="card-icon">📊</span>学习进度总览
       </div>
-      <div class="progress-wrap">
-        <div class="progress-label"><span>🔢 数学</span><span id="prog-math">0%</span></div>
-        <div class="progress-bar"><div class="progress-fill fill-math" id="bar-math" style="width:0%"></div></div>
+      <div class="prog-row">
+        <div class="prog-label">
+          <span><span>📖</span> 语文</span>
+          <span class="prog-pct" id="pp-c">0%</span>
+        </div>
+        <div class="prog-bar"><div class="prog-fill red" id="pb-c" style="width:0%"></div></div>
       </div>
-      <div class="progress-wrap">
-        <div class="progress-label"><span>🔤 英语</span><span id="prog-english">0%</span></div>
-        <div class="progress-bar"><div class="progress-fill fill-english" id="bar-english" style="width:0%"></div></div>
+      <div class="prog-row">
+        <div class="prog-label">
+          <span><span>🔢</span> 数学</span>
+          <span class="prog-pct" id="pp-m">0%</span>
+        </div>
+        <div class="prog-bar"><div class="prog-fill blue" id="pb-m" style="width:0%"></div></div>
       </div>
-      <div class="progress-wrap">
-        <div class="progress-label"><span>🧠 奥数</span><span id="prog-oly">0%</span></div>
-        <div class="progress-bar"><div class="progress-fill fill-oly" id="bar-oly" style="width:0%"></div></div>
+      <div class="prog-row">
+        <div class="prog-label">
+          <span><span>🔤</span> 英语</span>
+          <span class="prog-pct" id="pp-e">0%</span>
+        </div>
+        <div class="prog-bar"><div class="prog-fill green" id="pb-e" style="width:0%"></div></div>
       </div>
-      <div class="info-chips">
-        <span class="info-chip" style="border-color:rgba(231,76,60,0.3);color:var(--red);background:rgba(231,76,60,0.08);">📖 语文：古诗词+课文+习作</span>
-        <span class="info-chip" style="border-color:rgba(52,152,219,0.3);color:var(--blue);background:rgba(52,152,219,0.08);">🔢 数学：图形+数运算+方程+统计</span>
-        <span class="info-chip" style="border-color:rgba(46,204,113,0.3);color:var(--green);background:rgba(46,204,113,0.08);">🔤 英语：单词+课文+语法+写作</span>
-        <span class="info-chip" style="border-color:rgba(155,89,182,0.3);color:var(--purple);background:rgba(155,89,182,0.08);">🧠 奥数：9周循序渐进</span>
+      <div class="prog-row">
+        <div class="prog-label">
+          <span><span>🧠</span> 奥数</span>
+          <span class="prog-pct" id="pp-o">0%</span>
+        </div>
+        <div class="prog-bar"><div class="prog-fill purple" id="pb-o" style="width:0%"></div></div>
+      </div>
+      <div class="chips">
+        <span class="chip chip-red">📖 26个课文知识点</span>
+        <span class="chip chip-blue">🔢 9大数学单元</span>
+        <span class="chip chip-green">🔤 英语译林版</span>
+        <span class="chip chip-purple">🧠 9周奥数体系</span>
       </div>
     </div>
 
-    <!-- Quick Nav -->
     <div class="card">
-      <div class="card-title">🚀 快速跳转</div>
-      <div class="mini-nav">
-        <button class="mini-btn" style="background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.2);color:var(--red);" onclick="goTab('chinese')">📖 语文知识树<br><span style="font-size:0.7em;color:var(--text-muted);">26个知识点</span></button>
-        <button class="mini-btn" style="background:rgba(52,152,219,0.1);border:1px solid rgba(52,152,219,0.2);color:var(--blue);" onclick="goTab('math')">🔢 数学知识树<br><span style="font-size:0.7em;color:var(--text-muted);">9个单元</span></button>
-        <button class="mini-btn" style="background:rgba(46,204,113,0.1);border:1px solid rgba(46,204,113,0.2);color:var(--green);" onclick="goTab('english')">🔤 英语知识树<br><span style="font-size:0.7em;color:var(--text-muted);">8个模块</span></button>
-        <button class="mini-btn" style="background:rgba(155,89,182,0.1);border:1px solid rgba(155,89,182,0.2);color:var(--purple);" onclick="goTab('oly')">🧠 奥数知识树<br><span style="font-size:0.7em;color:var(--text-muted);">9周完整体系</span></button>
+      <div class="card-title">
+        <span class="card-icon">🚀</span>快速出发
+      </div>
+      <div class="quick-grid">
+        <button class="quick-btn qb-chinese" onclick="goTab('chinese')">
+          <span class="qbig">📖</span>
+          <span>语文知识树</span>
+          <span class="qsub">26个知识点</span>
+        </button>
+        <button class="quick-btn qb-math" onclick="goTab('math')">
+          <span class="qbig">🔢</span>
+          <span>数学知识树</span>
+          <span class="qsub">9大单元</span>
+        </button>
+        <button class="quick-btn qb-english" onclick="goTab('english')">
+          <span class="qbig">🔤</span>
+          <span>英语知识树</span>
+          <span class="qsub">8个模块</span>
+        </button>
+        <button class="quick-btn qb-oly" onclick="goTab('oly')">
+          <span class="qbig">🧠</span>
+          <span>奥数知识树</span>
+          <span class="qsub">9周完整体系</span>
+        </button>
       </div>
     </div>
 
-    <!-- Recent completed -->
     <div class="card">
-      <div class="card-title">✅ 最近完成</div>
-      <div id="recent-list" style="font-size:0.82em;color:var(--text-muted);">还没有完成记录，去学习知识树里打勾吧 💪</div>
+      <div class="card-title">
+        <span class="card-icon">✨</span>已完成的知识点
+      </div>
+      <div id="recentList">
+        <div class="recent-empty">🌱 还没有完成记录<br>去知识树里打勾，开始你的探索之旅吧！</div>
+      </div>
     </div>
-  </div>
 
-  <!-- ── CHINESE ── -->
-  <div class="section" id="tab-chinese">
+  </div><!-- /overview -->
+
+  <!-- ═══ CHINESE ═══ -->
+  <div class="section" id="sec-chinese">
+
     <div class="card">
-      <div class="card-title">📖 语文知识树（点击知识点标记完成）</div>
-      <p style="font-size:0.78em;color:var(--text-muted);margin-bottom:12px;">🌱 打勾 = 已掌握 · 🆕 = 待学习 · 🟡 = 进行中</p>
-
-      <!-- 单元卡片 -->
+      <div class="card-title"><span class="card-icon">📖</span>语文 · 单元总览（点击打开详情）</div>
       <div class="units-grid">
         <div class="unit-card" id="uc-c1" onclick="openModal('chinese','c1')">
           <div class="unit-num">第 1 单元</div>
-          <div class="unit-title">🌸 古诗词三首（已学3首）</div>
+          <div class="unit-title">🌸 古诗词三首</div>
           <div class="unit-tags">
-            <span class="tag tag-red">《绝句》</span>
-            <span class="tag tag-red">《惠崇春江晚景》</span>
-            <span class="tag tag-red">《三衢道中》</span>
+            <span class="unit-tag unit-tag-red">《绝句》</span>
+            <span class="unit-tag unit-tag-red">《惠崇春江晚景》</span>
+            <span class="unit-tag unit-tag-red">《三衢道中》</span>
           </div>
-          <div class="unit-check">✅ 完成</div>
+          <div class="unit-done-badge">✨ 已完成</div>
         </div>
         <div class="unit-card" id="uc-c2" onclick="openModal('chinese','c2')">
-          <div class="unit-num">第 2 单元</div>
-          <div class="unit-title">🏠 乡下人家</div>
-          <div class="unit-tags">
-            <span class="tag tag-red">掌握生字词</span>
-            <span class="tag tag-red">整体感知</span>
-          </div>
-          <div class="unit-check">✅ 完成</div>
+          <div class="unit-num">第 2 单元</div><div class="unit-title">🏠 乡下人家</div>
+          <div class="unit-tags"><span class="unit-tag unit-tag-red">掌握生字词</span><span class="unit-tag unit-tag-red">整体感知</span></div>
+          <div class="unit-done-badge">✨ 已完成</div>
         </div>
         <div class="unit-card" id="uc-c3" onclick="openModal('chinese','c3')">
-          <div class="unit-num">第 3 单元</div>
-          <div class="unit-title">🌙 天窗</div>
-          <div class="unit-tags">
-            <span class="tag tag-red">理解含义深刻句子</span>
-            <span class="tag tag-red">体会写法</span>
-          </div>
-          <div class="unit-check">✅ 完成</div>
+          <div class="unit-num">第 3 单元</div><div class="unit-title">🌙 天窗</div>
+          <div class="unit-tags"><span class="unit-tag unit-tag-red">含义深刻句子</span><span class="unit-tag unit-tag-red">体会写法</span></div>
+          <div class="unit-done-badge">✨ 已完成</div>
         </div>
         <div class="unit-card" id="uc-c4" onclick="openModal('chinese','c4')">
-          <div class="unit-num">第 4 单元</div>
-          <div class="unit-title">🔭 母鸡</div>
-          <div class="unit-tags">
-            <span class="tag tag-red">作者情感变化</span>
-            <span class="tag tag-red">对比手法</span>
-          </div>
-          <div class="unit-check">✅ 完成</div>
+          <div class="unit-num">第 4 单元</div><div class="unit-title">🔭 母鸡</div>
+          <div class="unit-tags"><span class="unit-tag unit-tag-red">作者情感变化</span><span class="unit-tag unit-tag-red">对比手法</span></div>
+          <div class="unit-done-badge">✨ 已完成</div>
         </div>
         <div class="unit-card" id="uc-c5" onclick="openModal('chinese','c5')">
-          <div class="unit-num">第 5 单元</div>
-          <div class="unit-title">🌍 颐和园·十七孔桥</div>
-          <div class="unit-tags">
-            <span class="tag tag-red">移步换景</span>
-            <span class="tag tag-red">按游览顺序</span>
-          </div>
-          <div class="unit-check">✅ 完成</div>
+          <div class="unit-num">第 5 单元</div><div class="unit-title">🌍 颐和园·十七孔桥</div>
+          <div class="unit-tags"><span class="unit-tag unit-tag-red">移步换景</span><span class="unit-tag unit-tag-red">游览顺序</span></div>
+          <div class="unit-done-badge">✨ 已完成</div>
         </div>
         <div class="unit-card" id="uc-c6" onclick="openModal('chinese','c6')">
-          <div class="unit-num">第 6 单元</div>
-          <div class="unit-title">🧒 小英雄雨来</div>
-          <div class="unit-tags">
-            <span class="tag tag-red">长文章分段</span>
-            <span class="tag tag-red">把握情节</span>
-          </div>
-          <div class="unit-check">✅ 完成</div>
+          <div class="unit-num">第 6 单元</div><div class="unit-title">🧒 小英雄雨来</div>
+          <div class="unit-tags"><span class="unit-tag unit-tag-red">长文章分段</span><span class="unit-tag unit-tag-red">把握情节</span></div>
+          <div class="unit-done-badge">✨ 已完成</div>
         </div>
         <div class="unit-card" id="uc-c7" onclick="openModal('chinese','c7')">
-          <div class="unit-num">第 7 单元</div>
-          <div class="unit-title">⚔️ 古诗三首（已学3首）</div>
-          <div class="unit-tags">
-            <span class="tag tag-red">《墨梅》</span>
-            <span class="tag tag-red">《囊萤夜读》</span>
-            <span class="tag tag-red">《铁杵成针》</span>
-          </div>
-          <div class="unit-check">✅ 完成</div>
+          <div class="unit-num">第 7 单元</div><div class="unit-title">⚔️ 古诗三首</div>
+          <div class="unit-tags"><span class="unit-tag unit-tag-red">《墨梅》</span><span class="unit-tag unit-tag-red">《囊萤夜读》</span><span class="unit-tag unit-tag-red">《铁杵成针》</span></div>
+          <div class="unit-done-badge">✨ 已完成</div>
         </div>
         <div class="unit-card" id="uc-c8" onclick="openModal('chinese','c8')">
-          <div class="unit-num">第 8 单元</div>
-          <div class="unit-title">🦋 宝葫芦的秘密</div>
-          <div class="unit-tags">
-            <span class="tag tag-red">故事续编</span>
-            <span class="tag tag-red">发挥想象</span>
-          </div>
-          <div class="unit-check">✅ 完成</div>
+          <div class="unit-num">第 8 单元</div><div class="unit-title">🦋 宝葫芦的秘密</div>
+          <div class="unit-tags"><span class="unit-tag unit-tag-red">故事续编</span><span class="unit-tag unit-tag-red">发挥想象</span></div>
+          <div class="unit-done-badge">✨ 已完成</div>
         </div>
       </div>
     </div>
 
-    <!-- 知识树 -->
     <div class="card">
-      <h3 class="card-title">🌳 语文知识体系</h3>
+      <div class="card-title"><span class="card-icon">🌳</span>语文知识树 · 点击展开</div>
       <ul class="tree">
         <li class="tree-item">
-          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(231,76,60,0.06);border-color:rgba(231,76,60,0.2);">
-            <span class="icon">📖</span><span class="label">📖 课文理解</span><span class="arrow">▸</span>
+          <div class="tree-node red-node" onclick="toggleTree(this)">
+            📖 课文理解能力 <span class="tree-arrow">▸</span>
           </div>
-          <ul class="tree-children">
-            <li class="tree-child-item" data-subject="chinese" data-id="c-1" onclick="toggleDone(this,'chinese','c-1')">🆕 1.1 课文朗读：准确、流利、有感情</li>
-            <li class="tree-child-item" data-subject="chinese" data-id="c-2" onclick="toggleDone(this,'chinese','c-2')">🆕 1.2 段落划分：找关键句、分层</li>
-            <li class="tree-child-item" data-subject="chinese" data-id="c-3" onclick="toggleDone(this,'chinese','c-3')">🆕 1.3 概括段意：摘句法/要素法</li>
-            <li class="tree-child-item" data-subject="chinese" data-id="c-4" onclick="toggleDone(this,'chinese','c-4')">🆕 1.4 理解词语：联系上下文/查词典</li>
-            <li class="tree-child-item" data-subject="chinese" data-id="c-5" onclick="toggleDone(this,'chinese','c-5')">🆕 1.5 体会情感：抓关键词句</li>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="chinese" data-id="c-1" onclick="toggleDone(this)">🆕 1.1 课文朗读：准确、流利、有感情</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-2" onclick="toggleDone(this)">🆕 1.2 段落划分：找关键句、分层</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-3" onclick="toggleDone(this)">🆕 1.3 概括段意：摘句法/要素法</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-4" onclick="toggleDone(this)">🆕 1.4 理解词语：联系上下文/查词典</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-5" onclick="toggleDone(this)">🆕 1.5 体会情感：抓关键词句</li>
           </ul>
         </li>
         <li class="tree-item">
-          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(230,126,34,0.06);border-color:rgba(230,126,34,0.2);">
-            <span class="icon">✍️</span><span class="label">✍️ 习作能力</span><span class="arrow">▸</span>
+          <div class="tree-node orange-node" onclick="toggleTree(this)">
+            ✍️ 习作能力 <span class="tree-arrow">▸</span>
           </div>
-          <ul class="tree-children">
-            <li class="tree-child-item" data-subject="chinese" data-id="c-6" onclick="toggleDone(this,'chinese','c-6')">🆕 2.1 写景作文：顺序+修辞+感受</li>
-            <li class="tree-child-item" data-subject="chinese" data-id="c-7" onclick="toggleDone(this,'chinese','c-7')">🆕 2.2 写事作文：起因经过结果</li>
-            <li class="tree-child-item" data-subject="chinese" data-id="c-8" onclick="toggleDone(this,'chinese','c-8')">🆕 2.3 写人作文：外貌+事件+品质</li>
-            <li class="tree-child-item" data-subject="chinese" data-id="c-9" onclick="toggleDone(this,'chinese','c-9')">🆕 2.4 修改作文：增删调换</li>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="chinese" data-id="c-6" onclick="toggleDone(this)">🆕 2.1 写景作文：顺序+修辞+感受</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-7" onclick="toggleDone(this)">🆕 2.2 写事作文：起因经过结果</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-8" onclick="toggleDone(this)">🆕 2.3 写人作文：外貌+事件+品质</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-9" onclick="toggleDone(this)">🆕 2.4 修改作文：增删调换</li>
           </ul>
         </li>
         <li class="tree-item">
-          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(0,188,212,0.06);border-color:rgba(0,188,212,0.2);">
-            <span class="icon">📝</span><span class="label">📝 语文基础知识</span><span class="arrow">▸</span>
+          <div class="tree-node cyan-node" onclick="toggleTree(this)">
+            📝 语文基础知识 <span class="tree-arrow">▸</span>
           </div>
-          <ul class="tree-children">
-            <li class="tree-child-item" data-subject="chinese" data-id="c-10" onclick="toggleDone(this,'chinese','c-10')">🆕 3.1 多音字：区分不同读音和用法</li>
-            <li class="tree-child-item" data-subject="chinese" data-id="c-11" onclick="toggleDone(this,'chinese','c-11')">🆕 3.2 形近字：比较差异，正确组词</li>
-            <li class="tree-child-item" data-subject="chinese" data-id="c-12" onclick="toggleDone(this,'chinese','c-12')">🆕 3.3 标点符号：句号/逗号/引号/冒号用法</li>
-            <li class="tree-child-item" data-subject="chinese" data-id="c-13" onclick="toggleDone(this,'chinese','c-13')">🆕 3.4 关联词：因果/转折/递进/并列</li>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="chinese" data-id="c-10" onclick="toggleDone(this)">🆕 3.1 多音字：区分不同读音和用法</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-11" onclick="toggleDone(this)">🆕 3.2 形近字：比较差异，正确组词</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-12" onclick="toggleDone(this)">🆕 3.3 标点符号：句号/逗号/引号/冒号</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-13" onclick="toggleDone(this)">🆕 3.4 关联词：因果/转折/递进/并列</li>
           </ul>
         </li>
         <li class="tree-item">
-          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(155,89,182,0.06);border-color:rgba(155,89,182,0.2);">
-            <span class="icon">📜</span><span class="label">📜 古诗文积累</span><span class="arrow">▸</span>
+          <div class="tree-node purple-node" onclick="toggleTree(this)">
+            📜 古诗文积累 <span class="tree-arrow">▸</span>
           </div>
-          <ul class="tree-children">
-            <li class="tree-child-item" data-subject="chinese" data-id="c-14" onclick="toggleDone(this,'chinese','c-14')">🆕 4.1 古诗词背诵：理解诗意+诗情</li>
-            <li class="tree-child-item" data-subject="chinese" data-id="c-15" onclick="toggleDone(this,'chinese','c-15')">🆕 4.2 文言文入门：读懂大意即可</li>
-            <li class="tree-child-item" data-subject="chinese" data-id="c-16" onclick="toggleDone(this,'chinese','c-16')">🆕 4.3 名言警句：积累并运用</li>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="chinese" data-id="c-14" onclick="toggleDone(this)">🆕 4.1 古诗词背诵：理解诗意+诗情</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-15" onclick="toggleDone(this)">🆕 4.2 文言文入门：读懂大意即可</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-16" onclick="toggleDone(this)">🆕 4.3 名言警句：积累并运用</li>
           </ul>
         </li>
       </ul>
     </div>
   </div>
 
-  <!-- ── MATH ── -->
-  <div class="section" id="tab-math">
+  <!-- ═══ MATH ═══ -->
+  <div class="section" id="sec-math">
     <div class="card">
-      <div class="card-title">🔢 数学知识树（点击单元标记完成）</div>
+      <div class="card-title"><span class="card-icon">🔢</span>数学 · 单元总览</div>
       <div class="units-grid">
-        <div class="unit-card" onclick="openModal('math','m1')">
-          <div class="unit-num">第 1 单元</div><div class="unit-title">🌏 位置与方向</div>
-          <div class="unit-tags"><span class="tag tag-blue">方向词</span><span class="tag tag-blue">描述路线</span></div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
-        <div class="unit-card" onclick="openModal('math','m2')">
-          <div class="unit-num">第 2 单元</div><div class="unit-title">➗ 除数是两位数的除法</div>
-          <div class="unit-tags"><span class="tag tag-blue">笔算除法</span><span class="tag tag-blue">商的变化规律</span></div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
-        <div class="unit-card" onclick="openModal('math','m3')">
-          <div class="unit-num">第 3 单元</div><div class="unit-title">📊 统计</div>
-          <div class="unit-tags"><span class="tag tag-blue">条形统计图</span><span class="tag tag-blue">复式统计表</span></div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
-        <div class="unit-card" onclick="openModal('math','m4')">
-          <div class="unit-num">第 4 单元</div><div class="unit-title">🔲 平行四边形和梯形</div>
-          <div class="unit-tags"><span class="tag tag-blue">特征</span><span class="tag tag-blue">高与底</span><span class="tag tag-blue">周长</span></div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
-        <div class="unit-card" onclick="openModal('math','m5')">
-          <div class="unit-num">第 5 单元</div><div class="unit-title">🔢 除数是一位数的除法</div>
-          <div class="unit-tags"><span class="tag tag-blue">口算</span><span class="tag tag-blue">笔算</span><span class="tag tag-blue">验算</span></div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
-        <div class="unit-card" onclick="openModal('math','m6')">
-          <div class="unit-num">第 6 单元</div><div class="unit-title">📐 面积</div>
-          <div class="unit-tags"><span class="tag tag-blue">面积公式</span><span class="tag tag-blue">单位换算</span><span class="tag tag-blue">解决问题</span></div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
-        <div class="unit-card" onclick="openModal('math','m7')">
-          <div class="unit-num">第 7 单元</div><div class="unit-title">🔤 数学广角（解决问题）</div>
-          <div class="unit-tags"><span class="tag tag-blue">优化</span><span class="tag tag-blue">策略</span><span class="tag tag-blue">烙饼问题</span></div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
-        <div class="unit-card" onclick="openModal('math','m8')">
-          <div class="unit-num">第 8 单元</div><div class="unit-title">🔢 总复习</div>
-          <div class="unit-tags"><span class="tag tag-blue">数与运算</span><span class="tag tag-blue">图形</span><span class="tag tag-blue">统计</span></div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
+        <div class="unit-card" id="uc-m1" onclick="openModal('math','m1')"><div class="unit-num">第 1 单元</div><div class="unit-title">🌏 位置与方向</div><div class="unit-tags"><span class="unit-tag unit-tag-blue">方向词</span><span class="unit-tag unit-tag-blue">描述路线</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-m2" onclick="openModal('math','m2')"><div class="unit-num">第 2 单元</div><div class="unit-title">➗ 除数两位数除法</div><div class="unit-tags"><span class="unit-tag unit-tag-blue">笔算</span><span class="unit-tag unit-tag-blue">商的变化规律</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-m3" onclick="openModal('math','m3')"><div class="unit-num">第 3 单元</div><div class="unit-title">📊 统计</div><div class="unit-tags"><span class="unit-tag unit-tag-blue">条形统计图</span><span class="unit-tag unit-tag-blue">复式统计表</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-m4" onclick="openModal('math','m4')"><div class="unit-num">第 4 单元</div><div class="unit-title">🔲 平行四边形和梯形</div><div class="unit-tags"><span class="unit-tag unit-tag-blue">特征</span><span class="unit-tag unit-tag-blue">高与底</span><span class="unit-tag unit-tag-blue">周长</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-m5" onclick="openModal('math','m5')"><div class="unit-num">第 5 单元</div><div class="unit-title">🔢 除数一位数除法</div><div class="unit-tags"><span class="unit-tag unit-tag-blue">口算</span><span class="unit-tag unit-tag-blue">笔算</span><span class="unit-tag unit-tag-blue">验算</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-m6" onclick="openModal('math','m6')"><div class="unit-num">第 6 单元</div><div class="unit-title">📐 面积</div><div class="unit-tags"><span class="unit-tag unit-tag-blue">面积公式</span><span class="unit-tag unit-tag-blue">单位换算</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-m7" onclick="openModal('math','m7')"><div class="unit-num">第 7 单元</div><div class="unit-title">🔤 数学广角</div><div class="unit-tags"><span class="unit-tag unit-tag-blue">优化</span><span class="unit-tag unit-tag-blue">策略</span><span class="unit-tag unit-tag-blue">烙饼问题</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-m8" onclick="openModal('math','m8')"><div class="unit-num">第 8 单元</div><div class="unit-title">🔢 总复习</div><div class="unit-tags"><span class="unit-tag unit-tag-blue">数与运算</span><span class="unit-tag unit-tag-blue">图形</span><span class="unit-tag unit-tag-blue">统计</span></div><div class="unit-done-badge">✨ 已完成</div></div>
       </div>
     </div>
     <div class="card">
-      <h3 class="card-title">🌳 数学知识体系</h3>
+      <div class="card-title"><span class="card-icon">🌳</span>数学知识树</div>
       <ul class="tree">
         <li class="tree-item">
-          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(52,152,219,0.06);border-color:rgba(52,152,219,0.2);">
-            <span class="icon">🔢</span><span class="label">🔢 数与运算</span><span class="arrow">▸</span>
-          </div>
-          <ul class="tree-children">
-            <li class="tree-child-item" data-subject="math" data-id="m-1" onclick="toggleDone(this,'math','m-1')">🆕 1.1 大数读写：万以内/亿以内</li>
-            <li class="tree-child-item" data-subject="math" data-id="m-2" onclick="toggleDone(this,'math','m-2')">🆕 1.2 四舍五入：求近似数</li>
-            <li class="tree-child-item" data-subject="math" data-id="m-3" onclick="toggleDone(this,'math','m-3')">🆕 1.3 三位数乘两位数</li>
-            <li class="tree-child-item" data-subject="math" data-id="m-4" onclick="toggleDone(this,'math','m-4')">🆕 1.4 除数是两位数除法</li>
+          <div class="tree-node blue-node" onclick="toggleTree(this)">🔢 数与运算 <span class="tree-arrow">▸</span></div>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="math" data-id="m-1" onclick="toggleDone(this)">🆕 1.1 大数读写：万以内/亿以内</li>
+            <li class="tree-child" data-subject="math" data-id="m-2" onclick="toggleDone(this)">🆕 1.2 四舍五入：求近似数</li>
+            <li class="tree-child" data-subject="math" data-id="m-3" onclick="toggleDone(this)">🆕 1.3 三位数乘两位数</li>
+            <li class="tree-child" data-subject="math" data-id="m-4" onclick="toggleDone(this)">🆕 1.4 除数是两位数除法</li>
           </ul>
         </li>
         <li class="tree-item">
-          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(46,204,113,0.06);border-color:rgba(46,204,113,0.2);">
-            <span class="icon">📐</span><span class="label">📐 图形与几何</span><span class="arrow">▸</span>
-          </div>
-          <ul class="tree-children">
-            <li class="tree-child-item" data-subject="math" data-id="m-5" onclick="toggleDone(this,'math','m-5')">🆕 2.1 角：分类（锐/直/钝/平/周）</li>
-            <li class="tree-child-item" data-subject="math" data-id="m-6" onclick="toggleDone(this,'math','m-6')">🆕 2.2 平行四边形：特征与高</li>
-            <li class="tree-child-item" data-subject="math" data-id="m-7" onclick="toggleDone(this,'math','m-7')">🆕 2.3 梯形：等腰/直角梯形</li>
-            <li class="tree-child-item" data-subject="math" data-id="m-8" onclick="toggleDone(this,'math','m-8')">🆕 2.4 面积：正/长/平行四边/梯形</li>
+          <div class="tree-node green-node" onclick="toggleTree(this)">📐 图形与几何 <span class="tree-arrow">▸</span></div>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="math" data-id="m-5" onclick="toggleDone(this)">🆕 2.1 角：分类（锐/直/钝/平/周）</li>
+            <li class="tree-child" data-subject="math" data-id="m-6" onclick="toggleDone(this)">🆕 2.2 平行四边形：特征与高</li>
+            <li class="tree-child" data-subject="math" data-id="m-7" onclick="toggleDone(this)">🆕 2.3 梯形：等腰/直角梯形</li>
+            <li class="tree-child" data-subject="math" data-id="m-8" onclick="toggleDone(this)">🆕 2.4 面积：正/长/平行四边/梯形</li>
           </ul>
         </li>
         <li class="tree-item">
-          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(155,89,182,0.06);border-color:rgba(155,89,182,0.2);">
-            <span class="icon">📊</span><span class="label">📊 统计与概率</span><span class="arrow">▸</span>
-          </div>
-          <ul class="tree-children">
-            <li class="tree-child-item" data-subject="math" data-id="m-9" onclick="toggleDone(this,'math','m-9')">🆕 3.1 复式条形统计图</li>
-            <li class="tree-child-item" data-subject="math" data-id="m-10" onclick="toggleDone(this,'math','m-10')">🆕 3.2 合理选择统计图</li>
+          <div class="tree-node purple-node" onclick="toggleTree(this)">📊 统计与概率 <span class="tree-arrow">▸</span></div>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="math" data-id="m-9" onclick="toggleDone(this)">🆕 3.1 复式条形统计图</li>
+            <li class="tree-child" data-subject="math" data-id="m-10" onclick="toggleDone(this)">🆕 3.2 合理选择统计图</li>
           </ul>
         </li>
       </ul>
     </div>
   </div>
 
-  <!-- ── ENGLISH ── -->
-  <div class="section" id="tab-english">
+  <!-- ═══ ENGLISH ═══ -->
+  <div class="section" id="sec-english">
     <div class="card">
-      <div class="card-title">🔤 英语知识树（译林版四年级下册）</div>
+      <div class="card-title"><span class="card-icon">🔤</span>英语 · 译林版四年级下册</div>
       <div class="units-grid">
-        <div class="unit-card" onclick="openModal('english','e1')">
-          <div class="unit-num">Unit 1</div><div class="unit-title">🏠 Our school subjects</div>
-          <div class="unit-tags"><span class="tag tag-green">subjects</span><span class="tag tag-green">like</span></div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
-        <div class="unit-card" onclick="openModal('english','e2')">
-          <div class="unit-num">Unit 2</div><div class="unit-title">🌟 Our new house</div>
-          <div class="unit-tags"><span class="tag tag-green">rooms</span><span class="tag tag-green">prepositions</span></div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
-        <div class="unit-card" onclick="openModal('english','e3')">
-          <div class="unit-num">Unit 3</div><div class="unit-title">☕ A day in the library</div>
-          <div class="unit-tags"><span class="tag tag-green">rules</span><span class="tag tag-green">should</span></div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
-        <div class="unit-card" onclick="openModal('english','e4')">
-          <div class="unit-num">Unit 4</div><div class="unit-title">🐟 Drawing in the park</div>
-          <div class="unit-tags"><span class="tag tag-green">can/could</span><span class="tag tag-green">able to</span></div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
-        <div class="unit-card" onclick="openModal('english','e5')">
-          <div class="unit-num">Unit 5</div><div class="unit-title">🦋 Seasons</div>
-          <div class="unit-tags"><span class="tag tag-green">weather</span><span class="tag tag-green">activities</span></div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
-        <div class="unit-card" onclick="openModal('english','e6')">
-          <div class="unit-num">Unit 6</div><div class="unit-title">🍀 What's the matter?</div>
-          <div class="unit-tags"><span class="tag tag-green">feelings</span><span class="tag tag-green">health</span></div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
-        <div class="unit-card" onclick="openModal('english','e7')">
-          <div class="unit-num">Unit 7</div><div class="unit-title">🍦 Summer is coming!</div>
-          <div class="unit-tags"><span class="tag tag-green">summer plans</span><span class="tag tag-green">be going to</span></div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
-        <div class="unit-card" onclick="openModal('english','e8')">
-          <div class="unit-num">Unit 8</div><div class="unit-title">🏥 How are you now?</div>
-          <div class="unit-tags"><span class="tag tag-green">illness</span><span class="tag tag-green">advice</span></div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
+        <div class="unit-card" onclick="openModal('english','e1')"><div class="unit-num">Unit 1</div><div class="unit-title">🏠 Our school subjects</div><div class="unit-tags"><span class="unit-tag unit-tag-green">subjects</span><span class="unit-tag unit-tag-green">like</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" onclick="openModal('english','e2')"><div class="unit-num">Unit 2</div><div class="unit-title">🌟 Our new house</div><div class="unit-tags"><span class="unit-tag unit-tag-green">rooms</span><span class="unit-tag unit-tag-green">prepositions</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" onclick="openModal('english','e3')"><div class="unit-num">Unit 3</div><div class="unit-title">☕ A day in the library</div><div class="unit-tags"><span class="unit-tag unit-tag-green">rules</span><span class="unit-tag unit-tag-green">should</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" onclick="openModal('english','e4')"><div class="unit-num">Unit 4</div><div class="unit-title">🐟 Drawing in the park</div><div class="unit-tags"><span class="unit-tag unit-tag-green">can/could</span><span class="unit-tag unit-tag-green">able to</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" onclick="openModal('english','e5')"><div class="unit-num">Unit 5</div><div class="unit-title">🦋 Seasons</div><div class="unit-tags"><span class="unit-tag unit-tag-green">weather</span><span class="unit-tag unit-tag-green">activities</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" onclick="openModal('english','e6')"><div class="unit-num">Unit 6</div><div class="unit-title">🍀 What's the matter?</div><div class="unit-tags"><span class="unit-tag unit-tag-green">feelings</span><span class="unit-tag unit-tag-green">health</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" onclick="openModal('english','e7')"><div class="unit-num">Unit 7</div><div class="unit-title">🍦 Summer is coming!</div><div class="unit-tags"><span class="unit-tag unit-tag-green">summer plans</span><span class="unit-tag unit-tag-green">be going to</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" onclick="openModal('english','e8')"><div class="unit-num">Unit 8</div><div class="unit-title">🏥 How are you now?</div><div class="unit-tags"><span class="unit-tag unit-tag-green">illness</span><span class="unit-tag unit-tag-green">advice</span></div><div class="unit-done-badge">✨ 已完成</div></div>
       </div>
     </div>
     <div class="card">
-      <h3 class="card-title">🌳 英语知识体系</h3>
+      <div class="card-title"><span class="card-icon">🌳</span>英语知识树</div>
       <ul class="tree">
         <li class="tree-item">
-          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(46,204,113,0.06);border-color:rgba(46,204,113,0.2);">
-            <span class="icon">📖</span><span class="label">📖 单词积累（160+词汇）</span><span class="arrow">▸</span>
-          </div>
-          <ul class="tree-children">
-            <li class="tree-child-item" data-subject="english" data-id="e-1" onclick="toggleDone(this,'english','e-1')">🆕 1.1 校校科目词汇</li>
-            <li class="tree-child-item" data-subject="english" data-id="e-2" onclick="toggleDone(this,'english','e-2')">🆕 1.2 房间家居词汇</li>
-            <li class="tree-child-item" data-subject="english" data-id="e-3" onclick="toggleDone(this,'english','e-3')">🆕 1.3 季节天气词汇</li>
-            <li class="tree-child-item" data-subject="english" data-id="e-4" onclick="toggleDone(this,'english','e-4')">🆕 1.4 情感健康词汇</li>
-            <li class="tree-child-item" data-subject="english" data-id="e-5" onclick="toggleDone(this,'english','e-5')">🆕 1.5 其他核心词汇</li>
+          <div class="tree-node green-node" onclick="toggleTree(this)">📖 单词积累（160+词汇） <span class="tree-arrow">▸</span></div>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="english" data-id="e-1" onclick="toggleDone(this)">🆕 1.1 校校科目词汇</li>
+            <li class="tree-child" data-subject="english" data-id="e-2" onclick="toggleDone(this)">🆕 1.2 房间家居词汇</li>
+            <li class="tree-child" data-subject="english" data-id="e-3" onclick="toggleDone(this)">🆕 1.3 季节天气词汇</li>
+            <li class="tree-child" data-subject="english" data-id="e-4" onclick="toggleDone(this)">🆕 1.4 情感健康词汇</li>
+            <li class="tree-child" data-subject="english" data-id="e-5" onclick="toggleDone(this)">🆕 1.5 其他核心词汇</li>
           </ul>
         </li>
         <li class="tree-item">
-          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(230,126,34,0.06);border-color:rgba(230,126,34,0.2);">
-            <span class="icon">📝</span><span class="label">📝 语法要点</span><span class="arrow">▸</span>
-          </div>
-          <ul class="tree-children">
-            <li class="tree-child-item" data-subject="english" data-id="e-6" onclick="toggleDone(this,'english','e-6')">🆕 2.1 be动词（am/is/are）</li>
-            <li class="tree-child-item" data-subject="english" data-id="e-7" onclick="toggleDone(this,'english','e-7')">🆕 2.2 Have/Has got 用法</li>
-            <li class="tree-child-item" data-subject="english" data-id="e-8" onclick="toggleDone(this,'english','e-8')">🆕 2.3 一般现在时</li>
-            <li class="tree-child-item" data-subject="english" data-id="e-9" onclick="toggleDone(this,'english','e-9')">🆕 2.4 现在进行时（be+v-ing）</li>
-            <li class="tree-child-item" data-subject="english" data-id="e-10" onclick="toggleDone(this,'english','e-10')">🆕 2.5 一般过去时（was/were）</li>
-            <li class="tree-child-item" data-subject="english" data-id="e-11" onclick="toggleDone(this,'english','e-11')">🆕 2.6 情态动词 can/could/may</li>
-            <li class="tree-child-item" data-subject="english" data-id="e-12" onclick="toggleDone(this,'english','e-12')">🆕 2.7 there is/are</li>
+          <div class="tree-node orange-node" onclick="toggleTree(this)">📝 语法要点 <span class="tree-arrow">▸</span></div>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="english" data-id="e-6" onclick="toggleDone(this)">🆕 2.1 be动词（am/is/are）</li>
+            <li class="tree-child" data-subject="english" data-id="e-7" onclick="toggleDone(this)">🆕 2.2 Have/Has got 用法</li>
+            <li class="tree-child" data-subject="english" data-id="e-8" onclick="toggleDone(this)">🆕 2.3 一般现在时</li>
+            <li class="tree-child" data-subject="english" data-id="e-9" onclick="toggleDone(this)">🆕 2.4 现在进行时（be+v-ing）</li>
+            <li class="tree-child" data-subject="english" data-id="e-10" onclick="toggleDone(this)">🆕 2.5 一般过去时（was/were）</li>
+            <li class="tree-child" data-subject="english" data-id="e-11" onclick="toggleDone(this)">🆕 2.6 情态动词 can/could/may</li>
+            <li class="tree-child" data-subject="english" data-id="e-12" onclick="toggleDone(this)">🆕 2.7 there is/are</li>
           </ul>
         </li>
         <li class="tree-item">
-          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(0,188,212,0.06);border-color:rgba(0,188,212,0.2);">
-            <span class="icon">🗣️</span><span class="label">🗣️ 听说读写</span><span class="arrow">▸</span>
-          </div>
-          <ul class="tree-children">
-            <li class="tree-child-item" data-subject="english" data-id="e-13" onclick="toggleDone(this,'english','e-13')">🆕 3.1 课本听力跟读</li>
-            <li class="tree-child-item" data-subject="english" data-id="e-14" onclick="toggleDone(this,'english','e-14')">🆕 3.2 朗读与背诵</li>
-            <li class="tree-child-item" data-subject="english" data-id="e-15" onclick="toggleDone(this,'english','e-15')">🆕 3.3 简单句写作</li>
-            <li class="tree-child-item" data-subject="english" data-id="e-16" onclick="toggleDone(this,'english','e-16')">🆕 3.4 日常口语对话</li>
+          <div class="tree-node cyan-node" onclick="toggleTree(this)">🗣️ 听说读写 <span class="tree-arrow">▸</span></div>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="english" data-id="e-13" onclick="toggleDone(this)">🆕 3.1 课本听力跟读</li>
+            <li class="tree-child" data-subject="english" data-id="e-14" onclick="toggleDone(this)">🆕 3.2 朗读与背诵</li>
+            <li class="tree-child" data-subject="english" data-id="e-15" onclick="toggleDone(this)">🆕 3.3 简单句写作</li>
+            <li class="tree-child" data-subject="english" data-id="e-16" onclick="toggleDone(this)">🆕 3.4 日常口语对话</li>
           </ul>
         </li>
       </ul>
     </div>
   </div>
 
-  <!-- ── OLYMPIAD MATH ── -->
-  <div class="section" id="tab-oly">
+  <!-- ═══ OLYMPIAD ═══ -->
+  <div class="section" id="sec-oly">
     <div class="card">
-      <div class="card-title">🧠 奥数学习进度（9周计划）</div>
-      <p style="font-size:0.78em;color:var(--text-muted);margin-bottom:12px;">难度：⭐ 基础 → ⭐⭐⭐⭐ 挑战 · 每周5道精选题 · 点击卡片标记完成</p>
+      <div class="card-title"><span class="card-icon">🧠</span>奥数学习进度 · 9周计划</div>
+      <p style="font-size:0.75em;color:var(--muted);margin-bottom:12px;">⭐ 基础 → ⭐⭐⭐⭐ 挑战 · 每周5道精选题</p>
       <div class="units-grid">
-        <div class="unit-card done" id="uc-o1" onclick="openModal('oly','o1')">
-          <div class="unit-num">第 1 周</div>
-          <div class="unit-title">➕ 和差问题</div>
-          <div class="unit-tags"><span class="tag tag-purple">大数=(和+差)÷2</span><span class="tag tag-purple">小数=(和-差)÷2</span></div>
-          <div style="margin-top:8px;font-size:0.78em;color:var(--text-muted);">难度：⭐ · 5道题</div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
-        <div class="unit-card" id="uc-o2" onclick="openModal('oly','o2')">
-          <div class="unit-num">第 2 周</div><div class="unit-title">✖️ 和倍·差倍问题</div>
-          <div class="unit-tags"><span class="tag tag-purple">和倍：1倍数=和÷(倍数+1)</span><span class="tag tag-purple">差倍：1倍数=差÷(倍数-1)</span></div>
-          <div style="margin-top:8px;font-size:0.78em;color:var(--text-muted);">难度：⭐⭐ · 5道题</div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
-        <div class="unit-card" id="uc-o3" onclick="openModal('oly','o3')">
-          <div class="unit-num">第 3 周</div><div class="unit-title">🐔 鸡兔同笼</div>
-          <div class="unit-tags"><span class="tag tag-purple">假设法</span><span class="tag tag-purple">抬脚法</span></div>
-          <div style="margin-top:8px;font-size:0.78em;color:var(--text-muted);">难度：⭐⭐ · 5道题</div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
-        <div class="unit-card" id="uc-o4" onclick="openModal('oly','o4')">
-          <div class="unit-num">第 4 周</div><div class="unit-title">👦 年龄 + 植树问题</div>
-          <div class="unit-tags"><span class="tag tag-purple">年龄差不变</span><span class="tag tag-purple">植树的公式</span></div>
-          <div style="margin-top:8px;font-size:0.78em;color:var(--text-muted);">难度：⭐⭐ · 5道题</div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
-        <div class="unit-card" id="uc-o5" onclick="openModal('oly','o5')">
-          <div class="unit-num">第 5 周</div><div class="unit-title">💰 盈亏问题</div>
-          <div class="unit-tags"><span class="tag tag-purple">一盈一亏</span><span class="tag tag-purple">两次盈/亏</span></div>
-          <div style="margin-top:8px;font-size:0.78em;color:var(--text-muted);">难度：⭐⭐⭐ · 5道题</div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
-        <div class="unit-card" id="uc-o6" onclick="openModal('oly','o6')">
-          <div class="unit-num">第 6 周</div><div class="unit-title">📐 几何与面积</div>
-          <div class="unit-tags"><span class="tag tag-purple">周长面积</span><span class="tag tag-purple">方格计数</span></div>
-          <div style="margin-top:8px;font-size:0.78em;color:var(--text-muted);">难度：⭐⭐ · 5道题</div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
-        <div class="unit-card" id="uc-o7" onclick="openModal('oly','o7')">
-          <div class="unit-num">第 7 周</div><div class="unit-title">🧠 逻辑推理</div>
-          <div class="unit-tags"><span class="tag tag-purple">真假话</span><span class="tag tag-purple">枚举列表</span></div>
-          <div style="margin-top:8px;font-size:0.78em;color:var(--text-muted);">难度：⭐⭐⭐ · 5道题</div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
-        <div class="unit-card" id="uc-o8" onclick="openModal('oly','o8')">
-          <div class="unit-num">第 8 周</div><div class="unit-title">🧩+⚖️ 抽屉+统筹</div>
-          <div class="unit-tags"><span class="tag tag-purple">最不利原则</span><span class="tag tag-purple">最优策略</span></div>
-          <div style="margin-top:8px;font-size:0.78em;color:var(--text-muted);">难度：⭐⭐⭐ · 5道题</div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
-        <div class="unit-card" id="uc-o9" onclick="openModal('oly','o9')">
-          <div class="unit-num">第 9 周 🏆</div><div class="unit-title">🎯 综合挑战 · 毕业考</div>
-          <div class="unit-tags"><span class="tag tag-orange">数字谜</span><span class="tag tag-orange">逆向思维</span><span class="tag tag-orange">综合应用</span></div>
-          <div style="margin-top:8px;font-size:0.78em;color:var(--text-muted);">难度：⭐⭐⭐⭐ · 毕业挑战</div>
-          <div class="unit-check">✅ 完成</div>
-        </div>
+        <div class="unit-card done" id="uc-o1" onclick="openModal('oly','o1')"><div class="unit-num">第 1 周</div><div class="unit-title">➕ 和差问题</div><div class="unit-tags"><span class="unit-tag unit-tag-purple">大数=(和+差)÷2</span><span class="unit-tag unit-tag-purple">小数=(和-差)÷2</span></div><div style="margin-top:8px;font-size:0.73em;color:var(--muted);">⭐ 基础 · 5道题</div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-o2" onclick="openModal('oly','o2')"><div class="unit-num">第 2 周</div><div class="unit-title">✖️ 和倍·差倍问题</div><div class="unit-tags"><span class="unit-tag unit-tag-purple">和倍</span><span class="unit-tag unit-tag-purple">差倍</span></div><div style="margin-top:8px;font-size:0.73em;color:var(--muted);">⭐⭐ 进阶 · 5道题</div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-o3" onclick="openModal('oly','o3')"><div class="unit-num">第 3 周</div><div class="unit-title">🐔 鸡兔同笼</div><div class="unit-tags"><span class="unit-tag unit-tag-purple">假设法</span><span class="unit-tag unit-tag-purple">抬脚法</span></div><div style="margin-top:8px;font-size:0.73em;color:var(--muted);">⭐⭐ 进阶 · 5道题</div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-o4" onclick="openModal('oly','o4')"><div class="unit-num">第 4 周</div><div class="unit-title">👦 年龄+植树问题</div><div class="unit-tags"><span class="unit-tag unit-tag-purple">年龄差不变</span><span class="unit-tag unit-tag-purple">植树公式</span></div><div style="margin-top:8px;font-size:0.73em;color:var(--muted);">⭐⭐ 进阶 · 5道题</div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-o5" onclick="openModal('oly','o5')"><div class="unit-num">第 5 周</div><div class="unit-title">💰 盈亏问题</div><div class="unit-tags"><span class="unit-tag unit-tag-purple">一盈一亏</span><span class="unit-tag unit-tag-purple">两次盈/亏</span></div><div style="margin-top:8px;font-size:0.73em;color:var(--muted);">⭐⭐⭐ 中级 · 5道题</div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-o6" onclick="openModal('oly','o6')"><div class="unit-num">第 6 周</div><div class="unit-title">📐 几何与面积</div><div class="unit-tags"><span class="unit-tag unit-tag-purple">周长面积</span><span class="unit-tag unit-tag-purple">方格计数</span></div><div style="margin-top:8px;font-size:0.73em;color:var(--muted);">⭐⭐ 中级 · 5道题</div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-o7" onclick="openModal('oly','o7')"><div class="unit-num">第 7 周</div><div class="unit-title">🧠 逻辑推理</div><div class="unit-tags"><span class="unit-tag unit-tag-purple">真假话</span><span class="unit-tag unit-tag-purple">枚举列表</span></div><div style="margin-top:8px;font-size:0.73em;color:var(--muted);">⭐⭐⭐ 中级 · 5道题</div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-o8" onclick="openModal('oly','o8')"><div class="unit-num">第 8 周</div><div class="unit-title">🧩+⚖️ 抽屉+统筹</div><div class="unit-tags"><span class="unit-tag unit-tag-purple">最不利原则</span><span class="unit-tag unit-tag-purple">最优策略</span></div><div style="margin-top:8px;font-size:0.73em;color:var(--muted);">⭐⭐⭐ 中级 · 5道题</div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-o9" onclick="openModal('oly','o9')"><div class="unit-num">第 9 周 🏆</div><div class="unit-title">🎯 综合挑战 · 毕业考</div><div class="unit-tags"><span class="unit-tag unit-tag-orange">数字谜</span><span class="unit-tag unit-tag-orange">逆向思维</span></div><div style="margin-top:8px;font-size:0.73em;color:var(--muted);">⭐⭐⭐⭐ 挑战 · 毕业考</div><div class="unit-done-badge">✨ 已完成</div></div>
       </div>
     </div>
-
     <div class="card">
-      <h3 class="card-title">🌳 奥数知识树（点击展开）</h3>
+      <div class="card-title"><span class="card-icon">🌳</span>奥数知识树 · 点击展开</div>
       <ul class="tree">
         <li class="tree-item">
-          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(231,76,60,0.06);border-color:rgba(231,76,60,0.15);">
-            <span class="icon">📊</span><span class="label">📊 应用题（和差/和倍/鸡兔/年龄/盈亏/植树）</span><span class="arrow">▸</span>
-          </div>
-          <ul class="tree-children">
-            <li class="tree-child-item done" data-subject="oly" data-id="o1-1" onclick="toggleDone(this,'oly','o1-1')">✅ 1.1 和差问题：大数=(和+差)÷2，小数=(和-差)÷2</li>
-            <li class="tree-child-item" data-subject="oly" data-id="o1-2" onclick="toggleDone(this,'oly','o1-2')">🆕 1.2 和倍问题：1倍数=和÷（倍数+1）</li>
-            <li class="tree-child-item" data-subject="oly" data-id="o1-3" onclick="toggleDone(this,'oly','o1-3')">🆕 1.3 差倍问题：1倍数=差÷（倍数-1）</li>
-            <li class="tree-child-item" data-subject="oly" data-id="o1-4" onclick="toggleDone(this,'oly','o1-4')">🆕 1.4 鸡兔同笼·假设法：先假设全是一种，算出差来调整</li>
-            <li class="tree-child-item" data-subject="oly" data-id="o1-5" onclick="toggleDone(this,'oly','o1-5')">🆕 1.5 鸡兔同笼·抬脚法：让动物抬脚的趣味解法</li>
-            <li class="tree-child-item" data-subject="oly" data-id="o1-6" onclick="toggleDone(this,'oly','o1-6')">🆕 1.6 年龄问题：年龄差不变，年龄和随时间同增同减</li>
-            <li class="tree-child-item" data-subject="oly" data-id="o1-7" onclick="toggleDone(this,'oly','o1-7')">🆕 1.7 盈亏问题·一盈一亏：（盈+亏）÷分配差</li>
-            <li class="tree-child-item" data-subject="oly" data-id="o1-8" onclick="toggleDone(this,'oly','o1-8')">🆕 1.8 植树问题：段数=路长÷间距，端点种+1</li>
+          <div class="tree-node red-node" onclick="toggleTree(this)">📊 应用题（和差/和倍/鸡兔/年龄/盈亏/植树） <span class="tree-arrow">▸</span></div>
+          <ul class="tree-child-list">
+            <li class="tree-child done" data-subject="oly" data-id="o1-1" onclick="toggleDone(this)">✅ 1.1 和差问题：大数=(和+差)÷2，小数=(和-差)÷2</li>
+            <li class="tree-child" data-subject="oly" data-id="o1-2" onclick="toggleDone(this)">🆕 1.2 和倍问题：1倍数=和÷（倍数+1）</li>
+            <li class="tree-child" data-subject="oly" data-id="o1-3" onclick="toggleDone(this)">🆕 1.3 差倍问题：1倍数=差÷（倍数-1）</li>
+            <li class="tree-child" data-subject="oly" data-id="o1-4" onclick="toggleDone(this)">🆕 1.4 鸡兔同笼·假设法：先假设全是一种，算出差来调整</li>
+            <li class="tree-child" data-subject="oly" data-id="o1-5" onclick="toggleDone(this)">🆕 1.5 鸡兔同笼·抬脚法：让动物抬脚的趣味解法</li>
+            <li class="tree-child" data-subject="oly" data-id="o1-6" onclick="toggleDone(this)">🆕 1.6 年龄问题：年龄差不变，年龄和随时间同增同减</li>
+            <li class="tree-child" data-subject="oly" data-id="o1-7" onclick="toggleDone(this)">🆕 1.7 盈亏问题·一盈一亏：（盈+亏）÷分配差</li>
+            <li class="tree-child" data-subject="oly" data-id="o1-8" onclick="toggleDone(this)">🆕 1.8 植树问题：段数=路长÷间距，端点种+1</li>
           </ul>
         </li>
         <li class="tree-item">
-          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(46,204,113,0.06);border-color:rgba(46,204,113,0.15);">
-            <span class="icon">🔍</span><span class="label">🔍 找规律（数列/周期/图形）</span><span class="arrow">▸</span>
-          </div>
-          <ul class="tree-children">
-            <li class="tree-child-item" data-subject="oly" data-id="o2-1" onclick="toggleDone(this,'oly','o2-1')">🆕 2.1 等差数列：第n项=首项+（n-1）×公差</li>
-            <li class="tree-child-item" data-subject="oly" data-id="o2-2" onclick="toggleDone(this,'oly','o2-2')">🆕 2.2 等比数列/跳级规律</li>
-            <li class="tree-child-item" data-subject="oly" data-id="o2-3" onclick="toggleDone(this,'oly','o2-3')">🆕 2.3 数量周期：总数÷周期长度=完整周期数+余数</li>
-            <li class="tree-child-item" data-subject="oly" data-id="o2-4" onclick="toggleDone(this,'oly','o2-4')">🆕 2.4 星期/日期周期（含星期几计算）</li>
-            <li class="tree-child-item" data-subject="oly" data-id="o2-5" onclick="toggleDone(this,'oly','o2-5')">🆕 2.5 图形排列规律</li>
+          <div class="tree-node green-node" onclick="toggleTree(this)">🔍 找规律（数列/周期/图形） <span class="tree-arrow">▸</span></div>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="oly" data-id="o2-1" onclick="toggleDone(this)">🆕 2.1 等差数列：第n项=首项+（n-1）×公差</li>
+            <li class="tree-child" data-subject="oly" data-id="o2-2" onclick="toggleDone(this)">🆕 2.2 等比数列/跳级规律</li>
+            <li class="tree-child" data-subject="oly" data-id="o2-3" onclick="toggleDone(this)">🆕 2.3 数量周期：总数÷周期长度=完整周期数+余数</li>
+            <li class="tree-child" data-subject="oly" data-id="o2-4" onclick="toggleDone(this)">🆕 2.4 星期/日期周期（含星期几计算）</li>
+            <li class="tree-child" data-subject="oly" data-id="o2-5" onclick="toggleDone(this)">🆕 2.5 图形排列规律</li>
           </ul>
         </li>
         <li class="tree-item">
-          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(243,156,18,0.06);border-color:rgba(243,156,18,0.15);">
-            <span class="icon">📐</span><span class="label">📐 几何与面积</span><span class="arrow">▸</span>
-          </div>
-          <ul class="tree-children">
-            <li class="tree-child-item" data-subject="oly" data-id="o3-1" onclick="toggleDone(this,'oly','o3-1')">🆕 3.1 正/长方形：周长=2×(长+宽)，面积=长×宽</li>
-            <li class="tree-child-item" data-subject="oly" data-id="o3-2" onclick="toggleDone(this,'oly','o3-2')">🆕 3.2 不规则图形：拆分法、平移法求面积</li>
-            <li class="tree-child-item" data-subject="oly" data-id="o3-3" onclick="toggleDone(this,'oly','o3-3')">🆕 3.3 数线段：点数×(点数-1)÷2</li>
-            <li class="tree-child-item" data-subject="oly" data-id="o3-4" onclick="toggleDone(this,'oly','o3-4')">🆕 3.4 数三角形/方格计数</li>
+          <div class="tree-node yellow-node" onclick="toggleTree(this)">📐 几何与面积 <span class="tree-arrow">▸</span></div>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="oly" data-id="o3-1" onclick="toggleDone(this)">🆕 3.1 正/长方形：周长=2×(长+宽)，面积=长×宽</li>
+            <li class="tree-child" data-subject="oly" data-id="o3-2" onclick="toggleDone(this)">🆕 3.2 不规则图形：拆分法、平移法求面积</li>
+            <li class="tree-child" data-subject="oly" data-id="o3-3" onclick="toggleDone(this)">🆕 3.3 数线段：点数×(点数-1)÷2</li>
+            <li class="tree-child" data-subject="oly" data-id="o3-4" onclick="toggleDone(this)">🆕 3.4 数三角形/方格计数</li>
           </ul>
         </li>
         <li class="tree-item">
-          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(155,89,182,0.06);border-color:rgba(155,89,182,0.15);">
-            <span class="icon">🧠</span><span class="label">🧠 逻辑推理 / 🧩 抽屉原理 / ⚖️ 统筹</span><span class="arrow">▸</span>
-          </div>
-          <ul class="tree-children">
-            <li class="tree-child-item" data-subject="oly" data-id="o4-1" onclick="toggleDone(this,'oly','o4-1')">🆕 4.1 真假话问题：假设法，逐一排除矛盾</li>
-            <li class="tree-child-item" data-subject="oly" data-id="o4-2" onclick="toggleDone(this,'oly','o4-2')">🆕 4.2 简单排列：枚举法，有序列举</li>
-            <li class="tree-child-item" data-subject="oly" data-id="o4-3" onclick="toggleDone(this,'oly','o4-3')">🆕 4.3 抽屉原理入门：n+1只鸽，放n个笼，必有1笼≥2只</li>
-            <li class="tree-child-item" data-subject="oly" data-id="o5-1" onclick="toggleDone(this,'oly','o5-1')">🆕 5.1 时间安排：统筹规划、最短时间问题</li>
-            <li class="tree-child-item" data-subject="oly" data-id="o5-2" onclick="toggleDone(this,'oly','o5-2')">🆕 5.2 最优策略：选择最优方案</li>
+          <div class="tree-node purple-node" onclick="toggleTree(this)">🧠 逻辑推理 / 🧩 抽屉原理 / ⚖️ 统筹 <span class="tree-arrow">▸</span></div>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="oly" data-id="o4-1" onclick="toggleDone(this)">🆕 4.1 真假话问题：假设法，逐一排除矛盾</li>
+            <li class="tree-child" data-subject="oly" data-id="o4-2" onclick="toggleDone(this)">🆕 4.2 简单排列：枚举法，有序列举</li>
+            <li class="tree-child" data-subject="oly" data-id="o4-3" onclick="toggleDone(this)">🆕 4.3 抽屉原理入门：n+1只鸽，放n个笼，必有1笼≥2只</li>
+            <li class="tree-child" data-subject="oly" data-id="o5-1" onclick="toggleDone(this)">🆕 5.1 时间安排：统筹规划、最短时间问题</li>
+            <li class="tree-child" data-subject="oly" data-id="o5-2" onclick="toggleDone(this)">🆕 5.2 最优策略：选择最优方案</li>
           </ul>
         </li>
       </ul>
@@ -746,27 +855,26 @@
 
 <!-- Footer -->
 <div class="footer">
-  🌱 豆芽哈吉米 · 吴尚融学习知识树 · 2026-04-17<br>
-  语文·数学·英语·奥数 · 四年级下册全覆盖 · 数据同步至 GitHub
+  🌱 豆芽哈吉米 · 吴尚融学习星球 · 2026 · 记录成长每一天
 </div>
 
 <!-- Float Actions -->
 <div class="float-actions">
   <button class="fab fab-sync" onclick="syncFromGitHub()" title="从 GitHub 同步">🔄</button>
-  <button class="fab fab-down" onclick="exportData()" title="导出数据">⬇️</button>
-  <button class="fab fab-up" onclick="document.getElementById('fileImport').click()" title="导入数据">⬆️</button>
+  <button class="fab fab-down" onclick="exportData()" title="导出备份">⬇️</button>
+  <button class="fab fab-up" onclick="document.getElementById('fileImport').click()" title="导入备份">⬆️</button>
   <input type="file" id="fileImport" accept=".json" style="display:none" onchange="importData(this)">
 </div>
 
 <!-- Modal -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <h3 id="modalTitle">知识点列表</h3>
-    <div id="modalContent"></div>
-    <div style="margin-top:16px;text-align:right;">
-      <button onclick="saveModal()" style="background:var(--blue);color:white;border:none;padding:8px 20px;border-radius:8px;cursor:pointer;font-size:0.85em;">💾 保存进度</button>
+    <div class="modal-header">
+      <h3 id="modalTitle">📋 知识点详情</h3>
+      <button class="modal-close-btn" onclick="closeModal()">✕</button>
     </div>
+    <div id="modalContent"></div>
+    <button class="modal-save-btn" onclick="saveModal()">💾 保存进度</button>
   </div>
 </div>
 
@@ -774,214 +882,198 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ── Config ──
+// ── Constants ──
 const GITHUB_RAW = 'https://raw.githubusercontent.com/wjbtian/shengrong-study/main/progress.json';
-const GITHUB_API  = 'https://api.github.com/repos/wjbtian/shengrong-study/contents/progress.json';
 
 // ── State ──
-let progressData = { chinese: [], math: [], english: [], oly: [] };
-let progressSha  = null;
-let modalSubject = null;
-let modalUnit    = null;
+let progressData = { chinese:[], math:[], english:[], oly:[] };
+let modalSubject = null, modalUnit = null;
 
 // ── Boot ──
 (async () => {
-  await loadFromGitHub();
-  await loadFromLocal();
-  applyProgress();
-  setSyncStatus('ok', '已同步 ☁️');
+  loadLocal();
+  applyAll();
+  setSync('ok', '本地已就绪 ✓');
 })();
 
-// ── Load from GitHub ──
-async function loadFromGitHub() {
-  try {
-    const r = await fetch(GITHUB_RAW + '?t=' + Date.now());
-    if (!r.ok) return;
-    const data = await r.json();
-    // Merge: remote wins if newer than local
-    for (const key of ['chinese','math','english','oly']) {
-      const local = JSON.parse(localStorage.getItem('progress_' + key) || '[]');
-      const remote = data[key] || [];
-      // Union of both arrays (unique by id)
-      const merged = [...new Map([...local,...remote].map(x=>[x.id,x])).values()];
-      progressData[key] = merged;
-    }
-    syncToLocal();
-    document.getElementById('syncTime').textContent = '☁️ 已从云端同步';
-  } catch(e) {
-    // offline, fall back to local
-    document.getElementById('syncTime').textContent = '📴 本地模式';
-  }
-}
-
 // ── Load from localStorage ──
-async function loadFromLocal() {
-  for (const key of ['chinese','math','english','oly']) {
+function loadLocal() {
+  for (const k of ['chinese','math','english','oly']) {
     try {
-      const stored = JSON.parse(localStorage.getItem('progress_' + key) || '[]');
-      if (stored.length > 0) {
-        progressData[key] = stored;
-      }
+      const v = JSON.parse(localStorage.getItem('prog_' + k) || '[]');
+      if (v.length) progressData[k] = v;
     } catch(e) {}
   }
 }
 
-// ── Save to localStorage ──
-function syncToLocal() {
-  for (const key of ['chinese','math','english','oly']) {
-    localStorage.setItem('progress_' + key, JSON.stringify(progressData[key]));
+function saveAll() {
+  for (const k of ['chinese','math','english','oly']) {
+    localStorage.setItem('prog_' + k, JSON.stringify(progressData[k]));
   }
 }
 
-// ── Apply progress to DOM ──
-function applyProgress() {
-  // Overview progress bars
-  for (const subject of ['chinese','math','english','oly']) {
-    const ids = progressData[subject];
-    document.querySelectorAll('[data-subject="'+subject+'"][data-id]').forEach(el => {
-      const done = ids.includes(el.dataset.id);
-      el.classList.toggle('done', done);
-    });
+// ── Apply progress to all elements ──
+function applyAll() {
+  for (const el of document.querySelectorAll('.tree-child[data-subject][data-id]')) {
+    const s = el.dataset.subject, id = el.dataset.id;
+    el.classList.toggle('done', progressData[s].includes(id));
   }
   // Unit cards
-  for (const subject of ['chinese','math','english','oly']) {
-    const ids = progressData[subject];
-    document.querySelectorAll('.unit-card[id^="uc-"]').forEach(el => {
-      const cardId = subject[0] + el.id.replace('uc-','');
-      const unitItems = document.querySelectorAll('[data-subject="'+subject+'"][data-unit]');
-      const unitSet = new Set([...unitItems].map(x=>x.dataset.id));
-      const allDone = [...unitSet].every(id => ids.includes(id));
-      el.classList.toggle('done', allDone);
-    });
+  for (const el of document.querySelectorAll('.unit-card[id]')) {
+    const prefix = el.id.replace('uc-','');
+    const items = document.querySelectorAll(`.tree-child[data-subject][data-id^="${prefix}-"]`);
+    if (!items.length) continue;
+    const allDone = [...items].every(x => progressData[x.dataset.subject].includes(x.dataset.id));
+    el.classList.toggle('done', allDone);
+  }
+  // Progress percentages
+  const totals = { chinese:26, math:10, english:16, oly:9 };
+  for (const [k,total] of Object.entries(totals)) {
+    const pct = Math.round((progressData[k].length / total) * 100);
+    const fill = { chinese:'pb-c', math:'pb-m', english:'pb-e', oly:'pb-o' }[k];
+    const txt  = { chinese:'pp-c', math:'pp-m', english:'pp-e', oly:'pp-o' }[k];
+    document.getElementById(fill).style.width = pct + '%';
+    document.getElementById(txt).textContent  = pct + '%';
   }
   // Recent list
-  updateRecent();
-  // Progress percentages
-  updateProgressPct();
-}
-
-function updateProgressPct() {
-  const totals = { chinese: 26, math: 9, english: 8, oly: 9 };
-  for (const [subj, total] of Object.entries(totals)) {
-    const ids = progressData[subj];
-    const pct = total > 0 ? Math.round((ids.length / total) * 100) : 0;
-    const bar = document.getElementById('bar-' + subj);
-    const txt = document.getElementById('prog-' + subj);
-    if (bar) bar.style.width = pct + '%';
-    if (txt) txt.textContent = pct + '%';
+  const total = Object.values(progressData).reduce((a,v) => a+v.length, 0);
+  const rl = document.getElementById('recentList');
+  if (total > 0) {
+    rl.innerHTML = `<div class="recent-stars">⭐⭐⭐</div>
+      <div class="recent-count">${total} 个知识点已完成！</div>
+      <div style="font-size:0.78em;color:var(--muted);margin-top:6px;">继续加油，继续探索知识宇宙！🚀</div>`;
   }
 }
 
-function updateRecent() {
-  const all = [];
-  for (const [subj, ids] of Object.entries(progressData)) {
-    ids.forEach(id => all.push(id));
-  }
-  const el = document.getElementById('recent-list');
-  if (!all.length) return;
-  el.innerHTML = `<span style="color:var(--green);font-size:0.85em;">✅ 已有 ${all.length} 个知识点完成，继续加油！💪</span>`;
+// ── Toggle tree branch ──
+function toggleTree(node) {
+  node.classList.toggle('open');
+  node.nextElementSibling && node.nextElementSibling.classList.toggle('open');
 }
 
-// ── Sync indicator ──
-function setSyncStatus(type, text) {
-  const dot = document.getElementById('syncDot');
-  dot.className = 'sync-dot ' + type;
+// ── Toggle single item ──
+function toggleDone(el) {
+  const s = el.dataset.subject, id = el.dataset.id;
+  if (progressData[s].includes(id)) {
+    progressData[s] = progressData[s].filter(x => x !== id);
+    el.classList.remove('done');
+  } else {
+    progressData[s].push(id);
+    el.classList.add('done');
+    // sparkle effect
+    el.style.transform = 'scale(1.03)';
+    setTimeout(() => el.style.transform = '', 200);
+  }
+  saveAll();
+  applyAll();
+  toast('✅ 进度已保存！');
+}
+
+// ── Sync ──
+async function syncFromGitHub() {
+  setSync('', '同步中…');
+  try {
+    const r = await fetch(GITHUB_RAW + '?t=' + Date.now());
+    if (!r.ok) throw new Error('not ok');
+    const data = await r.json();
+    for (const k of ['chinese','math','english','oly']) {
+      if (data[k] && Array.isArray(data[k])) {
+        progressData[k] = [...new Set([...progressData[k], ...data[k]])];
+      }
+    }
+    saveAll(); applyAll();
+    setSync('ok', '☁️ 已同步');
+    toast('☁️ 已从 GitHub 同步！');
+  } catch(e) {
+    setSync('err', '📴 本地模式');
+    toast('📴 无法连接 GitHub，使用本地数据');
+  }
+}
+
+function setSync(type, text) {
+  document.getElementById('syncDot').className  = 'sync-dot' + (type ? ' ' + type : '');
   document.getElementById('syncText').textContent = text;
 }
 
-async function syncFromGitHub() {
-  setSyncStatus('', '同步中…');
-  try {
-    await loadFromGitHub();
-    applyProgress();
-    setSyncStatus('ok', '已同步 ☁️');
-    toast('✅ 已从 GitHub 同步！');
-  } catch(e) {
-    setSyncStatus('err', '同步失败');
-    toast('⚠️ 同步失败，请检查网络');
-  }
+// ── Tab navigation ──
+function switchTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-
-// ── Toggle a single knowledge point ──
-function toggleDone(el, subject, id) {
-  el.classList.toggle('done');
-  let ids = progressData[subject];
-  if (ids.includes(id)) {
-    ids = ids.filter(x => x !== id);
-  } else {
-    ids = [...ids, id];
-  }
-  progressData[subject] = ids;
-  syncToLocal();
-  updateProgressPct();
-  updateRecent();
-  toast('✅ 进度已保存（本地）');
+function goTab(id) {
+  const btn = document.querySelectorAll('.tab-btn')[ {chinese:1,math:2,english:3,oly:4}[id] || 0];
+  if (btn) btn.click();
 }
 
 // ── Modal ──
-const MODAL_ITEMS = {
+const UNIT_ITEMS = {
   chinese: {
-    c1: ['古诗词1：绝句','古诗词2：惠崇春江晚景','古诗词3：三衢道中','朗读流利','默写正确'],
-    c2: ['掌握生字词','整体感知课文','段落划分','体会情感'],
-    c3: ['理解含义深刻句子','体会写法','朗读感悟'],
-    c4: ['作者情感变化','对比手法','朗读感悟'],
-    c5: ['移步换景','按游览顺序','优美语句积累'],
-    c6: ['长文章分段','把握情节','人物形象'],
-    c7: ['墨梅背诵','囊萤夜读理解','铁杵成针寓意'],
-    c8: ['故事续编','发挥想象','写清楚过程'],
+    c1: ['《绝句》朗读背诵','《惠崇春江晚景》朗读背诵','《三衢道中》朗读背诵','默写三首古诗词','理解诗意诗情'],
+    c2: ['掌握课后生字词','正确读写生字','整体感知课文内容','体会乡村生活美好'],
+    c3: ['理解"小小的天窗"含义','体会作者对天窗的喜爱','学习比喻、拟人写法','有感情朗读'],
+    c4: ['理清课文脉络','体会作者情感变化','学习对比写法','母鸡形象分析'],
+    c5: ['移步换景的写作方法','按游览顺序写景','积累优美语句','十七孔桥特点'],
+    c6: ['给长文章分段','把握故事主要内容','小英雄雨来形象','体会爱国精神'],
+    c7: ['《墨梅》背诵理解','《囊萤夜读》读懂大意','《铁杵成针》明白道理','古诗默写正确'],
+    c8: ['了解故事内容','发挥想象续编','写清楚过程','有趣味有道理'],
   },
   math: {
-    m1: ['方向词（东南西北）','描述简单路线','绘制简单示意图'],
-    m2: ['口算除法','笔算除法（两位数除）','商的变化规律'],
-    m3: ['读懂统计表','绘制条形统计图','分析数据'],
-    m4: ['平行四边形特征','梯形特征','高与底的画法'],
-    m5: ['口算除法','笔算除法','验算方法'],
-    m6: ['面积公式推导','单位换算','解决实际问题'],
-    m7: ['烙饼问题','统筹优化思想','策略选择'],
-    m8: ['数与运算总览','图形知识回顾','统计复习'],
+    m1: ['认识方向词（东南西北）','用方向词描述简单路线','绘制简单示意图','解决问题'],
+    m2: ['口算除法','笔算除法（两位数除）','商的变化规律','解决问题'],
+    m3: ['读懂统计表','绘制条形统计图','分析数据提出建议','复式统计图'],
+    m4: ['平行四边形特征','梯形特征','高与底的画法','四边形关系'],
+    m5: ['口算除法','笔算除法（一位数）','验算方法','解决问题'],
+    m6: ['面积公式推导','面积单位（cm²/dm²/m²）','单位换算','解决实际问题'],
+    m7: ['烙饼问题','沏茶问题','田忌赛马策略','统筹优化思想'],
+    m8: ['数与运算总览','图形知识回顾','统计与概率','综合应用'],
   },
   english: {
-    e1: ['会读subjects词汇','掌握like的用法','会写简单句子'],
-    e2: ['rooms词汇','in/on/under用法','会描述房间'],
-    e3: ['rules词汇','should/shouldn\'t用法','会写规则句子'],
-    e4: ['can/could用法','描述能力','会写否定句'],
-    e5: ['seasons词汇','weather词汇','会用形容词描述季节'],
-    e6: ['feelings词汇','询问身体状况','给出建议'],
-    e7: ['be going to用法','summer plans','会用将来时'],
-    e8: ['illness词汇','询问健康','给出建议表达'],
+    e1: ['会读subjects词汇','掌握like的用法','会写简单句子','课本朗读'],
+    e2: ['rooms词汇','in/on/under用法','会描述房间位置','课本朗读'],
+    e3: ['rules词汇','should/shouldn\'t用法','会写规则句子','课本朗读'],
+    e4: ['can/could用法','描述能力','会写否定句','课本朗读'],
+    e5: ['seasons词汇','weather词汇','会用形容词描述季节','课本朗读'],
+    e6: ['feelings词汇','询问身体状况','给出建议','课本朗读'],
+    e7: ['be going to用法','summer plans','会用将来时','课本朗读'],
+    e8: ['illness词汇','询问健康','给出建议表达','课本朗读'],
   },
   oly: {
-    o1: ['理解大数=(和+差)÷2','理解小数=(和-差)÷2','做对5道练习题'],
-    o2: ['和倍：找1倍数','差倍：找1倍数','综合练习'],
-    o3: ['假设法解题','抬脚法解题','区分两种方法'],
-    o4: ['年龄差不变原理','植树公式三情况','实际应用'],
-    o5: ['一盈一亏公式','两次盈/亏','判断用哪个公式'],
-    o6: ['周长公式','面积公式','组合图形'],
-    o7: ['真假话假设法','枚举法','综合推理'],
+    o1: ['理解大数=(和+差)÷2','理解小数=(和-差)÷2','做对5道练习题','综合应用题'],
+    o2: ['和倍：找1倍数','差倍：找1倍数','和倍差倍综合练习'],
+    o3: ['假设法解题','抬脚法解题','区分两种方法应用','综合练习'],
+    o4: ['年龄差不变原理','植树公式三情况','实际应用题练习'],
+    o5: ['一盈一亏公式','两次盈/亏公式','判断用哪个公式'],
+    o6: ['周长公式推导','面积公式推导','组合图形求面积'],
+    o7: ['真假话假设法','枚举法解题','综合推理练习'],
     o8: ['抽屉原理最不利','统筹最优策略','综合应用'],
-    o9: ['数字谜','逆向思维','综合毕业挑战'],
+    o9: ['数字谜解题','逆向思维训练','综合毕业挑战'],
   }
 };
 
+const SUBJ_NAMES  = { chinese:'语文', math:'数学', english:'英语', oly:'奥数' };
+const SUBJ_COLORS = { chinese:'red', math:'blue', english:'green', oly:'purple' };
+const UNIT_NAMES  = {
+  c1:'古诗词三首',c2:'乡下人家',c3:'天窗',c4:'母鸡',c5:'颐和园',c6:'小英雄雨来',c7:'古诗三首',c8:'宝葫芦的秘密',
+  m1:'位置与方向',m2:'除数两位数除法',m3:'统计',m4:'平行四边形和梯形',m5:'除数一位数除法',m6:'面积',m7:'数学广角',m8:'总复习',
+  e1:'Our school subjects',e2:'Our new house',e3:'A day in the library',e4:'Drawing in the park',
+  e5:'Seasons',e6:'What\'s the matter?',e7:'Summer is coming!',e8:'How are you now?',
+  o1:'和差问题',o2:'和倍·差倍',o3:'鸡兔同笼',o4:'年龄+植树',o5:'盈亏问题',o6:'几何与面积',o7:'逻辑推理',o8:'抽屉+统筹',o9:'综合挑战'
+};
+const SUBJ_ICONS = { chinese:'📖', math:'🔢', english:'🔤', oly:'🧠' };
+
 function openModal(subject, unit) {
-  modalSubject = subject;
-  modalUnit = unit;
-  const items = MODAL_ITEMS[subject]?.[unit] || [];
-  const subjectNames = { chinese:'语文', math:'数学', english:'英语', oly:'奥数' };
-  const unitNames = {
-    c1:'古诗词三首',c2:'乡下人家',c3:'天窗',c4:'母鸡',c5:'颐和园',c6:'小英雄雨来',c7:'古诗三首',c8:'宝葫芦',
-    m1:'位置与方向',m2:'除数两位数除法',m3:'统计',m4:'平行四边形和梯形',m5:'除数一位数除法',m6:'面积',m7:'数学广角',m8:'总复习',
-    e1:'Our school subjects',e2:'Our new house',e3:'A day in the library',e4:'Drawing in the park',
-    e5:'Seasons',e6:'What\'s the matter?',e7:'Summer is coming!',e8:'How are you now?',
-    o1:'和差问题',o2:'和倍·差倍',o3:'鸡兔同笼',o4:'年龄+植树',o5:'盈亏问题',o6:'几何与面积',o7:'逻辑推理',o8:'抽屉+统筹',o9:'综合挑战'
-  };
-  document.getElementById('modalTitle').textContent = `📋 ${subjectNames[subject]} - ${unitNames[unit]}`;
+  modalSubject = subject; modalUnit = unit;
+  const items = UNIT_ITEMS[subject]?.[unit] || [];
+  document.getElementById('modalTitle').textContent = `${SUBJ_ICONS[subject]} ${SUBJ_NAMES[subject]} · ${UNIT_NAMES[unit]}`;
   const ids = progressData[subject];
   document.getElementById('modalContent').innerHTML = items.map((item, i) => {
-    const id = `${unit}-${i+1}`;
-    const done = ids.includes(id);
-    return `<div class="modal-item ${done?'done':''}" onclick="this.classList.toggle('done');this.querySelector('input').checked=${!done}">
-      <input type="checkbox" ${done?'checked':''} onclick="event.stopPropagation();this.parentElement.classList.toggle('done')">
+    const kid = `${unit}-${i+1}`;
+    const done = ids.includes(kid);
+    return `<div class="modal-item ${done?'done':''}" onclick="this.classList.toggle('done')">
+      <div class="check-circle">${done?'✓':''}</div>
       <span>${item}</span>
     </div>`;
   }).join('');
@@ -991,82 +1083,43 @@ function openModal(subject, unit) {
 function saveModal() {
   if (!modalSubject) return;
   const ids = progressData[modalSubject];
-  document.querySelectorAll('#modalContent .modal-item').forEach(el => {
-    const text = el.querySelector('span').textContent;
-    const unitPrefix = modalUnit + '-';
-    // find matching id by index
-    const idx = [...el.parentElement.children].indexOf(el);
-    const id = `${modalUnit}-${idx+1}`;
-    const checked = el.querySelector('input').checked;
-    if (checked && !ids.includes(id)) {
-      ids.push(id);
-    } else if (!checked && ids.includes(id)) {
-      progressData[modalSubject] = ids.filter(x => x !== id);
+  document.querySelectorAll('#modalContent .modal-item').forEach((el, i) => {
+    const kid = `${modalUnit}-${i+1}`;
+    if (el.classList.contains('done') && !ids.includes(kid)) ids.push(kid);
+    else if (!el.classList.contains('done') && ids.includes(kid)) {
+      progressData[modalSubject] = ids.filter(x => x !== kid);
     }
   });
-  syncToLocal();
-  applyProgress();
-  closeModal();
-  toast('✅ 进度已保存（本地），刷新后生效');
+  saveAll(); applyAll(); closeModal();
+  toast('✅ 进度已保存！');
 }
 
 function closeModal() {
   document.getElementById('modalOverlay').classList.remove('show');
 }
 
-// ── Tab nav ──
-function showTab(tabId) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.getElementById('tab-' + tabId).classList.add('active');
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-}
-function goTab(tabId) {
-  document.querySelectorAll('.tab-btn')[{chinese:1,math:2,english:3,oly:4}[tabId]].click();
-}
-
-function toggleTree(el) {
-  el.classList.toggle('open');
-  const children = el.nextElementSibling;
-  if (children) children.classList.toggle('open');
-}
-
-// ── Export ──
+// ── Export / Import ──
 function exportData() {
-  const all = {};
-  for (const key of ['chinese','math','english','oly']) {
-    all[key] = progressData[key];
-  }
-  const blob = new Blob([JSON.stringify(all, null, 2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
+  const blob = new Blob([JSON.stringify(progressData, null, 2)], {type:'application/json'});
   const a = document.createElement('a');
-  a.href = url;
+  a.href = URL.createObjectURL(blob);
   a.download = `shengrong-progress-${new Date().toISOString().slice(0,10)}.json`;
   a.click();
-  URL.revokeObjectURL(url);
-  toast('⬇️ 数据已导出，保存好文件哦');
+  toast('⬇️ 已导出备份文件！');
 }
 
-// ── Import ──
 function importData(input) {
-  const file = input.files[0];
-  if (!file) return;
+  const file = input.files[0]; if (!file) return;
   const reader = new FileReader();
   reader.onload = (e) => {
     try {
       const data = JSON.parse(e.target.result);
-      for (const key of ['chinese','math','english','oly']) {
-        if (data[key]) {
-          const merged = [...new Map([...progressData[key],...data[key]].map(x=>[x.id||x,x])).values()];
-          progressData[key] = merged;
-        }
+      for (const k of ['chinese','math','english','oly']) {
+        if (data[k]) progressData[k] = [...new Set([...progressData[k], ...data[k]])];
       }
-      syncToLocal();
-      applyProgress();
-      toast('✅ 数据已导入并保存');
-    } catch(err) {
-      toast('⚠️ 文件格式错误');
-    }
+      saveAll(); applyAll();
+      toast('✅ 已导入并合并！');
+    } catch(err) { toast('⚠️ 文件格式错误'); }
   };
   reader.readAsText(file);
   input.value = '';
@@ -1075,11 +1128,9 @@ function importData(input) {
 // ── Toast ──
 function toast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 </script>
-
 </body>
 </html>
