@@ -489,7 +489,45 @@
     .bank-tab.active.red-tab    { background: rgba(255,107,107,0.15); }
     .bank-tab.active.blue-tab   { background: rgba(79,195,247,0.15); }
     .bank-tab.active.green-tab  { background: rgba(105,240,174,0.15); }
-    .bank-tab.active.purple-tab { background: rgba(206,147,216,0.15); }
+    /* ── Vocab Game ── */
+    .vocab-game-wrap { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 16px; }
+    .vc-controls { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+    .vc-stat { font-size: 0.78em; color: var(--muted); flex: 1; min-width: 120px; }
+    #vocab-level-select {
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+      color: #fff; border-radius: 8px; padding: 6px 12px; font-size: 0.82em;
+      cursor: pointer; outline: none;
+    }
+    .vc-start-btn {
+      padding: 7px 18px; background: rgba(105,240,174,0.15); border: 1px solid rgba(105,240,174,0.3);
+      border-radius: 20px; color: var(--green); font-weight: 700; font-size: 0.82em;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .vc-start-btn:hover { background: rgba(105,240,174,0.25); }
+    .vc-progress-bar { height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; margin-bottom: 10px; }
+    .vc-progress-fill { height: 100%; background: linear-gradient(90deg, var(--green), #00e5a0); border-radius: 3px; transition: width 0.4s; }
+    .vc-counter { font-size: 0.75em; color: var(--muted); text-align: center; margin-bottom: 12px; }
+    .vc-card {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px; padding: 28px 20px; text-align: center; cursor: pointer;
+      min-height: 160px; display: flex; flex-direction: column; justify-content: center;
+      transition: all 0.3s; margin-bottom: 16px;
+      user-select: none;
+    }
+    .vc-card:hover { border-color: rgba(105,240,174,0.4); background: rgba(105,240,174,0.04); }
+    .vc-lvl { font-size: 0.72em; font-weight: 700; margin-bottom: 10px; letter-spacing: 1px; }
+    .vc-en { font-size: 1.6em; font-weight: 800; color: #fff; letter-spacing: 0.5px; line-height: 1.3; margin-bottom: 14px; }
+    .vc-zh { font-size: 1.3em; font-weight: 700; color: var(--green); line-height: 1.4; }
+    .vc-hint { font-size: 0.75em; color: var(--muted); }
+    .vc-btns { display: flex; gap: 12px; }
+    .vc-btn {
+      flex: 1; padding: 12px; border-radius: 14px; font-size: 0.9em; font-weight: 700;
+      cursor: pointer; border: 1px solid; transition: all 0.2s; text-align: center;
+    }
+    .vc-no  { background: rgba(255,107,107,0.1); border-color: rgba(255,107,107,0.3); color: var(--red); }
+    .vc-no:hover  { background: rgba(255,107,107,0.2); transform: translateY(-1px); }
+    .vc-yes { background: rgba(105,240,174,0.12); border-color: rgba(105,240,174,0.3); color: var(--green); }
+    .vc-yes:hover { background: rgba(105,240,174,0.22); transform: translateY(-1px); }
 
     .q-card {
       background: rgba(255,255,255,0.04);
@@ -879,6 +917,29 @@
         </li>
       </ul>
     </div>
+    <!-- 词汇闯关 -->
+    <div class="card" style="margin-top:12px;">
+      <div class="card-title"><span class="card-icon">🎮</span>词汇闯关游戏</div>
+      <div class="vocab-game-wrap">
+        <div class="vc-controls">
+          <select id="vocab-level-select" onchange="initVocabGame()">
+            <option value="all">🌏 全部词汇</option>
+            <option value="1">🌱 基础词汇</option>
+            <option value="2">🌟 进阶词汇</option>
+            <option value="3">🚀 困难词汇</option>
+          </select>
+          <button class="vc-start-btn" onclick="initVocabGame()">🎯 开始闯关</button>
+          <div class="vc-stat" id="vocab-stat">已掌握 0 / 总共 0 词 · 0%</div>
+        </div>
+        <div id="vocab-game">
+          <div style="text-align:center;padding:24px 0;color:var(--muted)">
+            <div style="font-size:2.5em;margin-bottom:10px;">🎮</div>
+            <div style="font-size:0.9em;">选择难度 → 点击「开始闯关」</div>
+            <div style="font-size:0.78em;margin-top:6px;">翻转卡片认词 · 点了"认识了"才算真正掌握</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ═══ OLYMPIAD ═══ -->
@@ -1008,6 +1069,7 @@ let modalSubject = null, modalUnit = null;
   loadLocal();
   applyAll();
   renderBank('oly');
+  updateVocabStats();
   setSync('ok', '本地已就绪 ✓');
 })();
 
@@ -1108,6 +1170,280 @@ async function syncFromGitHub() {
 function setSync(type, text) {
   document.getElementById('syncDot').className  = 'sync-dot' + (type ? ' ' + type : '');
   document.getElementById('syncText').textContent = text;
+}
+
+// ── English Vocabulary (160+ words, by difficulty) ──
+const VOCAB_WORDS = [
+  // 🌱 Level 1 — 基础词汇（约60词）
+  { en: 'Chinese', zh: '语文，中文', lv: 1 },
+  { en: 'Maths', zh: '数学', lv: 1 },
+  { en: 'English', zh: '英语', lv: 1 },
+  { en: 'Music', zh: '音乐', lv: 1 },
+  { en: 'PE', zh: '体育', lv: 1 },
+  { en: 'Art', zh: '美术', lv: 1 },
+  { en: 'Science', zh: '科学', lv: 1 },
+  { en: 'computer', zh: '计算机，电脑', lv: 1 },
+  { en: 'homework', zh: '家庭作业', lv: 1 },
+  { en: 'lesson', zh: '课，一节课', lv: 1 },
+  { en: 'subject', zh: '学科，科目', lv: 1 },
+  { en: 'like', zh: '喜欢', lv: 1 },
+  { en: 'love', zh: '爱，喜欢', lv: 1 },
+  { en: 'play', zh: '玩，打球', lv: 1 },
+  { en: 'draw', zh: '画画', lv: 1 },
+  { en: 'sing', zh: '唱歌', lv: 1 },
+  { en: 'dance', zh: '跳舞', lv: 1 },
+  { en: 'read', zh: '读，阅读', lv: 1 },
+  { en: 'write', zh: '写', lv: 1 },
+  { en: 'nice', zh: '好的，美好的', lv: 1 },
+  { en: 'happy', zh: '开心的', lv: 1 },
+  { en: 'sad', zh: '伤心的', lv: 1 },
+  { en: 'tired', zh: '累的，疲劳的', lv: 1 },
+  { en: 'hot', zh: '热的', lv: 1 },
+  { en: 'cold', zh: '冷的', lv: 1 },
+  { en: 'warm', zh: '暖和的', lv: 1 },
+  { en: 'cool', zh: '凉爽的', lv: 1 },
+  { en: 'sunny', zh: '晴朗的', lv: 1 },
+  { en: 'rainy', zh: '下雨的', lv: 1 },
+  { en: 'cloudy', zh: '多云的', lv: 1 },
+  { en: 'snowy', zh: '下雪的', lv: 1 },
+  { en: 'spring', zh: '春天', lv: 1 },
+  { en: 'summer', zh: '夏天', lv: 1 },
+  { en: 'autumn', zh: '秋天', lv: 1 },
+  { en: 'winter', zh: '冬天', lv: 1 },
+  { en: 'Monday', zh: '星期一', lv: 1 },
+  { en: 'Tuesday', zh: '星期二', lv: 1 },
+  { en: 'Wednesday', zh: '星期三', lv: 1 },
+  { en: 'Thursday', zh: '星期四', lv: 1 },
+  { en: 'Friday', zh: '星期五', lv: 1 },
+  { en: 'Saturday', zh: '星期六', lv: 1 },
+  { en: 'Sunday', zh: '星期日', lv: 1 },
+  { en: 'today', zh: '今天', lv: 1 },
+  { en: 'tomorrow', zh: '明天', lv: 1 },
+  { en: 'yesterday', zh: '昨天', lv: 1 },
+  { en: 'bedroom', zh: '卧室', lv: 1 },
+  { en: 'kitchen', zh: '厨房', lv: 1 },
+  { en: 'bathroom', zh: '浴室，卫生间', lv: 1 },
+  { en: 'living room', zh: '客厅', lv: 1 },
+  { en: 'garden', zh: '花园', lv: 1 },
+  { en: 'table', zh: '桌子', lv: 1 },
+  { en: 'chair', zh: '椅子', lv: 1 },
+  { en: 'window', zh: '窗户', lv: 1 },
+  { en: 'door', zh: '门', lv: 1 },
+  { en: 'floor', zh: '地板，楼层', lv: 1 },
+  { en: 'wall', zh: '墙', lv: 1 },
+  { en: 'tree', zh: '树', lv: 1 },
+  { en: 'flower', zh: '花', lv: 1 },
+  { en: 'bird', zh: '鸟', lv: 1 },
+  { en: 'fish', zh: '鱼', lv: 1 },
+  { en: 'cat', zh: '猫', lv: 1 },
+  { en: 'dog', zh: '狗', lv: 1 },
+  // 🌟 Level 2 — 进阶词汇（约60词）
+  { en: 'school subjects', zh: '学校科目', lv: 2 },
+  { en: 'library', zh: '图书馆', lv: 2 },
+  { en: 'should', zh: '应该', lv: 2 },
+  { en: 'quiet', zh: '安静的', lv: 2 },
+  { en: 'noise', zh: '噪音，吵闹', lv: 2 },
+  { en: 'listen', zh: '听', lv: 2 },
+  { en: 'careful', zh: '仔细的，小心的', lv: 2 },
+  { en: 'carefully', zh: '仔细地', lv: 2 },
+  { en: 'talk', zh: '谈话，说话', lv: 2 },
+  { en: 'run', zh: '跑', lv: 2 },
+  { en: 'jump', zh: '跳', lv: 2 },
+  { en: 'swim', zh: '游泳', lv: 2 },
+  { en: 'fly', zh: '飞', lv: 2 },
+  { en: 'can', zh: '能，会（一般现在）', lv: 2 },
+  { en: 'could', zh: '能，会（过去式）', lv: 2 },
+  { en: 'able', zh: '能，能够', lv: 2 },
+  { en: 'be able to', zh: '能够', lv: 2 },
+  { en: 'draw', zh: '画，绘画', lv: 2 },
+  { en: 'park', zh: '公园', lv: 2 },
+  { en: 'beautiful', zh: '美丽的', lv: 2 },
+  { en: 'flower', zh: '花', lv: 2 },
+  { en: 'river', zh: '河流', lv: 2 },
+  { en: 'lake', zh: '湖', lv: 2 },
+  { en: 'hill', zh: '小山', lv: 2 },
+  { en: 'boat', zh: '小船', lv: 2 },
+  { en: 'city', zh: '城市', lv: 2 },
+  { en: 'village', zh: '乡村，村庄', lv: 2 },
+  { en: 'season', zh: '季节', lv: 2 },
+  { en: 'weather', zh: '天气', lv: 2 },
+  { en: 'temperature', zh: '温度', lv: 2 },
+  { en: 'windy', zh: '有风的', lv: 2 },
+  { en: 'foggy', zh: '有雾的', lv: 2 },
+  { en: 'wet', zh: '潮湿的', lv: 2 },
+  { en: 'dry', zh: '干燥的', lv: 2 },
+  { en: 'feel', zh: '感觉', lv: 2 },
+  { en: 'feel ill', zh: '感觉不舒服', lv: 2 },
+  { en: 'headache', zh: '头痛', lv: 2 },
+  { en: 'fever', zh: '发烧', lv: 2 },
+  { en: 'cold', zh: '感冒', lv: 2 },
+  { en: 'toothache', zh: '牙痛', lv: 2 },
+  { en: 'stomachache', zh: '胃痛，肚子痛', lv: 2 },
+  { en: 'matter', zh: '事情，问题', lv: 2 },
+  { en: "What's the matter?", zh: '怎么了？', lv: 2 },
+  { en: 'doctor', zh: '医生', lv: 2 },
+  { en: 'hospital', zh: '医院', lv: 2 },
+  { en: 'medicine', zh: '药', lv: 2 },
+  { en: 'rest', zh: '休息', lv: 2 },
+  { en: 'drink', zh: '喝，饮料', lv: 2 },
+  { en: 'water', zh: '水', lv: 2 },
+  { en: 'juice', zh: '果汁', lv: 2 },
+  { en: 'milk', zh: '牛奶', lv: 2 },
+  { en: 'ice cream', zh: '冰淇淋', lv: 2 },
+  { en: 'sick', zh: '恶心的，生病的', lv: 2 },
+  { en: 'pain', zh: '疼痛', lv: 2 },
+  { en: 'holiday', zh: '假期，节日', lv: 2 },
+  { en: 'beach', zh: '海滩', lv: 2 },
+  { en: 'camp', zh: '露营', lv: 2 },
+  { en: 'picnic', zh: '野餐', lv: 2 },
+  { en: 'be going to', zh: '将要，打算', lv: 2 },
+  { en: 'plan', zh: '计划', lv: 2 },
+  { en: 'fruit', zh: '水果', lv: 2 },
+  { en: 'ice', zh: '冰', lv: 2 },
+  { en: 'fun', zh: '乐趣，有趣', lv: 2 },
+  // 🚀 Level 3 — 高难度词汇（约40词）
+  { en: 'ours', zh: '我们的', lv: 3 },
+  { en: 'theirs', zh: '他们的', lv: 3 },
+  { en: 'subjects', zh: '科目（复数）', lv: 3 },
+  { en: 'new', zh: '新的', lv: 3 },
+  { en: 'house', zh: '房子', lv: 3 },
+  { en: 'first', zh: '第一', lv: 3 },
+  { en: 'second', zh: '第二', lv: 3 },
+  { en: 'third', zh: '第三', lv: 3 },
+  { en: 'upstairs', zh: '楼上', lv: 3 },
+  { en: 'downstairs', zh: '楼下', lv: 3 },
+  { en: 'make noise', zh: '制造噪音', lv: 3 },
+  { en: 'in the library', zh: '在图书馆里', lv: 3 },
+  { en: 'in the park', zh: '在公园里', lv: 3 },
+  { en: 'have a look', zh: '看一看', lv: 3 },
+  { en: 'turn round', zh: '转身', lv: 3 },
+  { en: 'in the sky', zh: '在天空中', lv: 3 },
+  { en: 'over there', zh: '在那边', lv: 3 },
+  { en: 'What a nice day!', zh: '多好的天气啊！', lv: 3 },
+  { en: 'not...any more', zh: '不再', lv: 3 },
+  { en: 'be ill', zh: '生病', lv: 3 },
+  { en: 'take some medicine', zh: '吃药', lv: 3 },
+  { en: 'have a rest', zh: '休息一下', lv: 3 },
+  { en: 'drink some water', zh: '喝点水', lv: 3 },
+  { en: 'every day', zh: '每天', lv: 3 },
+  { en: 'How are you now?', zh: '你现在好吗？', lv: 3 },
+  { en: 'I\'m better now.', zh: '我现在好多了。', lv: 3 },
+  { en: 'I\'m not so good.', zh: '我不太好。', lv: 3 },
+  { en: 'See you tomorrow.', zh: '明天见。', lv: 3 },
+  { en: 'Good idea!', zh: '好主意！', lv: 3 },
+  { en: 'have a picnic', zh: '去野餐', lv: 3 },
+  { en: 'go camping', zh: '去露营', lv: 3 },
+  { en: 'go to the beach', zh: '去海滩', lv: 3 },
+  { en: 'summer holiday', zh: '暑假', lv: 3 },
+  { en: 'make snowmen', zh: '堆雪人', lv: 3 },
+  { en: 'go skating', zh: '去滑冰', lv: 3 },
+  { en: 'go swimming', zh: '去游泳', lv: 3 },
+  { en: 'pick fruit', zh: '摘水果', lv: 3 },
+  { en: 'in summer', zh: '在夏天', lv: 3 },
+  { en: 'every season', zh: '每个季节', lv: 3 },
+  { en: 'enjoy your holiday', zh: '享受你的假期', lv: 3 },
+  { en: 'Good luck!', zh: '祝你好运！', lv: 3 },
+];
+
+let vocabSolved = {};
+try { vocabSolved = JSON.parse(localStorage.getItem('vocab_solved') || '{}'); } catch(e) {}
+
+function saveVocab() {
+  localStorage.setItem('vocab_solved', JSON.stringify(vocabSolved));
+}
+
+let vocabMode = 'all'; // 'all' | 'easy' | 'mid' | 'hard' | 'unlearned'
+let vocabQueue = [];
+let vocabIdx = 0;
+
+function initVocabGame() {
+  const sel = document.getElementById('vocab-level-select')?.value || 'all';
+  vocabMode = sel;
+  vocabQueue = VOCAB_WORDS.filter(w => sel === 'all' || w.lv === parseInt(sel));
+  // shuffle
+  vocabQueue.sort(() => Math.random() - 0.5);
+  vocabIdx = 0;
+  showVocabCard();
+  updateVocabStats();
+}
+
+function showVocabCard() {
+  if (vocabQueue.length === 0) {
+    document.getElementById('vocab-game').innerHTML = `
+      <div style="text-align:center;padding:40px 0;color:var(--muted)">
+        <div style="font-size:3em;margin-bottom:10px;">🎉</div>
+        <div style="font-size:1.1em;font-weight:700;color:#fff;margin-bottom:8px;">太厉害了！</div>
+        <div>你已经掌握了所有词汇！</div>
+      </div>`;
+    return;
+  }
+  const word = vocabQueue[vocabIdx];
+  const key = word.en;
+  const done = vocabSolved[key];
+  const lvlLabel = word.lv === 1 ? '🌱 基础' : word.lv === 2 ? '🌟 进阶' : '🚀 困难';
+  const lvlColor = word.lv === 1 ? 'var(--green)' : word.lv === 2 ? 'var(--yellow)' : '#ff7b7b';
+
+  document.getElementById('vocab-game').innerHTML = `
+    <div class="vc-progress-bar">
+      <div class="vc-progress-fill" style="width:${Math.round((vocabIdx / vocabQueue.length) * 100)}%"></div>
+    </div>
+    <div class="vc-counter">第 ${vocabIdx + 1} / ${vocabQueue.length} 题</div>
+    <div class="vc-card" id="vc-card" onclick="vocabFlip()">
+      <div class="vc-front" id="vc-front">
+        <div class="vc-lvl" style="color:${lvlColor}">${lvlLabel}</div>
+        <div class="vc-en">${word.en}</div>
+        <div class="vc-hint">👆 点击显示中文意思</div>
+      </div>
+      <div class="vc-back" id="vc-back" style="display:none">
+        <div class="vc-lvl" style="color:${lvlColor}">${lvlLabel}</div>
+        <div class="vc-zh">${word.zh}</div>
+      </div>
+    </div>
+    <div class="vc-btns" id="vc-btns" style="display:none">
+      <button class="vc-btn vc-no" onclick="vocabResult(false)">🤔 再想想</button>
+      <button class="vc-btn vc-yes" onclick="vocabResult(true)">🎉 认识了！</button>
+    </div>`;
+}
+
+function vocabFlip() {
+  const f = document.getElementById('vc-front');
+  const b = document.getElementById('vc-back');
+  const btns = document.getElementById('vc-btns');
+  if (f.style.display !== 'none') {
+    f.style.display = 'none';
+    b.style.display = '';
+  } else {
+    b.style.display = 'none';
+    f.style.display = '';
+    btns.style.display = 'none';
+    return;
+  }
+  btns.style.display = '';
+}
+
+function vocabResult(yes) {
+  const word = vocabQueue[vocabIdx];
+  vocabSolved[word.en] = yes;
+  saveVocab();
+  updateVocabStats();
+  if (yes) {
+    toast('✅ 记住了！');
+  } else {
+    toast('📝 再复习一下！');
+    // put at end of queue
+    vocabQueue.push(vocabQueue.splice(vocabIdx, 1)[0]);
+  }
+  vocabIdx++;
+  if (vocabIdx >= vocabQueue.length) vocabIdx = 0;
+  showVocabCard();
+}
+
+function updateVocabStats() {
+  const total = VOCAB_WORDS.length;
+  const done = VOCAB_WORDS.filter(w => vocabSolved[w.en]).length;
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  document.getElementById('vocab-stat').innerHTML =
+    `<span style="color:var(--green)">已掌握 ${done}</span> / 总共 ${total} 词 · ${pct}%`;
 }
 
 // ── Chinese Unit Content (poems & texts) ──
