@@ -3,1136 +3,1083 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🌌 尚融知识宇宙 - 知识树</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <title>📚 吴尚融学习知识树 - 语文·数学·英语·奥数</title>
   <style>
     :root {
-      --bg-deep: #050510;
-      --bg-card: rgba(255,255,255,0.04);
-      --bg-card-hover: rgba(255,255,255,0.08);
-      --text: #e8eaf6;
-      --text-muted: #7986cb;
-      --border: rgba(255,255,255,0.08);
-      --accent-chinese: #ff7043;
-      --accent-math: #42a5f5;
-      --accent-english: #ab47bc;
-      --accent-olympiad: #ffd54f;
-      --glow: rgba(129,212,250,0.15);
+      --bg: #0f1419;
+      --card-bg: #1a2332;
+      --card-border: #2d3a4f;
+      --text: #e8eaed;
+      --text-muted: #8899a6;
+      --red: #e74c3c;
+      --green: #2ecc71;
+      --blue: #3498db;
+      --orange: #e67e22;
+      --purple: #9b59b6;
+      --pink: #e91e8b;
+      --cyan: #00bcd4;
     }
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
-      font-family: 'Noto Sans SC', sans-serif;
-      background: var(--bg-deep);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
       color: var(--text);
-      min-height: 100vh;
-      overflow-x: hidden;
+      line-height: 1.7;
+      padding-bottom: 100px;
     }
 
-    /* ====== STARFIELD BACKGROUND ====== */
-    #cosmos {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
+    /* ── Header ── */
+    .header {
+      background: linear-gradient(135deg, #1a3a5c 0%, #0d2137 50%, #1a0a3a 100%);
+      padding: 36px 20px 24px;
+      text-align: center;
+      position: relative;
       overflow: hidden;
     }
-    .star {
-      position: absolute;
-      border-radius: 50%;
-      background: white;
-      animation: twinkle var(--d) ease-in-out infinite alternate;
+    .header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(52,152,219,0.15), transparent 60%),
+                  radial-gradient(ellipse at 70% 50%, rgba(155,89,182,0.15), transparent 60%);
     }
-    @keyframes twinkle { from { opacity: 0.1; transform: scale(0.8); } to { opacity: 1; transform: scale(1.2); } }
-
-    /* ====== NEBULA ORBS ====== */
-    .nebula {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.12;
-      z-index: 0;
-      animation: drift 20s ease-in-out infinite alternate;
-    }
-    .nebula-1 { width: 500px; height: 500px; background: #1a237e; top: -100px; left: -100px; animation-delay: 0s; }
-    .nebula-2 { width: 400px; height: 400px; background: #4a148c; bottom: -80px; right: -80px; animation-delay: -7s; }
-    .nebula-3 { width: 350px; height: 350px; background: #00695c; top: 40%; left: 50%; animation-delay: -14s; }
-    @keyframes drift {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(30px, 20px) scale(1.1); }
-    }
-
-    /* ====== LAYOUT ====== */
-    .app {
+    .header h1 { font-size: 1.6em; margin-bottom: 6px; position: relative; }
+    .header .subtitle { color: var(--text-muted); font-size: 0.88em; position: relative; }
+    .sync-bar {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin-top: 12px; font-size: 0.75em; color: var(--text-muted);
       position: relative;
-      z-index: 1;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 40px 24px;
     }
+    .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: #f39c12; }
+    .sync-dot.ok { background: var(--green); }
+    .sync-dot.err { background: var(--red); }
+    .sync-time { font-size: 0.7em; }
 
-    /* ====== HEADER ====== */
-    .header {
-      text-align: center;
-      margin-bottom: 48px;
-      animation: fadeInDown 0.8s ease;
+    /* ── Nav ── */
+    .nav-tabs {
+      display: flex;
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--card-border);
+      position: sticky; top: 0; z-index: 100;
+      overflow-x: auto;
     }
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-30px); }
+    .nav-tabs::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      flex: 1; min-width: 72px;
+      padding: 12px 4px;
+      background: none; border: none;
+      color: var(--text-muted);
+      font-size: 0.76em; font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+    }
+    .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+    .tab-btn:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+
+    /* ── Container ── */
+    .container { max-width: 960px; margin: 0 auto; padding: 14px 14px; }
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 18px 18px 16px;
+      margin-bottom: 14px;
+      animation: fadeUp 0.4s ease;
+    }
+    .card-title { font-size: 1em; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .header-emoji {
-      font-size: 56px;
-      display: block;
-      margin-bottom: 12px;
-      animation: float 3s ease-in-out infinite;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
+    /* ── Progress ── */
+    .progress-wrap { margin-bottom: 14px; }
+    .progress-wrap:last-child { margin-bottom: 0; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 0.78em; color: var(--text-muted); margin-bottom: 5px; }
+    .progress-bar { height: 8px; background: var(--card-border); border-radius: 8px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 8px; transition: width 0.6s ease; }
+    .fill-chinese { background: linear-gradient(90deg, #e74c3c, #c0392b); }
+    .fill-math    { background: linear-gradient(90deg, #3498db, #2980b9); }
+    .fill-english  { background: linear-gradient(90deg, #2ecc71, #27ae60); }
+    .fill-oly      { background: linear-gradient(90deg, #9b59b6, #8e44ad); }
 
-    .header h1 {
-      font-family: 'Ma Shan Zheng', cursive;
-      font-size: 42px;
-      background: linear-gradient(135deg, #81d4fa, #b39ddb, #ffab91);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 8px;
-    }
+    /* ── Tags ── */
+    .tag { display: inline-block; padding: 2px 9px; border-radius: 6px; font-size: 0.73em; margin: 2px; }
+    .tag-red    { background: rgba(231,76,60,0.15); color: var(--red); }
+    .tag-blue   { background: rgba(52,152,219,0.15); color: var(--blue); }
+    .tag-green  { background: rgba(46,204,113,0.15); color: var(--green); }
+    .tag-orange { background: rgba(230,126,34,0.15); color: var(--orange); }
+    .tag-purple { background: rgba(155,89,182,0.15); color: var(--purple); }
+    .tag-cyan   { background: rgba(0,188,212,0.15); color: var(--cyan); }
+    .tag.done   { background: rgba(46,204,113,0.2); color: var(--green); text-decoration: line-through; opacity: 0.7; }
 
-    .header-sub {
-      color: var(--text-muted);
-      font-size: 15px;
-      font-weight: 300;
-      letter-spacing: 2px;
-    }
-
-    .stats-bar {
-      display: flex;
-      justify-content: center;
-      gap: 32px;
-      margin-top: 20px;
-      flex-wrap: wrap;
-    }
-    .stat {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-    .stat-num {
-      color: var(--text);
-      font-weight: 700;
-      font-size: 16px;
-    }
-
-    /* ====== SUBJECT NAV ====== */
-    .subject-nav {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 40px;
-      flex-wrap: wrap;
-      animation: fadeIn 1s ease 0.3s both;
-    }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-    .nav-btn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 22px;
-      border-radius: 32px;
-      border: 1.5px solid var(--border);
-      background: var(--bg-card);
-      color: var(--text-muted);
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-family: 'Noto Sans SC', sans-serif;
-    }
-    .nav-btn:hover {
-      transform: translateY(-2px);
-      border-color: rgba(255,255,255,0.2);
-      color: var(--text);
-    }
-    .nav-btn.active {
-      color: white;
-      border-color: transparent;
-      box-shadow: 0 4px 20px var(--glow);
-    }
-    .nav-btn[data-sub="chinese"].active { background: linear-gradient(135deg, #e64a19, #ff7043); border-color: #ff7043; }
-    .nav-btn[data-sub="math"].active { background: linear-gradient(135deg, #1565c0, #42a5f5); border-color: #42a5f5; }
-    .nav-btn[data-sub="english"].active { background: linear-gradient(135deg, #7b1fa2, #ab47bc); border-color: #ab47bc; }
-    .nav-btn[data-sub="olympiad"].active { background: linear-gradient(135deg, #f57f17, #ffd54f); border-color: #ffd54f; color: #333; }
-
-    /* ====== SUBJECT HEADER ====== */
-    .subject-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-      gap: 12px;
-      animation: slideIn 0.5s ease;
-    }
-    @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
-
-    .subject-title {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-    .subject-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 26px;
-    }
-    .subject-icon.chinese { background: linear-gradient(135deg, #bf360c, #ff7043); }
-    .subject-icon.math { background: linear-gradient(135deg, #0d47a1, #42a5f5); }
-    .subject-icon.english { background: linear-gradient(135deg, #4a148c, #ab47bc); }
-    .subject-icon.olympiad { background: linear-gradient(135deg, #f57f17, #ffd54f); }
-
-    .subject-title h2 {
-      font-family: 'Ma Shan Zheng', cursive;
-      font-size: 32px;
-    }
-    .subject-title p {
-      color: var(--text-muted);
-      font-size: 13px;
-      margin-top: 2px;
-    }
-
-    .progress-ring-wrap {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .progress-ring-text {
-      text-align: right;
-    }
-    .progress-ring-text strong {
-      display: block;
-      font-size: 22px;
-      font-weight: 700;
-    }
-    .progress-ring-text span {
-      color: var(--text-muted);
-      font-size: 12px;
-    }
-
-    /* ====== UNIT GRID ====== */
-    .units-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 20px;
-    }
-
-    /* ====== UNIT CARD ====== */
+    /* ── Unit Cards (3-col grid) ── */
+    .units-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: 12px; }
     .unit-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 24px;
-      cursor: pointer;
-      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-      animation: cardIn 0.6s ease both;
-      position: relative;
-      overflow: hidden;
-    }
-    .unit-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-    .unit-card.chinese::before { background: linear-gradient(90deg, #e64a19, #ff7043); }
-    .unit-card.math::before { background: linear-gradient(90deg, #1565c0, #42a5f5); }
-    .unit-card.english::before { background: linear-gradient(90deg, #7b1fa2, #ab47bc); }
-    .unit-card.olympiad::before { background: linear-gradient(90deg, #f57f17, #ffd54f); }
-
-    .unit-card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(255,255,255,0.15);
-      box-shadow: 0 16px 40px rgba(0,0,0,0.4);
-    }
-    .unit-card:hover::before { opacity: 1; }
-
-    .unit-card.chinese:hover { box-shadow: 0 16px 40px rgba(230,74,25,0.2); }
-    .unit-card.math:hover { box-shadow: 0 16px 40px rgba(21,101,192,0.2); }
-    .unit-card.english:hover { box-shadow: 0 16px 40px rgba(123,31,162,0.2); }
-    .unit-card.olympiad:hover { box-shadow: 0 16px 40px rgba(245,127,23,0.2); }
-
-    @keyframes cardIn {
-      from { opacity: 0; transform: translateY(20px) scale(0.95); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    .unit-number {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      opacity: 0.4;
-      margin-bottom: 8px;
-    }
-    .unit-card.chinese .unit-number { color: #ff7043; }
-    .unit-card.math .unit-number { color: #42a5f5; }
-    .unit-card.english .unit-number { color: #ab47bc; }
-    .unit-card.olympiad .unit-number { color: #ffd54f; }
-
-    .unit-title {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 10px;
-      line-height: 1.3;
-    }
-
-    .unit-topics {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 14px;
-    }
-    .topic-tag {
-      padding: 3px 10px;
-      border-radius: 12px;
-      font-size: 11px;
-      background: rgba(255,255,255,0.06);
-      color: var(--text-muted);
-      border: 1px solid rgba(255,255,255,0.06);
-      transition: all 0.2s ease;
-    }
-    .topic-tag:hover { background: rgba(255,255,255,0.12); color: var(--text); }
-    .topic-tag.mastered { background: rgba(46,204,113,0.15); border-color: rgba(46,204,113,0.3); color: #2ecc71; }
-
-    .unit-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 14px;
-      padding-top: 14px;
-      border-top: 1px solid var(--border);
-    }
-    .mastery-bar {
-      width: 100px;
-      height: 4px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-    .mastery-fill {
-      height: 100%;
-      border-radius: 4px;
-      background: linear-gradient(90deg, #2ecc71, #27ae60);
-      transition: width 0.6s ease;
-    }
-    .mastery-label {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    /* ====== DETAIL MODAL ====== */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(5,5,16,0.85);
-      backdrop-filter: blur(8px);
-      z-index: 100;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-    .modal-overlay.open { display: flex; }
-
-    .modal {
-      background: #0d1117;
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      max-width: 680px;
-      width: 100%;
-      max-height: 85vh;
-      overflow-y: auto;
-      animation: modalIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    @keyframes modalIn {
-      from { opacity: 0; transform: scale(0.9) translateY(20px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    .modal-header {
-      padding: 28px 28px 20px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      background: #0d1117;
-      z-index: 2;
-    }
-    .modal-header h3 {
-      font-family: 'Ma Shan Zheng', cursive;
-      font-size: 26px;
-    }
-    .modal-close {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      background: var(--bg-card);
-      color: var(--text-muted);
-      font-size: 18px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-    }
-    .modal-close:hover { background: rgba(255,255,255,0.1); color: white; }
-
-    .modal-body { padding: 24px 28px 28px; }
-
-    .knowledge-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .knowledge-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
       padding: 14px 16px;
-      background: var(--bg-card);
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      transition: all 0.25s ease;
       cursor: pointer;
+      transition: all 0.25s;
     }
-    .knowledge-item:hover {
-      background: var(--bg-card-hover);
-      border-color: rgba(255,255,255,0.15);
-      transform: translateX(4px);
-    }
-    .knowledge-check {
-      width: 22px; height: 22px;
-      border-radius: 6px;
-      border: 2px solid rgba(255,255,255,0.2);
-      flex-shrink: 0;
-      margin-top: 1px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      color: transparent;
-      transition: all 0.3s ease;
-    }
-    .knowledge-item.learned .knowledge-check {
-      background: linear-gradient(135deg, #2ecc71, #27ae60);
-      border-color: #2ecc71;
-      color: white;
-    }
-    .knowledge-text { flex: 1; }
-    .knowledge-title { font-weight: 600; font-size: 15px; margin-bottom: 3px; }
-    .knowledge-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+    .unit-card:hover { border-color: var(--blue); background: rgba(52,152,219,0.06); transform: translateY(-1px); }
+    .unit-card.done  { border-color: rgba(46,204,113,0.3); background: rgba(46,204,113,0.05); }
+    .unit-num { font-size: 0.72em; color: var(--text-muted); margin-bottom: 4px; }
+    .unit-title { font-size: 0.88em; font-weight: 600; margin-bottom: 6px; }
+    .unit-tags { display: flex; flex-wrap: wrap; gap: 3px; }
+    .unit-check { font-size: 0.7em; color: var(--green); margin-top: 6px; display: none; }
+    .unit-card.done .unit-check { display: block; }
 
-    /* ====== FIREBASE STATUS ====== */
-    .db-status {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      padding: 8px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      border: 1px solid var(--border);
-      background: rgba(13,17,23,0.9);
-      backdrop-filter: blur(8px);
-      z-index: 50;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    /* ── Knowledge tree ── */
+    .tree { list-style: none; }
+    .tree-item { margin-bottom: 8px; }
+    .tree-toggle {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 14px;
+      border-radius: 9px;
+      cursor: pointer;
+      font-size: 0.86em; font-weight: 500;
+      transition: all 0.2s;
+      border: 1px solid;
     }
-    .db-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: #888;
+    .tree-toggle:hover { filter: brightness(1.15); }
+    .tree-toggle .arrow { margin-left: auto; transition: transform 0.25s; font-size: 0.7em; }
+    .tree-toggle.open .arrow { transform: rotate(90deg); }
+    .tree-children {
+      list-style: none; margin: 6px 0 6px 24px;
+      display: none;
     }
-    .db-dot.connected { background: #2ecc71; box-shadow: 0 0 8px #2ecc71; }
-    .db-dot.loading { background: #ffd54f; animation: pulse 1s ease infinite; }
-    .db-dot.error { background: #e74c3c; }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .tree-children.open { display: block; }
+    .tree-child-item {
+      padding: 6px 10px; margin: 3px 0;
+      border-radius: 7px; font-size: 0.82em;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .tree-child-item.done { text-decoration: line-through; opacity: 0.55; }
 
-    /* ====== FLOATING ORBS ====== */
-    .orb {
-      position: fixed;
-      border-radius: 50%;
-      z-index: 0;
-      pointer-events: none;
+    /* ── Info chips ── */
+    .info-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .info-chip { display: inline-block; padding: 3px 10px; border-radius: 8px; font-size: 0.73em; border: 1px solid; }
+
+    /* ── Mini nav buttons ── */
+    .mini-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+    .mini-btn {
+      padding: 12px 10px; border-radius: 10px; text-align: center;
+      font-size: 0.82em; cursor: pointer; font-weight: 500;
+      border: 1px solid; transition: all 0.2s;
     }
-    .orb-1 { width: 6px; height: 6px; background: #81d4fa; top: 20%; left: 15%; animation: floatOrb 8s ease-in-out infinite; }
-    .orb-2 { width: 4px; height: 4px; background: #ce93d8; top: 60%; right: 20%; animation: floatOrb 12s ease-in-out infinite reverse; }
-    .orb-3 { width: 5px; height: 5px; background: #ffcc80; bottom: 30%; left: 25%; animation: floatOrb 10s ease-in-out infinite 3s; }
-    @keyframes floatOrb {
-      0%, 100% { transform: translate(0, 0); opacity: 0.4; }
-      33% { transform: translate(20px, -30px); opacity: 0.8; }
-      66% { transform: translate(-15px, 20px); opacity: 0.5; }
+    .mini-btn:hover { filter: brightness(1.15); transform: translateY(-1px); }
+
+    /* ── Float actions ── */
+    .float-actions {
+      position: fixed; bottom: 20px; right: 20px;
+      display: flex; flex-direction: column; gap: 10px; z-index: 200;
+    }
+    .fab {
+      width: 46px; height: 46px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1em; cursor: pointer;
+      border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      transition: all 0.25s;
+    }
+    .fab:hover { transform: scale(1.1); }
+    .fab-sync  { background: var(--blue); color: white; }
+    .fab-up    { background: var(--green); color: white; }
+    .fab-down  { background: var(--orange); color: white; }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.65); z-index: 300;
+      align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 16px; padding: 24px; max-width: 480px; width: 100%;
+      max-height: 80vh; overflow-y: auto;
+    }
+    .modal h3 { margin-bottom: 14px; font-size: 1em; }
+    .modal-close {
+      float: right; background: none; border: none; color: var(--text-muted);
+      font-size: 1.2em; cursor: pointer;
+    }
+    .modal-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: 8px; cursor: pointer;
+      font-size: 0.85em; margin: 4px 0;
+      border: 1px solid transparent; transition: all 0.2s;
+    }
+    .modal-item:hover { background: rgba(255,255,255,0.05); border-color: var(--card-border); }
+    .modal-item.done { opacity: 0.5; }
+    .modal-item input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--green); }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center; padding: 24px 16px 16px;
+      color: var(--text-muted); font-size: 0.73em;
+      border-top: 1px solid var(--card-border); margin-top: 24px;
     }
 
-    /* ====== SCROLLBAR ====== */
-    ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
-
-    /* ====== RESPONSIVE ====== */
-    @media (max-width: 600px) {
-      .header h1 { font-size: 30px; }
-      .subject-title h2 { font-size: 26px; }
-      .units-grid { grid-template-columns: 1fr; }
-      .stats-bar { gap: 12px; }
+    /* ── Toast ── */
+    .toast {
+      position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      padding: 8px 18px; border-radius: 20px; font-size: 0.8em;
+      z-index: 400; opacity: 0; transition: opacity 0.3s; pointer-events: none;
     }
-
-    /* ====== LOADING STATE ====== */
-    .skeleton {
-      background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite;
-      border-radius: 20px;
-      height: 200px;
-    }
-    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+    .toast.show { opacity: 1; }
   </style>
 </head>
 <body>
 
-  <div id="cosmos"></div>
-  <div class="nebula nebula-1"></div>
-  <div class="nebula nebula-2"></div>
-  <div class="nebula nebula-3"></div>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
+<!-- Header -->
+<div class="header">
+  <h1>🌳 吴尚融学习知识树</h1>
+  <div class="subtitle">四年级下册 · 语文 · 数学 · 英语 · 奥数</div>
+  <div class="sync-bar">
+    <div class="sync-dot" id="syncDot"></div>
+    <span id="syncText">同步中…</span>
+    <span class="sync-time" id="syncTime"></span>
+  </div>
+</div>
 
-  <div class="app">
-    <!-- HEADER -->
-    <header class="header">
-      <span class="header-emoji">🌌</span>
-      <h1>尚融知识宇宙</h1>
-      <p class="header-sub">WU SHANGRONG · STUDY COSMOS · 2026</p>
-      <div class="stats-bar">
-        <div class="stat">📚 <span class="stat-num" id="stat-units">—</span> 知识单元</div>
-        <div class="stat">✨ <span class="stat-num" id="stat-topics">—</span> 知识点</div>
-        <div class="stat">🏆 <span class="stat-num" id="stat-mastery">—</span>% 掌握率</div>
+<!-- Nav -->
+<div class="nav-tabs">
+  <button class="tab-btn active" onclick="showTab('overview')">🏠 概览</button>
+  <button class="tab-btn" onclick="showTab('chinese')">📖 语文</button>
+  <button class="tab-btn" onclick="showTab('math')">🔢 数学</button>
+  <button class="tab-btn" onclick="showTab('english')">🔤 英语</button>
+  <button class="tab-btn" onclick="showTab('oly')">🧠 奥数</button>
+</div>
+
+<!-- Content -->
+<div class="container">
+
+  <!-- ── OVERVIEW ── -->
+  <div class="section active" id="tab-overview">
+    <div class="card">
+      <div class="card-title">📊 总体进度</div>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>📖 语文</span><span id="prog-chinese">0%</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-chinese" id="bar-chinese" style="width:0%"></div></div>
       </div>
-    </header>
-
-    <!-- SUBJECT NAV -->
-    <nav class="subject-nav">
-      <button class="nav-btn active" data-sub="chinese">📘 语文</button>
-      <button class="nav-btn" data-sub="math">📐 数学</button>
-      <button class="nav-btn" data-sub="english">📗 英语</button>
-      <button class="nav-btn" data-sub="olympiad">🏅 奥数</button>
-    </nav>
-
-    <!-- CONTENT AREA -->
-    <div id="content">
-      <div id="content-placeholder">
-        <div class="skeleton" style="margin-bottom:20px"></div>
-        <div class="skeleton" style="margin-bottom:20px"></div>
-        <div class="skeleton"></div>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>🔢 数学</span><span id="prog-math">0%</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-math" id="bar-math" style="width:0%"></div></div>
       </div>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>🔤 英语</span><span id="prog-english">0%</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-english" id="bar-english" style="width:0%"></div></div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>🧠 奥数</span><span id="prog-oly">0%</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-oly" id="bar-oly" style="width:0%"></div></div>
+      </div>
+      <div class="info-chips">
+        <span class="info-chip" style="border-color:rgba(231,76,60,0.3);color:var(--red);background:rgba(231,76,60,0.08);">📖 语文：古诗词+课文+习作</span>
+        <span class="info-chip" style="border-color:rgba(52,152,219,0.3);color:var(--blue);background:rgba(52,152,219,0.08);">🔢 数学：图形+数运算+方程+统计</span>
+        <span class="info-chip" style="border-color:rgba(46,204,113,0.3);color:var(--green);background:rgba(46,204,113,0.08);">🔤 英语：单词+课文+语法+写作</span>
+        <span class="info-chip" style="border-color:rgba(155,89,182,0.3);color:var(--purple);background:rgba(155,89,182,0.08);">🧠 奥数：9周循序渐进</span>
+      </div>
+    </div>
+
+    <!-- Quick Nav -->
+    <div class="card">
+      <div class="card-title">🚀 快速跳转</div>
+      <div class="mini-nav">
+        <button class="mini-btn" style="background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.2);color:var(--red);" onclick="goTab('chinese')">📖 语文知识树<br><span style="font-size:0.7em;color:var(--text-muted);">26个知识点</span></button>
+        <button class="mini-btn" style="background:rgba(52,152,219,0.1);border:1px solid rgba(52,152,219,0.2);color:var(--blue);" onclick="goTab('math')">🔢 数学知识树<br><span style="font-size:0.7em;color:var(--text-muted);">9个单元</span></button>
+        <button class="mini-btn" style="background:rgba(46,204,113,0.1);border:1px solid rgba(46,204,113,0.2);color:var(--green);" onclick="goTab('english')">🔤 英语知识树<br><span style="font-size:0.7em;color:var(--text-muted);">8个模块</span></button>
+        <button class="mini-btn" style="background:rgba(155,89,182,0.1);border:1px solid rgba(155,89,182,0.2);color:var(--purple);" onclick="goTab('oly')">🧠 奥数知识树<br><span style="font-size:0.7em;color:var(--text-muted);">9周完整体系</span></button>
+      </div>
+    </div>
+
+    <!-- Recent completed -->
+    <div class="card">
+      <div class="card-title">✅ 最近完成</div>
+      <div id="recent-list" style="font-size:0.82em;color:var(--text-muted);">还没有完成记录，去学习知识树里打勾吧 💪</div>
     </div>
   </div>
 
-  <!-- DATABASE STATUS -->
-  <div class="db-status">
-    <div class="db-dot loading" id="db-dot"></div>
-    <span id="db-text">连接数据库...</span>
-  </div>
+  <!-- ── CHINESE ── -->
+  <div class="section" id="tab-chinese">
+    <div class="card">
+      <div class="card-title">📖 语文知识树（点击知识点标记完成）</div>
+      <p style="font-size:0.78em;color:var(--text-muted);margin-bottom:12px;">🌱 打勾 = 已掌握 · 🆕 = 待学习 · 🟡 = 进行中</p>
 
-  <!-- DETAIL MODAL -->
-  <div class="modal-overlay" id="modal-overlay">
-    <div class="modal">
-      <div class="modal-header">
-        <h3 id="modal-title">Unit</h3>
-        <button class="modal-close" onclick="closeModal()">✕</button>
-      </div>
-      <div class="modal-body">
-        <ul class="knowledge-list" id="modal-list"></ul>
-      </div>
-    </div>
-  </div>
-
-  <!-- ========== FIREBASE SDK ========== -->
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-    import { getFirestore, collection, getDocs, updateDoc, doc, setDoc, getDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-
-    // ================================================
-    // 🔥 FIREBASE CONFIG — shengrong-study 项目
-    // ================================================
-    const firebaseConfig = {
-      apiKey: "AIzaSyDozO5pxNezP-68VPCMKcpnyVpWC5uMnBI",
-      authDomain: "shengrong-study.firebaseapp.com",
-      projectId: "shengrong-study",
-      storageBucket: "shengrong-study.firebasestorage.app",
-      messagingSenderId: "247420104511",
-      appId: "1:247420104511:web:69be22a77356fabb8f6d8a",
-      measurementId: "G-M51GJ9E0L1"
-    };
-
-    let db;
-    let currentSubject = 'chinese';
-    let allData = {};
-    let progressData = {};
-
-    // ================================================
-    // INIT
-    // ================================================
-    function setDbStatus(status, text) {
-      const dot = document.getElementById('db-dot');
-      const txt = document.getElementById('db-text');
-      dot.className = 'db-dot ' + status;
-      txt.textContent = text;
-    }
-
-    async function init() {
-      try {
-        // 检测网络环境：先测试 Firebase 是否可达
-        setDbStatus('loading', '检测网络...');
-
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-        let firebaseReachable = false;
-        try {
-          await fetch('https://firestore.googleapis.com/', { mode: 'no-cors', signal: controller.signal });
-          firebaseReachable = true;
-        } catch (e) {
-          firebaseReachable = false;
-        }
-        clearTimeout(timeoutId);
-
-        if (!firebaseReachable) {
-          // Firebase 不可达（国内网络），直接用本地模式
-          setDbStatus('connected', '本地模式 🇨🇳');
-          loadBuiltinData();
-          return;
-        }
-
-        const app = initializeApp(firebaseConfig);
-        db = getFirestore(app);
-        setDbStatus('loading', '加载数据...');
-
-        // 监听知识树数据（5秒超时）
-        const treeTimeout = setTimeout(() => {
-          setDbStatus('connected', '本地模式 🇨🇳');
-          loadBuiltinData();
-        }, 5000);
-
-        const unsubTree = onSnapshot(collection(db, 'knowledgeTree'), (snap) => {
-          clearTimeout(treeTimeout);
-          const treeData = {};
-          snap.forEach(d => { treeData[d.id] = d.data(); });
-          mergeData(treeData, 'tree');
-          setDbStatus('connected', '实时同步 ✓');
-        }, (err) => {
-          clearTimeout(treeTimeout);
-          console.error('Tree error:', err);
-          setDbStatus('connected', '本地模式 🇨🇳');
-          loadBuiltinData();
-        });
-
-        // 监听进度数据
-        const unsubProgress = onSnapshot(collection(db, 'progress'), (snap) => {
-          progressData = {};
-          snap.forEach(d => { progressData[d.id] = d.data(); });
-          renderAll();
-        });
-
-      } catch (e) {
-        console.error('Firebase init error:', e);
-        setDbStatus('connected', '本地模式 🇨🇳');
-        loadBuiltinData();
-      }
-    }
-
-    // ================================================
-    // 内置数据（Firebase 未配置时使用）
-    // ================================================
-    function loadBuiltinData() {
-      allData = getBuiltinKnowledgeTree();
-      renderAll();
-    }
-
-    function getBuiltinKnowledgeTree() {
-      return {
-        chinese: {
-          name: '语文', emoji: '📘', color: '#ff7043',
-          units: [
-            { id: 'c1', num: '第一单元', title: '壮丽山河', topics: ['古诗词', '山水游记', '四季描写'], color: '#ff7043',
-              knowledge: [
-                { id: 'k1', title: '《望洞庭》', desc: '刘禹锡·湖光秋月两相和', learned: false },
-                { id: 'k2', title: '《峨眉山月歌》', desc: '李白·影入平羌江水流', learned: false },
-                { id: 'k3', title: '写景方法', desc: '动静结合、借景抒情', learned: false },
-                { id: 'k4', title: '古诗背诵', desc: '本单元所有古诗背诵默写', learned: false }
-              ]
-            },
-            { id: 'c2', num: '第二单元', title: '科技的力量', topics: ['科技说明文', '科普知识'], color: '#ff7043',
-              knowledge: [
-                { id: 'k5', title: '说明方法', desc: '举例子、列数字、作比较', learned: false },
-                { id: 'k6', title: '《纳米技术》', desc: '了解纳米技术的应用', learned: false },
-                { id: 'k7', title: '科技词汇', desc: '科普文章常用词汇积累', learned: false }
-              ]
-            },
-            { id: 'c3', num: '第三单元', title: '童年趣事', topics: ['记叙文', '人物描写'], color: '#ff7043',
-              knowledge: [
-                { id: 'k8', title: '叙事六要素', desc: '时间、地点、人物、起因、经过、结果', learned: false },
-                { id: 'k9', title: '人物描写', desc: '外貌、语言、动作、心理', learned: false },
-                { id: 'k10', title: '《我和祖父的园子》', desc: '萧红·童年回忆散文', learned: false }
-              ]
-            },
-            { id: 'c4', num: '第四单元', title: '动物朋友', topics: ['状物作文', '动物描写'], color: '#ff7043',
-              knowledge: [
-                { id: 'k11', title: '状物技巧', desc: '外形、习性、情感', learned: false },
-                { id: 'k12', title: '《白鹅》', desc: '丰子恺·白鹅的架子', learned: false }
-              ]
-            },
-            { id: 'c5', num: '第五单元', title: '中国世界遗产', topics: ['说明文', '资料搜集'], color: '#ff7043',
-              knowledge: [
-                { id: 'k13', title: '世界遗产知识', desc: '长城、故宫、莫高窟等', learned: false },
-                { id: 'k14', title: '导游词写法', desc: '介绍景点、吸引游客', learned: false }
-              ]
-            },
-            { id: 'c6', num: '第六单元', title: '成长故事', topics: ['成长作文', '心理描写'], color: '#ff7043',
-              knowledge: [
-                { id: 'k15', title: '心理描写', desc: '内心独白、神态表现', learned: false },
-                { id: 'k16', title: '《小英雄雨来》', desc: '管桦·抗战儿童故事', learned: false }
-              ]
-            },
-            { id: 'c7', num: '第七单元', title: '人物风采', topics: ['人物传记', '品质作文'], color: '#ff7043',
-              knowledge: [
-                { id: 'k17', title: '人物品质', desc: '善良、勇敢、诚实、担当', learned: false },
-                { id: 'k18', title: '《挑山工》', desc: '冯骥才·坚持不懈', learned: false }
-              ]
-            },
-            { id: 'c8', num: '第八单元', title: '神奇神话', topics: ['神话故事', '想象作文'], color: '#ff7043',
-              knowledge: [
-                { id: 'k19', title: '神话要素', desc: '神奇人物、超自然力量', learned: false },
-                { id: 'k20', title: '《宝葫芦的秘密》', desc: '张天翼·想象作文', learned: false }
-              ]
-            }
-          ]
-        },
-        math: {
-          name: '数学', emoji: '📐', color: '#42a5f5',
-          units: [
-            { id: 'm1', num: '第一单元', title: '四则运算', topics: ['加减乘除', '运算定律'], color: '#42a5f5',
-              knowledge: [
-                { id: 'mk1', title: '四则混合运算', desc: '先乘除后加减，有括号先算括号', learned: false },
-                { id: 'mk2', title: '运算定律', desc: '交换律、结合律、分配律', learned: false },
-                { id: 'mk3', title: '简便计算', desc: '凑整、拆分、乘法分配律逆用', learned: false }
-              ]
-            },
-            { id: 'm2', num: '第二单元', title: '观察物体', topics: ['三视图', '立体图形'], color: '#42a5f5',
-              knowledge: [
-                { id: 'mk4', title: '三视图', desc: '正面、侧面、上面', learned: false },
-                { id: 'mk5', title: '摆小方块', desc: '根据视图还原立体图形', learned: false }
-              ]
-            },
-            { id: 'm3', num: '第三单元', title: '运算定律', topics: ['交换律', '结合律', '分配律'], color: '#42a5f5',
-              knowledge: [
-                { id: 'mk6', title: '加法交换律', desc: 'a+b=b+a', learned: false },
-                { id: 'mk7', title: '乘法交换律', desc: 'a×b=b×a', learned: false },
-                { id: 'mk8', title: '乘法分配律', desc: '(a+b)×c=a×c+b×c', learned: false }
-              ]
-            },
-            { id: 'm4', num: '第四单元', title: '小数的意义', topics: ['小数读写', '单位换算'], color: '#42a5f5',
-              knowledge: [
-                { id: 'mk9', title: '小数意义', desc: '分母是10、100、1000的分数', learned: false },
-                { id: 'mk10', title: '小数比较', desc: '先比较整数部分，再比较小数部分', learned: false },
-                { id: 'mk11', title: '单位换算', desc: '长度单位、面积单位、质量单位', learned: false }
-              ]
-            },
-            { id: 'm5', num: '第五单元', title: '三角形', topics: ['角', '三角形分类'], color: '#42a5f5',
-              knowledge: [
-                { id: 'mk12', title: '三角形内角和', desc: '三角形内角和等于180°', learned: false },
-                { id: 'mk13', title: '三角形分类', desc: '按角分：锐角、直角、钝角', learned: false },
-                { id: 'mk14', title: '四边形分类', desc: '平行四边形、梯形、长方形、正方形', learned: false }
-              ]
-            },
-            { id: 'm6', num: '第六单元', title: '小数的加法和减法', topics: ['小数计算', '验算'], color: '#42a5f5',
-              knowledge: [
-                { id: 'mk15', title: '小数加减法', desc: '小数点对齐，从低位算起', learned: false },
-                { id: 'mk16', title: '验算方法', desc: '交换验算、逆运算验算', learned: false }
-              ]
-            },
-            { id: 'm7', num: '第七单元', title: '统计', topics: ['条形统计图', '折线统计图'], color: '#42a5f5',
-              knowledge: [
-                { id: 'mk17', title: '条形统计图', desc: '一眼看出数量多少', learned: false },
-                { id: 'mk18', title: '折线统计图', desc: '反映变化趋势', learned: false }
-              ]
-            },
-            { id: 'm8', num: '第八单元', title: '数学广角', topics: ['鸡兔同笼', '统筹安排'], color: '#42a5f5',
-              knowledge: [
-                { id: 'mk19', title: '鸡兔同笼', desc: '假设法解题', learned: false },
-                { id: 'mk20', title: '烙饼问题', desc: '统筹与优化', learned: false }
-              ]
-            }
-          ]
-        },
-        english: {
-          name: '英语', emoji: '📗', color: '#ab47bc',
-          units: [
-            { id: 'e1', num: 'Unit 1', title: "Our School", topics: ['School subjects', 'Time'], color: '#ab47bc',
-              knowledge: [
-                { id: 'ek1', title: 'Subject Vocabulary', desc: 'Maths, English, Science, Art, PE, Music', learned: false },
-                { id: 'ek2', title: 'What time is it?', desc: 'It is 8 o\\'clock. / It is half past 8.', learned: false },
-                { id: 'ek3', title: '问句句型', desc: 'What subjects do you like? I like...', learned: false }
-              ]
-            },
-            { id: 'e2', num: 'Unit 2', title: "What Time Is It?", topics: ['Time', 'Daily routine'], color: '#ab47bc',
-              knowledge: [
-                { id: 'ek4', title: '时间表达', desc: 'o\\'clock, half past, quarter past/to', learned: false },
-                { id: 'ek5', title: '日常作息', desc: 'get up, have breakfast, go to school', learned: false }
-              ]
-            },
-            { id: 'e3', num: 'Unit 3', title: "Weather", topics: ['Weather words', 'Temperature'], color: '#ab47bc',
-              knowledge: [
-                { id: 'ek6', title: '天气词汇', desc: 'sunny, rainy, cloudy, windy, snowy', learned: false },
-                { id: 'ek7', title: 'How\\'s the weather?', desc: 'It\\'s sunny today.', learned: false }
-              ]
-            },
-            { id: 'e4', num: 'Unit 4', title: "At the Farm", topics: ['Farm animals', 'Vegetables'], color: '#ab47bc',
-              knowledge: [
-                { id: 'ek8', title: '农场动物', desc: 'cow, horse, sheep, chicken, pig', learned: false },
-                { id: 'ek9', title: '蔬菜词汇', desc: 'tomato, potato, carrot, cabbage', learned: false }
-              ]
-            },
-            { id: 'e5', num: 'Unit 5', title: "Clothes", topics: ['Clothing', 'Colors'], color: '#ab47bc',
-              knowledge: [
-                { id: 'ek10', title: '衣物词汇', desc: 'dress, shirt, skirt, pants, shoes', learned: false },
-                { id: 'ek11', title: '衣物颜色', desc: 'These shoes are white.', learned: false }
-              ]
-            },
-            { id: 'e6', num: 'Unit 6', title: "Shopping", topics: ['Shopping dialogue', 'Numbers'], color: '#ab47bc',
-              knowledge: [
-                { id: 'ek12', title: '购物用语', desc: 'How much is it? It is 10 yuan.', learned: false },
-                { id: 'ek13', title: '数字表达', desc: '基数词、序数词', learned: false }
-              ]
-            },
-            { id: 'e7', num: 'Unit 7', title: "Weekend Plans", topics: ['Activities', 'Future tense'], color: '#ab47bc',
-              knowledge: [
-                { id: 'ek14', title: '周末活动', desc: 'go shopping, visit grandparents, read books', learned: false },
-                { id: 'ek15', title: 'be going to', desc: 'What are you going to do?', learned: false }
-              ]
-            },
-            { id: 'e8', num: 'Unit 8', title: "Have a Good Habit", topics: ['Habits', 'Health'], color: '#ab47bc',
-              knowledge: [
-                { id: 'ek16', title: '习惯表达', desc: 'brush teeth, wash hands, go to bed early', learned: false },
-                { id: 'ek17', title: '健康建议', desc: 'Eat vegetables, drink milk, do exercise', learned: false }
-              ]
-            }
-          ]
-        },
-        olympiad: {
-          name: '奥数', emoji: '🏅', color: '#ffd54f',
-          units: [
-            { id: 'o1', num: '专题一', title: '巧算与速算', topics: ['凑整法', '乘法分配律'], color: '#ffd54f',
-              knowledge: [
-                { id: 'ok1', title: '找基准数', desc: '让计算更简单的基准数法', learned: false },
-                { id: 'ok2', title: '积不变', desc: '一个因数扩大，另一个缩小相同倍数', learned: false },
-                { id: 'ok3', title: '和不变', desc: '减一个加一个，和不变', learned: false }
-              ]
-            },
-            { id: 'o2', num: '专题二', title: '等差数列', topics: ['等差数列求和', '项数公式'], color: '#ffd54f',
-              knowledge: [
-                { id: 'ok4', title: '等差数列公式', desc: '第n项 = 首项+(n-1)×公差', learned: false },
-                { id: 'ok5', title: '求和公式', desc: '和=(首项+末项)×项数÷2', learned: false }
-              ]
-            },
-            { id: 'o3', num: '专题三', title: '鸡兔同笼', topics: ['假设法', '分组法'], color: '#ffd54f',
-              knowledge: [
-                { id: 'ok6', title: '假设法', desc: '全部是鸡或全部是兔', learned: false },
-                { id: 'ok7', title: '方程法', desc: '设未知数解方程', learned: false }
-              ]
-            },
-            { id: 'o4', num: '专题四', title: '盈亏问题', topics: ['盈盈', '盈亏'], color: '#ffd54f',
-              knowledge: [
-                { id: 'ok8', title: '盈盈问题', desc: '(大盈-小盈)÷分配差=人数', learned: false },
-                { id: 'ok9', title: '盈亏问题', desc: '(盈+亏)÷分配差=人数', learned: false }
-              ]
-            },
-            { id: 'o5', num: '专题五', title: '植树问题', topics: ['直线植树', '环形植树'], color: '#ffd54f',
-              knowledge: [
-                { id: 'ok10', title: '直线两端种', desc: '棵树=间隔数+1', learned: false },
-                { id: 'ok11', title: '环形种树', desc: '棵树=间隔数', learned: false }
-              ]
-            },
-            { id: 'o6', num: '专题六', title: '年龄问题', topics: ['年龄差不变', '年龄和'], color: '#ffd54f',
-              knowledge: [
-                { id: 'ok12', title: '年龄差不变', desc: '年龄差永远相同', learned: false },
-                { id: 'ok13', title: '和倍问题', desc: '画线段图找倍数关系', learned: false }
-              ]
-            },
-            { id: 'o7', num: '专题七', title: '行程问题', topics: ['相遇', '追及'], color: '#ffd54f',
-              knowledge: [
-                { id: 'ok14', title: '相遇问题', desc: '速度和×时间=路程和', learned: false },
-                { id: 'ok15', title: '追及问题', desc: '速度差×时间=路程差', learned: false }
-              ]
-            },
-            { id: 'o8', num: '专题八', title: '抽屉原理', topics: ['最不利原则', '简单应用'], color: '#ffd54f',
-              knowledge: [
-                { id: 'ok16', title: '抽屉原理', desc: 'n+1个苹果放进n个抽屉，至少有一个抽屉有2个', learned: false },
-                { id: 'ok17', title: '最不利原则', desc: '考虑最坏情况再加1', learned: false }
-              ]
-            }
-          ]
-        }
-      };
-    }
-
-    // ================================================
-    // MERGE DATA (Firebase + Builtin)
-    // ================================================
-    function mergeData(firebaseTree, type) {
-      if (type === 'tree' && Object.keys(firebaseTree).length > 0) {
-        allData = { ...allData, ...firebaseTree };
-      }
-      renderAll();
-    }
-
-    // ================================================
-    // RENDER
-    // ================================================
-    function renderAll() {
-      const data = allData[currentSubject];
-      if (!data) return;
-
-      renderHeader(data);
-      renderUnits(data);
-      updateStats();
-    }
-
-    function renderHeader(data) {
-      const mastered = countMastered();
-      const total = countTotal();
-      const pct = total > 0 ? Math.round((mastered / total) * 100) : 0;
-
-      const content = document.getElementById('content');
-      content.innerHTML = `
-        <div class="subject-header">
-          <div class="subject-title">
-            <div class="subject-icon ${currentSubject}">${data.emoji}</div>
-            <div>
-              <h2 style="color: ${data.color}">${data.name}</h2>
-              <p>${data.units.length} 个知识单元 · ${countTopics(data)} 个知识点</p>
-            </div>
+      <!-- 单元卡片 -->
+      <div class="units-grid">
+        <div class="unit-card" id="uc-c1" onclick="openModal('chinese','c1')">
+          <div class="unit-num">第 1 单元</div>
+          <div class="unit-title">🌸 古诗词三首（已学3首）</div>
+          <div class="unit-tags">
+            <span class="tag tag-red">《绝句》</span>
+            <span class="tag tag-red">《惠崇春江晚景》</span>
+            <span class="tag tag-red">《三衢道中》</span>
           </div>
-          <div class="progress-ring-wrap">
-            <div class="progress-ring-text">
-              <strong style="color: ${data.color}">${pct}%</strong>
-              <span>总体掌握</span>
-            </div>
-            <svg width="56" height="56" viewBox="0 0 56 56">
-              <circle cx="28" cy="28" r="22" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="5"/>
-              <circle cx="28" cy="28" r="22" fill="none" stroke="${data.color}" stroke-width="5"
-                stroke-dasharray="${2*Math.PI*22}" stroke-dashoffset="${2*Math.PI*22*(1-pct/100)}"
-                stroke-linecap="round" transform="rotate(-90 28 28)" style="transition: stroke-dashoffset 0.8s ease"/>
-            </svg>
-          </div>
+          <div class="unit-check">✅ 完成</div>
         </div>
-        <div class="units-grid" id="units-grid"></div>
-      `;
-    }
-
-    function renderUnits(data) {
-      const grid = document.getElementById('units-grid');
-      grid.innerHTML = '';
-
-      data.units.forEach((unit, i) => {
-        const learned = unit.knowledge ? unit.knowledge.filter(k => k.learned).length : 0;
-        const total = unit.knowledge ? unit.knowledge.length : 0;
-        const pct = total > 0 ? Math.round((learned / total) * 100) : 0;
-
-        const topicsHTML = unit.topics.map(t => `<span class="topic-tag">${t}</span>`).join('');
-        const topicsHTMLwithMastered = unit.topics.map(t => `<span class="topic-tag mastered">${t}</span>`).join('');
-
-        const card = document.createElement('div');
-        card.className = `unit-card ${currentSubject}`;
-        card.style.animationDelay = `${i * 0.06}s`;
-        card.onclick = () => openModal(unit);
-
-        card.innerHTML = `
-          <div class="unit-number">${unit.num}</div>
-          <div class="unit-title">${unit.title}</div>
-          <div class="unit-topics">${topicsHTML}</div>
-          <div class="unit-footer">
-            <div class="mastery-bar"><div class="mastery-fill" style="width:${pct}%"></div></div>
-            <span class="mastery-label">${learned}/${total} 已掌握</span>
+        <div class="unit-card" id="uc-c2" onclick="openModal('chinese','c2')">
+          <div class="unit-num">第 2 单元</div>
+          <div class="unit-title">🏠 乡下人家</div>
+          <div class="unit-tags">
+            <span class="tag tag-red">掌握生字词</span>
+            <span class="tag tag-red">整体感知</span>
           </div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    function updateStats() {
-      const totalUnits = Object.values(allData).reduce((s, d) => s + (d.units ? d.units.length : 0), 0);
-      const totalTopics = Object.values(allData).reduce((s, d) => s + countTopics(d), 0);
-      const mastered = Object.values(allData).reduce((s, d) => s + countMasteredInSubject(d), 0);
-      const total = Object.values(allData).reduce((s, d) => s + countTotalInSubject(d), 0);
-      const pct = total > 0 ? Math.round((mastered / total) * 100) : 0;
-
-      document.getElementById('stat-units').textContent = totalUnits;
-      document.getElementById('stat-topics').textContent = totalTopics;
-      document.getElementById('stat-mastery').textContent = pct;
-    }
-
-    function countTopics(data) { return data.units ? data.units.reduce((s, u) => s + (u.knowledge ? u.knowledge.length : 0), 0) : 0; }
-    function countMastered() {
-      return Object.values(allData).reduce((s, d) => s + countMasteredInSubject(d), 0);
-    }
-    function countTotal() {
-      return Object.values(allData).reduce((s, d) => s + countTotalInSubject(d), 0);
-    }
-    function countMasteredInSubject(data) { return data.units ? data.units.reduce((s, u) => s + (u.knowledge ? u.knowledge.filter(k => k.learned).length : 0), 0) : 0; }
-    function countTotalInSubject(data) { return data.units ? data.units.reduce((s, u) => s + (u.knowledge ? u.knowledge.length : 0), 0) : 0; }
-
-    // ================================================
-    // MODAL
-    // ================================================
-    function openModal(unit) {
-      const overlay = document.getElementById('modal-overlay');
-      const title = document.getElementById('modal-title');
-      const list = document.getElementById('modal-list');
-
-      title.textContent = `${unit.num} · ${unit.title}`;
-      list.innerHTML = (unit.knowledge || []).map(k => `
-        <li class="knowledge-item ${k.learned ? 'learned' : ''}" data-id="${k.id}" onclick="toggleLearn('${k.id}')">
-          <div class="knowledge-check">✓</div>
-          <div class="knowledge-text">
-            <div class="knowledge-title">${k.title}</div>
-            <div class="knowledge-desc">${k.desc}</div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" id="uc-c3" onclick="openModal('chinese','c3')">
+          <div class="unit-num">第 3 单元</div>
+          <div class="unit-title">🌙 天窗</div>
+          <div class="unit-tags">
+            <span class="tag tag-red">理解含义深刻句子</span>
+            <span class="tag tag-red">体会写法</span>
           </div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" id="uc-c4" onclick="openModal('chinese','c4')">
+          <div class="unit-num">第 4 单元</div>
+          <div class="unit-title">🔭 母鸡</div>
+          <div class="unit-tags">
+            <span class="tag tag-red">作者情感变化</span>
+            <span class="tag tag-red">对比手法</span>
+          </div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" id="uc-c5" onclick="openModal('chinese','c5')">
+          <div class="unit-num">第 5 单元</div>
+          <div class="unit-title">🌍 颐和园·十七孔桥</div>
+          <div class="unit-tags">
+            <span class="tag tag-red">移步换景</span>
+            <span class="tag tag-red">按游览顺序</span>
+          </div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" id="uc-c6" onclick="openModal('chinese','c6')">
+          <div class="unit-num">第 6 单元</div>
+          <div class="unit-title">🧒 小英雄雨来</div>
+          <div class="unit-tags">
+            <span class="tag tag-red">长文章分段</span>
+            <span class="tag tag-red">把握情节</span>
+          </div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" id="uc-c7" onclick="openModal('chinese','c7')">
+          <div class="unit-num">第 7 单元</div>
+          <div class="unit-title">⚔️ 古诗三首（已学3首）</div>
+          <div class="unit-tags">
+            <span class="tag tag-red">《墨梅》</span>
+            <span class="tag tag-red">《囊萤夜读》</span>
+            <span class="tag tag-red">《铁杵成针》</span>
+          </div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" id="uc-c8" onclick="openModal('chinese','c8')">
+          <div class="unit-num">第 8 单元</div>
+          <div class="unit-title">🦋 宝葫芦的秘密</div>
+          <div class="unit-tags">
+            <span class="tag tag-red">故事续编</span>
+            <span class="tag tag-red">发挥想象</span>
+          </div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 知识树 -->
+    <div class="card">
+      <h3 class="card-title">🌳 语文知识体系</h3>
+      <ul class="tree">
+        <li class="tree-item">
+          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(231,76,60,0.06);border-color:rgba(231,76,60,0.2);">
+            <span class="icon">📖</span><span class="label">📖 课文理解</span><span class="arrow">▸</span>
+          </div>
+          <ul class="tree-children">
+            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-1')">🆕 1.1 课文朗读：准确、流利、有感情</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-2')">🆕 1.2 段落划分：找关键句、分层</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-3')">🆕 1.3 概括段意：摘句法/要素法</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-4')">🆕 1.4 理解词语：联系上下文/查词典</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-5')">🆕 1.5 体会情感：抓关键词句</li>
+          </ul>
         </li>
-      `).join('');
+        <li class="tree-item">
+          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(230,126,34,0.06);border-color:rgba(230,126,34,0.2);">
+            <span class="icon">✍️</span><span class="label">✍️ 习作能力</span><span class="arrow">▸</span>
+          </div>
+          <ul class="tree-children">
+            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-6')">🆕 2.1 写景作文：顺序+修辞+感受</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-7')">🆕 2.2 写事作文：起因经过结果</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-8')">🆕 2.3 写人作文：外貌+事件+品质</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-9')">🆕 2.4 修改作文：增删调换</li>
+          </ul>
+        </li>
+        <li class="tree-item">
+          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(0,188,212,0.06);border-color:rgba(0,188,212,0.2);">
+            <span class="icon">📝</span><span class="label">📝 语文基础知识</span><span class="arrow">▸</span>
+          </div>
+          <ul class="tree-children">
+            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-10')">🆕 3.1 多音字：区分不同读音和用法</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-11')">🆕 3.2 形近字：比较差异，正确组词</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-12')">🆕 3.3 标点符号：句号/逗号/引号/冒号用法</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-13')">🆕 3.4 关联词：因果/转折/递进/并列</li>
+          </ul>
+        </li>
+        <li class="tree-item">
+          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(155,89,182,0.06);border-color:rgba(155,89,182,0.2);">
+            <span class="icon">📜</span><span class="label">📜 古诗文积累</span><span class="arrow">▸</span>
+          </div>
+          <ul class="tree-children">
+            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-14')">🆕 4.1 古诗词背诵：理解诗意+诗情</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-15')">🆕 4.2 文言文入门：读懂大意即可</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-16')">🆕 4.3 名言警句：积累并运用</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
 
-      overlay.classList.add('open');
+  <!-- ── MATH ── -->
+  <div class="section" id="tab-math">
+    <div class="card">
+      <div class="card-title">🔢 数学知识树（点击单元标记完成）</div>
+      <div class="units-grid">
+        <div class="unit-card" onclick="openModal('math','m1')">
+          <div class="unit-num">第 1 单元</div><div class="unit-title">🌏 位置与方向</div>
+          <div class="unit-tags"><span class="tag tag-blue">方向词</span><span class="tag tag-blue">描述路线</span></div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" onclick="openModal('math','m2')">
+          <div class="unit-num">第 2 单元</div><div class="unit-title">➗ 除数是两位数的除法</div>
+          <div class="unit-tags"><span class="tag tag-blue">笔算除法</span><span class="tag tag-blue">商的变化规律</span></div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" onclick="openModal('math','m3')">
+          <div class="unit-num">第 3 单元</div><div class="unit-title">📊 统计</div>
+          <div class="unit-tags"><span class="tag tag-blue">条形统计图</span><span class="tag tag-blue">复式统计表</span></div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" onclick="openModal('math','m4')">
+          <div class="unit-num">第 4 单元</div><div class="unit-title">🔲 平行四边形和梯形</div>
+          <div class="unit-tags"><span class="tag tag-blue">特征</span><span class="tag tag-blue">高与底</span><span class="tag tag-blue">周长</span></div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" onclick="openModal('math','m5')">
+          <div class="unit-num">第 5 单元</div><div class="unit-title">🔢 除数是一位数的除法</div>
+          <div class="unit-tags"><span class="tag tag-blue">口算</span><span class="tag tag-blue">笔算</span><span class="tag tag-blue">验算</span></div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" onclick="openModal('math','m6')">
+          <div class="unit-num">第 6 单元</div><div class="unit-title">📐 面积</div>
+          <div class="unit-tags"><span class="tag tag-blue">面积公式</span><span class="tag tag-blue">单位换算</span><span class="tag tag-blue">解决问题</span></div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" onclick="openModal('math','m7')">
+          <div class="unit-num">第 7 单元</div><div class="unit-title">🔤 数学广角（解决问题）</div>
+          <div class="unit-tags"><span class="tag tag-blue">优化</span><span class="tag tag-blue">策略</span><span class="tag tag-blue">烙饼问题</span></div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" onclick="openModal('math','m8')">
+          <div class="unit-num">第 8 单元</div><div class="unit-title">🔢 总复习</div>
+          <div class="unit-tags"><span class="tag tag-blue">数与运算</span><span class="tag tag-blue">图形</span><span class="tag tag-blue">统计</span></div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3 class="card-title">🌳 数学知识体系</h3>
+      <ul class="tree">
+        <li class="tree-item">
+          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(52,152,219,0.06);border-color:rgba(52,152,219,0.2);">
+            <span class="icon">🔢</span><span class="label">🔢 数与运算</span><span class="arrow">▸</span>
+          </div>
+          <ul class="tree-children">
+            <li class="tree-child-item" onclick="toggleDone(this,'math','m-1')">🆕 1.1 大数读写：万以内/亿以内</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'math','m-2')">🆕 1.2 四舍五入：求近似数</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'math','m-3')">🆕 1.3 三位数乘两位数</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'math','m-4')">🆕 1.4 除数是两位数除法</li>
+          </ul>
+        </li>
+        <li class="tree-item">
+          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(46,204,113,0.06);border-color:rgba(46,204,113,0.2);">
+            <span class="icon">📐</span><span class="label">📐 图形与几何</span><span class="arrow">▸</span>
+          </div>
+          <ul class="tree-children">
+            <li class="tree-child-item" onclick="toggleDone(this,'math','m-5')">🆕 2.1 角：分类（锐/直/钝/平/周）</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'math','m-6')">🆕 2.2 平行四边形：特征与高</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'math','m-7')">🆕 2.3 梯形：等腰/直角梯形</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'math','m-8')">🆕 2.4 面积：正/长/平行四边/梯形</li>
+          </ul>
+        </li>
+        <li class="tree-item">
+          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(155,89,182,0.06);border-color:rgba(155,89,182,0.2);">
+            <span class="icon">📊</span><span class="label">📊 统计与概率</span><span class="arrow">▸</span>
+          </div>
+          <ul class="tree-children">
+            <li class="tree-child-item" onclick="toggleDone(this,'math','m-9')">🆕 3.1 复式条形统计图</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'math','m-10')">🆕 3.2 合理选择统计图</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── ENGLISH ── -->
+  <div class="section" id="tab-english">
+    <div class="card">
+      <div class="card-title">🔤 英语知识树（译林版四年级下册）</div>
+      <div class="units-grid">
+        <div class="unit-card" onclick="openModal('english','e1')">
+          <div class="unit-num">Unit 1</div><div class="unit-title">🏠 Our school subjects</div>
+          <div class="unit-tags"><span class="tag tag-green">subjects</span><span class="tag tag-green">like</span></div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" onclick="openModal('english','e2')">
+          <div class="unit-num">Unit 2</div><div class="unit-title">🌟 Our new house</div>
+          <div class="unit-tags"><span class="tag tag-green">rooms</span><span class="tag tag-green">prepositions</span></div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" onclick="openModal('english','e3')">
+          <div class="unit-num">Unit 3</div><div class="unit-title">☕ A day in the library</div>
+          <div class="unit-tags"><span class="tag tag-green">rules</span><span class="tag tag-green">should</span></div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" onclick="openModal('english','e4')">
+          <div class="unit-num">Unit 4</div><div class="unit-title">🐟 Drawing in the park</div>
+          <div class="unit-tags"><span class="tag tag-green">can/could</span><span class="tag tag-green">able to</span></div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" onclick="openModal('english','e5')">
+          <div class="unit-num">Unit 5</div><div class="unit-title">🦋 Seasons</div>
+          <div class="unit-tags"><span class="tag tag-green">weather</span><span class="tag tag-green">activities</span></div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" onclick="openModal('english','e6')">
+          <div class="unit-num">Unit 6</div><div class="unit-title">🍀 What's the matter?</div>
+          <div class="unit-tags"><span class="tag tag-green">feelings</span><span class="tag tag-green">health</span></div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" onclick="openModal('english','e7')">
+          <div class="unit-num">Unit 7</div><div class="unit-title">🍦 Summer is coming!</div>
+          <div class="unit-tags"><span class="tag tag-green">summer plans</span><span class="tag tag-green">be going to</span></div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" onclick="openModal('english','e8')">
+          <div class="unit-num">Unit 8</div><div class="unit-title">🏥 How are you now?</div>
+          <div class="unit-tags"><span class="tag tag-green">illness</span><span class="tag tag-green">advice</span></div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3 class="card-title">🌳 英语知识体系</h3>
+      <ul class="tree">
+        <li class="tree-item">
+          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(46,204,113,0.06);border-color:rgba(46,204,113,0.2);">
+            <span class="icon">📖</span><span class="label">📖 单词积累（160+词汇）</span><span class="arrow">▸</span>
+          </div>
+          <ul class="tree-children">
+            <li class="tree-child-item" onclick="toggleDone(this,'english','e-1')">🆕 1.1 校校科目词汇</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'english','e-2')">🆕 1.2 房间家居词汇</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'english','e-3')">🆕 1.3 季节天气词汇</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'english','e-4')">🆕 1.4 情感健康词汇</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'english','e-5')">🆕 1.5 其他核心词汇</li>
+          </ul>
+        </li>
+        <li class="tree-item">
+          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(230,126,34,0.06);border-color:rgba(230,126,34,0.2);">
+            <span class="icon">📝</span><span class="label">📝 语法要点</span><span class="arrow">▸</span>
+          </div>
+          <ul class="tree-children">
+            <li class="tree-child-item" onclick="toggleDone(this,'english','e-6')">🆕 2.1 be动词（am/is/are）</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'english','e-7')">🆕 2.2 Have/Has got 用法</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'english','e-8')">🆕 2.3 一般现在时</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'english','e-9')">🆕 2.4 现在进行时（be+v-ing）</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'english','e-10')">🆕 2.5 一般过去时（was/were）</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'english','e-11')">🆕 2.6 情态动词 can/could/may</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'english','e-12')">🆕 2.7 there is/are</li>
+          </ul>
+        </li>
+        <li class="tree-item">
+          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(0,188,212,0.06);border-color:rgba(0,188,212,0.2);">
+            <span class="icon">🗣️</span><span class="label">🗣️ 听说读写</span><span class="arrow">▸</span>
+          </div>
+          <ul class="tree-children">
+            <li class="tree-child-item" onclick="toggleDone(this,'english','e-13')">🆕 3.1 课本听力跟读</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'english','e-14')">🆕 3.2 朗读与背诵</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'english','e-15')">🆕 3.3 简单句写作</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'english','e-16')">🆕 3.4 日常口语对话</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── OLYMPIAD MATH ── -->
+  <div class="section" id="tab-oly">
+    <div class="card">
+      <div class="card-title">🧠 奥数学习进度（9周计划）</div>
+      <p style="font-size:0.78em;color:var(--text-muted);margin-bottom:12px;">难度：⭐ 基础 → ⭐⭐⭐⭐ 挑战 · 每周5道精选题 · 点击卡片标记完成</p>
+      <div class="units-grid">
+        <div class="unit-card done" id="uc-o1" onclick="openModal('oly','o1')">
+          <div class="unit-num">第 1 周</div>
+          <div class="unit-title">➕ 和差问题</div>
+          <div class="unit-tags"><span class="tag tag-purple">大数=(和+差)÷2</span><span class="tag tag-purple">小数=(和-差)÷2</span></div>
+          <div style="margin-top:8px;font-size:0.78em;color:var(--text-muted);">难度：⭐ · 5道题</div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" id="uc-o2" onclick="openModal('oly','o2')">
+          <div class="unit-num">第 2 周</div><div class="unit-title">✖️ 和倍·差倍问题</div>
+          <div class="unit-tags"><span class="tag tag-purple">和倍：1倍数=和÷(倍数+1)</span><span class="tag tag-purple">差倍：1倍数=差÷(倍数-1)</span></div>
+          <div style="margin-top:8px;font-size:0.78em;color:var(--text-muted);">难度：⭐⭐ · 5道题</div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" id="uc-o3" onclick="openModal('oly','o3')">
+          <div class="unit-num">第 3 周</div><div class="unit-title">🐔 鸡兔同笼</div>
+          <div class="unit-tags"><span class="tag tag-purple">假设法</span><span class="tag tag-purple">抬脚法</span></div>
+          <div style="margin-top:8px;font-size:0.78em;color:var(--text-muted);">难度：⭐⭐ · 5道题</div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" id="uc-o4" onclick="openModal('oly','o4')">
+          <div class="unit-num">第 4 周</div><div class="unit-title">👦 年龄 + 植树问题</div>
+          <div class="unit-tags"><span class="tag tag-purple">年龄差不变</span><span class="tag tag-purple">植树的公式</span></div>
+          <div style="margin-top:8px;font-size:0.78em;color:var(--text-muted);">难度：⭐⭐ · 5道题</div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" id="uc-o5" onclick="openModal('oly','o5')">
+          <div class="unit-num">第 5 周</div><div class="unit-title">💰 盈亏问题</div>
+          <div class="unit-tags"><span class="tag tag-purple">一盈一亏</span><span class="tag tag-purple">两次盈/亏</span></div>
+          <div style="margin-top:8px;font-size:0.78em;color:var(--text-muted);">难度：⭐⭐⭐ · 5道题</div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" id="uc-o6" onclick="openModal('oly','o6')">
+          <div class="unit-num">第 6 周</div><div class="unit-title">📐 几何与面积</div>
+          <div class="unit-tags"><span class="tag tag-purple">周长面积</span><span class="tag tag-purple">方格计数</span></div>
+          <div style="margin-top:8px;font-size:0.78em;color:var(--text-muted);">难度：⭐⭐ · 5道题</div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" id="uc-o7" onclick="openModal('oly','o7')">
+          <div class="unit-num">第 7 周</div><div class="unit-title">🧠 逻辑推理</div>
+          <div class="unit-tags"><span class="tag tag-purple">真假话</span><span class="tag tag-purple">枚举列表</span></div>
+          <div style="margin-top:8px;font-size:0.78em;color:var(--text-muted);">难度：⭐⭐⭐ · 5道题</div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" id="uc-o8" onclick="openModal('oly','o8')">
+          <div class="unit-num">第 8 周</div><div class="unit-title">🧩+⚖️ 抽屉+统筹</div>
+          <div class="unit-tags"><span class="tag tag-purple">最不利原则</span><span class="tag tag-purple">最优策略</span></div>
+          <div style="margin-top:8px;font-size:0.78em;color:var(--text-muted);">难度：⭐⭐⭐ · 5道题</div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+        <div class="unit-card" id="uc-o9" onclick="openModal('oly','o9')">
+          <div class="unit-num">第 9 周 🏆</div><div class="unit-title">🎯 综合挑战 · 毕业考</div>
+          <div class="unit-tags"><span class="tag tag-orange">数字谜</span><span class="tag tag-orange">逆向思维</span><span class="tag tag-orange">综合应用</span></div>
+          <div style="margin-top:8px;font-size:0.78em;color:var(--text-muted);">难度：⭐⭐⭐⭐ · 毕业挑战</div>
+          <div class="unit-check">✅ 完成</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title">🌳 奥数知识树（点击展开）</h3>
+      <ul class="tree">
+        <li class="tree-item">
+          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(231,76,60,0.06);border-color:rgba(231,76,60,0.15);">
+            <span class="icon">📊</span><span class="label">📊 应用题（和差/和倍/鸡兔/年龄/盈亏/植树）</span><span class="arrow">▸</span>
+          </div>
+          <ul class="tree-children">
+            <li class="tree-child-item done" onclick="toggleDone(this,'oly','o1-1')">✅ 1.1 和差问题：大数=(和+差)÷2，小数=(和-差)÷2</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'oly','o1-2')">🆕 1.2 和倍问题：1倍数=和÷（倍数+1）</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'oly','o1-3')">🆕 1.3 差倍问题：1倍数=差÷（倍数-1）</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'oly','o1-4')">🆕 1.4 鸡兔同笼·假设法：先假设全是一种，算出差来调整</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'oly','o1-5')">🆕 1.5 鸡兔同笼·抬脚法：让动物抬脚的趣味解法</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'oly','o1-6')">🆕 1.6 年龄问题：年龄差不变，年龄和随时间同增同减</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'oly','o1-7')">🆕 1.7 盈亏问题·一盈一亏：（盈+亏）÷分配差</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'oly','o1-8')">🆕 1.8 植树问题：段数=路长÷间距，端点种+1</li>
+          </ul>
+        </li>
+        <li class="tree-item">
+          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(46,204,113,0.06);border-color:rgba(46,204,113,0.15);">
+            <span class="icon">🔍</span><span class="label">🔍 找规律（数列/周期/图形）</span><span class="arrow">▸</span>
+          </div>
+          <ul class="tree-children">
+            <li class="tree-child-item" onclick="toggleDone(this,'oly','o2-1')">🆕 2.1 等差数列：第n项=首项+（n-1）×公差</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'oly','o2-2')">🆕 2.2 等比数列/跳级规律</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'oly','o2-3')">🆕 2.3 数量周期：总数÷周期长度=完整周期数+余数</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'oly','o2-4')">🆕 2.4 星期/日期周期（含星期几计算）</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'oly','o2-5')">🆕 2.5 图形排列规律</li>
+          </ul>
+        </li>
+        <li class="tree-item">
+          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(243,156,18,0.06);border-color:rgba(243,156,18,0.15);">
+            <span class="icon">📐</span><span class="label">📐 几何与面积</span><span class="arrow">▸</span>
+          </div>
+          <ul class="tree-children">
+            <li class="tree-child-item" onclick="toggleDone(this,'oly','o3-1')">🆕 3.1 正/长方形：周长=2×(长+宽)，面积=长×宽</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'oly','o3-2')">🆕 3.2 不规则图形：拆分法、平移法求面积</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'oly','o3-3')">🆕 3.3 数线段：点数×(点数-1)÷2</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'oly','o3-4')">🆕 3.4 数三角形/方格计数</li>
+          </ul>
+        </li>
+        <li class="tree-item">
+          <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(155,89,182,0.06);border-color:rgba(155,89,182,0.15);">
+            <span class="icon">🧠</span><span class="label">🧠 逻辑推理 / 🧩 抽屉原理 / ⚖️ 统筹</span><span class="arrow">▸</span>
+          </div>
+          <ul class="tree-children">
+            <li class="tree-child-item" onclick="toggleDone(this,'oly','o4-1')">🆕 4.1 真假话问题：假设法，逐一排除矛盾</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'oly','o4-2')">🆕 4.2 简单排列：枚举法，有序列举</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'oly','o4-3')">🆕 4.3 抽屉原理入门：n+1只鸽，放n个笼，必有1笼≥2只</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'oly','o5-1')">🆕 5.1 时间安排：统筹规划、最短时间问题</li>
+            <li class="tree-child-item" onclick="toggleDone(this,'oly','o5-2')">🆕 5.2 最优策略：选择最优方案</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- Footer -->
+<div class="footer">
+  🌱 豆芽哈吉米 · 吴尚融学习知识树 · 2026-04-17<br>
+  语文·数学·英语·奥数 · 四年级下册全覆盖 · 数据同步至 GitHub
+</div>
+
+<!-- Float Actions -->
+<div class="float-actions">
+  <button class="fab fab-sync" onclick="syncFromGitHub()" title="从 GitHub 同步">🔄</button>
+  <button class="fab fab-down" onclick="exportData()" title="导出数据">⬇️</button>
+  <button class="fab fab-up" onclick="document.getElementById('fileImport').click()" title="导入数据">⬆️</button>
+  <input type="file" id="fileImport" accept=".json" style="display:none" onchange="importData(this)">
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h3 id="modalTitle">知识点列表</h3>
+    <div id="modalContent"></div>
+    <div style="margin-top:16px;text-align:right;">
+      <button onclick="saveModal()" style="background:var(--blue);color:white;border:none;padding:8px 20px;border-radius:8px;cursor:pointer;font-size:0.85em;">💾 保存进度</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Config ──
+const GITHUB_RAW = 'https://raw.githubusercontent.com/wjbtian/shengrong-study/main/progress.json';
+const GITHUB_API  = 'https://api.github.com/repos/wjbtian/shengrong-study/contents/progress.json';
+
+// ── State ──
+let progressData = { chinese: [], math: [], english: [], oly: [] };
+let progressSha  = null;
+let modalSubject = null;
+let modalUnit    = null;
+
+// ── Boot ──
+(async () => {
+  await loadFromGitHub();
+  await loadFromLocal();
+  applyProgress();
+  setSyncStatus('ok', '已同步 ☁️');
+})();
+
+// ── Load from GitHub ──
+async function loadFromGitHub() {
+  try {
+    const r = await fetch(GITHUB_RAW + '?t=' + Date.now());
+    if (!r.ok) return;
+    const data = await r.json();
+    // Merge: remote wins if newer than local
+    for (const key of ['chinese','math','english','oly']) {
+      const local = JSON.parse(localStorage.getItem('progress_' + key) || '[]');
+      const remote = data[key] || [];
+      // Union of both arrays (unique by id)
+      const merged = [...new Map([...local,...remote].map(x=>[x.id,x])).values()];
+      progressData[key] = merged;
     }
+    syncToLocal();
+    document.getElementById('syncTime').textContent = '☁️ 已从云端同步';
+  } catch(e) {
+    // offline, fall back to local
+    document.getElementById('syncTime').textContent = '📴 本地模式';
+  }
+}
 
-    window.closeModal = function() {
-      document.getElementById('modal-overlay').classList.remove('open');
-    };
+// ── Load from localStorage ──
+async function loadFromLocal() {
+  for (const key of ['chinese','math','english','oly']) {
+    try {
+      const stored = JSON.parse(localStorage.getItem('progress_' + key) || '[]');
+      if (stored.length > 0) {
+        progressData[key] = stored;
+      }
+    } catch(e) {}
+  }
+}
 
-    document.getElementById('modal-overlay').addEventListener('click', function(e) {
-      if (e.target === this) closeModal();
+// ── Save to localStorage ──
+function syncToLocal() {
+  for (const key of ['chinese','math','english','oly']) {
+    localStorage.setItem('progress_' + key, JSON.stringify(progressData[key]));
+  }
+}
+
+// ── Apply progress to DOM ──
+function applyProgress() {
+  // Overview progress bars
+  for (const subject of ['chinese','math','english','oly']) {
+    const ids = progressData[subject];
+    document.querySelectorAll('[data-subject="'+subject+'"][data-id]').forEach(el => {
+      const done = ids.includes(el.dataset.id);
+      el.classList.toggle('done', done);
     });
+  }
+  // Unit cards
+  for (const subject of ['chinese','math','english','oly']) {
+    const ids = progressData[subject];
+    document.querySelectorAll('.unit-card[id^="uc-"]').forEach(el => {
+      const cardId = subject[0] + el.id.replace('uc-','');
+      const unitItems = document.querySelectorAll('[data-subject="'+subject+'"][data-unit]');
+      const unitSet = new Set([...unitItems].map(x=>x.dataset.id));
+      const allDone = [...unitSet].every(id => ids.includes(id));
+      el.classList.toggle('done', allDone);
+    });
+  }
+  // Recent list
+  updateRecent();
+  // Progress percentages
+  updateProgressPct();
+}
 
-    // ================================================
-    // TOGGLE LEARN STATUS
-    // ================================================
-    window.toggleLearn = async function(kid) {
-      // Find and toggle
-      for (const sub of Object.values(allData)) {
-        for (const unit of (sub.units || [])) {
-          const k = (unit.knowledge || []).find(k => k.id === kid);
-          if (k) {
-            k.learned = !k.learned;
+function updateProgressPct() {
+  const totals = { chinese: 26, math: 9, english: 8, oly: 9 };
+  for (const [subj, total] of Object.entries(totals)) {
+    const ids = progressData[subj];
+    const pct = total > 0 ? Math.round((ids.length / total) * 100) : 0;
+    const bar = document.getElementById('bar-' + subj);
+    const txt = document.getElementById('prog-' + subj);
+    if (bar) bar.style.width = pct + '%';
+    if (txt) txt.textContent = pct + '%';
+  }
+}
 
-            // Save to Firebase if connected
-            if (db && firebaseConfig.apiKey !== 'YOUR_API_KEY') {
-              try {
-                const ref = doc(db, 'progress', kid);
-                await setDoc(ref, { learned: k.learned, updated: new Date().toISOString() }, { merge: true });
-              } catch (e) {
-                console.error('Save error:', e);
-              }
-            } else {
-              // Save to localStorage
-              const stored = JSON.parse(localStorage.getItem('shengrong_progress') || '{}');
-              stored[kid] = k.learned;
-              localStorage.setItem('shengrong_progress', JSON.stringify(stored));
-            }
+function updateRecent() {
+  const all = [];
+  for (const [subj, ids] of Object.entries(progressData)) {
+    ids.forEach(id => all.push(id));
+  }
+  const el = document.getElementById('recent-list');
+  if (!all.length) return;
+  el.innerHTML = `<span style="color:var(--green);font-size:0.85em;">✅ 已有 ${all.length} 个知识点完成，继续加油！💪</span>`;
+}
 
-            // Update UI
-            const el = document.querySelector(`.knowledge-item[data-id="${kid}"]`);
-            if (el) el.classList.toggle('learned', k.learned);
-            renderAll();
-            return;
-          }
+// ── Sync indicator ──
+function setSyncStatus(type, text) {
+  const dot = document.getElementById('syncDot');
+  dot.className = 'sync-dot ' + type;
+  document.getElementById('syncText').textContent = text;
+}
+
+async function syncFromGitHub() {
+  setSyncStatus('', '同步中…');
+  try {
+    await loadFromGitHub();
+    applyProgress();
+    setSyncStatus('ok', '已同步 ☁️');
+    toast('✅ 已从 GitHub 同步！');
+  } catch(e) {
+    setSyncStatus('err', '同步失败');
+    toast('⚠️ 同步失败，请检查网络');
+  }
+}
+
+// ── Toggle a single knowledge point ──
+function toggleDone(el, subject, id) {
+  el.classList.toggle('done');
+  let ids = progressData[subject];
+  if (ids.includes(id)) {
+    ids = ids.filter(x => x !== id);
+  } else {
+    ids = [...ids, id];
+  }
+  progressData[subject] = ids;
+  syncToLocal();
+  updateProgressPct();
+  updateRecent();
+  toast('✅ 进度已保存（本地）');
+}
+
+// ── Modal ──
+const MODAL_ITEMS = {
+  chinese: {
+    c1: ['古诗词1：绝句','古诗词2：惠崇春江晚景','古诗词3：三衢道中','朗读流利','默写正确'],
+    c2: ['掌握生字词','整体感知课文','段落划分','体会情感'],
+    c3: ['理解含义深刻句子','体会写法','朗读感悟'],
+    c4: ['作者情感变化','对比手法','朗读感悟'],
+    c5: ['移步换景','按游览顺序','优美语句积累'],
+    c6: ['长文章分段','把握情节','人物形象'],
+    c7: ['墨梅背诵','囊萤夜读理解','铁杵成针寓意'],
+    c8: ['故事续编','发挥想象','写清楚过程'],
+  },
+  math: {
+    m1: ['方向词（东南西北）','描述简单路线','绘制简单示意图'],
+    m2: ['口算除法','笔算除法（两位数除）','商的变化规律'],
+    m3: ['读懂统计表','绘制条形统计图','分析数据'],
+    m4: ['平行四边形特征','梯形特征','高与底的画法'],
+    m5: ['口算除法','笔算除法','验算方法'],
+    m6: ['面积公式推导','单位换算','解决实际问题'],
+    m7: ['烙饼问题','统筹优化思想','策略选择'],
+    m8: ['数与运算总览','图形知识回顾','统计复习'],
+  },
+  english: {
+    e1: ['会读subjects词汇','掌握like的用法','会写简单句子'],
+    e2: ['rooms词汇','in/on/under用法','会描述房间'],
+    e3: ['rules词汇','should/shouldn\'t用法','会写规则句子'],
+    e4: ['can/could用法','描述能力','会写否定句'],
+    e5: ['seasons词汇','weather词汇','会用形容词描述季节'],
+    e6: ['feelings词汇','询问身体状况','给出建议'],
+    e7: ['be going to用法','summer plans','会用将来时'],
+    e8: ['illness词汇','询问健康','给出建议表达'],
+  },
+  oly: {
+    o1: ['理解大数=(和+差)÷2','理解小数=(和-差)÷2','做对5道练习题'],
+    o2: ['和倍：找1倍数','差倍：找1倍数','综合练习'],
+    o3: ['假设法解题','抬脚法解题','区分两种方法'],
+    o4: ['年龄差不变原理','植树公式三情况','实际应用'],
+    o5: ['一盈一亏公式','两次盈/亏','判断用哪个公式'],
+    o6: ['周长公式','面积公式','组合图形'],
+    o7: ['真假话假设法','枚举法','综合推理'],
+    o8: ['抽屉原理最不利','统筹最优策略','综合应用'],
+    o9: ['数字谜','逆向思维','综合毕业挑战'],
+  }
+};
+
+function openModal(subject, unit) {
+  modalSubject = subject;
+  modalUnit = unit;
+  const items = MODAL_ITEMS[subject]?.[unit] || [];
+  const subjectNames = { chinese:'语文', math:'数学', english:'英语', oly:'奥数' };
+  const unitNames = {
+    c1:'古诗词三首',c2:'乡下人家',c3:'天窗',c4:'母鸡',c5:'颐和园',c6:'小英雄雨来',c7:'古诗三首',c8:'宝葫芦',
+    m1:'位置与方向',m2:'除数两位数除法',m3:'统计',m4:'平行四边形和梯形',m5:'除数一位数除法',m6:'面积',m7:'数学广角',m8:'总复习',
+    e1:'Our school subjects',e2:'Our new house',e3:'A day in the library',e4:'Drawing in the park',
+    e5:'Seasons',e6:'What\'s the matter?',e7:'Summer is coming!',e8:'How are you now?',
+    o1:'和差问题',o2:'和倍·差倍',o3:'鸡兔同笼',o4:'年龄+植树',o5:'盈亏问题',o6:'几何与面积',o7:'逻辑推理',o8:'抽屉+统筹',o9:'综合挑战'
+  };
+  document.getElementById('modalTitle').textContent = `📋 ${subjectNames[subject]} - ${unitNames[unit]}`;
+  const ids = progressData[subject];
+  document.getElementById('modalContent').innerHTML = items.map((item, i) => {
+    const id = `${unit}-${i+1}`;
+    const done = ids.includes(id);
+    return `<div class="modal-item ${done?'done':''}" onclick="this.classList.toggle('done');this.querySelector('input').checked=${!done}">
+      <input type="checkbox" ${done?'checked':''} onclick="event.stopPropagation();this.parentElement.classList.toggle('done')">
+      <span>${item}</span>
+    </div>`;
+  }).join('');
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function saveModal() {
+  if (!modalSubject) return;
+  const ids = progressData[modalSubject];
+  document.querySelectorAll('#modalContent .modal-item').forEach(el => {
+    const text = el.querySelector('span').textContent;
+    const unitPrefix = modalUnit + '-';
+    // find matching id by index
+    const idx = [...el.parentElement.children].indexOf(el);
+    const id = `${modalUnit}-${idx+1}`;
+    const checked = el.querySelector('input').checked;
+    if (checked && !ids.includes(id)) {
+      ids.push(id);
+    } else if (!checked && ids.includes(id)) {
+      progressData[modalSubject] = ids.filter(x => x !== id);
+    }
+  });
+  syncToLocal();
+  applyProgress();
+  closeModal();
+  toast('✅ 进度已保存（本地），刷新后生效');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('show');
+}
+
+// ── Tab nav ──
+function showTab(tabId) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+function goTab(tabId) {
+  document.querySelectorAll('.tab-btn')[{chinese:1,math:2,english:3,oly:4}[tabId]].click();
+}
+
+function toggleTree(el) {
+  el.classList.toggle('open');
+  const children = el.nextElementSibling;
+  if (children) children.classList.toggle('open');
+}
+
+// ── Export ──
+function exportData() {
+  const all = {};
+  for (const key of ['chinese','math','english','oly']) {
+    all[key] = progressData[key];
+  }
+  const blob = new Blob([JSON.stringify(all, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `shengrong-progress-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('⬇️ 数据已导出，保存好文件哦');
+}
+
+// ── Import ──
+function importData(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      for (const key of ['chinese','math','english','oly']) {
+        if (data[key]) {
+          const merged = [...new Map([...progressData[key],...data[key]].map(x=>[x.id||x,x])).values()];
+          progressData[key] = merged;
         }
       }
-    };
-
-    // ================================================
-    // NAVIGATION
-    // ================================================
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        currentSubject = this.dataset.sub;
-        renderAll();
-      });
-    });
-
-    // ================================================
-    // STARFIELD GENERATOR
-    // ================================================
-    function createStars() {
-      const cosmos = document.getElementById('cosmos');
-      for (let i = 0; i < 200; i++) {
-        const star = document.createElement('div');
-        star.className = 'star';
-        const size = Math.random() * 2.5 + 0.5;
-        star.style.cssText = `
-          width:${size}px; height:${size}px;
-          top:${Math.random()*100}%;
-          left:${Math.random()*100}%;
-          --d:${(Math.random()*3+1).toFixed(1)}s;
-          animation-delay:${(Math.random()*4).toFixed(1)}s;
-        `;
-        cosmos.appendChild(star);
-      }
+      syncToLocal();
+      applyProgress();
+      toast('✅ 数据已导入并保存');
+    } catch(err) {
+      toast('⚠️ 文件格式错误');
     }
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
 
-    // ================================================
-    // LOCALSTORAGE PROGRESS RESTORE
-    // ================================================
-    function restoreProgress() {
-      const stored = JSON.parse(localStorage.getItem('shengrong_progress') || '{}');
-      for (const sub of Object.values(allData)) {
-        for (const unit of (sub.units || [])) {
-          for (const k of (unit.knowledge || [])) {
-            if (stored[k.id] !== undefined) k.learned = stored[k.id];
-          }
-        }
-      }
-    }
+// ── Toast ──
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
 
-    // ================================================
-    // START
-    // ================================================
-    createStars();
-    restoreProgress();
-    init();
-
-    // Keyboard shortcut
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeModal();
-    });
-  </script>
 </body>
 </html>
