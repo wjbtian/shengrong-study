@@ -2638,20 +2638,27 @@ function toggleTask(key) {
   updateHomePage();
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  // 今日任务点击绑定
-  ['tw-poem','tw-math','tw-english','tw-diary'].forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.onclick = function() {
-      var key = id.replace('tw-','');
-      toggleTask(key);
-    };
+// 今日任务点击绑定（脚本末尾执行时DOM已就绪，无需DOMContentLoaded）
+['tw-poem','tw-math','tw-english','tw-diary'].forEach(function(id) {
+  var el = document.getElementById(id);
+  if (el) el.onclick = function() {
+    var key = id.replace('tw-','');
+    toggleTask(key);
+  };
+});
+
+// 初始化加载（脚本末尾执行时DOM已就绪）
+loadStore();
+updateHomePage();
+renderLearn();
+renderShine();
+renderTech();
+
+// 绑定导航点击
+document.querySelectorAll('.nav-item').forEach(function(item) {
+  item.addEventListener('click', function() {
+    goPage(item.dataset.page);
   });
-  loadStore();
-  updateHomePage();
-  renderLearn();
-  renderShine();
-  renderTech();
 });
 
 
@@ -2745,6 +2752,15 @@ document.querySelectorAll('.modal-overlay').forEach(ov => { ov.addEventListener(
 document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active')); });
 
 // ===== 初始化 =====
+loadStore();
+updateHomePage();
+renderLearn();
+renderShine();
+renderTech();
+// 绑定导航点击
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => goPage(item.dataset.page));
+});
 </script>
 </body>
 </html>
