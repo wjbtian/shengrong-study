@@ -283,7 +283,6 @@
     <div class="nav-item active" data-page="home"><span>🏠</span> 首页</div>
     <div class="nav-item" data-page="learn"><span>📚</span> 学习</div>
     <div class="nav-item" data-page="shine"><span>✨</span> 闪光时刻</div>
-    <div class="nav-item" data-page="science"><span>🔬</span> 科学百科</div>
     <div class="nav-item" data-page="tech"><span>🔭</span> 科技新闻</div>
   </div>
 </aside>
@@ -308,13 +307,7 @@
         <div class="card-icon">✨</div><h3>✨ 闪光时刻</h3>
         <p>日记 · 照片 · 吉他 · 荣誉</p>
         <div class="count" id="home-shine-count"></div>
-      </div>
-      <div class="home-section-card" onclick="goPage('science')">
-        <div class="card-icon">🔬</div><h3>🔬 科学百科</h3>
-        <p>有趣的知识 · 科学小实验</p>
-        <div class="count" id="home-science-count"></div>
-      </div>
-    </div>
+      </div></div>
     <div class="home-panel">
       <div class="home-panel-header">
         <h3>📊 学习进度</h3>
@@ -392,18 +385,7 @@
       </div>
       <div class="gallery-grid" id="shine-grid"></div>
     </div>
-  </div>
-
-  <!-- ========== 科学百科 ========== -->
-  <div class="page" id="page-science">
-    <div class="page-header"><h2>🔬 科学百科</h2><p>有趣的知识，让好奇心带你探索世界</p></div>
-    <div class="btn-group">
-      <button class="btn btn-primary" onclick="openAddScience()">➕ 添加知识</button>
-    </div>
-    <div class="science-grid" id="science-grid"></div>
-  </div>
-
-  <!-- ========== 科技新闻 ========== -->
+  </div><!-- ========== 科技新闻 ========== -->
   <div class="page" id="page-tech">
     <div class="page-header"><h2>🔭 科技新闻</h2><p>AI · 航天 · 机器人，了解世界最前沿</p></div>
     <div class="btn-group">
@@ -482,39 +464,7 @@
       <button class="btn btn-primary" onclick="saveShine()">保存</button>
     </div>
   </div>
-</div>
-
-<div class="modal-overlay" id="modal-science">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('modal-science')">×</button>
-    <h3>🔬 添加科学知识</h3>
-    <div class="form-group">
-      <label>标题</label>
-      <input id="sci-title" placeholder="比如：为什么天空是蓝色的？">
-    </div>
-    <div class="form-group">
-      <label>类型</label>
-      <select id="sci-type">
-        <option value="自然">🌿 自然百科</option>
-        <option value="动物">🐾 动物世界</option>
-        <option value="天文">🌌 天文宇宙</option>
-        <option value="人体">🧬 人体奥秘</option>
-        <option value="物理">⚡ 物理原理</option>
-        <option value="实验">🧪 科学实验</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>解释（选填）</label>
-      <textarea id="sci-desc" placeholder="简单解释一下原理..."></textarea>
-    </div>
-    <div class="form-actions">
-      <button class="btn" onclick="closeModal('modal-science')">取消</button>
-      <button class="btn btn-primary" onclick="saveScience()">保存</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modal-tech">
+</div><div class="modal-overlay" id="modal-tech">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('modal-tech')">×</button>
     <h3>🔭 添加科技新闻</h3>
@@ -950,39 +900,6 @@ function deleteShine(id) {
 }
 
 // ===== 科学百科 =====
-function renderScience() {
-  const grid = document.getElementById('science-grid');
-  const typeIcon = { '自然':'🌿','动物':'🐾','天文':'🌌','人体':'🧬','物理':'⚡','实验':'🧪' };
-  grid.innerHTML = store.sciences.map(s => `
-    <div class="science-card" onclick="showScienceDetail(${s.id})">
-      <div class="science-icon">${s.icon}</div>
-      <div class="science-title">${s.title}</div>
-      <div class="science-desc">${s.desc.substring(0,60)}...</div>
-    </div>`).join('');
-}
-
-function showScienceDetail(id) {
-  const s = store.sciences.find(x => x.id === id);
-  if (!s) return;
-  document.getElementById('detail-body').innerHTML = `
-    <div style="font-size:52px;margin-bottom:16px;">${s.icon}</div>
-    <h2 style="font-size:18px;margin-bottom:8px;">${s.title}</h2>
-    <p style="font-size:12px;color:var(--text2);margin-bottom:16px;">📅 ${s.date} · ${s.type}</p>
-    <div class="science-detail-section">
-      <p style="font-size:14px;color:var(--text);line-height:1.8;">${s.desc}</p>
-    </div>
-    <div style="margin-top:20px;display:flex;justify-content:flex-end;gap:10px;">
-      <button class="btn btn-danger" onclick="deleteScience(${id})">🗑️ 删除</button>
-      <button class="btn" onclick="closeModal('modal-detail')">关闭</button>
-    </div>`;
-  openModal('modal-detail');
-}
-
-function deleteScience(id) {
-  if (!confirm('确定删除？')) return;
-  store.sciences = store.sciences.filter(s => s.id !== id);
-  saveStore(); renderScience(); renderHome(); closeModal('modal-detail');
-}
 
 // ===== 科技新闻 =====
 const NEWS_TAG_MAP = { ai:['🤖 AI','ai'], space:['🚀 航天','space'], robot:['🤖 机器人','robot'], tech:['💡 科技','tech'], game:['🎮 游戏','game'] };
@@ -1065,24 +982,6 @@ function saveShine() {
   saveStore(); renderShine(); renderHome(); closeModal('modal-shine');
 }
 
-function openAddScience() {
-  document.getElementById('sci-title').value = '';
-  document.getElementById('sci-type').value = '自然';
-  document.getElementById('sci-desc').value = '';
-  openModal('modal-science');
-}
-
-const SCI_ICONS = { '自然':'🌿','动物':'🐾','天文':'🌌','人体':'🧬','物理':'⚡','实验':'🧪' };
-
-function saveScience() {
-  const title = document.getElementById('sci-title').value.trim();
-  const type = document.getElementById('sci-type').value;
-  const desc = document.getElementById('sci-desc').value.trim();
-  if (!title) { alert('请输入标题'); return; }
-  store.sciences.unshift({ id: Date.now(), title, type, icon: SCI_ICONS[type]||'🔬', desc, date: today() });
-  saveStore(); renderScience(); renderHome(); closeModal('modal-science');
-}
-
 function openAddTech() {
   document.getElementById('tech-title').value = '';
   document.getElementById('tech-type').value = 'ai';
@@ -1113,7 +1012,6 @@ updateGreeting();
 renderHome();
 renderLearn();
 renderShine();
-renderScience();
 renderTech();
 </script>
 </body>
