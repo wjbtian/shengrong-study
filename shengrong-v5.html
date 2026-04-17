@@ -462,6 +462,119 @@
   .music-upload-btn:hover { border-color: var(--accent); }
   .main { padding-bottom: 70px; }  /* 给播放器留空间 */
 
+
+  /* ===== 首页科技感样式 ===== */
+  .sysbar {
+    position: relative; z-index: 2;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 0; margin-bottom: 8px;
+    border-bottom: 1px solid rgba(63,185,80,0.15);
+  }
+  .sysbar-left, .sysbar-right { display: flex; align-items: center; gap: 8px; }
+  .sysbar-center { display: flex; align-items: center; gap: 12px; }
+  .sys-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .sys-dot.online { background: #3fb950; box-shadow: 0 0 8px #3fb950; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .sys-status { font-size: 11px; color: #3fb950; font-family: monospace; letter-spacing: 1px; }
+  .sys-time { font-size: 13px; font-weight: 700; color: var(--text); font-family: monospace; }
+  .sys-date { font-size: 11px; color: var(--text2); font-family: monospace; }
+  .sys-badge { font-size: 10px; color: var(--accent2); background: rgba(88,166,255,0.1); border: 1px solid rgba(88,166,255,0.3); padding: 3px 8px; border-radius: 10px; font-family: monospace; letter-spacing: 1px; }
+
+  .hero-section {
+    position: relative; z-index: 2;
+    display: flex; align-items: center; gap: 20px;
+    background: rgba(22,27,34,0.8);
+    border: 1px solid rgba(63,185,80,0.25);
+    border-radius: 16px; padding: 22px 26px;
+    margin-bottom: 14px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 40px rgba(63,185,80,0.08);
+  }
+  .hero-emoji { font-size: 52px; animation: float 3s ease-in-out infinite; flex-shrink: 0; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  .hero-text { flex: 1; }
+  .hero-greeting { font-size: 24px; font-weight: 800; color: var(--text); margin-bottom: 6px; line-height: 1.2; }
+  .hero-sub { font-size: 13px; color: var(--text2); }
+  .level-ring { width: 70px; height: 70px; position: relative; flex-shrink: 0; }
+  .level-svg { width: 70px; height: 70px; }
+  .level-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .level-num { font-size: 22px; font-weight: 800; color: var(--accent); line-height: 1; }
+  .level-label { font-size: 10px; color: var(--text2); }
+
+  .energy-bar-section {
+    position: relative; z-index: 2;
+    background: rgba(22,27,34,0.7); border: 1px solid rgba(255,166,87,0.2);
+    border-radius: 12px; padding: 14px 18px; margin-bottom: 14px;
+  }
+  .energy-info { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .energy-icon { font-size: 18px; }
+  .energy-title { font-size: 13px; color: var(--text2); flex: 1; }
+  .energy-pct { font-size: 13px; font-weight: 700; color: #ffa657; }
+  .energy-track { height: 10px; background: rgba(255,166,87,0.1); border-radius: 5px; position: relative; overflow: hidden; }
+  .energy-fill { height: 100%; background: linear-gradient(90deg, #ffa657, #ff79c6); border-radius: 5px; transition: width 1s ease; width: 0%; }
+  .energy-glow { position: absolute; top: 0; right: 0; width: 20px; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6)); border-radius: 5px; animation: energy-flow 1.5s infinite; }
+  @keyframes energy-flow { 0%{opacity:0;transform:translateX(-10px)} 50%{opacity:1} 100%{opacity:0;transform:translateX(0)} }
+
+  .quick-entry { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; }
+  .qe-card {
+    background: rgba(22,27,34,0.8); border: 1px solid var(--border); border-radius: 14px;
+    padding: 18px 14px; cursor: pointer; transition: all 0.2s; backdrop-filter: blur(8px);
+  }
+  .qe-card:hover { transform: translateY(-3px); }
+  .qe-learn { border-color: rgba(63,185,80,0.35); }
+  .qe-learn:hover { box-shadow: 0 0 20px rgba(63,185,80,0.2); border-color: var(--accent); }
+  .qe-shine { border-color: rgba(189,147,249,0.35); }
+  .qe-shine:hover { box-shadow: 0 0 20px rgba(189,147,249,0.2); border-color: var(--purple); }
+  .qe-tech { border-color: rgba(88,166,255,0.35); }
+  .qe-tech:hover { box-shadow: 0 0 20px rgba(88,166,255,0.2); border-color: var(--accent2); }
+  .qe-icon { font-size: 28px; margin-bottom: 10px; }
+  .qe-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .qe-desc { font-size: 11px; color: var(--text2); margin-bottom: 10px; }
+  .qe-bar { height: 5px; background: rgba(255,255,255,0.08); border-radius: 3px; margin-bottom: 6px; overflow: hidden; }
+  .qe-bar-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+  .qe-fill-green { background: var(--accent); }
+  .qe-fill-purple { background: var(--purple); }
+  .qe-fill-blue { background: var(--accent2); }
+  .qe-count { font-size: 11px; color: var(--text2); }
+
+  .home-bottom { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .hb-panel {
+    background: rgba(22,27,34,0.7); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px; backdrop-filter: blur(8px);
+  }
+  .hb-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .hb-title { font-size: 13px; font-weight: 600; }
+  .hb-more { font-size: 11px; color: var(--accent); cursor: pointer; }
+  .hb-more:hover { text-decoration: underline; }
+  .hb-photo-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; }
+  .hb-photo-scroll::-webkit-scrollbar { height: 3px; }
+  .hb-photo-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .hb-photo-item {
+    flex-shrink: 0; width: 90px; background: #fff; padding: 6px 6px 22px;
+    border-radius: 2px; box-shadow: 2px 3px 8px rgba(0,0,0,0.3);
+    cursor: pointer; transition: transform 0.15s;
+  }
+  .hb-photo-item:nth-child(odd) { transform: rotate(-2deg); }
+  .hb-photo-item:nth-child(even) { transform: rotate(1deg); }
+  .hb-photo-item:hover { transform: rotate(0deg) scale(1.08); }
+  .hb-photo-item img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; border-radius: 1px; }
+  .hb-photo-placeholder { width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 30px; border-radius: 1px; }
+  .hb-photo-item .hp-caption { font-size: 9px; color: #555; text-align: center; margin-top: 4px; font-family: Georgia, serif; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .hb-news-list { display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto; }
+  .hb-news-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px; background: rgba(0,0,0,0.2); border-radius: 8px; cursor: pointer; transition: background 0.15s; }
+  .hb-news-item:hover { background: rgba(88,166,255,0.1); }
+  .hb-news-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+  .hb-news-body { flex: 1; min-width: 0; }
+  .hb-news-title { font-size: 12px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.3; }
+  .hb-news-meta { font-size: 10px; color: var(--text2); margin-top: 2px; }
+  .hb-empty { text-align: center; padding: 20px; color: var(--text2); font-size: 12px; }
+
+  @media (max-width: 768px) {
+    .quick-entry { grid-template-columns: 1fr; }
+    .home-bottom { grid-template-columns: 1fr; }
+    .hero-greeting { font-size: 20px; }
+  }
+
 </style>
 </head>
 <body>
@@ -485,37 +598,101 @@
 <!-- 主内容 -->
 <main class="main">
 
+  
   <!-- ========== 首页 ========== -->
   <div class="page active" id="page-home">
-    <div class="page-header"><h2>🏠 尚融的星球</h2><p>记录成长每一天</p></div>
-    <div class="home-greeting">
-      <h2 id="greeting-text">你好，吴尚融！</h2>
-      <p id="greeting-sub">每天进步一点点 👣</p>
+    <canvas id="starfield" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.5;"></canvas>
+
+    <!-- 系统状态栏 -->
+    <div class="sysbar">
+      <div class="sysbar-left">
+        <span class="sys-dot online"></span>
+        <span class="sys-status">尚融星球 · ONLINE</span>
+      </div>
+      <div class="sysbar-center">
+        <span class="sys-time" id="sys-time">--:--:--</span>
+        <span class="sys-date" id="sys-date">----.--.--</span>
+      </div>
+      <div class="sysbar-right">
+        <span class="sys-badge">🚀 SHENGRONG OS</span>
+      </div>
     </div>
-    <div class="home-sections">
-      <div class="home-section-card" onclick="goPage('learn')">
-        <div class="card-icon">📚</div><h3>📚 学习</h3>
-        <p>语文诗词 · 数学 · 英语 · 奥数</p>
-        <div class="count" id="home-learn-count"></div>
+
+    <!-- 主标题区 -->
+    <div class="hero-section">
+      <div class="hero-emoji" id="hero-emoji">👋</div>
+      <div class="hero-text">
+        <div class="hero-greeting" id="hero-greeting">你好，吴尚融！</div>
+        <div class="hero-sub" id="hero-sub">每天进步一点点 👣</div>
       </div>
-      <div class="home-section-card" onclick="goPage('shine')">
-        <div class="card-icon">✨</div><h3>✨ 闪光时刻</h3>
-        <p>日记 · 照片 · 吉他 · 荣誉</p>
-        <div class="count" id="home-shine-count"></div>
-      </div></div>
-    <div class="home-panel">
-      <div class="home-panel-header">
-        <h3>📊 学习进度</h3>
-        <span class="more-link" onclick="goPage('learn')">查看全部 →</span>
+      <div class="level-ring">
+        <svg viewBox="0 0 100 100" class="level-svg">
+          <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(63,185,80,0.15)" stroke-width="8"/>
+          <circle cx="50" cy="50" r="42" fill="none" stroke="#3fb950" stroke-width="8"
+            stroke-dasharray="264" stroke-dashoffset="264" stroke-linecap="round"
+            transform="rotate(-90 50 50)" id="level-ring-circle"/>
+        </svg>
+        <div class="level-center">
+          <div class="level-num" id="level-num">1</div>
+          <div class="level-label">级</div>
+        </div>
       </div>
-      <div class="progress-list" id="home-progress"></div>
     </div>
-    <div class="home-panel">
-      <div class="home-panel-header">
-        <h3>🔭 科技前沿</h3>
-        <span class="more-link" onclick="goPage('tech')">查看全部 →</span>
+
+    <!-- 能量条 -->
+    <div class="energy-bar-section">
+      <div class="energy-info">
+        <span class="energy-icon">⚡</span>
+        <span class="energy-title">今日能量</span>
+        <span class="energy-pct" id="energy-pct">0%</span>
       </div>
-      <div class="mini-list" id="home-tech"></div>
+      <div class="energy-track">
+        <div class="energy-fill" id="energy-fill"></div>
+        <div class="energy-glow" id="energy-glow"></div>
+      </div>
+    </div>
+
+    <!-- 三大入口卡片 -->
+    <div class="quick-entry">
+      <div class="qe-card qe-learn" onclick="goPage('learn')">
+        <div class="qe-icon">📚</div>
+        <div class="qe-title">学习中心</div>
+        <div class="qe-desc">诗词 · 数学 · 英语 · 奥数</div>
+        <div class="qe-bar"><div class="qe-bar-fill qe-fill-green" id="qe-learn-bar"></div></div>
+        <div class="qe-count" id="qe-learn-count">0/29 已完成</div>
+      </div>
+      <div class="qe-card qe-shine" onclick="goPage('shine')">
+        <div class="qe-icon">✨</div>
+        <div class="qe-title">闪光时刻</div>
+        <div class="qe-desc">日记 · 照片 · 吉他</div>
+        <div class="qe-bar"><div class="qe-bar-fill qe-fill-purple" id="qe-shine-bar"></div></div>
+        <div class="qe-count" id="qe-shine-count">0篇日记 · 0张照片</div>
+      </div>
+      <div class="qe-card qe-tech" onclick="goPage('tech')">
+        <div class="qe-icon">🔭</div>
+        <div class="qe-title">科技前沿</div>
+        <div class="qe-desc">AI · 航天 · 机器人</div>
+        <div class="qe-bar"><div class="qe-bar-fill qe-fill-blue" id="qe-tech-bar"></div></div>
+        <div class="qe-count" id="qe-tech-count">0 条新闻</div>
+      </div>
+    </div>
+
+    <!-- 底部两栏 -->
+    <div class="home-bottom">
+      <div class="hb-panel">
+        <div class="hb-header">
+          <span class="hb-title">📷 最新照片</span>
+          <span class="hb-more" onclick="goPage('shine')">全部 →</span>
+        </div>
+        <div class="hb-photo-scroll" id="hb-photo-scroll"></div>
+      </div>
+      <div class="hb-panel">
+        <div class="hb-header">
+          <span class="hb-title">🔭 科技动态</span>
+          <span class="hb-more" onclick="goPage('tech')">全部 →</span>
+        </div>
+        <div class="hb-news-list" id="hb-news-list"></div>
+      </div>
     </div>
   </div>
 
@@ -785,53 +962,6 @@ function updateGreeting() {
   else { el.textContent = '🌙 晚上好，吴尚融！'; sub.textContent = '今天学到了什么？'; }
 }
 
-// ===== 首页渲染 =====
-function renderHome() {
-  const totals = { chinese:8, english:8, math:6, olympiad:9 };
-  const names = { chinese:'语文', english:'英语', math:'数学', olympiad:'奥数' };
-  let totalDone = store.doneUnits.length;
-  let totalUnits = Object.values(totals).reduce((a,b)=>a+b,0);
-  document.getElementById('home-learn-count').textContent = `${totalDone} / ${totalUnits} 个单元已完成`;
-  document.getElementById('home-shine-count').textContent = `${store.diary.length} 篇日记 · ${store.shines.length} 个时刻`;
-  document.getElementById('home-science-count').textContent = `${store.sciences.length} 个有趣知识`;
-
-  let progHTML = '';
-  Object.keys(totals).forEach(s => {
-    let cnt = 0;
-    for (let i = 0; i < totals[s]; i++) if (store.doneUnits.includes(s+'_'+i)) cnt++;
-    const pct = Math.round(cnt / totals[s] * 100);
-    progHTML += `<div class="progress-item">
-      <span class="progress-label">${names[s]}</span>
-      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-      <span class="progress-pct">${pct}%</span>
-    </div>`;
-  });
-  document.getElementById('home-progress').innerHTML = progHTML;
-
-  const recentTech = store.news.slice(0, 3);
-  document.getElementById('home-tech').innerHTML = recentTech.length
-    ? recentTech.map(n => `<div class="mini-item" onclick="showTechDetail(${n.id})">
-        <span class="mini-icon">${n.icon}</span>
-        <div class="mini-body">
-          <div class="mini-title">${n.title}</div>
-          <div class="mini-meta">📅 ${n.date}</div>
-        </div>
-      </div>`).join('')
-    : '<p style="font-size:13px;color:var(--text2);padding:10px">暂无科技新闻</p>';
-
-  // 首页照片墙迷你展示
-  const homePhotoGrid = document.getElementById('home-photos-grid');
-  if (!store.shines.length) {
-    homePhotoGrid.innerHTML = '<div class="home-photo-empty"><span>📷</span><span>还没有照片，去「闪光时刻」上传第一张吧！</span></div>';
-  } else {
-    homePhotoGrid.innerHTML = store.shines.slice(0, 6).map(s => `
-      <div class="home-photo-thumb" onclick="showShineDetail(${s.id})">
-        ${s.img ? `<img src="${s.img}" alt="${s.title}">` : `<div style="width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:36px;background:${s.bgColor||'#eee'};border-radius:1px;">${s.icon}</div>`}
-        <div class="hp-caption">${s.title}</div>
-      </div>`).join('');
-  }
-}
-
 // ===== 诗词数据 & 渲染 =====
 const POEMS = [
   {
@@ -941,7 +1071,7 @@ function renderLearn() {
 function toggleUnit(key) {
   if (store.doneUnits.includes(key)) store.doneUnits = store.doneUnits.filter(k => k !== key);
   else store.doneUnits.push(key);
-  saveStore(); renderLearn(); renderHome();
+  saveStore(); renderLearn(); updateHomePage();
 }
 
 // ===== 奥数 =====
@@ -1048,7 +1178,7 @@ function showOM(id) {
 function toggleOM(id) {
   if (store.doneOM.includes(id)) store.doneOM = store.doneOM.filter(k => k !== id);
   else store.doneOM.push(id);
-  saveStore(); renderOM(); renderHome(); showOM(id);
+  saveStore(); renderOM(); updateHomePage(); showOM(id);
 }
 
 // ===== 闪光时刻 =====function renderShine() {
@@ -1095,7 +1225,7 @@ function showDiaryDetail(id) {
 function deleteDiary(id) {
   if (!confirm('确定删除这篇日记？')) return;
   store.diary = store.diary.filter(d => d.id !== id);
-  saveStore(); renderShine(); renderHome(); closeModal('modal-detail');
+  saveStore(); renderShine(); updateHomePage(); closeModal('modal-detail');
 }
 
 function showShineDetail(id) {
@@ -1115,7 +1245,7 @@ function showShineDetail(id) {
 function deleteShine(id) {
   if (!confirm('确定删除？')) return;
   store.shines = store.shines.filter(s => s.id !== id);
-  saveStore(); renderShine(); renderHome(); closeModal('modal-detail');
+  saveStore(); renderShine(); updateHomePage(); closeModal('modal-detail');
 }
 
 // ===== 科学百科 =====
@@ -1158,7 +1288,7 @@ function showTechDetail(id) {
 function deleteTech(id) {
   if (!confirm('确定删除？')) return;
   store.news = store.news.filter(n => n.id !== id);
-  saveStore(); renderTech(); renderHome(); closeModal('modal-detail');
+  saveStore(); renderTech(); updateHomePage(); closeModal('modal-detail');
 }
 
 // ===== 添加操作 =====
@@ -1182,7 +1312,7 @@ function saveDiary() {
   const content = document.getElementById('diary-content').value.trim();
   if (!title || !content) { alert('请填写标题和内容'); return; }
   store.diary.unshift({ id: Date.now(), mood: selectedMood, title, content, date: today() });
-  saveStore(); renderShine(); renderHome(); closeModal('modal-diary');
+  saveStore(); renderShine(); updateHomePage(); closeModal('modal-diary');
 }
 
 function openAddShine() {
@@ -1203,7 +1333,7 @@ function saveShine() {
   const img = imgEl ? imgEl.src : null;
   const bgColor = BG_COLORS[Math.floor(Math.random() * BG_COLORS.length)];
   store.shines.unshift({ id: Date.now(), title, type, icon, img, bgColor, date: today() });
-  saveStore(); renderShine(); renderHome(); closeModal('modal-shine');
+  saveStore(); renderShine(); updateHomePage(); closeModal('modal-shine');
 }
 
 function openAddTech() {
@@ -1221,7 +1351,7 @@ function saveTech() {
   const summary = document.getElementById('tech-summary').value.trim();
   if (!title) { alert('请输入标题'); return; }
   store.news.unshift({ id: Date.now(), title, type, icon: TECH_ICONS[type]||'🔭', summary, date: today() });
-  saveStore(); renderTech(); renderHome(); closeModal('modal-tech');
+  saveStore(); renderTech(); updateHomePage(); closeModal('modal-tech');
 }
 
 
@@ -1277,6 +1407,56 @@ document.addEventListener('DOMContentLoaded', function() {
   } catch(e) {}
 });
 
+
+// ===== 数字时钟 =====
+function updateClock() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  const s = String(now.getSeconds()).padStart(2,'0');
+  const el = document.getElementById('sys-time');
+  if (el) el.textContent = `${h}:${m}:${s}`;
+  const d = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
+  const eld = document.getElementById('sys-date');
+  if (eld) eld.textContent = d;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+
+// ===== 粒子星空背景 =====
+(function initStarfield() {
+  const canvas = document.getElementById('starfield');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let w, h, stars = [];
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+    stars = Array.from({length: 120}, () => ({
+      x: Math.random() * w, y: Math.random() * h,
+      r: Math.random() * 1.5 + 0.5,
+      speed: Math.random() * 0.3 + 0.05,
+      opacity: Math.random() * 0.5 + 0.2
+    }));
+  }
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    stars.forEach(s => {
+      s.y += s.speed;
+      if (s.y > h) { s.y = 0; s.x = Math.random() * w; }
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${s.opacity})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  draw();
+})();
+
 // ===== 照片预览 =====
 function previewShineImg(input) {
   const file = input.files[0];
@@ -1298,7 +1478,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') document.que
 // ===== 初始化 =====
 loadStore();
 updateGreeting();
-renderHome();
+updateHomePage();
 renderLearn();
 renderShine();
 renderTech();
