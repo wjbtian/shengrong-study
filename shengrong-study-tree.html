@@ -1429,12 +1429,18 @@ function openModal(subject, unit) {
   document.getElementById('modalContent').innerHTML = items.map((item, i) => {
     const kid = `${unit}-${i+1}`;
     const done = ids.includes(kid);
-    return `<div class="modal-item ${done?'done':''}" onclick="this.classList.toggle('done')">
+    return `<div class="modal-item ${done?'done':''}" data-kid="${kid}" onclick="toggleModalItem(this)">
       <div class="check-circle">${done?'✓':''}</div>
       <span>${item}</span>
     </div>`;
   }).join('');
   document.getElementById('modalOverlay').classList.add('show');
+}
+
+function toggleModalItem(el) {
+  el.classList.toggle('done');
+  const circle = el.querySelector('.check-circle');
+  circle.textContent = el.classList.contains('done') ? '✓' : '';
 }
 
 function saveModal() {
