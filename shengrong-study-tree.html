@@ -433,6 +433,23 @@
     }
     .modal-save-btn:hover { filter: brightness(1.15); transform: translateY(-1px); }
 
+    /* Poem / text content cards inside modal */
+    .poem-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px; padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+    .poem-title { font-size: 0.88em; font-weight: 700; color: var(--yellow); margin-bottom: 8px; }
+    .poem-text {
+      font-size: 0.85em; color: #e8f4ff; line-height: 1.8;
+      font-family: 'KaiTi','楷体','STKaiti',serif;
+      padding: 10px 14px; background: rgba(255,255,255,0.04);
+      border-radius: 10px; margin-bottom: 8px; letter-spacing: 1px;
+    }
+    .poem-meaning { font-size: 0.8em; color: var(--muted); line-height: 1.7; }
+    .poem-meaning span { color: var(--yellow); font-weight: 600; }
+
     /* ── Toast ── */
     .toast {
       position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
@@ -1093,6 +1110,54 @@ function setSync(type, text) {
   document.getElementById('syncText').textContent = text;
 }
 
+// ── Chinese Unit Content (poems & texts) ──
+const UNIT_CONTENT = {
+  chinese: {
+    c1: `
+      <div class="poem-card">
+        <div class="poem-title">📜 《绝句》 杜甫</div>
+        <div class="poem-text">两个黄鹂鸣翠柳，一行白鹭上青天。<br>窗含西岭千秋雪，门泊东吴万里船。</div>
+        <div class="poem-meaning"><span>诗意：</span>两只黄鹂在翠柳间鸣叫，一行白鹭飞上蓝天。窗外西岭上千年不化的积雪像嵌在窗框里，门前停泊着从万里外的东吴来的船。</div>
+      </div>
+      <div class="poem-card">
+        <div class="poem-title">📜 《惠崇春江晚景》 苏轼</div>
+        <div class="poem-text">竹外桃花三两枝，春江水暖鸭先知。<br>蒌蒿满地芦芽短，正是河豚欲上时。</div>
+        <div class="poem-meaning"><span>诗意：</span>竹林外两三枝桃花初放，春天江水暖和了，鸭子最先知道。河滩上长满了蒌蒿，芦苇刚抽出嫩芽，这正是河豚逆流而上的时节。</div>
+      </div>
+      <div class="poem-card">
+        <div class="poem-title">📜 《三衢道中》 曾几</div>
+        <div class="poem-text">梅子黄时日日晴，小溪泛尽却山行。<br>绿阴不减来时路，添得黄鹂四五声。</div>
+        <div class="poem-meaning"><span>诗意：</span>梅子成熟的季节，天天都是晴天。乘小船到小溪尽头，再走山路。山路上绿树浓荫，和来时一样，又增添了四五声黄鹂的叫声。</div>
+      </div>`,
+    c2: `
+      <div class="poem-card">
+        <div class="poem-title">📖 《乡下人家》 陈醉云</div>
+        <div class="poem-meaning">课文描写了乡下人家朴素的田园生活：门前种花、屋后种竹、鸡鸭觅食、人们在瓜架下吃饭……展现了自然和谐的乡村画面。</div>
+      </div>`,
+    c3: `
+      <div class="poem-card">
+        <div class="poem-title">📖 《天窗》 茅盾</div>
+        <div class="poem-meaning">课文写了乡下孩子在屋顶开的小天窗。雨天和夜里，孩子们透过天窗想象外面的风雨、星星、月亮，感受想象的快乐。</div>
+      </div>`,
+    c7: `
+      <div class="poem-card">
+        <div class="poem-title">📜 《墨梅》 王冕</div>
+        <div class="poem-text">吾家洗砚池头树，个个花开淡墨痕。<br>不要人夸好颜色，只留清气满乾坤。</div>
+        <div class="poem-meaning"><span>诗意：</span>我家洗砚池边有棵梅花树，每朵花都带着淡淡的墨痕。不需要人们夸赞它颜色好看，只想把清香留在天地之间。（托物言志，表达诗人高洁志向）</div>
+      </div>
+      <div class="poem-card">
+        <div class="poem-title">📜 《囊萤夜读》</div>
+        <div class="poem-text">胤恭敏而好学，家贫不常得油。夏月则练囊盛数十萤火以照书，夜以继日焉。</div>
+        <div class="poem-meaning"><span>译文：</span>车胤谦虚勤学，家里贫穷常常没有灯油。夏天就用白色薄纱口袋装几十只萤火虫来照亮书本，夜以继日地读书。</div>
+      </div>
+      <div class="poem-card">
+        <div class="poem-title">📜 《铁杵成针》</div>
+        <div class="poem-text">磨针溪，在象耳山下。世传李太白读书山中，未成，弃去。过小溪，逢老媪方磨铁杵。问之，曰："欲作针。"太白感其意，还卒业。</div>
+        <div class="poem-meaning"><span>译文：</span>磨针溪在象耳山下。传说李白在山中读书，没学成就想离开。路过小溪时，遇到一位老奶奶在磨铁棒。李白问她磨铁棒做什么，老奶奶说想磨成针。李白被她的毅力感动，回去完成了学业。</div>
+      </div>`,
+  }
+};
+
 // ── Question Bank Data ──
 const QB_DATA = {
   oly: {
@@ -1368,7 +1433,7 @@ function goTab(id) {
 // ── Modal ──
 const UNIT_ITEMS = {
   chinese: {
-    c1: ['《绝句》朗读背诵','《惠崇春江晚景》朗读背诵','《三衢道中》朗读背诵','默写三首古诗词','理解诗意诗情'],
+    c1: ['正确读写本课生字词','有感情朗读三首古诗','背诵并默写《绝句》','背诵并默写《惠崇春江晚景》','背诵并默写《三衢道中》','理解诗意，说出每首诗的意思','体会诗人情感，完成课后题'],
     c2: ['掌握课后生字词','正确读写生字','整体感知课文内容','体会乡村生活美好'],
     c3: ['理解"小小的天窗"含义','体会作者对天窗的喜爱','学习比喻、拟人写法','有感情朗读'],
     c4: ['理清课文脉络','体会作者情感变化','学习对比写法','母鸡形象分析'],
@@ -1426,7 +1491,15 @@ function openModal(subject, unit) {
   const items = UNIT_ITEMS[subject]?.[unit] || [];
   document.getElementById('modalTitle').textContent = `${SUBJ_ICONS[subject]} ${SUBJ_NAMES[subject]} · ${UNIT_NAMES[unit]}`;
   const ids = progressData[subject];
-  document.getElementById('modalContent').innerHTML = items.map((item, i) => {
+
+  // Build content HTML (poems/texts for Chinese units)
+  const content = UNIT_CONTENT[subject]?.[unit] || '';
+  const contentSection = content
+    ? `<div class="modal-content-section">${content}</div><div style="font-size:0.8em;color:var(--yellow);margin:12px 0 8px;font-weight:700;">📝 学习任务清单</div>`
+    : '';
+
+  // Build checklist
+  const checklist = items.map((item, i) => {
     const kid = `${unit}-${i+1}`;
     const done = ids.includes(kid);
     return `<div class="modal-item ${done?'done':''}" data-kid="${kid}" onclick="toggleModalItem(this)">
@@ -1434,6 +1507,8 @@ function openModal(subject, unit) {
       <span>${item}</span>
     </div>`;
   }).join('');
+
+  document.getElementById('modalContent').innerHTML = contentSection + checklist;
   document.getElementById('modalOverlay').classList.add('show');
 }
 
