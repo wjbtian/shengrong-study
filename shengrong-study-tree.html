@@ -402,11 +402,11 @@
             <span class="icon">📖</span><span class="label">📖 课文理解</span><span class="arrow">▸</span>
           </div>
           <ul class="tree-children">
-            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-1')">🆕 1.1 课文朗读：准确、流利、有感情</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-2')">🆕 1.2 段落划分：找关键句、分层</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-3')">🆕 1.3 概括段意：摘句法/要素法</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-4')">🆕 1.4 理解词语：联系上下文/查词典</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-5')">🆕 1.5 体会情感：抓关键词句</li>
+            <li class="tree-child-item" data-subject="chinese" data-id="c-1" onclick="toggleDone(this,'chinese','c-1')">🆕 1.1 课文朗读：准确、流利、有感情</li>
+            <li class="tree-child-item" data-subject="chinese" data-id="c-2" onclick="toggleDone(this,'chinese','c-2')">🆕 1.2 段落划分：找关键句、分层</li>
+            <li class="tree-child-item" data-subject="chinese" data-id="c-3" onclick="toggleDone(this,'chinese','c-3')">🆕 1.3 概括段意：摘句法/要素法</li>
+            <li class="tree-child-item" data-subject="chinese" data-id="c-4" onclick="toggleDone(this,'chinese','c-4')">🆕 1.4 理解词语：联系上下文/查词典</li>
+            <li class="tree-child-item" data-subject="chinese" data-id="c-5" onclick="toggleDone(this,'chinese','c-5')">🆕 1.5 体会情感：抓关键词句</li>
           </ul>
         </li>
         <li class="tree-item">
@@ -414,10 +414,10 @@
             <span class="icon">✍️</span><span class="label">✍️ 习作能力</span><span class="arrow">▸</span>
           </div>
           <ul class="tree-children">
-            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-6')">🆕 2.1 写景作文：顺序+修辞+感受</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-7')">🆕 2.2 写事作文：起因经过结果</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-8')">🆕 2.3 写人作文：外貌+事件+品质</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-9')">🆕 2.4 修改作文：增删调换</li>
+            <li class="tree-child-item" data-subject="chinese" data-id="c-6" onclick="toggleDone(this,'chinese','c-6')">🆕 2.1 写景作文：顺序+修辞+感受</li>
+            <li class="tree-child-item" data-subject="chinese" data-id="c-7" onclick="toggleDone(this,'chinese','c-7')">🆕 2.2 写事作文：起因经过结果</li>
+            <li class="tree-child-item" data-subject="chinese" data-id="c-8" onclick="toggleDone(this,'chinese','c-8')">🆕 2.3 写人作文：外貌+事件+品质</li>
+            <li class="tree-child-item" data-subject="chinese" data-id="c-9" onclick="toggleDone(this,'chinese','c-9')">🆕 2.4 修改作文：增删调换</li>
           </ul>
         </li>
         <li class="tree-item">
@@ -425,10 +425,10 @@
             <span class="icon">📝</span><span class="label">📝 语文基础知识</span><span class="arrow">▸</span>
           </div>
           <ul class="tree-children">
-            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-10')">🆕 3.1 多音字：区分不同读音和用法</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-11')">🆕 3.2 形近字：比较差异，正确组词</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-12')">🆕 3.3 标点符号：句号/逗号/引号/冒号用法</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-13')">🆕 3.4 关联词：因果/转折/递进/并列</li>
+            <li class="tree-child-item" data-subject="chinese" data-id="c-10" onclick="toggleDone(this,'chinese','c-10')">🆕 3.1 多音字：区分不同读音和用法</li>
+            <li class="tree-child-item" data-subject="chinese" data-id="c-11" onclick="toggleDone(this,'chinese','c-11')">🆕 3.2 形近字：比较差异，正确组词</li>
+            <li class="tree-child-item" data-subject="chinese" data-id="c-12" onclick="toggleDone(this,'chinese','c-12')">🆕 3.3 标点符号：句号/逗号/引号/冒号用法</li>
+            <li class="tree-child-item" data-subject="chinese" data-id="c-13" onclick="toggleDone(this,'chinese','c-13')">🆕 3.4 关联词：因果/转折/递进/并列</li>
           </ul>
         </li>
         <li class="tree-item">
@@ -436,9 +436,9 @@
             <span class="icon">📜</span><span class="label">📜 古诗文积累</span><span class="arrow">▸</span>
           </div>
           <ul class="tree-children">
-            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-14')">🆕 4.1 古诗词背诵：理解诗意+诗情</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-15')">🆕 4.2 文言文入门：读懂大意即可</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'chinese','c-16')">🆕 4.3 名言警句：积累并运用</li>
+            <li class="tree-child-item" data-subject="chinese" data-id="c-14" onclick="toggleDone(this,'chinese','c-14')">🆕 4.1 古诗词背诵：理解诗意+诗情</li>
+            <li class="tree-child-item" data-subject="chinese" data-id="c-15" onclick="toggleDone(this,'chinese','c-15')">🆕 4.2 文言文入门：读懂大意即可</li>
+            <li class="tree-child-item" data-subject="chinese" data-id="c-16" onclick="toggleDone(this,'chinese','c-16')">🆕 4.3 名言警句：积累并运用</li>
           </ul>
         </li>
       </ul>
@@ -500,10 +500,10 @@
             <span class="icon">🔢</span><span class="label">🔢 数与运算</span><span class="arrow">▸</span>
           </div>
           <ul class="tree-children">
-            <li class="tree-child-item" onclick="toggleDone(this,'math','m-1')">🆕 1.1 大数读写：万以内/亿以内</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'math','m-2')">🆕 1.2 四舍五入：求近似数</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'math','m-3')">🆕 1.3 三位数乘两位数</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'math','m-4')">🆕 1.4 除数是两位数除法</li>
+            <li class="tree-child-item" data-subject="math" data-id="m-1" onclick="toggleDone(this,'math','m-1')">🆕 1.1 大数读写：万以内/亿以内</li>
+            <li class="tree-child-item" data-subject="math" data-id="m-2" onclick="toggleDone(this,'math','m-2')">🆕 1.2 四舍五入：求近似数</li>
+            <li class="tree-child-item" data-subject="math" data-id="m-3" onclick="toggleDone(this,'math','m-3')">🆕 1.3 三位数乘两位数</li>
+            <li class="tree-child-item" data-subject="math" data-id="m-4" onclick="toggleDone(this,'math','m-4')">🆕 1.4 除数是两位数除法</li>
           </ul>
         </li>
         <li class="tree-item">
@@ -511,10 +511,10 @@
             <span class="icon">📐</span><span class="label">📐 图形与几何</span><span class="arrow">▸</span>
           </div>
           <ul class="tree-children">
-            <li class="tree-child-item" onclick="toggleDone(this,'math','m-5')">🆕 2.1 角：分类（锐/直/钝/平/周）</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'math','m-6')">🆕 2.2 平行四边形：特征与高</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'math','m-7')">🆕 2.3 梯形：等腰/直角梯形</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'math','m-8')">🆕 2.4 面积：正/长/平行四边/梯形</li>
+            <li class="tree-child-item" data-subject="math" data-id="m-5" onclick="toggleDone(this,'math','m-5')">🆕 2.1 角：分类（锐/直/钝/平/周）</li>
+            <li class="tree-child-item" data-subject="math" data-id="m-6" onclick="toggleDone(this,'math','m-6')">🆕 2.2 平行四边形：特征与高</li>
+            <li class="tree-child-item" data-subject="math" data-id="m-7" onclick="toggleDone(this,'math','m-7')">🆕 2.3 梯形：等腰/直角梯形</li>
+            <li class="tree-child-item" data-subject="math" data-id="m-8" onclick="toggleDone(this,'math','m-8')">🆕 2.4 面积：正/长/平行四边/梯形</li>
           </ul>
         </li>
         <li class="tree-item">
@@ -522,8 +522,8 @@
             <span class="icon">📊</span><span class="label">📊 统计与概率</span><span class="arrow">▸</span>
           </div>
           <ul class="tree-children">
-            <li class="tree-child-item" onclick="toggleDone(this,'math','m-9')">🆕 3.1 复式条形统计图</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'math','m-10')">🆕 3.2 合理选择统计图</li>
+            <li class="tree-child-item" data-subject="math" data-id="m-9" onclick="toggleDone(this,'math','m-9')">🆕 3.1 复式条形统计图</li>
+            <li class="tree-child-item" data-subject="math" data-id="m-10" onclick="toggleDone(this,'math','m-10')">🆕 3.2 合理选择统计图</li>
           </ul>
         </li>
       </ul>
@@ -585,11 +585,11 @@
             <span class="icon">📖</span><span class="label">📖 单词积累（160+词汇）</span><span class="arrow">▸</span>
           </div>
           <ul class="tree-children">
-            <li class="tree-child-item" onclick="toggleDone(this,'english','e-1')">🆕 1.1 校校科目词汇</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'english','e-2')">🆕 1.2 房间家居词汇</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'english','e-3')">🆕 1.3 季节天气词汇</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'english','e-4')">🆕 1.4 情感健康词汇</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'english','e-5')">🆕 1.5 其他核心词汇</li>
+            <li class="tree-child-item" data-subject="english" data-id="e-1" onclick="toggleDone(this,'english','e-1')">🆕 1.1 校校科目词汇</li>
+            <li class="tree-child-item" data-subject="english" data-id="e-2" onclick="toggleDone(this,'english','e-2')">🆕 1.2 房间家居词汇</li>
+            <li class="tree-child-item" data-subject="english" data-id="e-3" onclick="toggleDone(this,'english','e-3')">🆕 1.3 季节天气词汇</li>
+            <li class="tree-child-item" data-subject="english" data-id="e-4" onclick="toggleDone(this,'english','e-4')">🆕 1.4 情感健康词汇</li>
+            <li class="tree-child-item" data-subject="english" data-id="e-5" onclick="toggleDone(this,'english','e-5')">🆕 1.5 其他核心词汇</li>
           </ul>
         </li>
         <li class="tree-item">
@@ -597,13 +597,13 @@
             <span class="icon">📝</span><span class="label">📝 语法要点</span><span class="arrow">▸</span>
           </div>
           <ul class="tree-children">
-            <li class="tree-child-item" onclick="toggleDone(this,'english','e-6')">🆕 2.1 be动词（am/is/are）</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'english','e-7')">🆕 2.2 Have/Has got 用法</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'english','e-8')">🆕 2.3 一般现在时</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'english','e-9')">🆕 2.4 现在进行时（be+v-ing）</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'english','e-10')">🆕 2.5 一般过去时（was/were）</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'english','e-11')">🆕 2.6 情态动词 can/could/may</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'english','e-12')">🆕 2.7 there is/are</li>
+            <li class="tree-child-item" data-subject="english" data-id="e-6" onclick="toggleDone(this,'english','e-6')">🆕 2.1 be动词（am/is/are）</li>
+            <li class="tree-child-item" data-subject="english" data-id="e-7" onclick="toggleDone(this,'english','e-7')">🆕 2.2 Have/Has got 用法</li>
+            <li class="tree-child-item" data-subject="english" data-id="e-8" onclick="toggleDone(this,'english','e-8')">🆕 2.3 一般现在时</li>
+            <li class="tree-child-item" data-subject="english" data-id="e-9" onclick="toggleDone(this,'english','e-9')">🆕 2.4 现在进行时（be+v-ing）</li>
+            <li class="tree-child-item" data-subject="english" data-id="e-10" onclick="toggleDone(this,'english','e-10')">🆕 2.5 一般过去时（was/were）</li>
+            <li class="tree-child-item" data-subject="english" data-id="e-11" onclick="toggleDone(this,'english','e-11')">🆕 2.6 情态动词 can/could/may</li>
+            <li class="tree-child-item" data-subject="english" data-id="e-12" onclick="toggleDone(this,'english','e-12')">🆕 2.7 there is/are</li>
           </ul>
         </li>
         <li class="tree-item">
@@ -611,10 +611,10 @@
             <span class="icon">🗣️</span><span class="label">🗣️ 听说读写</span><span class="arrow">▸</span>
           </div>
           <ul class="tree-children">
-            <li class="tree-child-item" onclick="toggleDone(this,'english','e-13')">🆕 3.1 课本听力跟读</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'english','e-14')">🆕 3.2 朗读与背诵</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'english','e-15')">🆕 3.3 简单句写作</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'english','e-16')">🆕 3.4 日常口语对话</li>
+            <li class="tree-child-item" data-subject="english" data-id="e-13" onclick="toggleDone(this,'english','e-13')">🆕 3.1 课本听力跟读</li>
+            <li class="tree-child-item" data-subject="english" data-id="e-14" onclick="toggleDone(this,'english','e-14')">🆕 3.2 朗读与背诵</li>
+            <li class="tree-child-item" data-subject="english" data-id="e-15" onclick="toggleDone(this,'english','e-15')">🆕 3.3 简单句写作</li>
+            <li class="tree-child-item" data-subject="english" data-id="e-16" onclick="toggleDone(this,'english','e-16')">🆕 3.4 日常口语对话</li>
           </ul>
         </li>
       </ul>
@@ -693,14 +693,14 @@
             <span class="icon">📊</span><span class="label">📊 应用题（和差/和倍/鸡兔/年龄/盈亏/植树）</span><span class="arrow">▸</span>
           </div>
           <ul class="tree-children">
-            <li class="tree-child-item done" onclick="toggleDone(this,'oly','o1-1')">✅ 1.1 和差问题：大数=(和+差)÷2，小数=(和-差)÷2</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'oly','o1-2')">🆕 1.2 和倍问题：1倍数=和÷（倍数+1）</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'oly','o1-3')">🆕 1.3 差倍问题：1倍数=差÷（倍数-1）</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'oly','o1-4')">🆕 1.4 鸡兔同笼·假设法：先假设全是一种，算出差来调整</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'oly','o1-5')">🆕 1.5 鸡兔同笼·抬脚法：让动物抬脚的趣味解法</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'oly','o1-6')">🆕 1.6 年龄问题：年龄差不变，年龄和随时间同增同减</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'oly','o1-7')">🆕 1.7 盈亏问题·一盈一亏：（盈+亏）÷分配差</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'oly','o1-8')">🆕 1.8 植树问题：段数=路长÷间距，端点种+1</li>
+            <li class="tree-child-item done" data-subject="oly" data-id="o1-1" onclick="toggleDone(this,'oly','o1-1')">✅ 1.1 和差问题：大数=(和+差)÷2，小数=(和-差)÷2</li>
+            <li class="tree-child-item" data-subject="oly" data-id="o1-2" onclick="toggleDone(this,'oly','o1-2')">🆕 1.2 和倍问题：1倍数=和÷（倍数+1）</li>
+            <li class="tree-child-item" data-subject="oly" data-id="o1-3" onclick="toggleDone(this,'oly','o1-3')">🆕 1.3 差倍问题：1倍数=差÷（倍数-1）</li>
+            <li class="tree-child-item" data-subject="oly" data-id="o1-4" onclick="toggleDone(this,'oly','o1-4')">🆕 1.4 鸡兔同笼·假设法：先假设全是一种，算出差来调整</li>
+            <li class="tree-child-item" data-subject="oly" data-id="o1-5" onclick="toggleDone(this,'oly','o1-5')">🆕 1.5 鸡兔同笼·抬脚法：让动物抬脚的趣味解法</li>
+            <li class="tree-child-item" data-subject="oly" data-id="o1-6" onclick="toggleDone(this,'oly','o1-6')">🆕 1.6 年龄问题：年龄差不变，年龄和随时间同增同减</li>
+            <li class="tree-child-item" data-subject="oly" data-id="o1-7" onclick="toggleDone(this,'oly','o1-7')">🆕 1.7 盈亏问题·一盈一亏：（盈+亏）÷分配差</li>
+            <li class="tree-child-item" data-subject="oly" data-id="o1-8" onclick="toggleDone(this,'oly','o1-8')">🆕 1.8 植树问题：段数=路长÷间距，端点种+1</li>
           </ul>
         </li>
         <li class="tree-item">
@@ -708,11 +708,11 @@
             <span class="icon">🔍</span><span class="label">🔍 找规律（数列/周期/图形）</span><span class="arrow">▸</span>
           </div>
           <ul class="tree-children">
-            <li class="tree-child-item" onclick="toggleDone(this,'oly','o2-1')">🆕 2.1 等差数列：第n项=首项+（n-1）×公差</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'oly','o2-2')">🆕 2.2 等比数列/跳级规律</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'oly','o2-3')">🆕 2.3 数量周期：总数÷周期长度=完整周期数+余数</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'oly','o2-4')">🆕 2.4 星期/日期周期（含星期几计算）</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'oly','o2-5')">🆕 2.5 图形排列规律</li>
+            <li class="tree-child-item" data-subject="oly" data-id="o2-1" onclick="toggleDone(this,'oly','o2-1')">🆕 2.1 等差数列：第n项=首项+（n-1）×公差</li>
+            <li class="tree-child-item" data-subject="oly" data-id="o2-2" onclick="toggleDone(this,'oly','o2-2')">🆕 2.2 等比数列/跳级规律</li>
+            <li class="tree-child-item" data-subject="oly" data-id="o2-3" onclick="toggleDone(this,'oly','o2-3')">🆕 2.3 数量周期：总数÷周期长度=完整周期数+余数</li>
+            <li class="tree-child-item" data-subject="oly" data-id="o2-4" onclick="toggleDone(this,'oly','o2-4')">🆕 2.4 星期/日期周期（含星期几计算）</li>
+            <li class="tree-child-item" data-subject="oly" data-id="o2-5" onclick="toggleDone(this,'oly','o2-5')">🆕 2.5 图形排列规律</li>
           </ul>
         </li>
         <li class="tree-item">
@@ -720,10 +720,10 @@
             <span class="icon">📐</span><span class="label">📐 几何与面积</span><span class="arrow">▸</span>
           </div>
           <ul class="tree-children">
-            <li class="tree-child-item" onclick="toggleDone(this,'oly','o3-1')">🆕 3.1 正/长方形：周长=2×(长+宽)，面积=长×宽</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'oly','o3-2')">🆕 3.2 不规则图形：拆分法、平移法求面积</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'oly','o3-3')">🆕 3.3 数线段：点数×(点数-1)÷2</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'oly','o3-4')">🆕 3.4 数三角形/方格计数</li>
+            <li class="tree-child-item" data-subject="oly" data-id="o3-1" onclick="toggleDone(this,'oly','o3-1')">🆕 3.1 正/长方形：周长=2×(长+宽)，面积=长×宽</li>
+            <li class="tree-child-item" data-subject="oly" data-id="o3-2" onclick="toggleDone(this,'oly','o3-2')">🆕 3.2 不规则图形：拆分法、平移法求面积</li>
+            <li class="tree-child-item" data-subject="oly" data-id="o3-3" onclick="toggleDone(this,'oly','o3-3')">🆕 3.3 数线段：点数×(点数-1)÷2</li>
+            <li class="tree-child-item" data-subject="oly" data-id="o3-4" onclick="toggleDone(this,'oly','o3-4')">🆕 3.4 数三角形/方格计数</li>
           </ul>
         </li>
         <li class="tree-item">
@@ -731,11 +731,11 @@
             <span class="icon">🧠</span><span class="label">🧠 逻辑推理 / 🧩 抽屉原理 / ⚖️ 统筹</span><span class="arrow">▸</span>
           </div>
           <ul class="tree-children">
-            <li class="tree-child-item" onclick="toggleDone(this,'oly','o4-1')">🆕 4.1 真假话问题：假设法，逐一排除矛盾</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'oly','o4-2')">🆕 4.2 简单排列：枚举法，有序列举</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'oly','o4-3')">🆕 4.3 抽屉原理入门：n+1只鸽，放n个笼，必有1笼≥2只</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'oly','o5-1')">🆕 5.1 时间安排：统筹规划、最短时间问题</li>
-            <li class="tree-child-item" onclick="toggleDone(this,'oly','o5-2')">🆕 5.2 最优策略：选择最优方案</li>
+            <li class="tree-child-item" data-subject="oly" data-id="o4-1" onclick="toggleDone(this,'oly','o4-1')">🆕 4.1 真假话问题：假设法，逐一排除矛盾</li>
+            <li class="tree-child-item" data-subject="oly" data-id="o4-2" onclick="toggleDone(this,'oly','o4-2')">🆕 4.2 简单排列：枚举法，有序列举</li>
+            <li class="tree-child-item" data-subject="oly" data-id="o4-3" onclick="toggleDone(this,'oly','o4-3')">🆕 4.3 抽屉原理入门：n+1只鸽，放n个笼，必有1笼≥2只</li>
+            <li class="tree-child-item" data-subject="oly" data-id="o5-1" onclick="toggleDone(this,'oly','o5-1')">🆕 5.1 时间安排：统筹规划、最短时间问题</li>
+            <li class="tree-child-item" data-subject="oly" data-id="o5-2" onclick="toggleDone(this,'oly','o5-2')">🆕 5.2 最优策略：选择最优方案</li>
           </ul>
         </li>
       </ul>
