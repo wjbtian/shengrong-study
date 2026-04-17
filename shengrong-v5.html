@@ -1566,6 +1566,113 @@
   @media (max-width: 1100px) { .entry-grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 900px) { .tw-tasks { grid-template-columns: 1fr 1fr; } .home-feeds { grid-template-columns: 1fr; } .entry-grid { grid-template-columns: 1fr; } }
   @media (max-width: 600px) { .main { padding: 24px 20px 80px; } .hero-greeting { font-size: 28px; } }
+
+
+  /* ===== 干净极简风格替换 - 参考 coreychiu.com ===== */
+  /* body基础 */
+  body { background: #000000 !important; color: #e8e8e8 !important; }
+  /* 卡片/面板背景 */
+  .qe-card, .hb-panel, .poem-card, .unit-card, .om-card,
+  .diary-item, .news-card, .entry-card, .feed-item,
+  .today-widget, .modal {
+    background: #0a0a0a !important;
+    border-color: rgba(255,255,255,0.06) !important;
+  }
+  /* 侧边栏 */
+  aside {
+    background: #050505 !important;
+    border-right-color: rgba(255,255,255,0.06) !important;
+  }
+  /* 文字颜色 */
+  .greeting, .page-header h2, .learn-section h3,
+  .entry-title, .diary-title, .news-title, .om-title,
+  .poem-title, .unit-card-title {
+    color: #ffffff !important;
+  }
+  /* 次要文字 */
+  .qe-desc, .qe-count, .entry-desc, .entry-stat,
+  .diary-preview, .news-summary, .om-meta,
+  .poem-author, .poem-preview, .feed-meta {
+    color: #555555 !important;
+  }
+  /* 边框色 */
+  .nav-item.active, .shine-tab.active { border-left-color: #ffffff !important; }
+  /* 能量条移除 */
+  .energy-bar-section { display: none !important; }
+  /* 系统状态栏 */
+  .sysbar { display: flex !important; }
+  /* 粒子星空调暗 */
+  #starfield { opacity: 0.15 !important; }
+  /* 四大入口改为卡片网格 */
+  .quick-entry {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 14px !important;
+  }
+  .qe-card {
+    flex-direction: row !important;
+    align-items: center !important;
+    padding: 20px !important;
+    border-radius: 14px !important;
+  }
+  .qe-card:hover { transform: translateY(-2px) !important; background: #111 !important; }
+  .qe-title { font-size: 15px !important; font-weight: 700 !important; color: #fff !important; }
+  .qe-desc { font-size: 12px !important; margin-top: 3px !important; }
+  .qe-icon { font-size: 26px !important; margin-right: 12px !important; }
+  .qe-count { font-size: 12px !important; margin-top: 4px !important; }
+  .qe-bar { display: none !important; }
+  .qe-arrow { display: block !important; font-size: 16px !important; color: #333 !important; }
+  .qe-card:hover .qe-arrow { color: #888 !important; }
+  /* Hero区域简化 */
+  .hero-section { margin-bottom: 28px !important; }
+  .level-ring { display: none !important; }
+  .hero-greeting { font-size: 34px !important; font-weight: 700 !important; color: #fff !important; letter-spacing: -0.5px !important; }
+  .hero-sub { font-size: 14px !important; color: #555 !important; }
+  /* 底部动态栏改为博客双栏 */
+  .home-bottom {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 20px !important;
+  }
+  .hb-panel { padding: 0 !important; }
+  .hb-photo-item { flex-shrink: 0 !important; width: 90px !important; }
+  .hb-photo-scroll { display: flex !important; flex-wrap: wrap !important; gap: 8px !important; overflow-x: auto !important; padding-bottom: 8px !important; }
+  .hb-news-item { flex-direction: row !important; padding: 10px 12px !important; }
+  .hb-news-title { font-size: 13px !important; flex: 1 !important; }
+  .hb-news-icon { font-size: 20px !important; }
+  /* 入口卡片整体 */
+  .entry-grid { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 14px !important; margin-bottom: 8px !important; }
+  /* 首页区域标题 */
+  .section-title { font-size: 11px !important; font-weight: 700 !important; color: #555 !important; text-transform: uppercase !important; letter-spacing: 2px !important; margin-bottom: 16px !important; margin-top: 40px !important; }
+  .section-title:first-child { margin-top: 0 !important; }
+  /* feed列表 */
+  .feed-list { display: flex !important; flex-direction: column !important; gap: 8px !important; }
+  .feed-item { display: flex !important; align-items: center !important; gap: 12px !important; padding: 12px 14px !important; background: #0a0a0a !important; border: 1px solid rgba(255,255,255,0.05) !important; border-radius: 10px !important; cursor: pointer !important; transition: all 0.15s !important; }
+  .feed-item:hover { border-color: rgba(255,255,255,0.12) !important; background: #0f0f0f !important; }
+  .feed-icon { font-size: 22px !important; flex-shrink: 0 !important; }
+  .feed-body { flex: 1 !important; min-width: 0 !important; }
+  .feed-title { font-size: 13px !important; font-weight: 600 !important; color: #ccc !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; }
+  .feed-meta { font-size: 11px !important; color: #444 !important; margin-top: 2px !important; }
+  .feed-empty { text-align: center !important; padding: 20px 0 !important; color: #333 !important; font-size: 12px !important; }
+  .feed-header { display: flex !important; align-items: center !important; justify-content: space-between !important; margin-bottom: 12px !important; font-size: 12px !important; font-weight: 700 !important; color: #555 !important; text-transform: uppercase !important; letter-spacing: 1px !important; }
+  .feed-more { font-size: 11px !important; color: #555 !important; cursor: pointer !important; font-weight: 600 !important; transition: color 0.15s !important; }
+  .feed-more:hover { color: #aaa !important; }
+  /* 今日任务 */
+  .today-widget { background: #0a0a0a !important; border: 1px solid rgba(255,255,255,0.06) !important; border-radius: 14px !important; padding: 16px 20px !important; margin-bottom: 8px !important; }
+  .tw-header { display: flex !important; align-items: center !important; gap: 8px !important; margin-bottom: 12px !important; }
+  .tw-icon { font-size: 14px !important; }
+  .tw-title { font-size: 13px !important; font-weight: 600 !important; flex: 1 !important; color: #aaa !important; }
+  .tw-progress-text { font-size: 12px !important; color: #666 !important; font-weight: 600 !important; }
+  .tw-tasks { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 8px !important; }
+  .tw-task { display: flex !important; align-items: center !important; gap: 8px !important; padding: 10px 12px !important; border-radius: 10px !important; font-size: 13px !important; font-weight: 600 !important; background: transparent !important; border: 1px solid rgba(255,255,255,0.07) !important; cursor: pointer !important; transition: all 0.2s !important; color: #444 !important; }
+  .tw-task:hover { border-color: rgba(255,255,255,0.15) !important; color: #888 !important; }
+  .tw-task.done { background: transparent !important; border-color: rgba(255,255,255,0.2) !important; color: #fff !important; }
+  .tw-check { font-size: 14px !important; flex-shrink: 0 !important; }
+  /* 移除赛博朋克效果 */
+  body::before { display: none !important; }
+  #data-stream { display: none !important; }
+  h1, h2 { text-shadow: none !important; }
+
 </style>
 </head>
 <body>
