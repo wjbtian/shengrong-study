@@ -6,464 +6,253 @@
 <title>尚融的星球</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  
   :root {
-    --bg: #0d1117;
-    --surface: #161b22;
-    --surface2: #21262d;
-    --border: #30363d;
-    --accent: #3fb950;
-    --accent2: #58a6ff;
-    --text: #e6edf3;
-    --text2: #8b949e;
-    --pink: #ff79c6;
-    --yellow: #f1fa8c;
-    --purple: #bd93f9;
-    --orange: #ffa657;
+    --bg: #0d1117; --surface: #161b22; --surface2: #21262d;
+    --border: #30363d; --accent: #3fb950; --accent2: #58a6ff;
+    --text: #e6edf3; --text2: #8b949e;
+    --pink: #ff79c6; --yellow: #f1fa8c; --purple: #bd93f9; --orange: #ffa657;
   }
-  
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    height: 100vh;
-    display: flex;
-    overflow: hidden;
+    background: var(--bg); color: var(--text); height: 100vh; display: flex; overflow: hidden;
   }
-  
-  /* === 侧边栏 === */
   .sidebar {
-    width: 210px;
-    min-width: 210px;
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    padding: 0;
-    overflow-y: auto;
+    width: 210px; min-width: 210px; background: var(--surface);
+    border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 0; overflow-y: auto;
   }
-  
-  .sidebar-top {
-    padding: 20px;
-    border-bottom: 1px solid var(--border);
-  }
-  
+  .sidebar-top { padding: 20px; border-bottom: 1px solid var(--border); }
   .avatar {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
+    width: 52px; height: 52px; border-radius: 50%;
     background: linear-gradient(135deg, var(--accent), var(--purple));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    margin-bottom: 10px;
+    display: flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: 10px;
   }
-  
-  .sidebar-top h1 {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 2px;
-  }
-  
-  .sidebar-top p {
-    font-size: 12px;
-    color: var(--text2);
-  }
-  
-  .nav-section {
-    padding: 12px 0;
-  }
-  
-  .nav-section-label {
-    font-size: 10px;
-    color: var(--text2);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    padding: 4px 20px;
-    margin-bottom: 4px;
-  }
-  
+  .sidebar-top h1 { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+  .sidebar-top p { font-size: 12px; color: var(--text2); }
+  .nav-section { padding: 12px 0; }
+  .nav-section-label { font-size: 10px; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; padding: 4px 20px; margin-bottom: 4px; }
   .nav-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 11px 20px;
-    cursor: pointer;
-    font-size: 14px;
-    color: var(--text2);
-    transition: all 0.15s;
-    border-left: 3px solid transparent;
+    display: flex; align-items: center; gap: 10px; padding: 11px 20px; cursor: pointer; font-size: 14px;
+    color: var(--text2); transition: all 0.15s; border-left: 3px solid transparent;
   }
-  
   .nav-item:hover { background: var(--surface2); color: var(--text); }
   .nav-item.active { background: rgba(63,185,80,0.1); color: var(--accent); border-left-color: var(--accent); }
-  .nav-item .icon { font-size: 16px; }
-  
-  /* === 主内容 === */
-  .main {
-    flex: 1;
-    overflow-y: auto;
-    padding: 32px 40px;
-  }
-  
+  .main { flex: 1; overflow-y: auto; padding: 32px 40px; }
   .page { display: none; }
   .page.active { display: block; }
-  
-  .page-header {
-    margin-bottom: 28px;
-  }
-  
-  .page-header h2 {
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-  
-  .page-header p {
-    font-size: 13px;
-    color: var(--text2);
-  }
-  
-  /* === 按钮 === */
+  .page-header { margin-bottom: 28px; }
+  .page-header h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .page-header p { font-size: 13px; color: var(--text2); }
   .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-    color: var(--text);
-    font-size: 13px;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.15s;
+    display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-size: 13px;
+    cursor: pointer; font-family: inherit; transition: all 0.15s;
   }
-  
   .btn:hover { border-color: var(--accent); color: var(--accent); }
   .btn-primary { background: var(--accent); border-color: var(--accent); color: #000; font-weight: 600; }
   .btn-primary:hover { background: #4ade60; border-color: #4ade60; }
   .btn-danger { border-color: #f85149; color: #f85149; }
   .btn-danger:hover { background: rgba(248,81,73,0.1); }
-  
+  .btn-sm { padding: 5px 12px; font-size: 12px; }
   .btn-group { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
-  
-  /* === 学习板块 - 简洁单元展示 === */
-  .learn-section { margin-bottom: 40px; }
-  
-  .learn-section h3 {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--text);
+
+  /* 首页 */
+  .home-greeting {
+    background: linear-gradient(135deg, rgba(63,185,80,0.12), rgba(88,166,255,0.08));
+    border: 1px solid rgba(63,185,80,0.25); border-radius: 16px; padding: 22px 26px; margin-bottom: 24px;
   }
-  
-  .subject-tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
+  .home-greeting h2 { font-size: 20px; margin-bottom: 4px; }
+  .home-greeting p { font-size: 13px; color: var(--text2); }
+  .home-sections { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+  .home-section-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 18px; cursor: pointer; transition: all 0.2s;
   }
-  
-  .subject-tab {
-    padding: 7px 16px;
-    border-radius: 20px;
-    font-size: 13px;
-    cursor: pointer;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text2);
-    transition: all 0.15s;
+  .home-section-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .home-section-card .card-icon { font-size: 30px; margin-bottom: 10px; }
+  .home-section-card h3 { font-size: 15px; margin-bottom: 5px; }
+  .home-section-card p { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .home-section-card .count { font-size: 12px; color: var(--accent); margin-top: 8px; }
+  .home-panel {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 18px; margin-bottom: 16px;
   }
-  
-  .subject-tab:hover { border-color: var(--accent); color: var(--accent); }
-  .subject-tab.active { background: var(--accent); border-color: var(--accent); color: #000; font-weight: 600; }
-  
-  .unit-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 12px;
+  .home-panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .home-panel-header h3 { font-size: 15px; display: flex; align-items: center; gap: 8px; }
+  .more-link { font-size: 12px; color: var(--accent); cursor: pointer; }
+  .more-link:hover { text-decoration: underline; }
+  .progress-list { display: flex; flex-direction: column; gap: 10px; }
+  .progress-item { display: flex; align-items: center; gap: 12px; }
+  .progress-label { font-size: 13px; min-width: 50px; }
+  .progress-bar { flex: 1; height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 4px; transition: width 0.5s ease; }
+  .progress-pct { font-size: 12px; color: var(--text2); min-width: 36px; text-align: right; }
+  .mini-list { display: flex; flex-direction: column; gap: 8px; }
+  .mini-item {
+    display: flex; gap: 12px; align-items: flex-start; padding: 10px 12px;
+    background: var(--bg); border-radius: 8px; cursor: pointer; transition: all 0.15s;
   }
-  
+  .mini-item:hover { background: var(--surface2); }
+  .mini-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+  .mini-body { flex: 1; }
+  .mini-title { font-size: 13px; font-weight: 500; margin-bottom: 2px; line-height: 1.3; }
+  .mini-meta { font-size: 11px; color: var(--text2); }
+  .mini-text { font-size: 12px; color: var(--text2); line-height: 1.4; }
+
+  /* 学习 */
+  .learn-section { margin-bottom: 36px; }
+  .learn-section h3 { font-size: 15px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .unit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
   .unit-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px;
-    cursor: pointer;
-    transition: all 0.15s;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 13px;
+    cursor: pointer; transition: all 0.15s;
   }
-  
   .unit-card:hover { border-color: var(--accent); }
-  .unit-card.done { border-color: var(--accent); background: rgba(63,185,80,0.05); }
-  
-  .unit-card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px;
+  .unit-card.done { border-color: rgba(63,185,80,0.4); background: rgba(63,185,80,0.04); }
+  .unit-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .unit-card-title { font-size: 13px; font-weight: 600; }
+  .unit-card.done .unit-card-title::after { content: ' ✓'; color: var(--accent); }
+  .unit-card-meta { font-size: 11px; color: var(--text2); line-height: 1.4; }
+
+  /* 诗词卡片 */
+  .poem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .poem-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+    cursor: pointer; transition: all 0.15s;
   }
-  
-  .unit-card-title {
-    font-size: 13px;
-    font-weight: 600;
+  .poem-card:hover { border-color: var(--accent); }
+  .poem-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .poem-author { font-size: 12px; color: var(--text2); margin-bottom: 8px; }
+  .poem-preview { font-size: 13px; color: var(--text2); line-height: 1.7; font-style: italic; }
+
+  /* 奥数 */
+  .om-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+  .om-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+    cursor: pointer; transition: all 0.15s;
   }
-  
-  .unit-card.done .unit-card-title::after {
-    content: ' ✓';
-    color: var(--accent);
-  }
-  
-  .unit-card-meta {
-    font-size: 11px;
-    color: var(--text2);
-  }
-  
-  .unit-card-tags { display: flex; gap: 4px; flex-wrap: wrap; }
-  
-  .tag {
-    font-size: 11px;
-    padding: 2px 8px;
-    border-radius: 12px;
-    background: var(--surface2);
-    color: var(--text2);
-  }
-  
+  .om-card:hover { border-color: var(--accent2); }
+  .om-card.done { border-color: rgba(63,185,80,0.4); background: rgba(63,185,80,0.04); }
+  .om-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; }
+  .om-done { font-size: 16px; }
+  .om-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+  .om-meta { font-size: 11px; color: var(--text2); }
+  .tag { font-size: 11px; padding: 2px 8px; border-radius: 12px; background: var(--surface2); color: var(--text2); }
   .tag.done { background: rgba(63,185,80,0.15); color: var(--accent); }
-  
-  /* === 单元详情弹窗 === */
-  .unit-detail-content h4 {
-    font-size: 16px;
-    margin-bottom: 12px;
-    color: var(--accent);
-  }
-  
-  .unit-detail-content ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  
-  .unit-detail-content li {
-    font-size: 13px;
-    color: var(--text2);
-    padding: 8px 12px;
-    background: var(--bg);
-    border-radius: 6px;
-    border-left: 3px solid var(--border);
-  }
-  
-  .unit-detail-content li.done {
-    border-left-color: var(--accent);
-    color: var(--text);
-  }
-  
-  /* === 科技新闻 === */
-  .news-list { display: flex; flex-direction: column; gap: 12px; }
-  
-  .news-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 18px 20px;
-    cursor: pointer;
-    transition: all 0.15s;
-    display: flex;
-    gap: 16px;
-    align-items: flex-start;
-  }
-  
-  .news-card:hover { border-color: var(--accent2); }
-  
-  .news-icon {
-    font-size: 28px;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-  
-  .news-body { flex: 1; }
-  
-  .news-title {
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 6px;
-    line-height: 1.4;
-  }
-  
-  .news-summary {
-    font-size: 12px;
-    color: var(--text2);
-    line-height: 1.6;
-    margin-bottom: 8px;
-  }
-  
-  .news-meta {
-    display: flex;
-    gap: 12px;
-    font-size: 11px;
-    color: var(--text2);
-  }
-  
-  .news-tag {
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-size: 11px;
-  }
-  
-  .news-tag.ai { background: rgba(189,147,249,0.15); color: var(--purple); }
-  .news-tag.space { background: rgba(88,166,255,0.15); color: var(--accent2); }
-  .news-tag.tech { background: rgba(255,166,87,0.15); color: var(--orange); }
-  .news-tag.robot { background: rgba(255,121,198,0.15); color: var(--pink); }
-  .news-tag.game { background: rgba(241,250,140,0.15); color: var(--yellow); }
-  
-  /* === 日常板块 === */
-  .gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 16px;
-  }
-  
+  .tag.blue { background: rgba(88,166,255,0.15); color: var(--accent2); }
+  .tag.pink { background: rgba(255,121,198,0.15); color: var(--pink); }
+  .tag.yellow { background: rgba(241,250,140,0.15); color: var(--yellow); }
+  .tag.purple { background: rgba(189,147,249,0.15); color: var(--purple); }
+
+  /* 闪光时刻 */
+  .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; }
   .gallery-item {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    transition: all 0.15s;
-    cursor: pointer;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+    transition: all 0.15s; cursor: pointer;
   }
-  
   .gallery-item:hover { border-color: var(--accent); transform: translateY(-2px); }
-  
   .gallery-img {
-    width: 100%;
-    height: 180px;
-    background: var(--surface2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 48px;
+    width: 100%; height: 160px; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 44px;
   }
-  
   .gallery-body { padding: 12px 14px; }
   .gallery-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
   .gallery-desc { font-size: 12px; color: var(--text2); line-height: 1.4; }
-  .gallery-date { font-size: 11px; color: var(--text2); margin-top: 6px; }
-  
-  /* 分类筛选 */
-  .filter-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
-  
+  .gallery-date { font-size: 11px; color: var(--text2); margin-top: 5px; }
+  .filter-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
   .filter-pill {
-    padding: 5px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    cursor: pointer;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text2);
-    transition: all 0.15s;
+    padding: 5px 14px; border-radius: 20px; font-size: 12px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--surface); color: var(--text2); transition: all 0.15s;
   }
-  
   .filter-pill:hover, .filter-pill.active { background: var(--accent); border-color: var(--accent); color: #000; font-weight: 600; }
-  
-  /* === 模态框 === */
+
+  /* 日记 */
+  .diary-list { display: flex; flex-direction: column; gap: 10px; }
+  .diary-item {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .diary-item:hover { border-color: var(--accent); }
+  .diary-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .diary-mood { font-size: 24px; }
+  .diary-date { font-size: 12px; color: var(--text2); }
+  .diary-title { font-size: 15px; font-weight: 600; margin-bottom: 5px; }
+  .diary-preview { font-size: 13px; color: var(--text2); line-height: 1.5; }
+
+  /* 科学百科 */
+  .science-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .science-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .science-card:hover { border-color: var(--orange); }
+  .science-icon { font-size: 28px; margin-bottom: 10px; }
+  .science-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .science-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+  /* 科技新闻 */
+  .news-list { display: flex; flex-direction: column; gap: 10px; }
+  .news-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px;
+    cursor: pointer; transition: all 0.15s; display: flex; gap: 14px; align-items: flex-start;
+  }
+  .news-card:hover { border-color: var(--accent2); }
+  .news-icon { font-size: 26px; flex-shrink: 0; margin-top: 2px; }
+  .news-body { flex: 1; }
+  .news-title { font-size: 14px; font-weight: 600; margin-bottom: 5px; line-height: 1.3; }
+  .news-summary { font-size: 12px; color: var(--text2); line-height: 1.6; margin-bottom: 7px; }
+  .news-meta { display: flex; gap: 10px; font-size: 11px; color: var(--text2); }
+  .news-tag { padding: 2px 8px; border-radius: 10px; font-size: 11px; }
+  .news-tag.ai { background: rgba(189,147,249,0.15); color: var(--purple); }
+  .news-tag.space { background: rgba(88,166,255,0.15); color: var(--accent2); }
+  .news-tag.robot { background: rgba(255,121,198,0.15); color: var(--pink); }
+  .news-tag.tech { background: rgba(255,166,87,0.15); color: var(--orange); }
+  .news-tag.game { background: rgba(241,250,140,0.15); color: var(--yellow); }
+
+  /* 模态框 */
   .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.7);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 1000;
+    align-items: center; justify-content: center; padding: 20px;
   }
-  
   .modal-overlay.active { display: flex; }
-  
   .modal {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    width: 100%;
-    max-width: 520px;
-    max-height: 85vh;
-    overflow-y: auto;
-    padding: 28px;
-    position: relative;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    width: 100%; max-width: 580px; max-height: 85vh; overflow-y: auto; padding: 28px; position: relative;
   }
-  
-  .modal h3 {
-    font-size: 18px;
-    margin-bottom: 20px;
-    font-weight: 700;
-  }
-  
+  .modal h3 { font-size: 18px; margin-bottom: 20px; font-weight: 700; }
   .modal-close {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    background: none;
-    border: none;
-    color: var(--text2);
-    font-size: 22px;
-    cursor: pointer;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.15s;
+    position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--text2);
+    font-size: 22px; cursor: pointer; width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; transition: all 0.15s;
   }
-  
   .modal-close:hover { background: var(--surface2); color: var(--text); }
-  
-  /* === 表单 === */
   .form-group { margin-bottom: 16px; }
-  
-  .form-group label {
-    display: block;
-    font-size: 12px;
-    color: var(--text2);
-    margin-bottom: 6px;
-    font-weight: 500;
+  .form-group label { display: block; font-size: 12px; color: var(--text2); margin-bottom: 6px; font-weight: 500; }
+  .form-group input, .form-group textarea, .form-group select {
+    width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--bg); color: var(--text); font-size: 14px; font-family: inherit;
   }
-  
-  .form-group input,
-  .form-group textarea,
-  .form-group select {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--bg);
-    color: var(--text);
-    font-size: 14px;
-    font-family: inherit;
-  }
-  
-  .form-group input:focus,
-  .form-group textarea:focus,
-  .form-group select:focus {
-    outline: none;
-    border-color: var(--accent);
-  }
-  
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--accent); }
   .form-group textarea { min-height: 90px; resize: vertical; }
-  
   .form-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
-  
-  /* === 空状态 === */
-  .empty-state { text-align: center; padding: 60px 20px; color: var(--text2); }
-  .empty-state .emoji { font-size: 48px; margin-bottom: 16px; }
-  .empty-state p { font-size: 14px; }
-  
-  /* === 响应式 === */
+  .empty-state { text-align: center; padding: 50px 20px; color: var(--text2); }
+  .empty-state .emoji { font-size: 44px; margin-bottom: 14px; }
+  .empty-state p { font-size: 13px; }
+
+  /* 详情页内容样式 */
+  .detail-poem { font-size: 15px; line-height: 2; font-style: italic; color: var(--text); margin: 12px 0; }
+  .detail-note { font-size: 13px; color: var(--text2); background: var(--bg); padding: 12px; border-radius: 8px; line-height: 1.7; margin-top: 10px; border-left: 3px solid var(--accent); }
+  .detail-section { margin-top: 20px; }
+  .detail-section h4 { font-size: 14px; font-weight: 600; margin-bottom: 10px; color: var(--accent); }
+  .detail-section ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .detail-section li { font-size: 13px; color: var(--text2); padding: 8px 12px; background: var(--bg); border-radius: 6px; line-height: 1.5; }
+  .om-problem-box { background: var(--bg); border-radius: 10px; padding: 16px; margin-bottom: 16px; border: 1px solid var(--border); }
+  .om-problem-box h4 { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: var(--yellow); }
+  .om-problem-box p { font-size: 13px; color: var(--text); line-height: 1.7; margin-bottom: 8px; }
+  .om-answer-box { background: rgba(63,185,80,0.08); border: 1px solid rgba(63,185,80,0.3); border-radius: 10px; padding: 16px; }
+  .om-answer-box h4 { font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 8px; }
+  .om-answer-box p { font-size: 13px; color: var(--text2); line-height: 1.7; }
+  .science-detail-section h4 { font-size: 14px; font-weight: 600; color: var(--orange); margin-bottom: 10px; }
+  .science-detail-section p { font-size: 13px; color: var(--text2); line-height: 1.8; margin-bottom: 8px; }
+
   @media (max-width: 640px) {
     body { flex-direction: column; }
     .sidebar { width: 100%; min-width: unset; flex-direction: row; padding: 0; border-right: none; border-bottom: 1px solid var(--border); overflow-x: auto; flex-shrink: 0; }
@@ -472,112 +261,208 @@
     .nav-section-label { display: none; }
     .nav-item { padding: 12px 14px; white-space: nowrap; font-size: 13px; }
     .main { padding: 20px 16px; }
+    .home-sections { grid-template-columns: 1fr; }
+    .poem-grid { grid-template-columns: 1fr; }
     .unit-grid { grid-template-columns: 1fr 1fr; }
     .gallery-grid { grid-template-columns: 1fr; }
+    .science-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 
-<!-- ========== 侧边栏 ========== -->
+<!-- 侧边栏 -->
 <aside class="sidebar">
   <div class="sidebar-top">
     <div class="avatar">🎸</div>
     <h1>吴尚融</h1>
     <p>四年级 · 10岁</p>
   </div>
-  
   <div class="nav-section">
-    <div class="nav-section-label">学习</div>
-    <div class="nav-item active" data-page="learn">
-      <span class="icon">📚</span> 学习
-    </div>
-    <div class="nav-section-label">日常</div>
-    <div class="nav-item" data-page="daily">
-      <span class="icon">🌟</span> 日常帅一面
-    </div>
-    <div class="nav-item" data-page="tech">
-      <span class="icon">🔭</span> 科技新闻
-    </div>
+    <div class="nav-section-label">导航</div>
+    <div class="nav-item active" data-page="home"><span>🏠</span> 首页</div>
+    <div class="nav-item" data-page="learn"><span>📚</span> 学习</div>
+    <div class="nav-item" data-page="shine"><span>✨</span> 闪光时刻</div>
+    <div class="nav-item" data-page="science"><span>🔬</span> 科学百科</div>
+    <div class="nav-item" data-page="tech"><span>🔭</span> 科技新闻</div>
   </div>
 </aside>
 
-<!-- ========== 主内容 ========== -->
+<!-- 主内容 -->
 <main class="main">
-  
-  <!-- === 学习板块 === -->
-  <div class="page active" id="page-learn">
-    <div class="page-header">
-      <h2>📚 学习</h2>
-      <p>语数英奥，稳步前进</p>
+
+  <!-- ========== 首页 ========== -->
+  <div class="page active" id="page-home">
+    <div class="page-header"><h2>🏠 尚融的星球</h2><p>记录成长每一天</p></div>
+    <div class="home-greeting">
+      <h2 id="greeting-text">你好，吴尚融！</h2>
+      <p id="greeting-sub">每天进步一点点 👣</p>
     </div>
-    
-    <!-- 语文 -->
+    <div class="home-sections">
+      <div class="home-section-card" onclick="goPage('learn')">
+        <div class="card-icon">📚</div><h3>📚 学习</h3>
+        <p>语文诗词 · 数学 · 英语 · 奥数</p>
+        <div class="count" id="home-learn-count"></div>
+      </div>
+      <div class="home-section-card" onclick="goPage('shine')">
+        <div class="card-icon">✨</div><h3>✨ 闪光时刻</h3>
+        <p>日记 · 照片 · 吉他 · 荣誉</p>
+        <div class="count" id="home-shine-count"></div>
+      </div>
+      <div class="home-section-card" onclick="goPage('science')">
+        <div class="card-icon">🔬</div><h3>🔬 科学百科</h3>
+        <p>有趣的知识 · 科学小实验</p>
+        <div class="count" id="home-science-count"></div>
+      </div>
+    </div>
+    <div class="home-panel">
+      <div class="home-panel-header">
+        <h3>📊 学习进度</h3>
+        <span class="more-link" onclick="goPage('learn')">查看全部 →</span>
+      </div>
+      <div class="progress-list" id="home-progress"></div>
+    </div>
+    <div class="home-panel">
+      <div class="home-panel-header">
+        <h3>🔭 科技前沿</h3>
+        <span class="more-link" onclick="goPage('tech')">查看全部 →</span>
+      </div>
+      <div class="mini-list" id="home-tech"></div>
+    </div>
+  </div>
+
+  <!-- ========== 学习 ========== -->
+  <div class="page" id="page-learn">
+    <div class="page-header"><h2>📚 学习</h2><p>点击诗词卡查看原文和注释 · 点击单元标记完成</p></div>
+
+    <!-- 语文诗词 -->
     <div class="learn-section">
-      <h3>📖 语文</h3>
+      <h3>📖 语文 · 古诗词</h3>
+      <div class="poem-grid" id="poem-grid"></div>
+    </div>
+
+    <!-- 语文单元 -->
+    <div class="learn-section">
+      <h3>📖 语文 · 各单元</h3>
       <div class="unit-grid" id="chinese-grid"></div>
     </div>
-    
+
     <!-- 英语 -->
     <div class="learn-section">
       <h3>🔤 英语</h3>
       <div class="unit-grid" id="english-grid"></div>
     </div>
-    
+
     <!-- 数学 -->
     <div class="learn-section">
       <h3>🔢 数学</h3>
       <div class="unit-grid" id="math-grid"></div>
     </div>
-    
+
     <!-- 奥数 -->
     <div class="learn-section">
-      <h3>🧩 奥数</h3>
-      <div class="unit-grid" id="olympiad-grid"></div>
+      <h3>🧩 奥数 · 每周一题</h3>
+      <div class="om-grid" id="olympiad-grid"></div>
     </div>
   </div>
-  
-  <!-- === 日常帅一面 === -->
-  <div class="page" id="page-daily">
-    <div class="page-header">
-      <h2>🌟 日常帅一面</h2>
-      <p>照片、吉他、才艺……属于尚融的精彩时刻</p>
-    </div>
+
+  <!-- ========== 闪光时刻 ========== -->
+  <div class="page" id="page-shine">
+    <div class="page-header"><h2>✨ 闪光时刻</h2><p>记录尚融最闪亮的瞬间</p></div>
+
     <div class="btn-group">
-      <button class="btn btn-primary" onclick="openAddDaily()">➕ 添加内容</button>
+      <button class="btn btn-primary" onclick="openAddDiary()">✍️ 写日记</button>
+      <button class="btn btn-primary" onclick="openAddShine()">➕ 添加时刻</button>
     </div>
-    <div class="filter-pills" id="filter-pills"></div>
-    <div class="gallery-grid" id="gallery-grid"></div>
+
+    <div class="filter-pills" id="shine-filter-pills"></div>
+
+    <!-- 日记区 -->
+    <div id="shine-diary-section">
+      <div class="home-panel-header" style="margin-bottom:14px;">
+        <h3>✍️ 日记</h3>
+      </div>
+      <div class="diary-list" id="diary-list"></div>
+    </div>
+
+    <!-- 时刻区 -->
+    <div style="margin-top:24px;">
+      <div class="home-panel-header" style="margin-bottom:14px;">
+        <h3>✨ 精彩时刻</h3>
+      </div>
+      <div class="gallery-grid" id="shine-grid"></div>
+    </div>
   </div>
-  
-  <!-- === 科技新闻 === -->
+
+  <!-- ========== 科学百科 ========== -->
+  <div class="page" id="page-science">
+    <div class="page-header"><h2>🔬 科学百科</h2><p>有趣的知识，让好奇心带你探索世界</p></div>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="openAddScience()">➕ 添加知识</button>
+    </div>
+    <div class="science-grid" id="science-grid"></div>
+  </div>
+
+  <!-- ========== 科技新闻 ========== -->
   <div class="page" id="page-tech">
-    <div class="page-header">
-      <h2>🔭 科技新闻</h2>
-      <p>AI、航天、机器人……科技最前沿</p>
-    </div>
+    <div class="page-header"><h2>🔭 科技新闻</h2><p>AI · 航天 · 机器人，了解世界最前沿</p></div>
     <div class="btn-group">
-      <button class="btn btn-primary" onclick="openAddNews()">➕ 添加新闻</button>
+      <button class="btn btn-primary" onclick="openAddTech()">➕ 添加新闻</button>
     </div>
     <div class="news-list" id="news-list"></div>
   </div>
-  
+
 </main>
 
 <!-- ========== 模态框 ========== -->
-
-<!-- 添加日常 -->
-<div class="modal-overlay" id="modal-daily">
+<div class="modal-overlay" id="modal-detail">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal('modal-daily')">×</button>
-    <h3>➕ 添加日常内容</h3>
+    <button class="modal-close" onclick="closeModal('modal-detail')">×</button>
+    <div id="detail-body"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-diary">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-diary')">×</button>
+    <h3>✍️ 写日记</h3>
+    <div class="form-group">
+      <label>今天心情</label>
+      <div id="mood-picker" style="display:flex;gap:8px;flex-wrap:wrap;">
+        <span class="mood-opt" data-mood="😄" onclick="selMood(this)">😄</span>
+        <span class="mood-opt" data-mood="🙂" onclick="selMood(this)">🙂</span>
+        <span class="mood-opt" data-mood="😐" onclick="selMood(this)">😐</span>
+        <span class="mood-opt" data-mood="😔" onclick="selMood(this)">😔</span>
+        <span class="mood-opt" data-mood="😤" onclick="selMood(this)">😤</span>
+        <span class="mood-opt" data-mood="🤩" onclick="selMood(this)">🤩</span>
+      </div>
+    </div>
     <div class="form-group">
       <label>标题</label>
-      <input id="daily-title" placeholder="比如：学校运动会">
+      <input id="diary-title" placeholder="今天发生了什么事？">
+    </div>
+    <div class="form-group">
+      <label>内容</label>
+      <textarea id="diary-content" placeholder="写下来吧，想写什么都行..."></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn" onclick="closeModal('modal-diary')">取消</button>
+      <button class="btn btn-primary" onclick="saveDiary()">保存</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-shine">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-shine')">×</button>
+    <h3>✨ 添加闪光时刻</h3>
+    <div class="form-group">
+      <label>标题</label>
+      <input id="shine-title" placeholder="比如：吉他演奏会">
     </div>
     <div class="form-group">
       <label>类型</label>
-      <select id="daily-type">
+      <select id="shine-type">
         <option value="📸 照片">📸 照片</option>
         <option value="🎸 吉他">🎸 吉他</option>
         <option value="⚽ 运动">⚽ 运动</option>
@@ -590,27 +475,56 @@
     </div>
     <div class="form-group">
       <label>描述</label>
-      <textarea id="daily-desc" placeholder="简单描述一下这个时刻..."></textarea>
+      <textarea id="shine-desc" placeholder="描述一下这个闪光时刻..."></textarea>
     </div>
     <div class="form-actions">
-      <button class="btn" onclick="closeModal('modal-daily')">取消</button>
-      <button class="btn btn-primary" onclick="saveDaily()">保存</button>
+      <button class="btn" onclick="closeModal('modal-shine')">取消</button>
+      <button class="btn btn-primary" onclick="saveShine()">保存</button>
     </div>
   </div>
 </div>
 
-<!-- 添加新闻 -->
-<div class="modal-overlay" id="modal-news">
+<div class="modal-overlay" id="modal-science">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal('modal-news')">×</button>
-    <h3>➕ 添加科技新闻</h3>
+    <button class="modal-close" onclick="closeModal('modal-science')">×</button>
+    <h3>🔬 添加科学知识</h3>
     <div class="form-group">
-      <label>新闻标题</label>
-      <input id="news-title" placeholder="比如：SpaceX 星舰成功着陆">
+      <label>标题</label>
+      <input id="sci-title" placeholder="比如：为什么天空是蓝色的？">
     </div>
     <div class="form-group">
       <label>类型</label>
-      <select id="news-type">
+      <select id="sci-type">
+        <option value="自然">🌿 自然百科</option>
+        <option value="动物">🐾 动物世界</option>
+        <option value="天文">🌌 天文宇宙</option>
+        <option value="人体">🧬 人体奥秘</option>
+        <option value="物理">⚡ 物理原理</option>
+        <option value="实验">🧪 科学实验</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>解释（选填）</label>
+      <textarea id="sci-desc" placeholder="简单解释一下原理..."></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn" onclick="closeModal('modal-science')">取消</button>
+      <button class="btn btn-primary" onclick="saveScience()">保存</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-tech">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-tech')">×</button>
+    <h3>🔭 添加科技新闻</h3>
+    <div class="form-group">
+      <label>新闻标题</label>
+      <input id="tech-title" placeholder="比如：SpaceX 星舰成功着陆">
+    </div>
+    <div class="form-group">
+      <label>类型</label>
+      <select id="tech-type">
         <option value="ai">🤖 AI人工智能</option>
         <option value="space">🚀 航天航空</option>
         <option value="robot">🤖 机器人</option>
@@ -620,324 +534,587 @@
     </div>
     <div class="form-group">
       <label>摘要（选填）</label>
-      <textarea id="news-summary" placeholder="简单描述这条新闻的内容..."></textarea>
+      <textarea id="tech-summary" placeholder="简单描述这条新闻的内容..."></textarea>
     </div>
     <div class="form-actions">
-      <button class="btn" onclick="closeModal('modal-news')">取消</button>
-      <button class="btn btn-primary" onclick="saveNews()">保存</button>
+      <button class="btn" onclick="closeModal('modal-tech')">取消</button>
+      <button class="btn btn-primary" onclick="saveTech()">保存</button>
     </div>
-  </div>
-</div>
-
-<!-- 详情弹窗 -->
-<div class="modal-overlay" id="modal-detail">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('modal-detail')">×</button>
-    <div id="detail-body"></div>
   </div>
 </div>
 
 <script>
-// ===== 数据存储 =====
-const STORAGE_KEY = 'shengrong_v5';
+// ===== 数据 =====
+const STORAGE_KEY = 'shengrong_v6';
 let store = null;
-let currentFilter = '全部';
+let selectedMood = '😄';
+
+function today() {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+}
 
 function loadStore() {
   const s = localStorage.getItem(STORAGE_KEY);
-  if (s) {
-    store = JSON.parse(s);
-  } else {
-    store = {
-      doneUnits: [],
-      daily: [
-        { id: 1, title: '吉他练习第1天', type: '🎸 吉他', icon: '🎸', desc: '今天开始学吉他！第一课，学会了C和弦', date: '2026-04-10' },
-        { id: 2, title: '足球比赛', type: '⚽ 运动', icon: '⚽', desc: '班级足球赛，我们赢了2比1！', date: '2026-04-08' },
-        { id: 3, title: '学校运动会', type: '📸 照片', icon: '📸', desc: '60米短跑第三名！', date: '2026-04-05' },
-        { id: 4, title: '水彩风景画', type: '🎨 绘画', icon: '🎨', desc: '美术课画的水彩 sunset', date: '2026-04-02' },
-        { id: 5, title: 'Scratch 小游戏', type: '🎮 游戏', icon: '🎮', desc: '自己做的猫抓老鼠游戏，可以玩！', date: '2026-04-01' },
-        { id: 6, title: '数学竞赛二等奖', type: '🏆 荣誉', icon: '🏆', desc: '校级数学竞赛二等奖，继续加油', date: '2026-03-28' },
-      ],
-      news: [
-        { id: 1, title: 'SpaceX 星舰第5次试飞成功着陆', type: 'space', icon: '🚀', summary: 'SpaceX 的星舰火箭第5次试飞，成功实现软着陆！这意味着人类离火星移民又近了一步。', date: '2026-04-15' },
-        { id: 2, title: 'ChatGPT-5 通过了律师考试和医师执照', type: 'ai', icon: '🤖', summary: 'OpenAI 最新的大语言模型 ChatGPT-5 再次刷新纪录，以高分通过了美国律师考试和医师执照考试。', date: '2026-04-14' },
-        { id: 3, title: '中国人形机器人Walker S 进工厂打工', type: 'robot', icon: '🤖', summary: '优必选的人形机器人Walker S已经在比亚迪工厂"上班"，负责质量检测工作。这是全球首批真正进入工厂的人形机器人。', date: '2026-04-13' },
-        { id: 4, title: 'NASA 发现"第二地球"：TOI-715 b', type: 'space', icon: '🌍', summary: 'NASA 宣布发现了一颗距离地球140光年、位于宜居带的超级地球，大小约为地球的1.5倍，可能有液态水！', date: '2026-04-12' },
-        { id: 5, title: '特斯拉展示 Optimus 机器人家庭版', type: 'robot', icon: '🤖', summary: '特斯拉在最新发布会上展示了 Optimus 机器人做家务的画面：叠衣服、洗碗、浇花……未来可能真的进千家万户。', date: '2026-04-11' },
-        { id: 6, title: '国产大模型 Kimi 支持200万字超长上下文', type: 'ai', icon: '🤖', summary: '月之暗面公司的 Kimi 大模型升级，可以一次性处理200万字的内容，相当于读完一整部《红楼梦》！', date: '2026-04-10' },
-      ]
-    };
-    saveStore();
-  }
+  if (s) { store = JSON.parse(s); return; }
+  store = {
+    doneUnits: [], // e.g. "chinese_2"
+    doneOM: [],     // e.g. "om_1"
+    diary: [
+      { id: 1, mood: '🤩', title: '数学考试100分！', content: '今天数学考试，试卷发下来一看——100分！爸爸说要带我去吃大餐，太开心了！', date: '2026-04-15' },
+      { id: 2, mood: '😐', title: '下雨天，好无聊', content: '今天下了一整天雨，不能出去玩，只能在家看书。还好有《三国演义》陪着我。', date: '2026-04-14' },
+      { id: 3, mood: '😔', title: '足球比赛输了', content: '今天的足球比赛我们班输了，0比2。不过老师说重在参与，下次再努力！', date: '2026-04-12' },
+      { id: 4, mood: '😄', title: '吉他学会了C和弦！', content: '今天吉他课学会了C和弦！老师说我的手指按弦很稳，好开心！', date: '2026-04-10' },
+    ],
+    shines: [
+      { id: 1, title: '吉他练习第1天', type: '🎸 吉他', icon: '🎸', desc: '今天开始学吉他！第一课，学会了C和弦。', date: '2026-04-10' },
+      { id: 2, title: '足球比赛获胜', type: '⚽ 运动', icon: '⚽', desc: '班级足球赛，我们赢了2比1！', date: '2026-04-08' },
+      { id: 3, title: '学校运动会60米第三名', type: '📸 照片', icon: '📸', desc: '60米短跑第三名！冲线那一刻太激动了', date: '2026-04-05' },
+      { id: 4, title: '水彩风景画', type: '🎨 绘画', icon: '🎨', desc: '美术课画的水彩 sunset，好喜欢这个颜色', date: '2026-04-02' },
+      { id: 5, title: 'Scratch 猫抓老鼠游戏', type: '🎮 游戏', icon: '🎮', desc: '自己做的游戏，可以玩！3个关卡', date: '2026-04-01' },
+      { id: 6, title: '数学竞赛二等奖', type: '🏆 荣誉', icon: '🏆', desc: '校级数学竞赛二等奖，继续加油！', date: '2026-03-28' },
+    ],
+    sciences: [
+      { id: 1, title: '为什么天空是蓝色的？', type: '自然', icon: '🌤️', desc: '太阳光看起来是白色的，但其实它是由红、橙、黄、绿、蓝、靛、紫七种颜色的光组成的。大气层里的空气分子会把蓝光散射到四面八方，所以当我们抬头看天空时，看到的就是被散射的蓝光。', date: '2026-04-15' },
+      { id: 2, title: '大象的鼻子有多少块肌肉？', type: '动物', icon: '🐘', desc: '大象的鼻子大约有4万块肌肉！人类全身才600多块肌肉。大象的鼻子可以非常灵活，既能捡起花生米，也能抬起几百公斤的木头。', date: '2026-04-14' },
+      { id: 3, title: '太阳有多热？', type: '天文', icon: '☀️', desc: '太阳表面温度约5500℃，而太阳核心的温度高达1500万℃！如果把一个火星放到太阳表面，它会瞬间蒸发成气体。', date: '2026-04-13' },
+      { id: 4, title: '彩虹是怎么形成的？', type: '自然', icon: '🌈', desc: '彩虹是阳光穿过雨滴时发生折射和反射形成的。阳光进入雨滴时改变方向（折射），然后在雨滴内部反射，再折射出来，不同颜色的光分开，就形成了七色彩虹。', date: '2026-04-12' },
+      { id: 5, title: '蝴蝶用哪里尝味道？', type: '动物', icon: '🦋', desc: '蝴蝶用脚来尝味道！它们的味觉感受器长在脚上。当蝴蝶停在叶子上时，用脚"品尝"叶子，如果味道对就会开始产卵。', date: '2026-04-11' },
+      { id: 6, title: '火山为什么会喷发？', type: '物理', icon: '🌋', desc: '地球内部非常热，岩石会融化成岩浆。岩浆比周围的岩石轻，会向上移动。当岩浆找到地表的裂缝时，就会带着气体一起喷出来，就形成了火山喷发。', date: '2026-04-10' },
+      { id: 7, title: '地球为什么是圆的？', type: '天文', icon: '🌍', desc: '地球之所以是圆的，是因为万有引力。所有物体都会被拉向质量中心，而地球质量足够大，所以能把表面所有点都"拉"向中心，最终形成球形。任何质量足够大的天体都会是球形的。', date: '2026-04-09' },
+      { id: 8, title: '为什么肚子会咕咕叫？', type: '人体', icon: '😋', desc: '肚子咕咕叫其实是肠道在"说话"。当胃和小肠里的食物被消化完变空时，消化液和空气会在肠道里移动，发出声音。饿的时候声音更大，因为肠道在提醒你该吃饭了！', date: '2026-04-08' },
+    ],
+    news: [
+      { id: 1, title: 'SpaceX 星舰第5次试飞成功着陆', type: 'space', icon: '🚀', summary: 'SpaceX 的星舰火箭成功实现软着陆，人类离火星移民又近了一步！', date: '2026-04-15' },
+      { id: 2, title: 'ChatGPT-5 通过律师考试和医师执照', type: 'ai', icon: '🤖', summary: 'OpenAI 最新大语言模型以高分通过美国律师考试和医师执照考试。', date: '2026-04-14' },
+      { id: 3, title: '中国人形机器人Walker S 进工厂打工', type: 'robot', icon: '🤖', summary: '优必选人形机器人在比亚迪工厂负责质量检测，全球首批真正"上班"的机器人。', date: '2026-04-13' },
+      { id: 4, title: 'NASA 发现"第二地球" TOI-715 b', type: 'space', icon: '🌍', summary: 'NASA 宣布发现位于宜居带的超级地球，距离140光年，可能有液态水！', date: '2026-04-12' },
+      { id: 5, title: '特斯拉 Optimus 机器人家庭版展示', type: 'robot', icon: '🤖', summary: '特斯拉展示 Optimus 叠衣服、洗碗、浇花的画面，未来可能进入千家万户。', date: '2026-04-11' },
+      { id: 6, title: '国产Kimi 大模型支持200万字上下文', type: 'ai', icon: '🤖', summary: '月之暗面公司的 Kimi 大模型升级，可一次性处理200万字内容！', date: '2026-04-10' },
+    ]
+  };
+  saveStore();
 }
 
-function saveStore() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
-}
+function saveStore() { localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); }
 
 // ===== 导航 =====
+function goPage(page) {
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelector(`.nav-item[data-page="${page}"]`).classList.add('active');
+  document.getElementById('page-' + page).classList.add('active');
+  window.scrollTo(0, 0);
+}
 document.querySelectorAll('.nav-item').forEach(item => {
-  item.addEventListener('click', () => {
-    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    item.classList.add('active');
-    document.getElementById('page-' + item.dataset.page).classList.add('active');
-  });
+  item.addEventListener('click', () => goPage(item.dataset.page));
 });
 
-// ===== 渲染学习单元 =====
+// ===== 问候语 =====
+function updateGreeting() {
+  const h = new Date().getHours();
+  const el = document.getElementById('greeting-text'), sub = document.getElementById('greeting-sub');
+  if (h < 12) { el.textContent = '☀️ 早上好，吴尚融！'; sub.textContent = '新的一天，充满能量 💪'; }
+  else if (h < 18) { el.textContent = '🌤️ 下午好，吴尚融！'; sub.textContent = '下午也要加油哦 💪'; }
+  else { el.textContent = '🌙 晚上好，吴尚融！'; sub.textContent = '今天学到了什么？'; }
+}
+
+// ===== 首页渲染 =====
+function renderHome() {
+  const totals = { chinese:8, english:8, math:6, olympiad:9 };
+  const names = { chinese:'语文', english:'英语', math:'数学', olympiad:'奥数' };
+  let totalDone = store.doneUnits.length;
+  let totalUnits = Object.values(totals).reduce((a,b)=>a+b,0);
+  document.getElementById('home-learn-count').textContent = `${totalDone} / ${totalUnits} 个单元已完成`;
+  document.getElementById('home-shine-count').textContent = `${store.diary.length} 篇日记 · ${store.shines.length} 个时刻`;
+  document.getElementById('home-science-count').textContent = `${store.sciences.length} 个有趣知识`;
+
+  let progHTML = '';
+  Object.keys(totals).forEach(s => {
+    let cnt = 0;
+    for (let i = 0; i < totals[s]; i++) if (store.doneUnits.includes(s+'_'+i)) cnt++;
+    const pct = Math.round(cnt / totals[s] * 100);
+    progHTML += `<div class="progress-item">
+      <span class="progress-label">${names[s]}</span>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <span class="progress-pct">${pct}%</span>
+    </div>`;
+  });
+  document.getElementById('home-progress').innerHTML = progHTML;
+
+  const recentTech = store.news.slice(0, 3);
+  document.getElementById('home-tech').innerHTML = recentTech.length
+    ? recentTech.map(n => `<div class="mini-item" onclick="showTechDetail(${n.id})">
+        <span class="mini-icon">${n.icon}</span>
+        <div class="mini-body">
+          <div class="mini-title">${n.title}</div>
+          <div class="mini-meta">📅 ${n.date}</div>
+        </div>
+      </div>`).join('')
+    : '<p style="font-size:13px;color:var(--text2);padding:10px">暂无科技新闻</p>';
+}
+
+// ===== 诗词数据 & 渲染 =====
+const POEMS = [
+  {
+    id: 'p1', title: '暮江吟', author: '唐·白居易',
+    text: '一道残阳铺水中，半江瑟瑟半江红。\n可怜九月初三夜，露似真珠月似弓。',
+    note: '这首诗描写了傍晚时分江面的美景。夕阳西下，江水一半碧绿一半鲜红；到了夜晚，露水像珍珠，月亮像弯弓。全诗意境优美，色彩鲜明。'
+  },
+  {
+    id: 'p2', title: '题西林壁', author: '宋·苏轼',
+    text: '横看成岭侧成峰，远近高低各不同。\n不识庐山真面目，只缘身在此山中。',
+    note: '这首诗告诉我们：从不同角度看庐山，会看到不同的形状。之所以看不清庐山的全貌，是因为自己就在山里面。这是一首哲理诗，说明了"当局者迷，旁观者清"的道理。'
+  },
+  {
+    id: 'p3', title: '雪梅', author: '宋·卢钺',
+    text: '梅雪争春未肯降，骚人阁笔费评章。\n梅须逊雪三分白，雪却输梅一段香。',
+    note: '梅花和雪花都认为自己最美，诗人很难评判。梅花比雪白差了三分，但雪却没有梅花的香气。这首诗告诉我们：事物各有所长，也各有所短。'
+  },
+  {
+    id: 'p4', title: '出塞', author: '唐·王昌龄',
+    text: '秦时明月汉时关，万里长征人未还。\n但使龙城飞将在，不教胡马度阴山。',
+    note: '这首诗表达了诗人对和平的渴望，以及对英勇将士的敬佩。"但使龙城飞将在，不教胡马度阴山"表达了一种强烈的爱国情怀。'
+  },
+  {
+    id: 'p5', title: '凉州词', author: '唐·王翰',
+    text: '葡萄美酒夜光杯，欲饮琵琶马上催。\n醉卧沙场君莫笑，古来征战几人回。',
+    note: '这首诗描写了边塞将士的豪迈气概。在荒凉的边塞，将士们用精美的酒杯喝着葡萄酒，虽然战争危险，但依然豪迈旷达。'
+  },
+  {
+    id: 'p6', title: '夏日绝句', author: '宋·李清照',
+    text: '生当作人杰，死亦为鬼雄。\n至今思项羽，不肯过江东。',
+    note: '李清照的这首诗借古讽今，表达了爱国之情。活着要做人中的豪杰，死了也要做鬼中的英雄。她用项羽不肯苟且偷生的故事，表达了对国家和民族的忠诚。'
+  },
+];
+
+function renderPoems() {
+  const grid = document.getElementById('poem-grid');
+  grid.innerHTML = POEMS.map(p => `
+    <div class="poem-card" onclick="showPoem('${p.id}')">
+      <div class="poem-title">《${p.title}》</div>
+      <div class="poem-author">${p.author}</div>
+      <div class="poem-preview">${p.text.split('\n').join(' ｜ ')}</div>
+    </div>`).join('');
+}
+
+function showPoem(id) {
+  const p = POEMS.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('detail-body').innerHTML = `
+    <h2 style="font-size:22px;margin-bottom:4px;">《${p.title}》</h2>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:16px;">${p.author}</p>
+    <div class="detail-poem">${p.text.split('\n').join('<br>')}</div>
+    <div class="detail-note">💡 <strong>诗意：</strong>${p.note}</div>
+    <div class="form-actions" style="margin-top:20px;">
+      <button class="btn" onclick="closeModal('modal-detail')">关闭</button>
+    </div>`;
+  openModal('modal-detail');
+}
+
+// ===== 单元渲染 =====
 const SUBJECTS = {
-  chinese: {
-    title: 'chinese-grid',
-    data: [
-      { name: '第一单元', sub: '《观潮》《走月亮》《现代诗两首》《繁星》', done: false },
-      { name: '第二单元', sub: '《一个豆荚里的五粒豆》《蝙蝠和雷达》《蝴蝶的家》', done: false },
-      { name: '第三单元', sub: '《古诗三首》暮江吟/题西林壁/雪梅', done: false },
-      { name: '第四单元', sub: '《爬山虎的脚》《蟋蟀的住宅》《蟋蟀》', done: false },
-      { name: '第五单元', sub: '《鲸》《风向袋的制作》', done: false },
-      { name: '第六单元', sub: '《牛和鹅》《一只窝囊的大老虎》', done: false },
-      { name: '第七单元', sub: '《古诗三首》出塞/凉州词/夏日绝句', done: false },
-      { name: '第八单元', sub: '《王戎不取道旁李》《西门豹治邺》', done: false },
-    ]
-  },
-  english: {
-    title: 'english-grid',
-    data: [
-      { name: 'Unit 1', sub: 'What's he like? 描述人物外貌和性格', done: false },
-      { name: 'Unit 2', sub: "My week 星期和日常活动", done: false },
-      { name: 'Unit 3', sub: "What would you like? 食物和饮料", done: false },
-      { name: 'Unit 4', sub: 'Hobby 兴趣爱好', done: false },
-      { name: 'Unit 5', sub: "Sizes 尺寸和大小", done: false },
-      { name: 'Unit 6', sub: 'Free time 课余活动', done: false },
-      { name: 'Unit 7', sub: 'Seasons 四季', done: false },
-      { name: 'Unit 8', sub: 'Story time 故事时间', done: false },
-    ]
-  },
-  math: {
-    title: 'math-grid',
-    data: [
-      { name: '第一单元', sub: '大数的认识', done: false },
-      { name: '第二单元', sub: '公顷和平方千米', done: false },
-      { name: '第三单元', sub: '角的度量', done: false },
-      { name: '第四单元', sub: '三位数乘两位数', done: false },
-      { name: '第五单元', sub: '平行四边形和梯形', done: false },
-      { name: '第六单元', sub: '除数是两位数的除法', done: false },
-    ]
-  },
-  olympiad: {
-    title: 'olympiad-grid',
-    data: [
-      { name: '第1-2周', sub: '和差问题', done: false },
-      { name: '第3-4周', sub: '和倍问题', done: false },
-      { name: '第5-6周', sub: '差倍问题', done: false },
-      { name: '第7-8周', sub: '年龄问题', done: false },
-      { name: '第9-10周', sub: '归一问题', done: false },
-      { name: '第11-12周', sub: '植树问题', done: false },
-      { name: '第13-14周', sub: '鸡兔同笼', done: false },
-      { name: '第15-16周', sub: '周期问题', done: false },
-      { name: '第17-18周', sub: '还原问题', done: false },
-    ]
-  }
+  chinese: { title: 'chinese-grid', data: [
+    { name: '第一单元', sub: '《观潮》《走月亮》《现代诗两首》《繁星》' },
+    { name: '第二单元', sub: '《一个豆荚里的五粒豆》《蝙蝠和雷达》《蝴蝶的家》' },
+    { name: '第三单元', sub: '《古诗三首》暮江吟/题西林壁/雪梅' },
+    { name: '第四单元', sub: '《爬山虎的脚》《蟋蟀的住宅》' },
+    { name: '第五单元', sub: '《鲸》《风向袋的制作》' },
+    { name: '第六单元', sub: '《牛和鹅》《一只窝囊的大老虎》' },
+    { name: '第七单元', sub: '《古诗三首》出塞/凉州词/夏日绝句' },
+    { name: '第八单元', sub: '《王戎不取道旁李》《西门豹治邺》' },
+  ]},
+  english: { title: 'english-grid', data: [
+    { name: 'Unit 1', sub: "What's he like? 描述人物外貌和性格" },
+    { name: 'Unit 2', sub: "My week 星期和日常活动" },
+    { name: 'Unit 3', sub: "What would you like? 食物和饮料" },
+    { name: 'Unit 4', sub: 'Hobby 兴趣爱好' },
+    { name: 'Unit 5', sub: 'Sizes 尺寸和大小' },
+    { name: 'Unit 6', sub: 'Free time 课余活动' },
+    { name: 'Unit 7', sub: 'Seasons 四季' },
+    { name: 'Unit 8', sub: 'Story time 故事时间' },
+  ]},
+  math: { title: 'math-grid', data: [
+    { name: '第一单元', sub: '大数的认识' },
+    { name: '第二单元', sub: '公顷和平方千米' },
+    { name: '第三单元', sub: '角的度量' },
+    { name: '第四单元', sub: '三位数乘两位数' },
+    { name: '第五单元', sub: '平行四边形和梯形' },
+    { name: '第六单元', sub: '除数是两位数的除法' },
+  ]},
 };
 
-function isDone(key) {
-  return store.doneUnits.includes(key);
+function renderLearn() {
+  Object.values(SUBJECTS).forEach(sub => {
+    const grid = document.getElementById(sub.title);
+    grid.innerHTML = sub.data.map((u, i) => {
+      const key = sub.title + '_' + i;
+      const done = store.doneUnits.includes(key);
+      return `<div class="unit-card ${done?'done':''}" onclick="toggleUnit('${key}')">
+        <div class="unit-card-header"><span class="unit-card-title">${u.name}</span></div>
+        <div class="unit-card-meta">${u.sub}</div>
+      </div>`;
+    }).join('');
+  });
+  renderPoems();
+  renderOM();
 }
 
-function toggleDone(key) {
-  if (isDone(key)) {
-    store.doneUnits = store.doneUnits.filter(k => k !== key);
-  } else {
-    store.doneUnits.push(key);
-  }
-  saveStore();
-  renderAll();
+function toggleUnit(key) {
+  if (store.doneUnits.includes(key)) store.doneUnits = store.doneUnits.filter(k => k !== key);
+  else store.doneUnits.push(key);
+  saveStore(); renderLearn(); renderHome();
 }
 
-function renderAll() {
-  Object.values(SUBJECTS).forEach(sub => renderUnits(sub));
-  renderDaily();
-  renderNews();
-}
+// ===== 奥数 =====
+const OM_TOPICS = [
+  {
+    id: 0, name: '第1-2周', tag: '和差问题', icon: '➕',
+    problem: '两数之和为50，差为10，这两个数分别是多少？',
+    answer: '大数 = (50+10)÷2 = 30，小数 = (50-10)÷2 = 20',
+    method: '大数 = (和+差)÷2，小数 = (和-差)÷2'
+  },
+  {
+    id: 1, name: '第3-4周', tag: '和倍问题', icon: '✖️',
+    problem: '小明和小红共有30本书，小明的书是小红的5倍，两人各有几本？',
+    answer: '小红：30÷(5+1)=5本，小明：5×5=25本',
+    method: '先求1倍数 = 和÷(倍数+1)，再求多倍数'
+  },
+  {
+    id: 2, name: '第5-6周', tag: '差倍问题', icon: '➖',
+    problem: '大桶里有50千克油，小桶里有10千克油，要使大桶是小题的几倍？',
+    answer: '50÷10=5，大桶是小桶的5倍',
+    method: '差÷(倍数-1)=小数，大数=小数×倍数'
+  },
+  {
+    id: 3, name: '第7-8周', tag: '年龄问题', icon: '👦',
+    problem: '爸爸今年40岁，儿子8岁，几年后爸爸年龄是儿子的3倍？',
+    answer: '差：40-8=32岁，32÷(3-1)=16岁，16-8=8年后',
+    method: '年龄差不变。(和差)÷倍数关系求解'
+  },
+  {
+    id: 4, name: '第9-10周', tag: '归一问题', icon: '📊',
+    problem: '3台机器5小时生产60个零件，1台机器1小时生产多少个？',
+    answer: '60÷5÷3=4个',
+    method: '先求单一量：总量÷数量÷时间'
+  },
+  {
+    id: 5, name: '第11-12周', tag: '植树问题', icon: '🌲',
+    problem: '在一条100米的路两边种树，每隔10米种一棵，一共种多少棵？',
+    answer: '每边：(100÷10+1)=11棵，两边：11×2=22棵',
+    method: '路长÷间隔+1 = 一边的棵数（两端都种）'
+  },
+  {
+    id: 6, name: '第13-14周', tag: '鸡兔同笼', icon: '🐔',
+    problem: '鸡和兔共8只，共20只脚，鸡和兔各有几只？',
+    answer: '兔：(20-8×2)÷(4-2)=2只，鸡：8-2=6只',
+    method: '假设全是鸡，脚数差÷每只差 = 另一种动物数'
+  },
+  {
+    id: 7, name: '第15-16周', tag: '周期问题', icon: '🔄',
+    problem: '排列顺序：红、黄、蓝、绿，第25个是什么颜色？',
+    answer: '25÷4=6余1，所以是第1个：红色',
+    method: '总数÷周期长度=完整周期数，余数看第几个'
+  },
+  {
+    id: 8, name: '第17-18周', tag: '还原问题', icon: '🔙',
+    problem: '一个数先加5，再乘3，最后减6，结果是30，原数是多少？',
+    answer: '(30+6)÷3-5=7',
+    method: '从结果倒推：减变加，加变减，乘变除，除变乘'
+  },
+];
 
-function renderUnits(sub) {
-  const grid = document.getElementById(sub.title);
-  grid.innerHTML = sub.data.map((u, i) => {
-    const key = sub.title + '_' + i;
-    const done = isDone(key);
-    return `<div class="unit-card ${done ? 'done' : ''}" onclick="toggleDone('${key}')">
-      <div class="unit-card-header">
-        <span class="unit-card-title">${u.name}</span>
+function renderOM() {
+  const grid = document.getElementById('olympiad-grid');
+  grid.innerHTML = OM_TOPICS.map(t => {
+    const done = store.doneOM.includes(t.id);
+    const tagColor = ['blue','pink','yellow','purple','blue','pink','yellow','purple','blue'][t.id];
+    return `<div class="om-card ${done?'done':''}" onclick="showOM(${t.id})">
+      <div class="om-title">
+        ${t.name}
+        <span class="om-done">${done?'✅':'📝'}</span>
       </div>
-      <div class="unit-card-meta">${u.sub.substring(0, 20)}...</div>
+      <div class="om-tags">
+        <span class="tag ${tagColor}">${t.tag}</span>
+        ${done ? '<span class="tag done">已掌握</span>' : ''}
+      </div>
+      <div class="om-meta">${t.problem.substring(0,25)}...</div>
     </div>`;
   }).join('');
 }
 
-// ===== 渲染日常 =====
-const DAILY_TYPES = ['全部', '📸 照片', '🎸 吉他', '⚽ 运动', '🎨 绘画', '🎮 游戏', '🎬 视频', '🏆 荣誉', '✨ 其他'];
-
-function renderDailyFilters() {
-  const pills = document.getElementById('filter-pills');
-  pills.innerHTML = DAILY_TYPES.map(t => {
-    const active = t === currentFilter ? 'active' : '';
-    return `<span class="filter-pill ${active}" onclick="setFilter('${t}')">${t}</span>`;
-  }).join('');
-}
-
-function setFilter(t) {
-  currentFilter = t;
-  renderDailyFilters();
-  renderDaily();
-}
-
-function renderDaily() {
-  const grid = document.getElementById('gallery-grid');
-  let items = store.daily;
-  if (currentFilter !== '全部') {
-    items = items.filter(d => d.type === currentFilter);
-  }
-  if (items.length === 0) {
-    grid.innerHTML = '<div class="empty-state"><div class="emoji">🌟</div><p>还没有内容<br>点击上方「添加内容」开始记录吧</p></div>';
-    return;
-  }
-  grid.innerHTML = items.map(d => `
-    <div class="gallery-item" onclick="showDailyDetail(${d.id})">
-      <div class="gallery-img">${d.icon}</div>
-      <div class="gallery-body">
-        <div class="gallery-title">${d.title}</div>
-        <div class="gallery-desc">${d.desc}</div>
-        <div class="gallery-date">📅 ${d.date} · ${d.type}</div>
-      </div>
-    </div>
-  `).join('');
-}
-
-function showDailyDetail(id) {
-  const d = store.daily.find(x => x.id === id);
-  if (!d) return;
+function showOM(id) {
+  const t = OM_TOPICS.find(x => x.id === id);
+  if (!t) return;
+  const done = store.doneOM.includes(id);
+  const tagColor = ['blue','pink','yellow','purple','blue','pink','yellow','purple','blue'][id];
   document.getElementById('detail-body').innerHTML = `
-    <div style="font-size:64px;margin-bottom:16px;text-align:center;">${d.icon}</div>
-    <h2 style="font-size:20px;margin-bottom:8px;">${d.title}</h2>
-    <p style="font-size:12px;color:var(--text2);margin-bottom:16px;">📅 ${d.date} · ${d.type}</p>
-    <p style="font-size:14px;color:var(--text2);line-height:1.7;">${d.desc}</p>
-    <div style="margin-top:20px;display:flex;justify-content:flex-end;">
-      <button class="btn btn-danger" onclick="deleteDaily(${id})">🗑️ 删除</button>
+    <div class="om-problem-box">
+      <h4>📝 ${t.name} · ${t.tag}</h4>
+      <p>${t.problem}</p>
     </div>
-  `;
+    <div class="om-answer-box">
+      <h4>💡 解答方法</h4>
+      <p>${t.method}</p>
+      <p style="margin-top:8px;"><strong>答案：</strong>${t.answer}</p>
+    </div>
+    <div class="form-actions" style="margin-top:16px;">
+      <button class="btn ${done?'':'btn-primary'}" onclick="toggleOM(${id})">
+        ${done?'↩️ 取消已掌握':'✅ 我会了'}
+      </button>
+      <button class="btn" onclick="closeModal('modal-detail')">关闭</button>
+    </div>`;
   openModal('modal-detail');
 }
 
-function deleteDaily(id) {
-  if (!confirm('确定删除？')) return;
-  store.daily = store.daily.filter(d => d.id !== id);
-  saveStore(); renderDaily(); closeModal('modal-detail');
+function toggleOM(id) {
+  if (store.doneOM.includes(id)) store.doneOM = store.doneOM.filter(k => k !== id);
+  else store.doneOM.push(id);
+  saveStore(); renderOM(); renderHome(); showOM(id);
 }
 
-// ===== 渲染新闻 =====
-const NEWS_TAG_MAP = { ai: ['🤖 AI', 'ai'], space: ['🚀 航天', 'space'], robot: ['🤖 机器人', 'robot'], tech: ['💡 科技', 'tech'], game: ['🎮 游戏', 'game'] };
+// ===== 闪光时刻 =====
+const SHINE_TYPES = ['全部', '📸 照片', '🎸 吉他', '⚽ 运动', '🎨 绘画', '🎮 游戏', '🎬 视频', '🏆 荣誉', '✨ 其他'];
+let shineFilter = '全部';
 
-function renderNews() {
+function renderShineFilters() {
+  document.getElementById('shine-filter-pills').innerHTML = SHINE_TYPES.map(t =>
+    `<span class="filter-pill ${t===shineFilter?'active':''}" onclick="setShineFilter('${t}')">${t}</span>`
+  ).join('');
+}
+
+function setShineFilter(t) { shineFilter = t; renderShine(); }
+
+function renderShine() {
+  renderShineFilters();
+  // 日记
+  const sortedDiary = [...store.diary].sort((a,b)=>b.id-a.id);
+  document.getElementById('diary-list').innerHTML = sortedDiary.length
+    ? sortedDiary.map(d => `<div class="diary-item" onclick="showDiaryDetail(${d.id})">
+        <div class="diary-meta">
+          <span class="diary-mood">${d.mood}</span>
+          <span class="diary-date">📅 ${d.date}</span>
+        </div>
+        <div class="diary-title">${d.title}</div>
+        <div class="diary-preview">${d.content}</div>
+      </div>`).join('')
+    : '<div class="empty-state"><div class="emoji">✍️</div><p>还没有日记<br>点击上方「写日记」开始记录吧</p></div>';
+
+  // 时刻
+  let shines = shineFilter==='全部' ? store.shines : store.shines.filter(s=>s.type===shineFilter);
+  document.getElementById('shine-grid').innerHTML = shines.length
+    ? shines.map(s => `<div class="gallery-item" onclick="showShineDetail(${s.id})">
+        <div class="gallery-img">${s.icon}</div>
+        <div class="gallery-body">
+          <div class="gallery-title">${s.title}</div>
+          <div class="gallery-desc">${s.desc}</div>
+          <div class="gallery-date">📅 ${s.date} · ${s.type}</div>
+        </div>
+      </div>`).join('')
+    : '<div class="empty-state"><div class="emoji">✨</div><p>还没有${shineFilter}的内容<br>点击上方「添加时刻」开始记录吧</p></div>';
+}
+
+function showDiaryDetail(id) {
+  const d = store.diary.find(x => x.id === id);
+  if (!d) return;
+  document.getElementById('detail-body').innerHTML = `
+    <div style="margin-bottom:16px;"><span style="font-size:40px;margin-right:12px;">${d.mood}</span><span style="font-size:13px;color:var(--text2);">📅 ${d.date}</span></div>
+    <h2 style="font-size:20px;margin-bottom:16px;">${d.title}</h2>
+    <p style="font-size:14px;color:var(--text2);line-height:1.8;">${d.content.replace(/\n/g,'<br>')}</p>
+    <div style="margin-top:20px;display:flex;justify-content:flex-end;"><button class="btn btn-danger" onclick="deleteDiary(${id})">🗑️ 删除</button></div>`;
+  openModal('modal-detail');
+}
+
+function deleteDiary(id) {
+  if (!confirm('确定删除这篇日记？')) return;
+  store.diary = store.diary.filter(d => d.id !== id);
+  saveStore(); renderShine(); renderHome(); closeModal('modal-detail');
+}
+
+function showShineDetail(id) {
+  const s = store.shines.find(x => x.id === id);
+  if (!s) return;
+  document.getElementById('detail-body').innerHTML = `
+    <div style="font-size:64px;margin-bottom:16px;text-align:center;">${s.icon}</div>
+    <h2 style="font-size:20px;margin-bottom:8px;">${s.title}</h2>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:16px;">📅 ${s.date} · ${s.type}</p>
+    <p style="font-size:14px;color:var(--text2);line-height:1.7;">${s.desc}</p>
+    <div style="margin-top:20px;display:flex;justify-content:flex-end;"><button class="btn btn-danger" onclick="deleteShine(${id})">🗑️ 删除</button></div>`;
+  openModal('modal-detail');
+}
+
+function deleteShine(id) {
+  if (!confirm('确定删除？')) return;
+  store.shines = store.shines.filter(s => s.id !== id);
+  saveStore(); renderShine(); renderHome(); closeModal('modal-detail');
+}
+
+// ===== 科学百科 =====
+function renderScience() {
+  const grid = document.getElementById('science-grid');
+  const typeIcon = { '自然':'🌿','动物':'🐾','天文':'🌌','人体':'🧬','物理':'⚡','实验':'🧪' };
+  grid.innerHTML = store.sciences.map(s => `
+    <div class="science-card" onclick="showScienceDetail(${s.id})">
+      <div class="science-icon">${s.icon}</div>
+      <div class="science-title">${s.title}</div>
+      <div class="science-desc">${s.desc.substring(0,60)}...</div>
+    </div>`).join('');
+}
+
+function showScienceDetail(id) {
+  const s = store.sciences.find(x => x.id === id);
+  if (!s) return;
+  document.getElementById('detail-body').innerHTML = `
+    <div style="font-size:52px;margin-bottom:16px;">${s.icon}</div>
+    <h2 style="font-size:18px;margin-bottom:8px;">${s.title}</h2>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:16px;">📅 ${s.date} · ${s.type}</p>
+    <div class="science-detail-section">
+      <p style="font-size:14px;color:var(--text);line-height:1.8;">${s.desc}</p>
+    </div>
+    <div style="margin-top:20px;display:flex;justify-content:flex-end;gap:10px;">
+      <button class="btn btn-danger" onclick="deleteScience(${id})">🗑️ 删除</button>
+      <button class="btn" onclick="closeModal('modal-detail')">关闭</button>
+    </div>`;
+  openModal('modal-detail');
+}
+
+function deleteScience(id) {
+  if (!confirm('确定删除？')) return;
+  store.sciences = store.sciences.filter(s => s.id !== id);
+  saveStore(); renderScience(); renderHome(); closeModal('modal-detail');
+}
+
+// ===== 科技新闻 =====
+const NEWS_TAG_MAP = { ai:['🤖 AI','ai'], space:['🚀 航天','space'], robot:['🤖 机器人','robot'], tech:['💡 科技','tech'], game:['🎮 游戏','game'] };
+
+function renderTech() {
   const list = document.getElementById('news-list');
-  if (store.news.length === 0) {
-    list.innerHTML = '<div class="empty-state"><div class="emoji">🔭</div><p>还没有新闻<br>点击上方「添加新闻」开始添加吧</p></div>';
-    return;
-  }
-  const sorted = [...store.news].sort((a, b) => b.id - a.id);
-  list.innerHTML = sorted.map(n => {
-    const [tagLabel, tagClass] = NEWS_TAG_MAP[n.type] || ['💡 科技', 'tech'];
-    return `<div class="news-card" onclick="showNewsDetail(${n.id})">
+  if (!store.news.length) { list.innerHTML='<div class="empty-state"><div class="emoji">🔭</div><p>还没有新闻<br>点击上方「添加新闻」开始吧</p></div>'; return; }
+  list.innerHTML = [...store.news].sort((a,b)=>b.id-a.id).map(n => {
+    const [tagLabel, tagClass] = NEWS_TAG_MAP[n.type]||['💡 科技','tech'];
+    return `<div class="news-card" onclick="showTechDetail(${n.id})">
       <div class="news-icon">${n.icon}</div>
       <div class="news-body">
         <div class="news-title">${n.title}</div>
-        ${n.summary ? `<div class="news-summary">${n.summary}</div>` : ''}
-        <div class="news-meta">
-          <span class="news-tag ${tagClass}">${tagLabel}</span>
-          <span>📅 ${n.date}</span>
-        </div>
+        ${n.summary?`<div class="news-summary">${n.summary}</div>`:''}
+        <div class="news-meta"><span class="news-tag ${tagClass}">${tagLabel}</span><span>📅 ${n.date}</span></div>
       </div>
     </div>`;
   }).join('');
 }
 
-function showNewsDetail(id) {
+function showTechDetail(id) {
   const n = store.news.find(x => x.id === id);
   if (!n) return;
-  const [tagLabel, tagClass] = NEWS_TAG_MAP[n.type] || ['💡 科技', 'tech'];
+  const [tagLabel, tagClass] = NEWS_TAG_MAP[n.type]||['💡 科技','tech'];
   document.getElementById('detail-body').innerHTML = `
-    <div style="font-size:56px;margin-bottom:16px;">${n.icon}</div>
+    <div style="font-size:52px;margin-bottom:16px;">${n.icon}</div>
     <h2 style="font-size:18px;margin-bottom:12px;line-height:1.4;">${n.title}</h2>
-    <div style="margin-bottom:16px;">
-      <span class="news-tag ${tagClass}">${tagLabel}</span>
-      <span style="font-size:12px;color:var(--text2);margin-left:10px;">📅 ${n.date}</span>
-    </div>
-    ${n.summary ? `<p style="font-size:14px;color:var(--text2);line-height:1.8;">${n.summary}</p>` : ''}
+    <div style="margin-bottom:16px;"><span class="news-tag ${tagClass}">${tagLabel}</span><span style="font-size:12px;color:var(--text2);margin-left:10px;">📅 ${n.date}</span></div>
+    ${n.summary?`<p style="font-size:14px;color:var(--text2);line-height:1.8;">${n.summary}</p>`:''}
     <div style="margin-top:20px;display:flex;justify-content:flex-end;gap:10px;">
-      <button class="btn btn-danger" onclick="deleteNews(${id})">🗑️ 删除</button>
+      <button class="btn btn-danger" onclick="deleteTech(${id})">🗑️ 删除</button>
       <button class="btn" onclick="closeModal('modal-detail')">关闭</button>
-    </div>
-  `;
+    </div>`;
   openModal('modal-detail');
 }
 
-function deleteNews(id) {
+function deleteTech(id) {
   if (!confirm('确定删除？')) return;
   store.news = store.news.filter(n => n.id !== id);
-  saveStore(); renderNews(); closeModal('modal-detail');
+  saveStore(); renderTech(); renderHome(); closeModal('modal-detail');
 }
 
 // ===== 添加操作 =====
-function openAddDaily() {
-  document.getElementById('daily-title').value = '';
-  document.getElementById('daily-type').value = '📸 照片';
-  document.getElementById('daily-desc').value = '';
-  openModal('modal-daily');
+function selMood(el) {
+  document.querySelectorAll('#mood-picker .mood-opt').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedMood = el.dataset.mood;
 }
 
-function saveDaily() {
-  const title = document.getElementById('daily-title').value.trim();
-  const type = document.getElementById('daily-type').value;
-  const desc = document.getElementById('daily-desc').value.trim();
+function openAddDiary() {
+  document.getElementById('diary-title').value = '';
+  document.getElementById('diary-content').value = '';
+  document.querySelectorAll('#mood-picker .mood-opt').forEach(e => e.classList.remove('selected'));
+  document.querySelector('#mood-picker .mood-opt').classList.add('selected');
+  selectedMood = '😄';
+  openModal('modal-diary');
+}
+
+function saveDiary() {
+  const title = document.getElementById('diary-title').value.trim();
+  const content = document.getElementById('diary-content').value.trim();
+  if (!title || !content) { alert('请填写标题和内容'); return; }
+  store.diary.unshift({ id: Date.now(), mood: selectedMood, title, content, date: today() });
+  saveStore(); renderShine(); renderHome(); closeModal('modal-diary');
+}
+
+function openAddShine() {
+  document.getElementById('shine-title').value = '';
+  document.getElementById('shine-type').value = '📸 照片';
+  document.getElementById('shine-desc').value = '';
+  openModal('modal-shine');
+}
+
+function saveShine() {
+  const title = document.getElementById('shine-title').value.trim();
+  const type = document.getElementById('shine-type').value;
+  const desc = document.getElementById('shine-desc').value.trim();
   if (!title) { alert('请输入标题'); return; }
-  const now = new Date();
-  const date = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-  const icon = type.split(' ')[0];
-  store.daily.unshift({ id: Date.now(), title, type, icon, desc, date });
-  saveStore(); renderDaily(); closeModal('modal-daily');
+  store.shines.unshift({ id: Date.now(), title, type, icon: type.split(' ')[0], desc, date: today() });
+  saveStore(); renderShine(); renderHome(); closeModal('modal-shine');
 }
 
-function openAddNews() {
-  document.getElementById('news-title').value = '';
-  document.getElementById('news-type').value = 'ai';
-  document.getElementById('news-summary').value = '';
-  openModal('modal-news');
+function openAddScience() {
+  document.getElementById('sci-title').value = '';
+  document.getElementById('sci-type').value = '自然';
+  document.getElementById('sci-desc').value = '';
+  openModal('modal-science');
 }
 
-const NEWS_ICONS = { ai: '🤖', space: '🚀', robot: '🤖', tech: '💡', game: '🎮' };
+const SCI_ICONS = { '自然':'🌿','动物':'🐾','天文':'🌌','人体':'🧬','物理':'⚡','实验':'🧪' };
 
-function saveNews() {
-  const title = document.getElementById('news-title').value.trim();
-  const type = document.getElementById('news-type').value;
-  const summary = document.getElementById('news-summary').value.trim();
+function saveScience() {
+  const title = document.getElementById('sci-title').value.trim();
+  const type = document.getElementById('sci-type').value;
+  const desc = document.getElementById('sci-desc').value.trim();
   if (!title) { alert('请输入标题'); return; }
-  const now = new Date();
-  const date = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
-  store.news.unshift({ id: Date.now(), title, type, icon: NEWS_ICONS[type] || '💡', summary, date });
-  saveStore(); renderNews(); closeModal('modal-news');
+  store.sciences.unshift({ id: Date.now(), title, type, icon: SCI_ICONS[type]||'🔬', desc, date: today() });
+  saveStore(); renderScience(); renderHome(); closeModal('modal-science');
+}
+
+function openAddTech() {
+  document.getElementById('tech-title').value = '';
+  document.getElementById('tech-type').value = 'ai';
+  document.getElementById('tech-summary').value = '';
+  openModal('modal-tech');
+}
+
+const TECH_ICONS = { ai:'🤖', space:'🚀', robot:'🤖', tech:'💡', game:'🎮' };
+
+function saveTech() {
+  const title = document.getElementById('tech-title').value.trim();
+  const type = document.getElementById('tech-type').value;
+  const summary = document.getElementById('tech-summary').value.trim();
+  if (!title) { alert('请输入标题'); return; }
+  store.news.unshift({ id: Date.now(), title, type, icon: TECH_ICONS[type]||'🔭', summary, date: today() });
+  saveStore(); renderTech(); renderHome(); closeModal('modal-tech');
 }
 
 // ===== 模态框 =====
 function openModal(id) { document.getElementById(id).classList.add('active'); }
 function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-document.querySelectorAll('.modal-overlay').forEach(ov => {
-  ov.addEventListener('click', e => { if (e.target === ov) ov.classList.remove('active'); });
-});
+document.querySelectorAll('.modal-overlay').forEach(ov => { ov.addEventListener('click', e => { if (e.target === ov) ov.classList.remove('active'); }); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active')); });
 
 // ===== 初始化 =====
 loadStore();
-renderDailyFilters();
-renderAll();
+updateGreeting();
+renderHome();
+renderLearn();
+renderShine();
+renderScience();
+renderTech();
 </script>
 </body>
 </html>
