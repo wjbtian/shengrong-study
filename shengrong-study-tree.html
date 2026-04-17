@@ -610,10 +610,24 @@
 
     async function init() {
       try {
-        // 检查是否配置了 Firebase
-        if (firebaseConfig.apiKey === 'YOUR_API_KEY') {
-          // Firebase 未配置，使用内置数据
-          setDbStatus('connected', '离线模式');
+        // 检测网络环境：先测试 Firebase 是否可达
+        setDbStatus('loading', '检测网络...');
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+        let firebaseReachable = false;
+        try {
+          await fetch('https://firestore.googleapis.com/', { mode: 'no-cors', signal: controller.signal });
+          firebaseReachable = true;
+        } catch (e) {
+          firebaseReachable = false;
+        }
+        clearTimeout(timeoutId);
+
+        if (!firebaseReachable) {
+          // Firebase 不可达（国内网络），直接用本地模式
+          setDbStatus('connected', '本地模式 🇨🇳');
           loadBuiltinData();
           return;
         }
@@ -622,15 +636,22 @@
         db = getFirestore(app);
         setDbStatus('loading', '加载数据...');
 
-        // 监听知识树数据
+        // 监听知识树数据（5秒超时）
+        const treeTimeout = setTimeout(() => {
+          setDbStatus('connected', '本地模式 🇨🇳');
+          loadBuiltinData();
+        }, 5000);
+
         const unsubTree = onSnapshot(collection(db, 'knowledgeTree'), (snap) => {
+          clearTimeout(treeTimeout);
           const treeData = {};
           snap.forEach(d => { treeData[d.id] = d.data(); });
           mergeData(treeData, 'tree');
           setDbStatus('connected', '实时同步 ✓');
         }, (err) => {
+          clearTimeout(treeTimeout);
           console.error('Tree error:', err);
-          setDbStatus('error', '连接失败');
+          setDbStatus('connected', '本地模式 🇨🇳');
           loadBuiltinData();
         });
 
@@ -643,7 +664,7 @@
 
       } catch (e) {
         console.error('Firebase init error:', e);
-        setDbStatus('error', '初始化失败');
+        setDbStatus('connected', '本地模式 🇨🇳');
         loadBuiltinData();
       }
     }
