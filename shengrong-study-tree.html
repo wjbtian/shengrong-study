@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📚 吴尚融学习知识树 - 语文·数学·英语</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --card-bg: #1a2332;
+      --card-border: #2d3a4f;
+      --text: #e8eaed;
+      --text-muted: #8899a6;
+      --red: #e74c3c;
+      --green: #2ecc71;
+      --blue: #3498db;
+      --orange: #e67e22;
+      --purple: #9b59b6;
+      --pink: #e91e8b;
+      --cyan: #00bcd4;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding-bottom: 80px;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: linear-gradient(135deg, #1a3a5c 0%, #0d2137 50%, #1a0a3a 100%);
+      padding: 40px 20px 30px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(52,152,219,0.15), transparent 60%),
+                  radial-gradient(ellipse at 70% 50%, rgba(155,89,182,0.15), transparent 60%);
+    }
+    .header h1 { font-size: 1.7em; margin-bottom: 6px; position: relative; }
+    .header .subtitle { color: var(--text-muted); font-size: 0.9em; position: relative; }
+    .badges { display: flex; gap: 8px; justify-content: center; margin-top: 12px; flex-wrap: wrap; position: relative; }
+    .badge {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-size: 0.72em;
+      font-weight: 600;
+    }
+    .badge-chinese { background: rgba(231,76,60,0.2); color: var(--red); border: 1px solid rgba(231,76,60,0.3); }
+    .badge-math { background: rgba(52,152,219,0.2); color: var(--blue); border: 1px solid rgba(52,152,219,0.3); }
+    .badge-english { background: rgba(46,204,113,0.2); color: var(--green); border: 1px solid rgba(46,204,113,0.3); }
+    .badge-oly { background: rgba(155,89,182,0.2); color: var(--purple); border: 1px solid rgba(155,89,182,0.3); }
+
+    /* ── Nav ── */
+    .nav-tabs {
+      display: flex;
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--card-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      overflow-x: auto;
+    }
+    .nav-tabs::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      flex: 1; min-width: 80px;
+      padding: 13px 6px;
+      background: none; border: none;
+      color: var(--text-muted);
+      font-size: 0.8em;
+      cursor: pointer;
+      transition: all 0.3s;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+    }
+    .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+    .tab-btn:hover { color: var(--text); }
+
+    /* ── Container ── */
+    .container { max-width: 940px; margin: 0 auto; padding: 16px 14px; }
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 14px;
+      animation: fadeUp 0.4s ease;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .card:hover { border-color: rgba(52,152,219,0.4); }
+
+    /* ── Subject Header ── */
+    .subject-header {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .subject-header::before {
+      content: ''; position: absolute; inset: 0;
+      opacity: 0.15;
+    }
+    .subject-header.chinese { background: linear-gradient(135deg, rgba(231,76,60,0.2), rgba(192,57,43,0.1)); border: 1px solid rgba(231,76,60,0.3); }
+    .subject-header.math { background: linear-gradient(135deg, rgba(52,152,219,0.2), rgba(41,128,185,0.1)); border: 1px solid rgba(52,152,219,0.3); }
+    .subject-header.english { background: linear-gradient(135deg, rgba(46,204,113,0.2), rgba(39,174,96,0.1)); border: 1px solid rgba(46,204,113,0.3); }
+    .subject-header .subj-icon { font-size: 1.8em; }
+    .subject-header .subj-info h2 { font-size: 1.1em; }
+    .subject-header .subj-info p { font-size: 0.75em; color: var(--text-muted); margin-top: 2px; }
+
+    /* ── Tree ── */
+    .tree { list-style: none; }
+    .tree-item { margin-bottom: 5px; }
+    .tree-toggle {
+      display: flex; align-items: center;
+      padding: 9px 13px;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 0.9em;
+      user-select: none;
+      border: 1px solid transparent;
+    }
+    .tree-toggle:hover { filter: brightness(1.15); }
+    .tree-toggle .icon { margin-right: 9px; font-size: 1em; }
+    .tree-toggle .label { flex: 1; }
+    .tree-toggle .arrow { margin-left: auto; transition: transform 0.3s; color: var(--text-muted); font-size: 0.75em; }
+    .tree-toggle.open .arrow { transform: rotate(90deg); }
+
+    .tree-children { list-style: none; margin-left: 22px; margin-top: 5px; display: none; padding-left: 14px; border-left: 2px solid rgba(255,255,255,0.08); }
+    .tree-children.open { display: block; }
+    .tree-child-item {
+      padding: 5px 0; font-size: 0.83em; color: var(--text-muted);
+      display: flex; align-items: flex-start; gap: 6px;
+    }
+    .tree-child-item::before { content: '▸'; color: var(--blue); flex-shrink: 0; margin-top: 1px; font-size: 0.75em; }
+    .tree-child-item.new::before { content: '🆕'; }
+    .tree-child-item.done::before { content: '✅'; }
+    .tree-child-item.doing::before { content: '🔥'; }
+
+    /* ── Unit Cards ── */
+    .unit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 500px) { .unit-grid { grid-template-columns: 1fr; } }
+    .unit-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 13px;
+      transition: all 0.3s;
+    }
+    .unit-card:hover { border-color: var(--blue); transform: translateY(-1px); }
+    .unit-num { font-size: 0.7em; color: var(--text-muted); margin-bottom: 3px; }
+    .unit-title { font-size: 0.88em; font-weight: 600; margin-bottom: 5px; }
+    .unit-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+    .tag { font-size: 0.68em; padding: 2px 8px; border-radius: 8px; }
+    .tag-red { background: rgba(231,76,60,0.15); color: #e74c3c; }
+    .tag-blue { background: rgba(52,152,219,0.15); color: #3498db; }
+    .tag-green { background: rgba(46,204,113,0.15); color: #2ecc71; }
+    .tag-purple { background: rgba(155,89,182,0.15); color: #9b59b6; }
+    .tag-orange { background: rgba(230,126,34,0.15); color: #e67e22; }
+    .tag-grey { background: rgba(255,255,255,0.07); color: var(--text-muted); }
+
+    /* ── Stats ── */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
+    @media (max-width: 500px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+    .stat-box { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 10px; padding: 12px 8px; text-align: center; }
+    .stat-n { font-size: 1.4em; font-weight: 700; background: linear-gradient(135deg, var(--blue), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .stat-l { font-size: 0.68em; color: var(--text-muted); margin-top: 2px; }
+
+    /* ── Progress ── */
+    .progress-wrap { margin-bottom: 16px; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 0.78em; color: var(--text-muted); margin-bottom: 5px; }
+    .progress-bar { height: 8px; background: var(--card-border); border-radius: 8px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 8px; transition: width 0.6s ease; }
+    .fill-chinese { background: linear-gradient(90deg, #e74c3c, #c0392b); }
+    .fill-math { background: linear-gradient(90deg, #3498db, #2980b9); }
+    .fill-english { background: linear-gradient(90deg, #2ecc71, #27ae60); }
+
+    /* ── Poem list ── */
+    .poem-list { display: flex; flex-direction: column; gap: 6px; }
+    .poem-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: rgba(255,255,255,0.03); border-radius: 8px; font-size: 0.85em; }
+    .poem-title { font-weight: 600; min-width: 80px; }
+    .poem-author { color: var(--text-muted); font-size: 0.8em; }
+
+    /* ── Word table ── */
+    .word-table { width: 100%; border-collapse: collapse; font-size: 0.82em; }
+    .word-table th { background: rgba(52,152,219,0.15); color: var(--blue); padding: 7px 10px; text-align: left; border-bottom: 1px solid var(--card-border); font-size: 0.78em; }
+    .word-table td { padding: 6px 10px; border-bottom: 1px solid rgba(255,255,255,0.04); color: var(--text-muted); }
+    .word-table tr:last-child td { border-bottom: none; }
+    .word-en { color: var(--green); font-weight: 600; }
+    .word-cn { color: var(--text); }
+
+    /* ── Footer ── */
+    .footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.72em; }
+
+    /* ── Info bar ── */
+    .info-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .info-chip { padding: 5px 12px; border-radius: 20px; font-size: 0.78em; border: 1px solid; }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <h1>📚 吴尚融 · 四年级下册学习知识树</h1>
+  <p class="subtitle">语文 · 数学 · 英语 · 三科全覆盖</p>
+  <div class="badges">
+    <span class="badge badge-chinese">📖 语文</span>
+    <span class="badge badge-math">🔢 数学</span>
+    <span class="badge badge-english">🔤 英语</span>
+    <span class="badge badge-oly">🏆 奥数</span>
+  </div>
+</div>
+
+<!-- Nav -->
+<div class="nav-tabs">
+  <button class="tab-btn active" onclick="showTab('overview')">📊 总览</button>
+  <button class="tab-btn" onclick="showTab('chinese')">📖 语文</button>
+  <button class="tab-btn" onclick="showTab('math')">🔢 数学</button>
+  <button class="tab-btn" onclick="showTab('english')">🔤 英语</button>
+  <button class="tab-btn" onclick="showTab('olympiad')">🏆 奥数</button>
+</div>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════
+     TAB: 总览
+════════════════════════════════════════ -->
+<div class="section active" id="tab-overview">
+
+  <!-- 总体进度 -->
+  <div class="card">
+    <h3 style="margin-bottom:12px; font-size:0.95em;">📈 学习进度总览</h3>
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-n">26</div><div class="stat-l">语文单元</div></div>
+      <div class="stat-box"><div class="stat-n">9</div><div class="stat-l">数学单元</div></div>
+      <div class="stat-box"><div class="stat-n">8</div><div class="stat-l">英语单元</div></div>
+      <div class="stat-box"><div class="stat-n">7</div><div class="stat-l">奥数模块</div></div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-label"><span>📖 语文进度</span><span>0/26</span></div>
+      <div class="progress-bar"><div class="progress-fill fill-chinese" style="width:0%"></div></div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-label"><span>🔢 数学进度</span><span>0/9</span></div>
+      <div class="progress-bar"><div class="progress-fill fill-math" style="width:0%"></div></div>
+    </div>
+    <div class="progress-wrap" style="margin-bottom:0;">
+      <div class="progress-label"><span>🔤 英语进度</span><span>0/8</span></div>
+      <div class="progress-bar"><div class="progress-fill fill-english" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- 四科概览 -->
+  <div class="card">
+    <h3 style="margin-bottom:12px; font-size:0.95em;">🌳 四科知识树总览</h3>
+    <div class="info-bar">
+      <span class="info-chip" style="border-color:rgba(231,76,60,0.3);color:#e74c3c;background:rgba(231,76,60,0.08);">📖 语文：阅读+写作+古诗+日积月累</span>
+      <span class="info-chip" style="border-color:rgba(52,152,219,0.3);color:#3498db;background:rgba(52,152,219,0.08);">🔢 数学：图形+数运算+方程+统计</span>
+      <span class="info-chip" style="border-color:rgba(46,204,113,0.3);color:#2ecc71;background:rgba(46,204,113,0.08);">🔤 英语：听说读写+词汇+语法</span>
+      <span class="info-chip" style="border-color:rgba(155,89,182,0.3);color:#9b59b6;background:rgba(155,89,182,0.08);">🏆 奥数：7大模块45+题</span>
+    </div>
+    <div style="font-size:0.82em; color:var(--text-muted); line-height:1.8;">
+      点击上方标签页进入各科知识树。<br>
+      🟡 <b style="color:var(--text);">黄色高亮</b> = 尚融目前正在学习的单元<br>
+      📅 学习顺序参考右侧标签页中的周计划。
+    </div>
+  </div>
+
+  <!-- 快速导航 -->
+  <div class="card">
+    <h3 style="margin-bottom:12px; font-size:0.95em;">⚡ 快速跳转到各科</h3>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+      <button class="tab-btn active" onclick="showTab('chinese')" style="background:rgba(231,76,60,0.1);border:1px solid rgba(231,76,60,0.2);border-radius:10px;padding:14px;color:#e74c3c;">📖 语文知识树<br><span style="font-size:0.7em;color:var(--text-muted);">26个知识点</span></button>
+      <button class="tab-btn" onclick="showTab('math')" style="background:rgba(52,152,219,0.1);border:1px solid rgba(52,152,219,0.2);border-radius:10px;padding:14px;color:#3498db;">🔢 数学知识树<br><span style="font-size:0.7em;color:var(--text-muted);">9个单元</span></button>
+      <button class="tab-btn" onclick="showTab('english')" style="background:rgba(46,204,113,0.1);border:1px solid rgba(46,204,113,0.2);border-radius:10px;padding:14px;color:#2ecc71;">🔤 英语知识树<br><span style="font-size:0.7em;color:var(--text-muted);">8个单元</span></button>
+      <button class="tab-btn" onclick="showTab('olympiad')" style="background:rgba(155,89,182,0.1);border:1px solid rgba(155,89,182,0.2);border-radius:10px;padding:14px;color:#9b59b6;">🏆 奥数知识树<br><span style="font-size:0.7em;color:var(--text-muted);">9周计划</span></button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB: 语文
+════════════════════════════════════════ -->
+<div class="section" id="tab-chinese">
+
+  <!-- 语文标题 -->
+  <div class="subject-header chinese">
+    <span class="subj-icon">📖</span>
+    <div class="subj-info">
+      <h2>语文 · 苏教版四年级下册</h2>
+      <p>教材版本：苏教版（江苏地区）· 共8个单元 + 快乐成长 + 日积月累</p>
+    </div>
+  </div>
+
+  <!-- 知识树主体 -->
+  <div class="card">
+    <h3 style="margin-bottom:12px; font-size:0.9em;">🌳 语文知识树（点击展开）</h3>
+    <ul class="tree">
+
+      <!-- 习惯培养 -->
+      <li class="tree-item">
+        <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(230,126,34,0.08);border-color:rgba(230,126,34,0.2);">
+          <span class="icon">🎯</span><span class="label">培养良好的学习习惯（8）</span><span class="arrow">▸</span>
+        </div>
+        <ul class="tree-children">
+          <li class="tree-child-item">📌 认真读书的习惯</li>
+          <li class="tree-child-item">📌 坚持写日记的习惯</li>
+          <li class="tree-child-item">📌 主动识字的习惯</li>
+          <li class="tree-child-item">📌 课前预习的习惯</li>
+          <li class="tree-child-item">📌 专心听讲的习惯</li>
+        </ul>
+      </li>
+
+      <!-- 第一单元：绿化 -->
+      <li class="tree-item">
+        <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(231,76,60,0.08);border-color:rgba(231,76,60,0.2);">
+          <span class="icon">🌲</span><span class="label">第一单元 · 绿化（🟡 当前）</span><span class="arrow">▸</span>
+        </div>
+        <ul class="tree-children">
+          <li class="tree-child-item doing">🔥 1.《走，我们去植树》— 拟人手法、绿化意义</li>
+          <li class="tree-child-item doing">🔥 2.《第一朵杏花》— 观察自然、竺可桢故事</li>
+          <li class="tree-child-item doing">🔥 3.《燕子》— 比喻手法、描写顺序</li>
+          <li class="tree-child-item doing">🔥 4. 古诗两首《江南春》《春日偶成》</li>
+          <li class="tree-child-item">📝 单元知识点：比喻句、拟人句、四字词语积累</li>
+          <li class="tree-child-item">✍️ 写作：描写一处景物（按顺序：远→近 / 整体→局部）</li>
+        </ul>
+      </li>
+
+      <!-- 第二单元：品质 -->
+      <li class="tree-item">
+        <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(231,76,60,0.06);border-color:rgba(231,76,60,0.15);">
+          <span class="icon">🏠</span><span class="label">第二单元 · 品质</span><span class="arrow">▸</span>
+        </div>
+        <ul class="tree-children">
+          <li class="tree-child-item">🆕 5.《苹果里的五角星》— 创新思维</li>
+          <li class="tree-child-item">🆕 6.《最佳路径》— 规则与自由（建筑大师格罗培斯）</li>
+          <li class="tree-child-item">🆕 7.《人类的"老师"》— 仿生学</li>
+          <li class="tree-child-item">📝 单元知识点：叙事顺序、人物品质概括</li>
+        </ul>
+      </li>
+
+      <!-- 第三单元：故事 -->
+      <li class="tree-item">
+        <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(231,76,60,0.06);border-color:rgba(231,76,60,0.15);">
+          <span class="icon">📜</span><span class="label">第三单元 · 历史故事</span><span class="arrow">▸</span>
+        </div>
+        <ul class="tree-children">
+          <li class="tree-child-item">🆕 8.《三顾茅庐》— 刘备求贤若渴（文言文过渡）</li>
+          <li class="tree-child-item">🆕 9.《祁黄羊》— 外举不避仇，内举不避亲</li>
+          <li class="tree-child-item">🆕 10.《公仪休拒收礼物》— 廉洁自律（文言文）</li>
+          <li class="tree-child-item">📝 单元知识点：理解人物语言、动作、神态描写</li>
+          <li class="tree-child-item">✍️ 写作：写一个熟悉的人（抓住典型事例）</li>
+        </ul>
+      </li>
+
+      <!-- 第四单元：奉献 -->
+      <li class="tree-item">
+        <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(231,76,60,0.06);border-color:rgba(231,76,60,0.15);">
+          <span class="icon">💉</span><span class="label">第四单元 · 奉献</span><span class="arrow">▸</span>
+        </div>
+        <ul class="tree-children">
+          <li class="tree-child-item">🆕 11.《永远的白衣战士》— 叶欣（抗击非典）</li>
+          <li class="tree-child-item">🆕 12.《"番茄太阳"》— 盲童明明</li>
+          <li class="tree-child-item">🆕 13.《第一次抱母亲》— 感恩母亲</li>
+          <li class="tree-child-item">🆕 14.《我不是最弱小的》— 自我保护</li>
+          <li class="tree-child-item">📝 单元知识点：概括段意、找出中心句</li>
+        </ul>
+      </li>
+
+      <!-- 第五单元：自然 -->
+      <li class="tree-item">
+        <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(231,76,60,0.06);border-color:rgba(231,76,60,0.15);">
+          <span class="icon">🐦</span><span class="label">第五单元 · 自然</span><span class="arrow">▸</span>
+        </div>
+        <ul class="tree-children">
+          <li class="tree-child-item">🆕 15.《鸟语》— 与鸟对话</li>
+          <li class="tree-child-item">🆕 16.《天鹅的故事》— 斯杰潘（老猎人）</li>
+          <li class="tree-child-item">🆕 《宋庆龄故居的樟树》— 托物言志</li>
+          <li class="tree-child-item">📝 单元知识点：体会文章感情色彩、托物言志手法</li>
+          <li class="tree-child-item">✍️ 写作：写一种小动物（外形+习性+事例）</li>
+        </ul>
+      </li>
+
+      <!-- 日积月累 -->
+      <li class="tree-item">
+        <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(230,126,34,0.08);border-color:rgba(230,126,34,0.2);">
+          <span class="icon">📚</span><span class="label">📌 日积月累（必背内容）</span><span class="arrow">▸</span>
+        </div>
+        <ul class="tree-children">
+          <li class="tree-child-item">🆕 古诗词：江南春、春日偶成等</li>
+          <li class="tree-child-item">🆕 谚语警句：一年之计在于春，一日之计在于晨</li>
+          <li class="tree-child-item">🆕 成语故事积累</li>
+          <li class="tree-child-item">🆕 名人名言（诚信、勤学）</li>
+        </ul>
+      </li>
+
+      <!-- 语法与阅读 -->
+      <li class="tree-item">
+        <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(52,152,219,0.08);border-color:rgba(52,152,219,0.2);">
+          <span class="icon">🔍</span><span class="label">🔍 语法与阅读专项</span><span class="arrow">▸</span>
+        </div>
+        <ul class="tree-children">
+          <li class="tree-child-item">📝 <b>修辞手法</b>：比喻、拟人、排比、夸张</li>
+          <li class="tree-child-item">📝 <b>句式转换</b>：把字句↔被字句、陈述句↔反问句</li>
+          <li class="tree-child-item">📝 <b>扩句与缩句</b>：找到主谓宾，增加修饰语</li>
+          <li class="tree-child-item">📝 <b>关联词</b>：因为...所以...、虽然...但是...、如果...就...</li>
+          <li class="tree-child-item">📝 <b>阅读理解</b>：找中心句、概括段意、理解含义深刻的句子</li>
+          <li class="tree-child-item">📝 <b>标点符号</b>：引号、冒号、顿号、分号用法</li>
+        </ul>
+      </li>
+
+    </ul>
+  </div>
+
+  <!-- 古诗列表 -->
+  <div class="card">
+    <h3 style="margin-bottom:12px; font-size:0.9em;">📜 四年级下册必背古诗词</h3>
+    <div class="poem-list">
+      <div class="poem-item">
+        <span class="poem-title">《江南春》</span>
+        <span class="poem-author">唐·杜牧</span>
+        <span class="tag tag-red">必背</span>
+      </div>
+      <div class="poem-item">
+        <span class="poem-title">《春日偶成》</span>
+        <span class="poem-author">宋·程颢</span>
+        <span class="tag tag-red">必背</span>
+      </div>
+      <div class="poem-item">
+        <span class="poem-title">《三字经》节选</span>
+        <span class="poem-author">王应麟</span>
+        <span class="tag tag-orange">选背</span>
+      </div>
+      <div class="poem-item">
+        <span class="poem-title">更多古诗词</span>
+        <span class="poem-author">日积月累收录</span>
+        <span class="tag tag-grey">持续更新</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB: 数学
+════════════════════════════════════════ -->
+<div class="section" id="tab-math">
+
+  <!-- 数学标题 -->
+  <div class="subject-header math">
+    <span class="subj-icon">🔢</span>
+    <div class="subj-info">
+      <h2>数学 · 苏教版四年级下册</h2>
+      <p>教材版本：苏教版 · 共9个单元</p>
+    </div>
+  </div>
+
+  <!-- 9个单元 -->
+  <div class="unit-grid">
+    <div class="unit-card">
+      <div class="unit-num">第一单元</div>
+      <div class="unit-title">🔄 平移、旋转和轴对称</div>
+      <div class="unit-tags">
+        <span class="tag tag-blue">图形平移</span>
+        <span class="tag tag-blue">图形旋转</span>
+        <span class="tag tag-blue">轴对称图形</span>
+        <span class="tag tag-blue">找对称轴</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">
+        重点：平移距离的判断、旋转方向的辨别
+      </div>
+    </div>
+
+    <div class="unit-card">
+      <div class="unit-num">第二单元</div>
+      <div class="unit-title">🔢 认识多位数</div>
+      <div class="unit-tags">
+        <span class="tag tag-blue">万以内数</span>
+        <span class="tag tag-blue">亿以内数</span>
+        <span class="tag tag-blue">四舍五入</span>
+        <span class="tag tag-blue">近似数</span>
+        <span class="tag tag-blue">数位/数级</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">
+        重点：亿以内数的读写、大小比较
+      </div>
+    </div>
+
+    <div class="unit-card">
+      <div class="unit-num">第三单元</div>
+      <div class="unit-title">✖️ 三位数乘两位数</div>
+      <div class="unit-tags">
+        <span class="tag tag-blue">笔算乘法</span>
+        <span class="tag tag-blue">积的变化规律</span>
+        <span class="tag tag-blue">末尾有0乘法</span>
+        <span class="tag tag-blue">数量关系</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">
+        重点：竖式计算、积的变化规律（×10/÷10）
+      </div>
+    </div>
+
+    <div class="unit-card">
+      <div class="unit-num">第四单元 🔥</div>
+      <div class="unit-title">🧮 用计算器计算</div>
+      <div class="unit-tags">
+        <span class="tag tag-orange">计算器认识</span>
+        <span class="tag tag-orange">按键功能</span>
+        <span class="tag tag-orange">积的变化规律</span>
+        <span class="tag tag-orange">商的变化规律</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">
+        重点：OFF/ON/M+/MR/CE用法，理解"一亿有多大"
+      </div>
+    </div>
+
+    <div class="unit-card">
+      <div class="unit-num">第五单元</div>
+      <div class="unit-title">🗺️ 解决问题的策略</div>
+      <div class="unit-tags">
+        <span class="tag tag-blue">画图策略</span>
+        <span class="tag tag-blue">列表策略</span>
+        <span class="tag tag-blue">倒推策略</span>
+        <span class="tag tag-blue">枚举策略</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">
+        重点：用画图法分析问题、多角度思考
+      </div>
+    </div>
+
+    <div class="unit-card">
+      <div class="unit-num">第六单元</div>
+      <div class="unit-title">⚡ 运算律</div>
+      <div class="unit-tags">
+        <span class="tag tag-blue">加法交换律</span>
+        <span class="tag tag-blue">加法结合律</span>
+        <span class="tag tag-blue">乘法交换律</span>
+        <span class="tag tag-blue">乘法结合律</span>
+        <span class="tag tag-blue">乘法分配律</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">
+        重点：用字母表示运算律（a+b=b+a等）
+      </div>
+    </div>
+
+    <div class="unit-card">
+      <div class="unit-num">第七单元</div>
+      <div class="unit-title">📐 三角形、平行四边形和梯形</div>
+      <div class="unit-tags">
+        <span class="tag tag-blue">三角形的认识</span>
+        <span class="tag tag-blue">三角形的分类</span>
+        <span class="tag tag-blue">内角和=180°</span>
+        <span class="tag tag-blue">平行四边形</span>
+        <span class="tag tag-blue">梯形</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">
+        重点：按角分类（直角/锐角/钝角三角形）
+      </div>
+    </div>
+
+    <div class="unit-card">
+      <div class="unit-num">第八单元</div>
+      <div class="unit-title">📍 确定位置</div>
+      <div class="unit-tags">
+        <span class="tag tag-blue">数对</span>
+        <span class="tag tag-blue">(列,行)</span>
+        <span class="tag tag-blue">方向与位置</span>
+        <span class="tag tag-blue">简单路线图</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">
+        重点：用数对表示位置（列在前，行在后）
+      </div>
+    </div>
+
+    <div class="unit-card" style="grid-column:1/-1;">
+      <div class="unit-num">第九单元</div>
+      <div class="unit-title">📋 整理与复习</div>
+      <div class="unit-tags">
+        <span class="tag tag-grey">数与运算</span>
+        <span class="tag tag-grey">图形与几何</span>
+        <span class="tag tag-grey">统计与概率</span>
+        <span class="tag tag-grey">解决问题</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">
+        综合复习，查漏补缺
+      </div>
+    </div>
+  </div>
+
+  <!-- 数学知识树 -->
+  <div class="card" style="margin-top:14px;">
+    <h3 style="margin-bottom:12px; font-size:0.9em;">🌳 数学知识树（点击展开）</h3>
+    <ul class="tree">
+      <li class="tree-item">
+        <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(52,152,219,0.08);border-color:rgba(52,152,219,0.2);">
+          <span class="icon">🔢</span><span class="label">数与运算</span><span class="arrow">▸</span>
+        </div>
+        <ul class="tree-children">
+          <li class="tree-child-item">整数：认识万以内/亿以内数，读写、大小比较</li>
+          <li class="tree-child-item">四舍五入：求近似数（万位/亿位）</li>
+          <li class="tree-child-item">三位数乘两位数：笔算方法、积的变化规律</li>
+          <li class="tree-child-item">运算律：交换律、结合律、分配律（字母表示）</li>
+          <li class="tree-child-item">用计算器：按键功能、积变化规律、商变化规律</li>
+        </ul>
+      </li>
+      <li class="tree-item">
+        <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(52,152,219,0.08);border-color:rgba(52,152,219,0.2);">
+          <span class="icon">📐</span><span class="label">图形与几何</span><span class="arrow">▸</span>
+        </div>
+        <ul class="tree-children">
+          <li class="tree-child-item">平移：方向+距离，找对应点</li>
+          <li class="tree-child-item">旋转：找点→找边→旋转角度→连线</li>
+          <li class="tree-child-item">轴对称：找对称轴、正多边形对称轴数量</li>
+          <li class="tree-child-item">三角形：按角分（直角/锐角/钝角），内角和=180°</li>
+          <li class="tree-child-item">平行四边形：两组对边平行</li>
+          <li class="tree-child-item">梯形：只有一组对边平行</li>
+          <li class="tree-child-item">确定位置：数对（列,行）</li>
+        </ul>
+      </li>
+      <li class="tree-item">
+        <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(52,152,219,0.08);border-color:rgba(52,152,219,0.2);">
+          <span class="icon">🧠</span><span class="label">解决问题策略</span><span class="arrow">▸</span>
+        </div>
+        <ul class="tree-children">
+          <li class="tree-child-item">画图法：用示意图分析题意</li>
+          <li class="tree-child-item">列表法：整理数量关系</li>
+          <li class="tree-child-item">倒推法：从结果往前推</li>
+          <li class="tree-child-item">枚举法：一一列举所有可能</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB: 英语
+════════════════════════════════════════ -->
+<div class="section" id="tab-english">
+
+  <!-- 英语标题 -->
+  <div class="subject-header english">
+    <span class="subj-icon">🔤</span>
+    <div class="subj-info">
+      <h2>英语 · 译林版四年级下册</h2>
+      <p>教材版本：译林版（江苏地区）· 共8个单元</p>
+    </div>
+  </div>
+
+  <!-- 8个单元 -->
+  <div class="unit-grid">
+    <div class="unit-card">
+      <div class="unit-num">Unit 1 🔥</div>
+      <div class="unit-title">Our school subjects</div>
+      <div class="unit-tags">
+        <span class="tag tag-green">school</span>
+        <span class="tag tag-green">subjects</span>
+        <span class="tag tag-green">Chinese/Maths</span>
+        <span class="tag tag-green">Monday</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">
+        重点句：What subjects do you have?
+      </div>
+    </div>
+
+    <div class="unit-card">
+      <div class="unit-num">Unit 2</div>
+      <div class="unit-title">After school</div>
+      <div class="unit-tags">
+        <span class="tag tag-green">playground</span>
+        <span class="tag tag-green">burger</span>
+        <span class="tag tag-green">sandwich</span>
+        <span class="tag tag-green">Tuesday-Sunday</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">
+        重点：星期几的表达like+V-ing
+      </div>
+    </div>
+
+    <div class="unit-card">
+      <div class="unit-num">Unit 3</div>
+      <div class="unit-title">My day</div>
+      <div class="unit-tags">
+        <span class="tag tag-green">get up</span>
+        <span class="tag tag-green">go to school</span>
+        <span class="tag tag-green">have lunch</span>
+        <span class="tag tag-green">一般现在时</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">
+        重点：时间表达 in the morning/afternoon/evening
+      </div>
+    </div>
+
+    <div class="unit-card">
+      <div class="unit-num">Unit 4 ✅</div>
+      <div class="unit-title">Drawing in the park</div>
+      <div class="unit-tags">
+        <span class="tag tag-green">park/draw/flower</span>
+        <span class="tag tag-green">boat/river/lake</span>
+        <span class="tag tag-green">easy/difficult</span>
+        <span class="tag tag-green">try/them</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">
+        重点：Can you...? What can you see?字母e发/e/
+      </div>
+    </div>
+
+    <div class="unit-card">
+      <div class="unit-num">Unit 5</div>
+      <div class="unit-title">Seasons</div>
+      <div class="unit-tags">
+        <span class="tag tag-green">spring/summer</span>
+        <span class="tag tag-green">autumn/winter</span>
+        <span class="tag tag-green">warm/hot/cool/cold</span>
+        <span class="tag tag-green">fly kites</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">
+        重点：季节描述 in spring/summer/autumn/winter
+      </div>
+    </div>
+
+    <div class="unit-card">
+      <div class="unit-num">Unit 6</div>
+      <div class="unit-title">Whose dress is this?</div>
+      <div class="unit-tags">
+        <span class="tag tag-green">dress/suit</span>
+        <span class="tag tag-green">too small/big</span>
+        <span class="tag tag-green">whose</span>
+        <span class="tag tag-green">ours/yours</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">
+        重点：Whose...? It's/They're + 名词性物主代词
+      </div>
+    </div>
+
+    <div class="unit-card">
+      <div class="unit-num">Unit 7</div>
+      <div class="unit-title">What's the matter?</div>
+      <div class="unit-tags">
+        <span class="tag tag-green">tired/hungry</span>
+        <span class="tag tag-green">thirsty/ill</span>
+        <span class="tag tag-green">happy/sad</span>
+        <span class="tag tag-green">drink water</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">
+        重点：询问身体状况及回应
+      </div>
+    </div>
+
+    <div class="unit-card">
+      <div class="unit-num">Unit 8</div>
+      <div class="unit-title">How are you?</div>
+      <div class="unit-tags">
+        <span class="tag tag-green">feel/fine</span>
+        <span class="tag tag-green">headache/cold</span>
+        <span class="tag tag-green">see a doctor</span>
+        <span class="tag tag-green">打电话用语</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">
+        重点：电话用语 This is... speaking.
+      </div>
+    </div>
+  </div>
+
+  <!-- 词汇表 -->
+  <div class="card" style="margin-top:14px;">
+    <h3 style="margin-bottom:12px; font-size:0.9em;">📝 四年级下册核心词汇表</h3>
+    <table class="word-table">
+      <thead>
+        <tr><th>单词</th><th>中文</th><th>词性</th><th>单元</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="word-en">park</td><td class="word-cn">公园</td><td>n.</td><td>U4</td></tr>
+        <tr><td class="word-en">draw</td><td class="word-cn">画</td><td>v.</td><td>U4</td></tr>
+        <tr><td class="word-en">flower</td><td class="word-cn">花</td><td>n.</td><td>U4</td></tr>
+        <tr><td class="word-en">boat</td><td class="word-cn">小船</td><td>n.</td><td>U4</td></tr>
+        <tr><td class="word-en">river</td><td class="word-cn">河；江</td><td>n.</td><td>U4</td></tr>
+        <tr><td class="word-en">lake</td><td class="word-cn">湖</td><td>n.</td><td>U4</td></tr>
+        <tr><td class="word-en">easy</td><td class="word-cn">容易的</td><td>adj.</td><td>U4</td></tr>
+        <tr><td class="word-en">difficult</td><td class="word-cn">困难的</td><td>adj.</td><td>U4</td></tr>
+        <tr><td class="word-en">try</td><td class="word-cn">尝试</td><td>v.</td><td>U4</td></tr>
+        <tr><td class="word-en">them</td><td class="word-cn">他们/她们/它们</td><td>pron.</td><td>U4</td></tr>
+        <tr><td class="word-en">Monday</td><td class="word-cn">星期一</td><td>n.</td><td>U1</td></tr>
+        <tr><td class="word-en">subject</td><td class="word-cn">课程</td><td>n.</td><td>U1</td></tr>
+        <tr><td class="word-en">playground</td><td class="word-cn">操场</td><td>n.</td><td>U2</td></tr>
+        <tr><td class="word-en">season</td><td class="word-cn">季节</td><td>n.</td><td>U5</td></tr>
+        <tr><td class="word-en">tired</td><td class="word-cn">累的</td><td>adj.</td><td>U7</td></tr>
+        <tr><td class="word-en">thirsty</td><td class="word-cn">口渴的</td><td>adj.</td><td>U7</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 语法树 -->
+  <div class="card">
+    <h3 style="margin-bottom:12px; font-size:0.9em;">🌳 英语语法知识树</h3>
+    <ul class="tree">
+      <li class="tree-item">
+        <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(46,204,113,0.08);border-color:rgba(46,204,113,0.2);">
+          <span class="icon">🔤</span><span class="label">词法</span><span class="arrow">▸</span>
+        </div>
+        <ul class="tree-children">
+          <li class="tree-child-item">be动词：am / is / are 的用法</li>
+          <li class="tree-child-item">名词单复数：a/an, -s, -es规则</li>
+          <li class="tree-child-item">人称代词：I, you, he, she, it, we, they + 宾格</li>
+          <li class="tree-child-item">物主代词：my, your, his, her, our, their</li>
+          <li class="tree-child-item">指示代词：this, that, these, those</li>
+          <li class="tree-child-item">情态动词：can（能；会）+ 动词原形</li>
+          <li class="tree-child-item">动词-ing：like + V-ing</li>
+        </ul>
+      </li>
+      <li class="tree-item">
+        <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(46,204,113,0.08);border-color:rgba(46,204,113,0.2);">
+          <span class="icon">📝</span><span class="label">句法</span><span class="arrow">▸</span>
+        </div>
+        <ul class="tree-children">
+          <li class="tree-child-item">This is... / These are...</li>
+          <li class="tree-child-item">Can you...? Yes, I can. / No, I can't.</li>
+          <li class="tree-child-item">What can you see? I can see...</li>
+          <li class="tree-child-item">Whose is this? It's...</li>
+          <li class="tree-child-item">What's the matter? I'm tired/hungry.</li>
+          <li class="tree-child-item">一般现在时：主语+V. / 主语+doesn't+V原形</li>
+          <li class="tree-child-item">时间介词：in (morning), on (Monday), at (7 o'clock)</li>
+        </ul>
+      </li>
+      <li class="tree-item">
+        <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(46,204,113,0.08);border-color:rgba(46,204,113,0.2);">
+          <span class="icon">🔊</span><span class="label">语音</span><span class="arrow">▸</span>
+        </div>
+        <ul class="tree-children">
+          <li class="tree-child-item">字母e发 /e/：bed, desk, pen, red, ten</li>
+          <li class="tree-child-item">字母组合：oa发/əʊ/, ai发/eɪ/, ee发/iː/</li>
+          <li class="tree-child-item">自然拼读：建立字母-发音对应关系</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════
+     TAB: 奥数
+════════════════════════════════════════ -->
+<div class="section" id="tab-olympiad">
+
+  <!-- 奥数标题 -->
+  <div class="subject-header" style="background:linear-gradient(135deg,rgba(155,89,182,0.2),rgba(142,68,173,0.1));border:1px solid rgba(155,89,182,0.3);">
+    <span class="subj-icon">🏆</span>
+    <div class="subj-info">
+      <h2>奥数知识树 · 四年级</h2>
+      <p>7大模块 · 23个子知识点 · 9周学习计划</p>
+    </div>
+  </div>
+
+  <!-- 9周计划 -->
+  <div class="unit-grid">
+    <div class="unit-card">
+      <div class="unit-num">第 1 周 🔥</div>
+      <div class="unit-title">📊 应用题 · 和差倍</div>
+      <div class="unit-tags">
+        <span class="tag tag-purple">和差问题</span>
+        <span class="tag tag-purple">和倍问题</span>
+        <span class="tag tag-purple">差倍问题</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">难度：⭐⭐ · 5道题</div>
+    </div>
+    <div class="unit-card">
+      <div class="unit-num">第 2 周</div>
+      <div class="unit-title">🐔 应用题 · 鸡兔同笼</div>
+      <div class="unit-tags">
+        <span class="tag tag-purple">假设法</span>
+        <span class="tag tag-purple">抬脚法</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">难度：⭐⭐⭐ · 5道题</div>
+    </div>
+    <div class="unit-card">
+      <div class="unit-num">第 3 周</div>
+      <div class="unit-title">🔍 找规律 · 数列与周期</div>
+      <div class="unit-tags">
+        <span class="tag tag-purple">等差数列</span>
+        <span class="tag tag-purple">周期问题</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">难度：⭐⭐ · 5道题</div>
+    </div>
+    <div class="unit-card">
+      <div class="unit-num">第 4 周</div>
+      <div class="unit-title">👦 应用题 · 年龄 + 植树</div>
+      <div class="unit-tags">
+        <span class="tag tag-purple">年龄差不变</span>
+        <span class="tag tag-purple">植树公式</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">难度：⭐⭐ · 5道题</div>
+    </div>
+    <div class="unit-card">
+      <div class="unit-num">第 5 周</div>
+      <div class="unit-title">💰 应用题 · 盈亏问题</div>
+      <div class="unit-tags">
+        <span class="tag tag-purple">一盈一亏</span>
+        <span class="tag tag-purple">两次盈/亏</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">难度：⭐⭐⭐ · 5道题</div>
+    </div>
+    <div class="unit-card">
+      <div class="unit-num">第 6 周</div>
+      <div class="unit-title">📐 几何与面积</div>
+      <div class="unit-tags">
+        <span class="tag tag-purple">周长面积</span>
+        <span class="tag tag-purple">方格计数</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">难度：⭐⭐ · 5道题</div>
+    </div>
+    <div class="unit-card">
+      <div class="unit-num">第 7 周</div>
+      <div class="unit-title">🧠 逻辑推理</div>
+      <div class="unit-tags">
+        <span class="tag tag-purple">真假话</span>
+        <span class="tag tag-purple">枚举列表</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">难度：⭐⭐⭐ · 5道题</div>
+    </div>
+    <div class="unit-card">
+      <div class="unit-num">第 8 周</div>
+      <div class="unit-title">🧩+⚖️ 抽屉+统筹</div>
+      <div class="unit-tags">
+        <span class="tag tag-purple">最不利原则</span>
+        <span class="tag tag-purple">最优策略</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">难度：⭐⭐⭐ · 5道题</div>
+    </div>
+    <div class="unit-card" style="grid-column:1/-1;">
+      <div class="unit-num">第 9 周 🏆</div>
+      <div class="unit-title">🎯 综合挑战 · 毕业考</div>
+      <div class="unit-tags">
+        <span class="tag tag-orange">数字谜</span>
+        <span class="tag tag-orange">逆向思维</span>
+        <span class="tag tag-orange">综合应用</span>
+      </div>
+      <div style="margin-top:8px; font-size:0.78em; color:var(--text-muted);">难度：⭐⭐⭐⭐ · 毕业挑战</div>
+    </div>
+  </div>
+
+  <!-- 知识树 -->
+  <div class="card" style="margin-top:14px;">
+    <h3 style="margin-bottom:12px; font-size:0.9em;">🌳 奥数知识树（点击展开）</h3>
+    <ul class="tree">
+      <li class="tree-item">
+        <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(231,76,60,0.06);border-color:rgba(231,76,60,0.15);">
+          <span class="icon">📊</span><span class="label">📊 应用题（和差倍/鸡兔/年龄/盈亏/植树）</span><span class="arrow">▸</span>
+        </div>
+        <ul class="tree-children">
+          <li class="tree-child-item doing">🟡 1.1 和差问题（大数=和+差）÷2，小数=（和-差）÷2</li>
+          <li class="tree-child-item">🆕 1.2 和倍问题：1倍数=和÷（倍数+1）</li>
+          <li class="tree-child-item">🆕 1.3 差倍问题：1倍数=差÷（倍数-1）</li>
+          <li class="tree-child-item">🆕 1.4 鸡兔同笼·假设法：先假设全是一种，算出差来调整</li>
+          <li class="tree-child-item">🆕 1.5 鸡兔同笼·抬脚法：让动物抬脚的趣味解法</li>
+          <li class="tree-child-item">🆕 1.6 年龄问题：年龄差不变，年龄和随时间同增同减</li>
+          <li class="tree-child-item">🆕 1.7 盈亏问题·一盈一亏：（盈+亏）÷分配差</li>
+          <li class="tree-child-item">🆕 1.8 植树问题：段数=路长÷间距，端点种+1</li>
+        </ul>
+      </li>
+      <li class="tree-item">
+        <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(46,204,113,0.06);border-color:rgba(46,204,113,0.15);">
+          <span class="icon">🔍</span><span class="label">🔍 找规律（数列/周期/图形）</span><span class="arrow">▸</span>
+        </div>
+        <ul class="tree-children">
+          <li class="tree-child-item">🆕 2.1 等差数列：第n项=首项+（n-1）×公差</li>
+          <li class="tree-child-item">🆕 2.2 等比数列/跳级规律</li>
+          <li class="tree-child-item">🆕 2.3 数量周期：总数÷周期长度=完整周期数+余数</li>
+          <li class="tree-child-item">🆕 2.4 星期/日期周期（含星期几计算）</li>
+          <li class="tree-child-item">🆕 2.5 图形排列规律</li>
+        </ul>
+      </li>
+      <li class="tree-item">
+        <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(243,156,18,0.06);border-color:rgba(243,156,18,0.15);">
+          <span class="icon">📐</span><span class="label">📐 几何与面积</span><span class="arrow">▸</span>
+        </div>
+        <ul class="tree-children">
+          <li class="tree-child-item">🆕 3.1 正/长方形：周长=2×(长+宽)，面积=长×宽</li>
+          <li class="tree-child-item">🆕 3.2 不规则图形：拆分法、平移法求面积</li>
+          <li class="tree-child-item">🆕 3.3 数线段：点数×(点数-1)÷2</li>
+          <li class="tree-child-item">🆕 3.4 数三角形/方格计数</li>
+        </ul>
+      </li>
+      <li class="tree-item">
+        <div class="tree-toggle" onclick="toggleTree(this)" style="background:rgba(155,89,182,0.06);border-color:rgba(155,89,182,0.15);">
+          <span class="icon">🧠</span><span class="label">🧠 逻辑推理 / 🧩 抽屉原理 / ⚖️ 统筹</span><span class="arrow">▸</span>
+        </div>
+        <ul class="tree-children">
+          <li class="tree-child-item">🆕 4.1 真假话问题：假设法，逐一排除矛盾</li>
+          <li class="tree-child-item">🆕 4.2 简单排列：枚举法，有序列举</li>
+          <li class="tree-child-item">🆕 4.3 抽屉原理入门：n+1只鸽，放n个笼，必有1笼≥2只</li>
+          <li class="tree-child-item">🆕 5.1 时间安排：统筹规划、最短时间问题</li>
+          <li class="tree-child-item">🆕 5.2 最优策略：选择最优方案</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  🌱 豆芽哈吉米 · 吴尚融学习知识树 · 2026-04-17<br>
+  语文·数学·英语·奥数 · 四年级下册全覆盖
+</div>
+
+<script>
+  function showTab(tabId) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById('tab-' + tabId).classList.add('active');
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+  function toggleTree(el) {
+    el.classList.toggle('open');
+    const children = el.nextElementSibling;
+    if (children) children.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>
