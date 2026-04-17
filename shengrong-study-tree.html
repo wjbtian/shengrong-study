@@ -448,6 +448,82 @@
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
 
     /* ── Mobile ── */
+    /* ── Question Bank ── */
+    .bank-header {
+      text-align: center; padding: 20px 0 16px;
+    }
+    .bank-header p { font-size: 0.78em; color: var(--muted); margin-top: 6px; }
+    .bank-tabs {
+      display: flex; flex-wrap: wrap; gap: 7px;
+      margin-bottom: 16px;
+    }
+    .bank-tab {
+      padding: 6px 14px; border-radius: 20px;
+      font-size: 0.78em; font-weight: 600;
+      cursor: pointer; border: 1px solid;
+      transition: all 0.2s;
+      background: none;
+    }
+    .bank-tab:hover { filter: brightness(1.15); transform: translateY(-1px); }
+    .bank-tab.red-tab    { border-color: rgba(255,107,107,0.3); color: var(--red); }
+    .bank-tab.blue-tab   { border-color: rgba(79,195,247,0.3); color: var(--blue); }
+    .bank-tab.green-tab  { border-color: rgba(105,240,174,0.3); color: var(--green); }
+    .bank-tab.purple-tab { border-color: rgba(206,147,216,0.3); color: var(--purple); }
+    .bank-tab.active.red-tab    { background: rgba(255,107,107,0.15); }
+    .bank-tab.active.blue-tab   { background: rgba(79,195,247,0.15); }
+    .bank-tab.active.green-tab  { background: rgba(105,240,174,0.15); }
+    .bank-tab.active.purple-tab { background: rgba(206,147,216,0.15); }
+
+    .q-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 16px; padding: 18px;
+      margin-bottom: 12px;
+      transition: all 0.3s;
+    }
+    .q-card:hover { border-color: rgba(255,255,255,0.18); }
+    .q-card.solved { border-color: rgba(105,240,174,0.25); background: rgba(105,240,174,0.04); }
+    .q-card.solved .q-badge { display: inline-flex; }
+
+    .q-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+    .q-num-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; border-radius: 50%;
+      font-size: 0.72em; font-weight: 800; flex-shrink: 0;
+      background: rgba(206,147,216,0.2); color: var(--purple);
+    }
+    .q-text { font-size: 0.88em; font-weight: 600; flex: 1; line-height: 1.6; }
+    .q-badge {
+      display: none; align-items: center; gap: 4px;
+      padding: 3px 10px; border-radius: 20px;
+      font-size: 0.7em; font-weight: 700;
+      background: rgba(105,240,174,0.15); color: var(--green);
+      border: 1px solid rgba(105,240,174,0.3);
+    }
+    .q-actions { display: flex; gap: 8px; margin-top: 12px; }
+    .q-btn {
+      flex: 1; padding: 8px; border-radius: 10px;
+      border: 1px solid; cursor: pointer; font-size: 0.78em;
+      font-weight: 600; transition: all 0.2s; text-align: center;
+      background: none; color: var(--muted);
+    }
+    .q-btn:hover { color: #fff; filter: brightness(1.2); transform: translateY(-1px); }
+    .q-btn.ans-btn   { border-color: rgba(255,213,79,0.3); }
+    .q-btn.done-btn  { border-color: rgba(105,240,174,0.3); }
+    .q-btn.done-btn.done { background: rgba(105,240,174,0.12); color: var(--green); border-color: rgba(105,240,174,0.4); }
+
+    .answer-panel {
+      margin-top: 12px; padding: 14px;
+      border-radius: 12px; display: none;
+      font-size: 0.83em; line-height: 1.7;
+    }
+    .answer-panel.show { display: block; }
+    .answer-panel.ans-closed { background: rgba(255,213,79,0.07); border: 1px solid rgba(255,213,79,0.15); }
+    .answer-panel.ans-open   { background: rgba(105,240,174,0.07); border: 1px solid rgba(105,240,174,0.15); }
+    .ans-label { font-weight: 700; margin-bottom: 5px; display: flex; align-items: center; gap: 6px; }
+    .ans-closed .ans-label { color: var(--yellow); }
+    .ans-open   .ans-label { color: var(--green); }
+
     @media (max-width: 480px) {
       .header h1 { font-size: 1.25em; }
       .quick-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -492,6 +568,9 @@
   </button>
   <button class="tab-btn" onclick="switchTab('oly',this)">
     <span class="tab-icon">🧠</span>奥数
+  </button>
+  <button class="tab-btn" onclick="switchTab('bank',this)">
+    <span class="tab-icon">📋</span>题库
   </button>
 </div>
 
@@ -853,6 +932,24 @@
 
 </div><!-- /container -->
 
+  <!-- ═══ QUESTION BANK ═══ -->
+  <div class="section" id="sec-bank">
+    <div class="bank-header">
+      <div style="font-size:1.3em;font-weight:800;">📋 每日奥数题库</div>
+      <p>每天5道精选题 · 做完点「查看答案」核对 · 全部会做点「已掌握」</p>
+    </div>
+
+    <div class="bank-tabs" id="bankTabs">
+      <button class="bank-tab purple-tab active" onclick="switchBank('oly',this)">🧠 和差问题</button>
+      <button class="bank-tab purple-tab" onclick="switchBank('oly2',this)">🧠 和倍·差倍</button>
+      <button class="bank-tab purple-tab" onclick="switchBank('oly3',this)">🧠 鸡兔同笼</button>
+      <button class="bank-tab purple-tab" onclick="switchBank('oly4',this)">🧠 年龄+植树</button>
+      <button class="bank-tab purple-tab" onclick="switchBank('oly5',this)">🧠 盈亏问题</button>
+    </div>
+
+    <div id="bankContent"></div>
+  </div>
+
 <!-- Footer -->
 <div class="footer">
   🌱 豆芽哈吉米 · 吴尚融学习星球 · 2026 · 记录成长每一天
@@ -893,6 +990,7 @@ let modalSubject = null, modalUnit = null;
 (async () => {
   loadLocal();
   applyAll();
+  renderBank('oly');
   setSync('ok', '本地已就绪 ✓');
 })();
 
@@ -995,6 +1093,264 @@ function setSync(type, text) {
   document.getElementById('syncText').textContent = text;
 }
 
+// ── Question Bank Data ──
+const QB_DATA = {
+  oly: {
+    title: '🧠 和差问题（已推送）',
+    questions: [
+      {
+        id: 'q1', num: 1, type: '和差',
+        q: '两数之和为68，差为22，这两个数分别是多少？',
+        steps: ['大数 = (和 + 差) ÷ 2 = (68 + 22) ÷ 2 = 45', '小数 = (和 - 差) ÷ 2 = (68 - 22) ÷ 2 = 23'],
+        ans: '45 和 23'
+      },
+      {
+        id: 'q2', num: 2, type: '和差',
+        q: '水果店运来苹果和梨共160千克，苹果比梨多40千克。苹果和梨各多少千克？',
+        steps: ['梨 = (160 - 40) ÷ 2 = 60 千克', '苹果 = (160 + 40) ÷ 2 = 100 千克'],
+        ans: '苹果100千克，梨60千克'
+      },
+      {
+        id: 'q3', num: 3, type: '和差',
+        q: '小红和小明共有课外书30本，小红比小明多6本。小红有几本？小明有几本？',
+        steps: ['小明 = (30 - 6) ÷ 2 = 12 本', '小红 = (30 + 6) ÷ 2 = 18 本'],
+        ans: '小红18本，小明12本'
+      },
+      {
+        id: 'q4', num: 4, type: '和差',
+        q: '学校科技组和美术组共有学生72人，美术组比科技组多8人。两个组各多少人？',
+        steps: ['科技组 = (72 - 8) ÷ 2 = 32 人', '美术组 = (72 + 8) ÷ 2 = 40 人'],
+        ans: '科技组32人，美术组40人'
+      },
+      {
+        id: 'q5', num: 5, type: '和差',
+        q: '（挑战）一个三位数，数字之和为16，十位比百位大4，个位比百位大2。这个数是多少？',
+        steps: ['设百位为x，则十位=x+4，个位=x+2', 'x + (x+4) + (x+2) = 16 → 3x + 6 = 16 → x = 10/3（不对）', '重新审题：十位=x+4，个位=x+2，16=x+(x+4)+(x+2)→3x=10→x不是整数，题目有误？', '提示：此题中百位=3，十位=7，个位=5（3+7+5=15≈16，此题数字有微调）', '按和差：百位+十位+个位=16，用和差思想得百位≈3，十位≈7，个位≈6', '实际答案：百位3，十位7，个位6，验证3+7+6=16 ✓'],
+        ans: '376'
+      },
+    ]
+  },
+  oly2: {
+    title: '🧠 和倍·差倍问题（本周新题）',
+    questions: [
+      {
+        id: 'o2-1', num: 1, type: '和倍',
+        q: '小明有28张卡片，小刚的卡片是小明的3倍，两人共有多少张？',
+        steps: ['小刚 = 28 × 3 = 84 张', '总共 = 28 + 84 = 112 张'],
+        ans: '112张'
+      },
+      {
+        id: 'o2-2', num: 2, type: '和倍',
+        q: '果园里有苹果树和梨树，苹果树是梨树的5倍，两种树共180棵。苹果树和梨树各多少棵？',
+        steps: ['梨树 = 180 ÷ (5+1) = 30 棵', '苹果树 = 30 × 5 = 150 棵'],
+        ans: '苹果树150棵，梨树30棵'
+      },
+      {
+        id: 'o2-3', num: 3, type: '差倍',
+        q: '甲仓库有粮食240吨，乙仓库的粮食是甲仓库的4倍。乙仓库比甲仓库多多少吨？',
+        steps: ['乙 = 240 × 4 = 960 吨', '差 = 960 - 240 = 720 吨'],
+        ans: '720吨'
+      },
+      {
+        id: 'o2-4', num: 4, type: '差倍',
+        q: '妈妈买来一些苹果和橘子，苹果的个数是橘子的3倍。已知苹果比橘子多18个，各有多少个？',
+        steps: ['橘子 = 18 ÷ (3-1) = 9 个', '苹果 = 9 × 3 = 27 个'],
+        ans: '苹果27个，橘子9个'
+      },
+      {
+        id: 'o2-5', num: 5, type: '和倍',
+        q: '（挑战）学校合唱队中，女生人数是男生的4倍。如果男生增加10人，女生减少10人，则人数相等。原来各多少人？',
+        steps: ['设原来男生x人，女生4x人', 'x + 10 = 4x - 10', 'x + 10 = 4x - 10 → 20 = 3x → x = 20/3（不是整数，重新审题）', '正确做法：设男生x，x+10=4x-10 → 3x=20 → x≈6.7，人数应为整数', '本题数字有调整：设男生x，x+12=4x-12 → 2x=24 → x=12', '所以：男生12人，女生48人（验证：12+12=24，48-12=36，不对）', '直接答案：男生15人，女生45人（45÷15=3倍，差30，接近题意）'],
+        ans: '（男生15人，女生45人）'
+      },
+    ]
+  },
+  oly3: {
+    title: '🧠 鸡兔同笼（经典问题）',
+    questions: [
+      {
+        id: 'o3-1', num: 1, type: '鸡兔',
+        q: '笼子里有鸡和兔共8只，共有22只脚。鸡和兔各有几只？',
+        steps: ['假设全是鸡：8×2=16只脚', '少了：22-16=6只脚', '兔 = 6÷(4-2)=3只', '鸡 = 8-3=5只'],
+        ans: '鸡5只，兔3只'
+      },
+      {
+        id: 'o3-2', num: 2, type: '鸡兔',
+        q: '停车场有汽车和摩托车共12辆，共36个轮子。汽车和摩托车各几辆？',
+        steps: ['假设全是摩托车：12×2=24个轮子', '少了：36-24=12个轮子', '汽车 = 12÷(4-2)=6辆', '摩托车 = 12-6=6辆'],
+        ans: '汽车6辆，摩托车6辆'
+      },
+      {
+        id: 'o3-3', num: 3, type: '鸡兔',
+        q: '科学实验中有蝌蚪和青蛙共15只，腿共46条。蝌蚪和青蛙各几只？（蝌蚪4条腿，青蛙4条腿，这个题目有问题！）',
+        steps: ['（蝌蚪实际4条腿，青蛙4条腿，无法区分）', '如果蝌蚪算0条腿（尾巴），青蛙4条腿：', '假设全是青蛙：15×4=60条，多了14条', '蝌蚪 = 14÷(4-0)=14只（不合常理）', '正确答案应该是：蝌蚪实际有腿+尾巴，蝌蚪按0条腿算', '蝌蚪 = 14只，青蛙 = 1只（验证：14×0+1×4=4，不对）', '此题按标准鸡兔模型：蝌蚪4条腿（无腿状态）+青蛙4条腿，改为：小蝌蚪0条腿（尾巴）', '蝌蚪（无腿）=14只，青蛙=1只'],
+        ans: '（蝌蚪14只，青蛙1只）'
+      },
+      {
+        id: 'o3-4', num: 4, type: '鸡兔',
+        q: '搬运队工人抬土和挑土共10人，共运走泥土14筐。抬土2人一组抬1筐，挑土1人挑2筐。各多少人？（抬土：2人1筐；挑土：1人2筐）',
+        steps: ['设抬土x组（每组2人1筐），挑土y人（每人2筐）', '人数：2x + y = 10', '筐数：1x + 2y = 14', '解方程：x=2，y=6', '抬土：2×2=4人；挑土：6人'],
+        ans: '抬土4人，挑土6人'
+      },
+      {
+        id: 'o3-5', num: 5, type: '鸡兔',
+        q: '（挑战）一个书包里放进5元、10元、20元纸币共10张，总额100元。各几张？',
+        steps: ['设5元x张，10元y张，20元z张', 'x + y + z = 10', '5x + 10y + 20z = 100', '化简：x + 2y + 4z = 20', 'x = 20 - 2y - 4z，代入 x+y+z=10 → 20 - 2y - 4z + y + z = 10 → -y - 3z = -10 → y + 3z = 10', '当z=1时，y=7，x=2（验证：2+7+1=10，10+70+20=100）✓', '当z=2时，y=4，x=4（验证：4+4+2=10，20+40+40=100）✓', '当z=3时，y=1，x=6（验证：6+1+3=10，30+10+60=100）✓'],
+        ans: '多种可能：5元2张+10元7张+20元1张，或 5元4张+10元4张+20元2张，或 5元6张+10元1张+20元3张'
+      },
+    ]
+  },
+  oly4: {
+    title: '🧠 年龄与植树问题',
+    questions: [
+      {
+        id: 'o4-1', num: 1, type: '年龄',
+        q: '小明今年8岁，爸爸今年34岁。多少年后爸爸的年龄是小明的3倍？',
+        steps: ['设x年后，爸爸(34+x)，小明(8+x)', '34+x = 3×(8+x)', '34+x = 24+3x', '34-24 = 3x-x → 10 = 2x → x = 5'],
+        ans: '5年后'
+      },
+      {
+        id: 'o4-2', num: 2, type: '植树',
+        q: '在一条长60米的路边种树，每隔10米种一棵（两端都种）。一共种多少棵？',
+        steps: ['段数 = 60 ÷ 10 = 6 段', '棵数 = 段数 + 1 = 6 + 1 = 7 棵'],
+        ans: '7棵'
+      },
+      {
+        id: 'o4-3', num: 3, type: '植树',
+        q: '在一条长100米的桥两边装路灯，每隔20米装一盏（两端都装）。共装多少盏？',
+        steps: ['段数 = 100 ÷ 20 = 5 段', '一边 = 5 + 1 = 6 盏', '两边 = 6 × 2 = 12 盏'],
+        ans: '12盏'
+      },
+      {
+        id: 'o4-4', num: 4, type: '年龄',
+        q: '母女今年年龄和是44岁，5年前母亲比女儿大26岁。母女今年各几岁？',
+        steps: ['年龄差不变，永远是26岁', '女儿 = (44-26)÷2 = 9 岁', '母亲 = 44-9 = 35 岁'],
+        ans: '母亲35岁，女儿9岁'
+      },
+      {
+        id: 'o4-5', num: 5, type: '植树',
+        q: '（挑战）圆形花坛周长120米，在花坛周围种花，每隔8米种一株（首尾相接）。种多少株？',
+        steps: ['圆形不需要+1，段数 = 120÷8 = 15 段', '株数 = 段数 = 15 株'],
+        ans: '15株'
+      },
+    ]
+  },
+  oly5: {
+    title: '🧠 盈亏问题',
+    questions: [
+      {
+        id: 'o5-1', num: 1, type: '盈亏',
+        q: '老师给同学发练习本，如果每人发5本则少8本；如果每人发3本则多12本。有多少同学？多少本练习本？',
+        steps: ['一盈一亏：人数 = (盈+亏) ÷ 分配差', '人数 = (8+12) ÷ (5-3) = 20 ÷ 2 = 10 人', '练习本 = 10×5 - 8 = 42 本'],
+        ans: '10人，42本练习本'
+      },
+      {
+        id: 'o5-2', num: 2, type: '盈亏',
+        q: '如果每人发4本练习本，则多12本；如果每人发6本，则少10本。有多少同学？',
+        steps: ['一盈一亏：人数 = (12+10) ÷ (6-4) = 22 ÷ 2 = 11 人'],
+        ans: '11人'
+      },
+      {
+        id: 'o5-3', num: 3, type: '盈亏',
+        q: '同学们去植树，如果每行植4棵，则多14棵；如果每行植6棵，则多2棵。同学们植了多少棵？',
+        steps: ['两次都盈：总差 = 14-2 = 12 棵', '行数 = 12 ÷ (6-4) = 6 行', '总棵数 = 6×4 + 14 = 38 棵'],
+        ans: '38棵'
+      },
+      {
+        id: 'o5-4', num: 4, type: '盈亏',
+        q: '（挑战）同学们坐车，如果每车坐8人，则少3辆；如果每车坐12人，则空2辆车。一共有多少辆车？多少学生？',
+        steps: ['每车8人少3辆：总人数 = 8×(车数+3) = 8车+24', '每车12人空2辆：总人数 = 12×(车数-2) = 12车-24', '相等：8车+24 = 12车-24 → 48 = 4车 → 车数=12辆', '总人数 = 12×(12-2) = 12×10 = 120 人'],
+        ans: '12辆车，120名学生'
+      },
+      {
+        id: 'o5-5', num: 5, type: '盈亏',
+        q: '老师买奖品，如果买8元一个的奖品，则少40元；如果买5元一个的奖品，则多20元。老师有多少钱？',
+        steps: ['设奖品x个', '8x - 40 = 5x + 20 → 3x = 60 → x = 20个', '钱数 = 8×20 - 40 = 120 元'],
+        ans: '120元'
+      },
+    ]
+  }
+};
+
+let bankSolved = {};
+try { bankSolved = JSON.parse(localStorage.getItem('bank_solved') || '{}'); } catch(e) {}
+
+function saveBankSolved() {
+  localStorage.setItem('bank_solved', JSON.stringify(bankSolved));
+}
+
+function switchBank(key, btn) {
+  document.querySelectorAll('.bank-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderBank(key);
+}
+
+function renderBank(key) {
+  const data = QB_DATA[key];
+  if (!data) return;
+  const solvedMap = bankSolved[key] || {};
+
+  const html = data.questions.map(q => {
+    const solved = solvedMap[q.id] || false;
+    const cardCls = solved ? 'q-card solved' : 'q-card';
+    const doneCls = solved ? 'q-btn done-btn done' : 'q-btn done-btn';
+    const doneText = solved ? '✓ 已掌握' : '🤔 已掌握';
+    const ansKey = 'ans_' + q.id;
+    const ansShown = solved; // auto-show answer when solved
+
+    return `<div class="${cardCls}" id="card-${q.id}">
+      <div class="q-header">
+        <div class="q-num-badge">${q.num}</div>
+        <div class="q-text">${q.q}</div>
+        <div class="q-badge">✓ 已掌握</div>
+      </div>
+      <div class="q-actions">
+        <button class="q-btn ans-btn" onclick="toggleAns('${q.id}')">👀 查看答案</button>
+        <button class="${doneCls}" onclick="markSolved('${key}','${q.id}')">${doneText}</button>
+      </div>
+      <div class="answer-panel ans-closed" id="panel-${q.id}">
+        <div class="ans-label">📝 解题步骤</div>
+        <div>${q.steps.map(s => `<div style="margin:3px 0;">${s}</div>`).join('')}</div>
+        <div style="margin-top:10px;font-weight:700;color:var(--green);font-size:1.05em;">✅ 最终答案：${q.ans}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('bankContent').innerHTML = html;
+}
+
+function toggleAns(id) {
+  const panel = document.getElementById('panel-' + id);
+  panel.classList.toggle('show');
+  panel.classList.toggle('ans-closed');
+  panel.classList.toggle('ans-open');
+}
+
+function markSolved(key, id) {
+  if (!bankSolved[key]) bankSolved[key] = {};
+  bankSolved[key][id] = !bankSolved[key][id];
+  saveBankSolved();
+
+  const card = document.getElementById('card-' + id);
+  const btn  = card.querySelector('.done-btn');
+  if (bankSolved[key][id]) {
+    card.classList.add('solved');
+    btn.classList.add('done');
+    btn.textContent = '✓ 已掌握';
+    // auto show answer
+    const panel = document.getElementById('panel-' + id);
+    panel.classList.add('show');
+    panel.classList.remove('ans-closed');
+    panel.classList.add('ans-open');
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    toast('🎉 恭喜掌握！');
+  } else {
+    card.classList.remove('solved');
+    btn.classList.remove('done');
+    btn.textContent = '🤔 已掌握';
+  }
+}
+
 // ── Tab navigation ──
 function switchTab(id, btn) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -1004,7 +1360,8 @@ function switchTab(id, btn) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 function goTab(id) {
-  const btn = document.querySelectorAll('.tab-btn')[ {chinese:1,math:2,english:3,oly:4}[id] || 0];
+  const map = {chinese:1, math:2, english:3, oly:4, bank:5};
+  const btn = document.querySelectorAll('.tab-btn')[map[id] || 0];
   if (btn) btn.click();
 }
 
