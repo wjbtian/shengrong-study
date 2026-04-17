@@ -267,6 +267,89 @@
     .gallery-grid { grid-template-columns: 1fr; }
     .science-grid { grid-template-columns: 1fr; }
   }
+
+  /* ===== 照片墙 ===== */
+  .photowall {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 20px;
+    padding: 8px 0;
+  }
+  .pw-item {
+    position: relative;
+    background: #fff;
+    padding: 8px 8px 28px;
+    box-shadow: 3px 4px 12px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border-radius: 2px;
+  }
+  .pw-item:nth-child(3n+1) { transform: rotate(-2deg); }
+  .pw-item:nth-child(3n+2) { transform: rotate(1.5deg); }
+  .pw-item:nth-child(3n+3) { transform: rotate(-1deg); }
+  .pw-item:nth-child(5n+1) { transform: rotate(2.5deg); }
+  .pw-item:nth-child(7n+1) { transform: rotate(-3deg); }
+  .pw-item:hover { transform: rotate(0deg) scale(1.05); box-shadow: 5px 8px 20px rgba(0,0,0,0.4); z-index: 10; }
+  .pw-img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+    border-radius: 1px;
+  }
+  .pw-placeholder {
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 44px;
+    border-radius: 1px;
+  }
+  .pw-caption {
+    position: absolute;
+    bottom: 6px;
+    left: 8px;
+    right: 8px;
+    text-align: center;
+    font-size: 11px;
+    color: #555;
+    font-family: 'Georgia', serif;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .pw-date {
+    position: absolute;
+    bottom: 20px;
+    left: 8px;
+    right: 8px;
+    text-align: center;
+    font-size: 10px;
+    color: #999;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .pw-tape {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 18px;
+    background: rgba(255,240,100,0.7);
+    border-radius: 2px;
+  }
+  .pw-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 50px;
+    color: var(--text2);
+  }
+  .pw-empty .pw-empty-icon { font-size: 50px; margin-bottom: 14px; }
+  .pw-empty p { font-size: 13px; }
+
 </style>
 </head>
 <body>
@@ -365,25 +448,24 @@
 
     <div class="btn-group">
       <button class="btn btn-primary" onclick="openAddDiary()">✍️ 写日记</button>
-      <button class="btn btn-primary" onclick="openAddShine()">➕ 添加时刻</button>
+      <button class="btn btn-primary" onclick="openAddShine()">📷 上传照片</button>
     </div>
 
-    <div class="filter-pills" id="shine-filter-pills"></div>
-
     <!-- 日记区 -->
-    <div id="shine-diary-section">
+    <div class="home-panel" style="margin-bottom:20px;">
       <div class="home-panel-header" style="margin-bottom:14px;">
         <h3>✍️ 日记</h3>
+        <span class="more-link" id="diary-count"></span>
       </div>
       <div class="diary-list" id="diary-list"></div>
     </div>
 
-    <!-- 时刻区 -->
-    <div style="margin-top:24px;">
-      <div class="home-panel-header" style="margin-bottom:14px;">
-        <h3>✨ 精彩时刻</h3>
+    <!-- 照片墙 -->
+    <div class="home-panel">
+      <div class="home-panel-header" style="margin-bottom:16px;">
+        <h3>📷 照片墙</h3>
       </div>
-      <div class="gallery-grid" id="shine-grid"></div>
+      <div class="photowall" id="photowall"></div>
     </div>
   </div><!-- ========== 科技新闻 ========== -->
   <div class="page" id="page-tech">
@@ -437,7 +519,15 @@
 <div class="modal-overlay" id="modal-shine">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('modal-shine')">×</button>
-    <h3>✨ 添加闪光时刻</h3>
+    <h3>📷 上传照片</h3>
+    <div class="form-group">
+      <label>照片</label>
+      <div style="border: 2px dashed var(--border); border-radius: 10px; padding: 24px; text-align: center; cursor: pointer; background: var(--bg); transition: all 0.15s;" onclick="document.getElementById('shine-file').click()" id="shine-img-preview">
+        <div style="font-size:40px;margin-bottom:8px;">📷</div>
+        <p style="font-size:13px;color:var(--text2);">点击选择照片<br><span style="font-size:11px;">支持 JPG/PNG，建议小于 2MB</span></p>
+      </div>
+      <input type="file" id="shine-file" accept="image/*" style="display:none" onchange="previewShineImg(this)">
+    </div>
     <div class="form-group">
       <label>标题</label>
       <input id="shine-title" placeholder="比如：吉他演奏会">
@@ -450,18 +540,13 @@
         <option value="⚽ 运动">⚽ 运动</option>
         <option value="🎨 绘画">🎨 绘画</option>
         <option value="🎮 游戏">🎮 游戏</option>
-        <option value="🎬 视频">🎬 视频</option>
         <option value="🏆 荣誉">🏆 荣誉</option>
         <option value="✨ 其他">✨ 其他</option>
       </select>
     </div>
-    <div class="form-group">
-      <label>描述</label>
-      <textarea id="shine-desc" placeholder="描述一下这个闪光时刻..."></textarea>
-    </div>
     <div class="form-actions">
       <button class="btn" onclick="closeModal('modal-shine')">取消</button>
-      <button class="btn btn-primary" onclick="saveShine()">保存</button>
+      <button class="btn btn-primary" onclick="saveShine()">保存到照片墙</button>
     </div>
   </div>
 </div><div class="modal-overlay" id="modal-tech">
@@ -823,20 +908,7 @@ function toggleOM(id) {
   saveStore(); renderOM(); renderHome(); showOM(id);
 }
 
-// ===== 闪光时刻 =====
-const SHINE_TYPES = ['全部', '📸 照片', '🎸 吉他', '⚽ 运动', '🎨 绘画', '🎮 游戏', '🎬 视频', '🏆 荣誉', '✨ 其他'];
-let shineFilter = '全部';
-
-function renderShineFilters() {
-  document.getElementById('shine-filter-pills').innerHTML = SHINE_TYPES.map(t =>
-    `<span class="filter-pill ${t===shineFilter?'active':''}" onclick="setShineFilter('${t}')">${t}</span>`
-  ).join('');
-}
-
-function setShineFilter(t) { shineFilter = t; renderShine(); }
-
-function renderShine() {
-  renderShineFilters();
+// ===== 闪光时刻 =====function renderShine() {
   // 日记
   const sortedDiary = [...store.diary].sort((a,b)=>b.id-a.id);
   document.getElementById('diary-list').innerHTML = sortedDiary.length
@@ -848,20 +920,22 @@ function renderShine() {
         <div class="diary-title">${d.title}</div>
         <div class="diary-preview">${d.content}</div>
       </div>`).join('')
-    : '<div class="empty-state"><div class="emoji">✍️</div><p>还没有日记<br>点击上方「写日记」开始记录吧</p></div>';
+    : '<div class="empty-state" style="padding:20px"><div class="emoji">✍️</div><p>还没有日记<br>点击上方「写日记」开始吧</p></div>';
 
-  // 时刻
-  let shines = shineFilter==='全部' ? store.shines : store.shines.filter(s=>s.type===shineFilter);
-  document.getElementById('shine-grid').innerHTML = shines.length
-    ? shines.map(s => `<div class="gallery-item" onclick="showShineDetail(${s.id})">
-        <div class="gallery-img">${s.icon}</div>
-        <div class="gallery-body">
-          <div class="gallery-title">${s.title}</div>
-          <div class="gallery-desc">${s.desc}</div>
-          <div class="gallery-date">📅 ${s.date} · ${s.type}</div>
-        </div>
-      </div>`).join('')
-    : '<div class="empty-state"><div class="emoji">✨</div><p>还没有${shineFilter}的内容<br>点击上方「添加时刻」开始记录吧</p></div>';
+  document.getElementById('diary-count').textContent = `${store.diary.length} 篇`;
+
+  // 照片墙
+  const wall = document.getElementById('photowall');
+  if (!store.shines.length) {
+    wall.innerHTML = '<div class="pw-empty"><div class="pw-empty-icon">📷</div><p>还没有照片<br>点击「上传照片」添加第一张吧！</p></div>';
+    return;
+  }
+  wall.innerHTML = store.shines.map(s => `
+    <div class="pw-item" onclick="showShineDetail(${s.id})">
+      ${s.img ? `<img class="pw-img" src="${s.img}" alt="${s.title}">` : `<div class="pw-placeholder" style="background:${s.bgColor||'#eee'}">${s.icon}</div>`}
+      <div class="pw-date">${s.date}</div>
+      <div class="pw-caption">${s.title}</div>
+    </div>`).join('');
 }
 
 function showDiaryDetail(id) {
@@ -885,11 +959,13 @@ function showShineDetail(id) {
   const s = store.shines.find(x => x.id === id);
   if (!s) return;
   document.getElementById('detail-body').innerHTML = `
-    <div style="font-size:64px;margin-bottom:16px;text-align:center;">${s.icon}</div>
+    ${s.img ? `<img src="${s.img}" style="width:100%;max-height:300px;object-fit:cover;border-radius:12px;margin-bottom:16px;">` : `<div style="width:100%;height:200px;display:flex;align-items:center;justify-content:center;font-size:80px;background:${s.bgColor||'#eee'};border-radius:12px;margin-bottom:16px;">${s.icon}</div>`}
     <h2 style="font-size:20px;margin-bottom:8px;">${s.title}</h2>
     <p style="font-size:12px;color:var(--text2);margin-bottom:16px;">📅 ${s.date} · ${s.type}</p>
-    <p style="font-size:14px;color:var(--text2);line-height:1.7;">${s.desc}</p>
-    <div style="margin-top:20px;display:flex;justify-content:flex-end;"><button class="btn btn-danger" onclick="deleteShine(${id})">🗑️ 删除</button></div>`;
+    <div style="margin-top:20px;display:flex;justify-content:space-between;">
+      <button class="btn btn-danger" onclick="deleteShine(${id})">🗑️ 删除</button>
+      <button class="btn" onclick="closeModal('modal-detail')">关闭</button>
+    </div>`;
   openModal('modal-detail');
 }
 
@@ -969,16 +1045,21 @@ function saveDiary() {
 function openAddShine() {
   document.getElementById('shine-title').value = '';
   document.getElementById('shine-type').value = '📸 照片';
-  document.getElementById('shine-desc').value = '';
+  document.getElementById('shine-img-preview').innerHTML = '';
   openModal('modal-shine');
 }
+
+const BG_COLORS = ['#ffecd2','#fcb69f','#a1c4fd','#c2e9fb','#d4fc79','#96e6a1','#fbc2eb','#ff9a9e'];
 
 function saveShine() {
   const title = document.getElementById('shine-title').value.trim();
   const type = document.getElementById('shine-type').value;
-  const desc = document.getElementById('shine-desc').value.trim();
   if (!title) { alert('请输入标题'); return; }
-  store.shines.unshift({ id: Date.now(), title, type, icon: type.split(' ')[0], desc, date: today() });
+  const icon = type.split(' ')[0];
+  const imgEl = document.getElementById('shine-img-preview').querySelector('img');
+  const img = imgEl ? imgEl.src : null;
+  const bgColor = BG_COLORS[Math.floor(Math.random() * BG_COLORS.length)];
+  store.shines.unshift({ id: Date.now(), title, type, icon, img, bgColor, date: today() });
   saveStore(); renderShine(); renderHome(); closeModal('modal-shine');
 }
 
@@ -998,6 +1079,19 @@ function saveTech() {
   if (!title) { alert('请输入标题'); return; }
   store.news.unshift({ id: Date.now(), title, type, icon: TECH_ICONS[type]||'🔭', summary, date: today() });
   saveStore(); renderTech(); renderHome(); closeModal('modal-tech');
+}
+
+
+// ===== 照片预览 =====
+function previewShineImg(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const preview = document.getElementById('shine-img-preview');
+    preview.innerHTML = `<img src="${e.target.result}" style="width:100%;max-height:200px;object-fit:cover;border-radius:8px;">`;
+  };
+  reader.readAsDataURL(file);
 }
 
 // ===== 模态框 =====
