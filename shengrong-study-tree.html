@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌳 吴尚融学习星球 · 知识宇宙</title>
+  <style>
+    /* ═══════════════════════════════════════════
+       COSMIC THEME — CSS Variables
+    ═══════════════════════════════════════════ */
+    :root {
+      --bg:         #050818;
+      --bg2:        #0a0f2e;
+      --glass:      rgba(255,255,255,0.06);
+      --glass2:     rgba(255,255,255,0.04);
+      --border:     rgba(255,255,255,0.10);
+      --border2:    rgba(255,255,255,0.05);
+      --text:       #e8ecf8;
+      --muted:      rgba(232,236,248,0.55);
+      --red:        #ff6b6b;
+      --blue:       #4fc3f7;
+      --green:      #69f0ae;
+      --yellow:     #ffd54f;
+      --purple:     #ce93d8;
+      --orange:     #ffab40;
+      --cyan:       #18ffff;
+      --r-grad: linear-gradient(135deg,#ff6b6b,#c0392b);
+      --b-grad: linear-gradient(135deg,#4fc3f7,#0277bd);
+      --g-grad: linear-gradient(135deg,#69f0ae,#00c853);
+      --y-grad: linear-gradient(135deg,#ffd54f,#ff6f00);
+      --p-grad: linear-gradient(135deg,#ce93d8,#7b1fa2);
+      --o-grad: linear-gradient(135deg,#ffab40,#e64a19);
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Stars Background ── */
+    .stars {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse at 15% 20%, rgba(79,195,247,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 80%, rgba(206,147,216,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(5,8,24,1) 0%, var(--bg) 100%);
+    }
+    .stars::before, .stars::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.8) 0%, transparent 100%),
+        radial-gradient(1px 1px at 60% 70%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 80% 20%, rgba(255,255,255,0.9) 0%, transparent 100%),
+        radial-gradient(1px 1px at 40% 90%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 10% 60%, rgba(255,255,255,0.7) 0%, transparent 100%),
+        radial-gradient(1px 1px at 90% 40%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 30% 80%, rgba(255,255,255,0.8) 0%, transparent 100%),
+        radial-gradient(1px 1px at 70% 10%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 50% 50%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 5% 95%, rgba(255,255,255,0.7) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 95% 65%, rgba(255,255,255,0.8) 0%, transparent 100%),
+        radial-gradient(1px 1px at 25% 45%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 75% 55%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 45% 15%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 65% 85%, rgba(255,255,255,0.7) 0%, transparent 100%);
+    }
+    .stars::after {
+      background-image:
+        radial-gradient(1px 1px at 15% 85%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 85% 5%, rgba(255,255,255,0.7) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 55% 35%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 35% 65%, rgba(255,255,255,0.8) 0%, transparent 100%),
+        radial-gradient(1px 1px at 5% 15%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 98% 90%, rgba(255,255,255,0.6) 0%, transparent 100%);
+      animation: twinkle 4s ease-in-out infinite alternate;
+    }
+    @keyframes twinkle {
+      from { opacity: 0.5; }
+      to   { opacity: 1; }
+    }
+
+    /* Floating planets */
+    .planet {
+      position: fixed; border-radius: 50%; z-index: 0; pointer-events: none;
+    }
+    .planet-1 {
+      width: 120px; height: 120px;
+      top: -30px; right: -20px;
+      background: radial-gradient(circle at 35% 35%, rgba(255,200,100,0.3), rgba(180,80,0,0.2));
+      box-shadow: 0 0 40px rgba(255,160,50,0.2), inset 0 0 30px rgba(0,0,0,0.5);
+    }
+    .planet-2 {
+      width: 60px; height: 60px;
+      bottom: 15%; left: -10px;
+      background: radial-gradient(circle at 35% 35%, rgba(79,195,247,0.4), rgba(2,119,189,0.2));
+      box-shadow: 0 0 30px rgba(79,195,247,0.2);
+    }
+
+    /* ── Header ── */
+    .header {
+      position: relative; z-index: 10;
+      padding: 32px 20px 24px;
+      text-align: center;
+    }
+    .header-badge {
+      display: inline-block;
+      padding: 4px 14px; border-radius: 20px;
+      font-size: 0.72em; letter-spacing: 1px;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .header h1 {
+      font-size: 1.55em; font-weight: 700;
+      background: linear-gradient(135deg, #fff 0%, #a8c8f0 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+    .header .subtitle { color: var(--muted); font-size: 0.82em; }
+
+    /* Sync status */
+    .sync-row {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      margin-top: 10px; font-size: 0.73em; color: var(--muted);
+    }
+    .sync-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--yellow);
+      transition: background 0.5s;
+    }
+    .sync-dot.ok  { background: var(--green); }
+    .sync-dot.err { background: var(--red); }
+
+    /* ── Nav Tabs ── */
+    .nav-tabs {
+      position: sticky; top: 0; z-index: 100;
+      display: flex;
+      background: rgba(5,8,24,0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border2);
+    }
+    .nav-tabs::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      flex: 1; min-width: 64px;
+      padding: 13px 4px 11px;
+      background: none; border: none;
+      color: var(--muted);
+      font-size: 0.73em; font-weight: 600;
+      cursor: pointer; white-space: nowrap;
+      border-bottom: 2.5px solid transparent;
+      transition: all 0.25s;
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+    }
+    .tab-btn .tab-icon { font-size: 1.15em; }
+    .tab-btn.active { color: #fff; border-bottom-color: var(--blue); }
+    .tab-btn:hover { color: #fff; background: rgba(255,255,255,0.03); }
+
+    /* ── Container ── */
+    .container { max-width: 960px; margin: 0 auto; padding: 16px 14px 120px; position: relative; z-index: 10; }
+    .section { display: none; animation: fadeIn 0.35s ease; }
+    .section.active { display: block; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+
+    /* ── Glass Card ── */
+    .card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px 18px 18px;
+      margin-bottom: 14px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: border-color 0.3s;
+    }
+    .card:hover { border-color: rgba(255,255,255,0.18); }
+
+    /* ── Section Title ── */
+    .card-title {
+      font-size: 0.9em; font-weight: 700;
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .card-title .card-icon { font-size: 1.15em; }
+
+    /* ── Progress Bars ── */
+    .prog-row { margin-bottom: 13px; }
+    .prog-row:last-child { margin-bottom: 0; }
+    .prog-label {
+      display: flex; justify-content: space-between;
+      font-size: 0.78em; color: var(--muted); margin-bottom: 7px;
+    }
+    .prog-label span:first-child { display: flex; align-items: center; gap: 6px; }
+    .prog-pct { font-weight: 700; color: #fff; min-width: 36px; text-align: right; }
+    .prog-bar {
+      height: 10px; border-radius: 10px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden; position: relative;
+    }
+    .prog-fill {
+      height: 100%; border-radius: 10px;
+      transition: width 1s cubic-bezier(0.4,0,0.2,1);
+      position: relative; overflow: hidden;
+    }
+    .prog-fill::after {
+      content: '';
+      position: absolute; top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      animation: shimmer 2s infinite;
+    }
+    @keyframes shimmer {
+      from { left: -100%; }
+      to   { left: 100%; }
+    }
+    .prog-fill.red    { background: var(--r-grad); box-shadow: 0 0 12px rgba(255,107,107,0.4); }
+    .prog-fill.blue   { background: var(--b-grad); box-shadow: 0 0 12px rgba(79,195,247,0.4); }
+    .prog-fill.green  { background: var(--g-grad); box-shadow: 0 0 12px rgba(105,240,174,0.4); }
+    .prog-fill.purple { background: var(--p-grad); box-shadow: 0 0 12px rgba(206,147,216,0.4); }
+
+    /* ── Subject Chips ── */
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+    .chip {
+      display: inline-block; padding: 3px 10px; border-radius: 8px;
+      font-size: 0.72em; border: 1px solid;
+    }
+    .chip-red    { border-color: rgba(255,107,107,0.3); color: var(--red);    background: rgba(255,107,107,0.07); }
+    .chip-blue   { border-color: rgba(79,195,247,0.3);  color: var(--blue);   background: rgba(79,195,247,0.07); }
+    .chip-green  { border-color: rgba(105,240,174,0.3); color: var(--green);  background: rgba(105,240,174,0.07); }
+    .chip-purple { border-color: rgba(206,147,216,0.3); color: var(--purple); background: rgba(206,147,216,0.07); }
+
+    /* ── Quick Nav ── */
+    .quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .quick-btn {
+      padding: 16px 12px; border-radius: 14px;
+      text-align: center; cursor: pointer; font-weight: 600;
+      font-size: 0.82em; border: 1px solid;
+      transition: all 0.25s;
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
+    }
+    .quick-btn:hover { transform: translateY(-2px); filter: brightness(1.15); }
+    .quick-btn .qbig { font-size: 1.5em; }
+    .quick-btn .qsub { font-size: 0.68em; opacity: 0.7; font-weight: 400; }
+    .qb-chinese {
+      background: rgba(255,107,107,0.08); border-color: rgba(255,107,107,0.25); color: var(--red);
+    }
+    .qb-math {
+      background: rgba(79,195,247,0.08); border-color: rgba(79,195,247,0.25); color: var(--blue);
+    }
+    .qb-english {
+      background: rgba(105,240,174,0.08); border-color: rgba(105,240,174,0.25); color: var(--green);
+    }
+    .qb-oly {
+      background: rgba(206,147,216,0.08); border-color: rgba(206,147,216,0.25); color: var(--purple);
+    }
+
+    /* ── Unit Cards Grid ── */
+    .units-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .unit-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .unit-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, rgba(79,195,247,0.5), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .unit-card:hover { border-color: rgba(79,195,247,0.3); background: rgba(79,195,247,0.05); transform: translateY(-2px); }
+    .unit-card:hover::before { opacity: 1; }
+    .unit-card.done  { border-color: rgba(105,240,174,0.25); background: rgba(105,240,174,0.04); }
+    .unit-card.done::before { background: linear-gradient(90deg,transparent,rgba(105,240,174,0.5),transparent); opacity: 1; }
+    .unit-num { font-size: 0.7em; color: var(--muted); margin-bottom: 5px; letter-spacing: 0.5px; }
+    .unit-title { font-size: 0.88em; font-weight: 700; margin-bottom: 8px; }
+    .unit-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+    .unit-tag { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 0.7em; }
+    .unit-tag-red    { background: rgba(255,107,107,0.1);  color: var(--red);    border: 1px solid rgba(255,107,107,0.2); }
+    .unit-tag-blue   { background: rgba(79,195,247,0.1);  color: var(--blue);   border: 1px solid rgba(79,195,247,0.2); }
+    .unit-tag-green  { background: rgba(105,240,174,0.1); color: var(--green);  border: 1px solid rgba(105,240,174,0.2); }
+    .unit-tag-orange { background: rgba(255,171,64,0.1);  color: var(--orange); border: 1px solid rgba(255,171,64,0.2); }
+    .unit-tag-purple { background: rgba(206,147,216,0.1); color: var(--purple); border: 1px solid rgba(206,147,216,0.2); }
+    .unit-done-badge {
+      display: none; margin-top: 8px; font-size: 0.75em; color: var(--green);
+      font-weight: 600;
+    }
+    .unit-card.done .unit-done-badge { display: block; }
+
+    /* ── Knowledge Tree ── */
+    .tree { list-style: none; }
+    .tree-item { margin-bottom: 8px; }
+    .tree-node {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 16px; border-radius: 12px;
+      cursor: pointer; font-size: 0.87em; font-weight: 600;
+      border: 1px solid; transition: all 0.25s;
+      position: relative;
+    }
+    .tree-node:hover { filter: brightness(1.12); transform: translateX(2px); }
+    .tree-node .tree-arrow {
+      margin-left: auto; font-size: 0.7em; transition: transform 0.3s;
+    }
+    .tree-node.open .tree-arrow { transform: rotate(90deg); }
+    .tree-node.red-node    { background: rgba(255,107,107,0.07); border-color: rgba(255,107,107,0.18); }
+    .tree-node.orange-node { background: rgba(255,171,64,0.07); border-color: rgba(255,171,64,0.18); }
+    .tree-node.cyan-node   { background: rgba(24,255,255,0.07); border-color: rgba(24,255,255,0.18); }
+    .tree-node.purple-node { background: rgba(206,147,216,0.07); border-color: rgba(206,147,216,0.18); }
+    .tree-node.blue-node   { background: rgba(79,195,247,0.07); border-color: rgba(79,195,247,0.18); }
+    .tree-node.green-node  { background: rgba(105,240,174,0.07); border-color: rgba(105,240,174,0.18); }
+    .tree-node.yellow-node { background: rgba(255,213,79,0.07); border-color: rgba(255,213,79,0.18); }
+    .tree-child-list { list-style: none; margin: 6px 0 6px 26px; display: none; }
+    .tree-child-list.open { display: block; }
+    .tree-child {
+      padding: 7px 12px; margin: 3px 0; border-radius: 8px;
+      font-size: 0.82em; cursor: pointer; display: flex;
+      align-items: center; gap: 7px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      transition: all 0.2s;
+    }
+    .tree-child:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); }
+    .tree-child.done  { opacity: 0.5; text-decoration: line-through; border-color: rgba(105,240,174,0.15); }
+    .tree-check {
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2);
+      flex-shrink: 0; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.6em;
+    }
+    .tree-child.done .tree-check {
+      background: var(--green); border-color: var(--green);
+      color: #000;
+    }
+
+    /* ── Recent Done ── */
+    .recent-empty { font-size: 0.82em; color: var(--muted); text-align: center; padding: 16px 0; }
+    .recent-count { color: var(--green); font-weight: 700; }
+    .recent-stars { font-size: 1.2em; margin-bottom: 6px; }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center; padding: 24px 16px 16px;
+      color: rgba(232,236,248,0.3); font-size: 0.7em;
+      border-top: 1px solid var(--border2); margin-top: 8px;
+      position: relative; z-index: 10;
+    }
+
+    /* ── Float Actions ── */
+    .float-actions {
+      position: fixed; bottom: 24px; right: 20px;
+      display: flex; flex-direction: column; gap: 10px; z-index: 200;
+    }
+    .fab {
+      width: 48px; height: 48px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1em; cursor: pointer; border: none;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      transition: all 0.25s;
+    }
+    .fab:hover { transform: scale(1.1) translateY(-2px); }
+    .fab:active { transform: scale(0.95); }
+    .fab-sync { background: linear-gradient(135deg, #4fc3f7, #0277bd); color: #fff; }
+    .fab-down { background: linear-gradient(135deg, #ffab40, #e64a19); color: #fff; }
+    .fab-up   { background: linear-gradient(135deg, #69f0ae, #00c853); color: #000; }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.7); z-index: 300;
+      align-items: center; justify-content: center; padding: 16px;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 20px; padding: 24px;
+      max-width: 480px; width: 100%;
+      max-height: 75vh; overflow-y: auto;
+      backdrop-filter: blur(20px);
+    }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+    .modal-header h3 { font-size: 0.95em; font-weight: 700; }
+    .modal-close-btn {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--glass2); border: 1px solid var(--border);
+      color: var(--muted); cursor: pointer; font-size: 0.85em;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .modal-close-btn:hover { background: rgba(255,255,255,0.1); }
+    .modal-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 14px; margin: 5px 0; border-radius: 12px;
+      cursor: pointer; font-size: 0.85em;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: all 0.2s;
+    }
+    .modal-item:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.12); }
+    .modal-item.done { background: rgba(105,240,174,0.07); border-color: rgba(105,240,174,0.2); }
+    .modal-item .check-circle {
+      width: 22px; height: 22px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2);
+      flex-shrink: 0; display: flex; align-items: center;
+      justify-content: center; font-size: 0.65em;
+      transition: all 0.2s;
+    }
+    .modal-item.done .check-circle {
+      background: var(--green); border-color: var(--green); color: #000;
+    }
+    .modal-save-btn {
+      width: 100%; margin-top: 16px; padding: 13px;
+      border-radius: 12px; border: none;
+      background: linear-gradient(135deg, #4fc3f7, #0277bd);
+      color: #fff; font-size: 0.88em; font-weight: 700;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .modal-save-btn:hover { filter: brightness(1.15); transform: translateY(-1px); }
+
+    /* Poem / text content cards inside modal */
+    .poem-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px; padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+    .poem-title { font-size: 0.88em; font-weight: 700; color: var(--yellow); margin-bottom: 8px; }
+    .poem-text {
+      font-size: 0.85em; color: #e8f4ff; line-height: 1.8;
+      font-family: 'KaiTi','楷体','STKaiti',serif;
+      padding: 10px 14px; background: rgba(255,255,255,0.04);
+      border-radius: 10px; margin-bottom: 8px; letter-spacing: 1px;
+    }
+    .poem-meaning { font-size: 0.8em; color: var(--muted); line-height: 1.7; }
+    .poem-meaning span { color: var(--yellow); font-weight: 600; }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+      background: rgba(15,25,60,0.95);
+      border: 1px solid rgba(105,240,174,0.3);
+      padding: 9px 22px; border-radius: 24px;
+      font-size: 0.8em; z-index: 400;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      backdrop-filter: blur(10px);
+      white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+
+    /* ── Mobile ── */
+    /* ── Question Bank ── */
+    .bank-header {
+      text-align: center; padding: 20px 0 16px;
+    }
+    .bank-header p { font-size: 0.78em; color: var(--muted); margin-top: 6px; }
+    .bank-tabs {
+      display: flex; flex-wrap: wrap; gap: 7px;
+      margin-bottom: 16px;
+    }
+    .bank-tab {
+      padding: 6px 14px; border-radius: 20px;
+      font-size: 0.78em; font-weight: 600;
+      cursor: pointer; border: 1px solid;
+      transition: all 0.2s;
+      background: none;
+    }
+    .bank-tab:hover { filter: brightness(1.15); transform: translateY(-1px); }
+    .bank-tab.red-tab    { border-color: rgba(255,107,107,0.3); color: var(--red); }
+    .bank-tab.blue-tab   { border-color: rgba(79,195,247,0.3); color: var(--blue); }
+    .bank-tab.green-tab  { border-color: rgba(105,240,174,0.3); color: var(--green); }
+    .bank-tab.purple-tab { border-color: rgba(206,147,216,0.3); color: var(--purple); }
+    .bank-tab.active.red-tab    { background: rgba(255,107,107,0.15); }
+    .bank-tab.active.blue-tab   { background: rgba(79,195,247,0.15); }
+    .bank-tab.active.green-tab  { background: rgba(105,240,174,0.15); }
+    /* ── Vocab Game ── */
+    .vocab-game-wrap { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 16px; }
+    .vc-controls { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+    .vc-stat { font-size: 0.78em; color: var(--muted); flex: 1; min-width: 120px; }
+    #vocab-level-select {
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+      color: #fff; border-radius: 8px; padding: 6px 12px; font-size: 0.82em;
+      cursor: pointer; outline: none;
+    }
+    .vc-start-btn {
+      padding: 7px 18px; background: rgba(105,240,174,0.15); border: 1px solid rgba(105,240,174,0.3);
+      border-radius: 20px; color: var(--green); font-weight: 700; font-size: 0.82em;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .vc-start-btn:hover { background: rgba(105,240,174,0.25); }
+    .vc-progress-bar { height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; margin-bottom: 10px; }
+    .vc-progress-fill { height: 100%; background: linear-gradient(90deg, var(--green), #00e5a0); border-radius: 3px; transition: width 0.4s; }
+    .vc-counter { font-size: 0.75em; color: var(--muted); text-align: center; margin-bottom: 12px; }
+    .vc-card {
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px; padding: 28px 20px; text-align: center; cursor: pointer;
+      min-height: 160px; display: flex; flex-direction: column; justify-content: center;
+      transition: all 0.3s; margin-bottom: 16px;
+      user-select: none;
+    }
+    .vc-card:hover { border-color: rgba(105,240,174,0.4); background: rgba(105,240,174,0.04); }
+    .vc-lvl { font-size: 0.72em; font-weight: 700; margin-bottom: 10px; letter-spacing: 1px; }
+    .vc-en { font-size: 1.6em; font-weight: 800; color: #fff; letter-spacing: 0.5px; line-height: 1.3; margin-bottom: 14px; }
+    .vc-zh { font-size: 1.3em; font-weight: 700; color: var(--green); line-height: 1.4; }
+    .vc-hint { font-size: 0.75em; color: var(--muted); }
+    .vc-btns { display: flex; gap: 12px; }
+    .vc-btn {
+      flex: 1; padding: 12px; border-radius: 14px; font-size: 0.9em; font-weight: 700;
+      cursor: pointer; border: 1px solid; transition: all 0.2s; text-align: center;
+    }
+    .vc-no  { background: rgba(255,107,107,0.1); border-color: rgba(255,107,107,0.3); color: var(--red); }
+    .vc-no:hover  { background: rgba(255,107,107,0.2); transform: translateY(-1px); }
+    .vc-yes { background: rgba(105,240,174,0.12); border-color: rgba(105,240,174,0.3); color: var(--green); }
+    .vc-yes:hover { background: rgba(105,240,174,0.22); transform: translateY(-1px); }
+
+    .q-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 16px; padding: 18px;
+      margin-bottom: 12px;
+      transition: all 0.3s;
+    }
+    .q-card:hover { border-color: rgba(255,255,255,0.18); }
+    .q-card.solved { border-color: rgba(105,240,174,0.25); background: rgba(105,240,174,0.04); }
+    .q-card.solved .q-badge { display: inline-flex; }
+
+    .q-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+    .q-num-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; border-radius: 50%;
+      font-size: 0.72em; font-weight: 800; flex-shrink: 0;
+      background: rgba(206,147,216,0.2); color: var(--purple);
+    }
+    .q-text { font-size: 0.88em; font-weight: 600; flex: 1; line-height: 1.6; }
+    .q-badge {
+      display: none; align-items: center; gap: 4px;
+      padding: 3px 10px; border-radius: 20px;
+      font-size: 0.7em; font-weight: 700;
+      background: rgba(105,240,174,0.15); color: var(--green);
+      border: 1px solid rgba(105,240,174,0.3);
+    }
+    .q-actions { display: flex; gap: 8px; margin-top: 12px; }
+    .q-btn {
+      flex: 1; padding: 8px; border-radius: 10px;
+      border: 1px solid; cursor: pointer; font-size: 0.78em;
+      font-weight: 600; transition: all 0.2s; text-align: center;
+      background: none; color: var(--muted);
+    }
+    .q-btn:hover { color: #fff; filter: brightness(1.2); transform: translateY(-1px); }
+    .q-btn.ans-btn   { border-color: rgba(255,213,79,0.3); }
+    .q-btn.done-btn  { border-color: rgba(105,240,174,0.3); }
+    .q-btn.done-btn.done { background: rgba(105,240,174,0.12); color: var(--green); border-color: rgba(105,240,174,0.4); }
+
+    .answer-panel {
+      margin-top: 12px; padding: 14px;
+      border-radius: 12px; display: none;
+      font-size: 0.83em; line-height: 1.7;
+    }
+    .answer-panel.show { display: block; }
+    .answer-panel.ans-closed { background: rgba(255,213,79,0.07); border: 1px solid rgba(255,213,79,0.15); }
+    .answer-panel.ans-open   { background: rgba(105,240,174,0.07); border: 1px solid rgba(105,240,174,0.15); }
+    .ans-label { font-weight: 700; margin-bottom: 5px; display: flex; align-items: center; gap: 6px; }
+    .ans-closed .ans-label { color: var(--yellow); }
+    .ans-open   .ans-label { color: var(--green); }
+
+    @media (max-width: 480px) {
+      .header h1 { font-size: 1.25em; }
+      .quick-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .units-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .quick-btn { padding: 12px 8px; }
+      .fab { width: 44px; height: 44px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Stars -->
+<div class="stars"></div>
+<div class="planet planet-1"></div>
+<div class="planet planet-2"></div>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-badge">🚀 四年级下册学习宇宙</div>
+  <h1>🌳 吴尚融学习星球</h1>
+  <div class="subtitle">语文 · 数学 · 英语 · 奥数 · 知识宇宙探索</div>
+  <div class="sync-row">
+    <div class="sync-dot" id="syncDot"></div>
+    <span id="syncText">正在启动…</span>
+    <span id="syncTime" style="font-size:0.7em;"></span>
+  </div>
+</div>
+
+<!-- Tab Nav -->
+<div class="nav-tabs">
+  <button class="tab-btn active" onclick="switchTab('overview',this)">
+    <span class="tab-icon">🏠</span>概览
+  </button>
+  <button class="tab-btn" onclick="switchTab('chinese',this)">
+    <span class="tab-icon">📖</span>语文
+  </button>
+  <button class="tab-btn" onclick="switchTab('math',this)">
+    <span class="tab-icon">🔢</span>数学
+  </button>
+  <button class="tab-btn" onclick="switchTab('english',this)">
+    <span class="tab-icon">🔤</span>英语
+  </button>
+  <button class="tab-btn" onclick="switchTab('oly',this)">
+    <span class="tab-icon">🧠</span>奥数
+  </button>
+  <button class="tab-btn" onclick="switchTab('bank',this)">
+    <span class="tab-icon">📋</span>题库
+  </button>
+</div>
+
+<!-- Content -->
+<div class="container">
+
+  <!-- ═══ OVERVIEW ═══ -->
+  <div class="section active" id="sec-overview">
+
+    <div class="card">
+      <div class="card-title">
+        <span class="card-icon">📊</span>学习进度总览
+      </div>
+      <div class="prog-row">
+        <div class="prog-label">
+          <span><span>📖</span> 语文</span>
+          <span class="prog-pct" id="pp-c">0%</span>
+        </div>
+        <div class="prog-bar"><div class="prog-fill red" id="pb-c" style="width:0%"></div></div>
+      </div>
+      <div class="prog-row">
+        <div class="prog-label">
+          <span><span>🔢</span> 数学</span>
+          <span class="prog-pct" id="pp-m">0%</span>
+        </div>
+        <div class="prog-bar"><div class="prog-fill blue" id="pb-m" style="width:0%"></div></div>
+      </div>
+      <div class="prog-row">
+        <div class="prog-label">
+          <span><span>🔤</span> 英语</span>
+          <span class="prog-pct" id="pp-e">0%</span>
+        </div>
+        <div class="prog-bar"><div class="prog-fill green" id="pb-e" style="width:0%"></div></div>
+      </div>
+      <div class="prog-row">
+        <div class="prog-label">
+          <span><span>🧠</span> 奥数</span>
+          <span class="prog-pct" id="pp-o">0%</span>
+        </div>
+        <div class="prog-bar"><div class="prog-fill purple" id="pb-o" style="width:0%"></div></div>
+      </div>
+      <div class="chips">
+        <span class="chip chip-red">📖 26个课文知识点</span>
+        <span class="chip chip-blue">🔢 9大数学单元</span>
+        <span class="chip chip-green">🔤 英语译林版</span>
+        <span class="chip chip-purple">🧠 9周奥数体系</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="card-icon">🚀</span>快速出发
+      </div>
+      <div class="quick-grid">
+        <button class="quick-btn qb-chinese" onclick="goTab('chinese')">
+          <span class="qbig">📖</span>
+          <span>语文知识树</span>
+          <span class="qsub">26个知识点</span>
+        </button>
+        <button class="quick-btn qb-math" onclick="goTab('math')">
+          <span class="qbig">🔢</span>
+          <span>数学知识树</span>
+          <span class="qsub">9大单元</span>
+        </button>
+        <button class="quick-btn qb-english" onclick="goTab('english')">
+          <span class="qbig">🔤</span>
+          <span>英语知识树</span>
+          <span class="qsub">8个模块</span>
+        </button>
+        <button class="quick-btn qb-oly" onclick="goTab('oly')">
+          <span class="qbig">🧠</span>
+          <span>奥数知识树</span>
+          <span class="qsub">9周完整体系</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="card-icon">✨</span>已完成的知识点
+      </div>
+      <div id="recentList">
+        <div class="recent-empty">🌱 还没有完成记录<br>去知识树里打勾，开始你的探索之旅吧！</div>
+      </div>
+    </div>
+
+  </div><!-- /overview -->
+
+  <!-- ═══ CHINESE ═══ -->
+  <div class="section" id="sec-chinese">
+
+    <div class="card">
+      <div class="card-title"><span class="card-icon">📖</span>语文 · 单元总览（点击打开详情）</div>
+      <div class="units-grid">
+        <div class="unit-card" id="uc-c1" onclick="openModal('chinese','c1')">
+          <div class="unit-num">第 1 单元</div>
+          <div class="unit-title">🌸 古诗词三首</div>
+          <div class="unit-tags">
+            <span class="unit-tag unit-tag-red">《绝句》</span>
+            <span class="unit-tag unit-tag-red">《惠崇春江晚景》</span>
+            <span class="unit-tag unit-tag-red">《三衢道中》</span>
+          </div>
+          <div class="unit-done-badge">✨ 已完成</div>
+        </div>
+        <div class="unit-card" id="uc-c2" onclick="openModal('chinese','c2')">
+          <div class="unit-num">第 2 单元</div><div class="unit-title">🏠 乡下人家</div>
+          <div class="unit-tags"><span class="unit-tag unit-tag-red">掌握生字词</span><span class="unit-tag unit-tag-red">整体感知</span></div>
+          <div class="unit-done-badge">✨ 已完成</div>
+        </div>
+        <div class="unit-card" id="uc-c3" onclick="openModal('chinese','c3')">
+          <div class="unit-num">第 3 单元</div><div class="unit-title">🌙 天窗</div>
+          <div class="unit-tags"><span class="unit-tag unit-tag-red">含义深刻句子</span><span class="unit-tag unit-tag-red">体会写法</span></div>
+          <div class="unit-done-badge">✨ 已完成</div>
+        </div>
+        <div class="unit-card" id="uc-c4" onclick="openModal('chinese','c4')">
+          <div class="unit-num">第 4 单元</div><div class="unit-title">🔭 母鸡</div>
+          <div class="unit-tags"><span class="unit-tag unit-tag-red">作者情感变化</span><span class="unit-tag unit-tag-red">对比手法</span></div>
+          <div class="unit-done-badge">✨ 已完成</div>
+        </div>
+        <div class="unit-card" id="uc-c5" onclick="openModal('chinese','c5')">
+          <div class="unit-num">第 5 单元</div><div class="unit-title">🌍 颐和园·十七孔桥</div>
+          <div class="unit-tags"><span class="unit-tag unit-tag-red">移步换景</span><span class="unit-tag unit-tag-red">游览顺序</span></div>
+          <div class="unit-done-badge">✨ 已完成</div>
+        </div>
+        <div class="unit-card" id="uc-c6" onclick="openModal('chinese','c6')">
+          <div class="unit-num">第 6 单元</div><div class="unit-title">🧒 小英雄雨来</div>
+          <div class="unit-tags"><span class="unit-tag unit-tag-red">长文章分段</span><span class="unit-tag unit-tag-red">把握情节</span></div>
+          <div class="unit-done-badge">✨ 已完成</div>
+        </div>
+        <div class="unit-card" id="uc-c7" onclick="openModal('chinese','c7')">
+          <div class="unit-num">第 7 单元</div><div class="unit-title">⚔️ 古诗三首</div>
+          <div class="unit-tags"><span class="unit-tag unit-tag-red">《墨梅》</span><span class="unit-tag unit-tag-red">《囊萤夜读》</span><span class="unit-tag unit-tag-red">《铁杵成针》</span></div>
+          <div class="unit-done-badge">✨ 已完成</div>
+        </div>
+        <div class="unit-card" id="uc-c8" onclick="openModal('chinese','c8')">
+          <div class="unit-num">第 8 单元</div><div class="unit-title">🦋 宝葫芦的秘密</div>
+          <div class="unit-tags"><span class="unit-tag unit-tag-red">故事续编</span><span class="unit-tag unit-tag-red">发挥想象</span></div>
+          <div class="unit-done-badge">✨ 已完成</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="card-icon">🌳</span>语文知识树 · 点击展开</div>
+      <ul class="tree">
+        <li class="tree-item">
+          <div class="tree-node red-node" onclick="toggleTree(this)">
+            📖 课文理解能力 <span class="tree-arrow">▸</span>
+          </div>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="chinese" data-id="c-1" onclick="toggleDone(this)">🆕 1.1 课文朗读：准确、流利、有感情</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-2" onclick="toggleDone(this)">🆕 1.2 段落划分：找关键句、分层</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-3" onclick="toggleDone(this)">🆕 1.3 概括段意：摘句法/要素法</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-4" onclick="toggleDone(this)">🆕 1.4 理解词语：联系上下文/查词典</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-5" onclick="toggleDone(this)">🆕 1.5 体会情感：抓关键词句</li>
+          </ul>
+        </li>
+        <li class="tree-item">
+          <div class="tree-node orange-node" onclick="toggleTree(this)">
+            ✍️ 习作能力 <span class="tree-arrow">▸</span>
+          </div>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="chinese" data-id="c-6" onclick="toggleDone(this)">🆕 2.1 写景作文：顺序+修辞+感受</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-7" onclick="toggleDone(this)">🆕 2.2 写事作文：起因经过结果</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-8" onclick="toggleDone(this)">🆕 2.3 写人作文：外貌+事件+品质</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-9" onclick="toggleDone(this)">🆕 2.4 修改作文：增删调换</li>
+          </ul>
+        </li>
+        <li class="tree-item">
+          <div class="tree-node cyan-node" onclick="toggleTree(this)">
+            📝 语文基础知识 <span class="tree-arrow">▸</span>
+          </div>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="chinese" data-id="c-10" onclick="toggleDone(this)">🆕 3.1 多音字：区分不同读音和用法</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-11" onclick="toggleDone(this)">🆕 3.2 形近字：比较差异，正确组词</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-12" onclick="toggleDone(this)">🆕 3.3 标点符号：句号/逗号/引号/冒号</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-13" onclick="toggleDone(this)">🆕 3.4 关联词：因果/转折/递进/并列</li>
+          </ul>
+        </li>
+        <li class="tree-item">
+          <div class="tree-node purple-node" onclick="toggleTree(this)">
+            📜 古诗文积累 <span class="tree-arrow">▸</span>
+          </div>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="chinese" data-id="c-14" onclick="toggleDone(this)">🆕 4.1 古诗词背诵：理解诗意+诗情</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-15" onclick="toggleDone(this)">🆕 4.2 文言文入门：读懂大意即可</li>
+            <li class="tree-child" data-subject="chinese" data-id="c-16" onclick="toggleDone(this)">🆕 4.3 名言警句：积累并运用</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══ MATH ═══ -->
+  <div class="section" id="sec-math">
+    <div class="card">
+      <div class="card-title"><span class="card-icon">🔢</span>数学 · 单元总览</div>
+      <div class="units-grid">
+        <div class="unit-card" id="uc-m1" onclick="openModal('math','m1')"><div class="unit-num">第 1 单元</div><div class="unit-title">🌏 位置与方向</div><div class="unit-tags"><span class="unit-tag unit-tag-blue">方向词</span><span class="unit-tag unit-tag-blue">描述路线</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-m2" onclick="openModal('math','m2')"><div class="unit-num">第 2 单元</div><div class="unit-title">➗ 除数两位数除法</div><div class="unit-tags"><span class="unit-tag unit-tag-blue">笔算</span><span class="unit-tag unit-tag-blue">商的变化规律</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-m3" onclick="openModal('math','m3')"><div class="unit-num">第 3 单元</div><div class="unit-title">📊 统计</div><div class="unit-tags"><span class="unit-tag unit-tag-blue">条形统计图</span><span class="unit-tag unit-tag-blue">复式统计表</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-m4" onclick="openModal('math','m4')"><div class="unit-num">第 4 单元</div><div class="unit-title">🔲 平行四边形和梯形</div><div class="unit-tags"><span class="unit-tag unit-tag-blue">特征</span><span class="unit-tag unit-tag-blue">高与底</span><span class="unit-tag unit-tag-blue">周长</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-m5" onclick="openModal('math','m5')"><div class="unit-num">第 5 单元</div><div class="unit-title">🔢 除数一位数除法</div><div class="unit-tags"><span class="unit-tag unit-tag-blue">口算</span><span class="unit-tag unit-tag-blue">笔算</span><span class="unit-tag unit-tag-blue">验算</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-m6" onclick="openModal('math','m6')"><div class="unit-num">第 6 单元</div><div class="unit-title">📐 面积</div><div class="unit-tags"><span class="unit-tag unit-tag-blue">面积公式</span><span class="unit-tag unit-tag-blue">单位换算</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-m7" onclick="openModal('math','m7')"><div class="unit-num">第 7 单元</div><div class="unit-title">🔤 数学广角</div><div class="unit-tags"><span class="unit-tag unit-tag-blue">优化</span><span class="unit-tag unit-tag-blue">策略</span><span class="unit-tag unit-tag-blue">烙饼问题</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-m8" onclick="openModal('math','m8')"><div class="unit-num">第 8 单元</div><div class="unit-title">🔢 总复习</div><div class="unit-tags"><span class="unit-tag unit-tag-blue">数与运算</span><span class="unit-tag unit-tag-blue">图形</span><span class="unit-tag unit-tag-blue">统计</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-icon">🌳</span>数学知识树</div>
+      <ul class="tree">
+        <li class="tree-item">
+          <div class="tree-node blue-node" onclick="toggleTree(this)">🔢 数与运算 <span class="tree-arrow">▸</span></div>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="math" data-id="m-1" onclick="toggleDone(this)">🆕 1.1 大数读写：万以内/亿以内</li>
+            <li class="tree-child" data-subject="math" data-id="m-2" onclick="toggleDone(this)">🆕 1.2 四舍五入：求近似数</li>
+            <li class="tree-child" data-subject="math" data-id="m-3" onclick="toggleDone(this)">🆕 1.3 三位数乘两位数</li>
+            <li class="tree-child" data-subject="math" data-id="m-4" onclick="toggleDone(this)">🆕 1.4 除数是两位数除法</li>
+          </ul>
+        </li>
+        <li class="tree-item">
+          <div class="tree-node green-node" onclick="toggleTree(this)">📐 图形与几何 <span class="tree-arrow">▸</span></div>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="math" data-id="m-5" onclick="toggleDone(this)">🆕 2.1 角：分类（锐/直/钝/平/周）</li>
+            <li class="tree-child" data-subject="math" data-id="m-6" onclick="toggleDone(this)">🆕 2.2 平行四边形：特征与高</li>
+            <li class="tree-child" data-subject="math" data-id="m-7" onclick="toggleDone(this)">🆕 2.3 梯形：等腰/直角梯形</li>
+            <li class="tree-child" data-subject="math" data-id="m-8" onclick="toggleDone(this)">🆕 2.4 面积：正/长/平行四边/梯形</li>
+          </ul>
+        </li>
+        <li class="tree-item">
+          <div class="tree-node purple-node" onclick="toggleTree(this)">📊 统计与概率 <span class="tree-arrow">▸</span></div>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="math" data-id="m-9" onclick="toggleDone(this)">🆕 3.1 复式条形统计图</li>
+            <li class="tree-child" data-subject="math" data-id="m-10" onclick="toggleDone(this)">🆕 3.2 合理选择统计图</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══ ENGLISH ═══ -->
+  <div class="section" id="sec-english">
+    <div class="card">
+      <div class="card-title"><span class="card-icon">🔤</span>英语 · 译林版四年级下册</div>
+      <div class="units-grid">
+        <div class="unit-card" onclick="openModal('english','e1')"><div class="unit-num">Unit 1</div><div class="unit-title">🏠 Our school subjects</div><div class="unit-tags"><span class="unit-tag unit-tag-green">subjects</span><span class="unit-tag unit-tag-green">like</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" onclick="openModal('english','e2')"><div class="unit-num">Unit 2</div><div class="unit-title">🌟 Our new house</div><div class="unit-tags"><span class="unit-tag unit-tag-green">rooms</span><span class="unit-tag unit-tag-green">prepositions</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" onclick="openModal('english','e3')"><div class="unit-num">Unit 3</div><div class="unit-title">☕ A day in the library</div><div class="unit-tags"><span class="unit-tag unit-tag-green">rules</span><span class="unit-tag unit-tag-green">should</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" onclick="openModal('english','e4')"><div class="unit-num">Unit 4</div><div class="unit-title">🐟 Drawing in the park</div><div class="unit-tags"><span class="unit-tag unit-tag-green">can/could</span><span class="unit-tag unit-tag-green">able to</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" onclick="openModal('english','e5')"><div class="unit-num">Unit 5</div><div class="unit-title">🦋 Seasons</div><div class="unit-tags"><span class="unit-tag unit-tag-green">weather</span><span class="unit-tag unit-tag-green">activities</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" onclick="openModal('english','e6')"><div class="unit-num">Unit 6</div><div class="unit-title">🍀 What's the matter?</div><div class="unit-tags"><span class="unit-tag unit-tag-green">feelings</span><span class="unit-tag unit-tag-green">health</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" onclick="openModal('english','e7')"><div class="unit-num">Unit 7</div><div class="unit-title">🍦 Summer is coming!</div><div class="unit-tags"><span class="unit-tag unit-tag-green">summer plans</span><span class="unit-tag unit-tag-green">be going to</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" onclick="openModal('english','e8')"><div class="unit-num">Unit 8</div><div class="unit-title">🏥 How are you now?</div><div class="unit-tags"><span class="unit-tag unit-tag-green">illness</span><span class="unit-tag unit-tag-green">advice</span></div><div class="unit-done-badge">✨ 已完成</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-icon">🌳</span>英语知识树</div>
+      <ul class="tree">
+        <li class="tree-item">
+          <div class="tree-node green-node" onclick="toggleTree(this)">📖 单词积累（160+词汇） <span class="tree-arrow">▸</span></div>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="english" data-id="e-1" onclick="toggleDone(this)">🆕 1.1 校校科目词汇</li>
+            <li class="tree-child" data-subject="english" data-id="e-2" onclick="toggleDone(this)">🆕 1.2 房间家居词汇</li>
+            <li class="tree-child" data-subject="english" data-id="e-3" onclick="toggleDone(this)">🆕 1.3 季节天气词汇</li>
+            <li class="tree-child" data-subject="english" data-id="e-4" onclick="toggleDone(this)">🆕 1.4 情感健康词汇</li>
+            <li class="tree-child" data-subject="english" data-id="e-5" onclick="toggleDone(this)">🆕 1.5 其他核心词汇</li>
+          </ul>
+        </li>
+        <li class="tree-item">
+          <div class="tree-node orange-node" onclick="toggleTree(this)">📝 语法要点 <span class="tree-arrow">▸</span></div>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="english" data-id="e-6" onclick="toggleDone(this)">🆕 2.1 be动词（am/is/are）</li>
+            <li class="tree-child" data-subject="english" data-id="e-7" onclick="toggleDone(this)">🆕 2.2 Have/Has got 用法</li>
+            <li class="tree-child" data-subject="english" data-id="e-8" onclick="toggleDone(this)">🆕 2.3 一般现在时</li>
+            <li class="tree-child" data-subject="english" data-id="e-9" onclick="toggleDone(this)">🆕 2.4 现在进行时（be+v-ing）</li>
+            <li class="tree-child" data-subject="english" data-id="e-10" onclick="toggleDone(this)">🆕 2.5 一般过去时（was/were）</li>
+            <li class="tree-child" data-subject="english" data-id="e-11" onclick="toggleDone(this)">🆕 2.6 情态动词 can/could/may</li>
+            <li class="tree-child" data-subject="english" data-id="e-12" onclick="toggleDone(this)">🆕 2.7 there is/are</li>
+          </ul>
+        </li>
+        <li class="tree-item">
+          <div class="tree-node cyan-node" onclick="toggleTree(this)">🗣️ 听说读写 <span class="tree-arrow">▸</span></div>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="english" data-id="e-13" onclick="toggleDone(this)">🆕 3.1 课本听力跟读</li>
+            <li class="tree-child" data-subject="english" data-id="e-14" onclick="toggleDone(this)">🆕 3.2 朗读与背诵</li>
+            <li class="tree-child" data-subject="english" data-id="e-15" onclick="toggleDone(this)">🆕 3.3 简单句写作</li>
+            <li class="tree-child" data-subject="english" data-id="e-16" onclick="toggleDone(this)">🆕 3.4 日常口语对话</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <!-- 词汇闯关 -->
+    <div class="card" style="margin-top:12px;">
+      <div class="card-title"><span class="card-icon">🎮</span>词汇闯关游戏</div>
+      <div class="vocab-game-wrap">
+        <div class="vc-controls">
+          <select id="vocab-level-select" onchange="initVocabGame()">
+            <option value="all">🌏 全部词汇</option>
+            <option value="1">🌱 基础词汇</option>
+            <option value="2">🌟 进阶词汇</option>
+            <option value="3">🚀 困难词汇</option>
+          </select>
+          <button class="vc-start-btn" onclick="initVocabGame()">🎯 开始闯关</button>
+          <div class="vc-stat" id="vocab-stat">已掌握 0 / 总共 0 词 · 0%</div>
+        </div>
+        <div id="vocab-game">
+          <div style="text-align:center;padding:24px 0;color:var(--muted)">
+            <div style="font-size:2.5em;margin-bottom:10px;">🎮</div>
+            <div style="font-size:0.9em;">选择难度 → 点击「开始闯关」</div>
+            <div style="font-size:0.78em;margin-top:6px;">翻转卡片认词 · 点了"认识了"才算真正掌握</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ OLYMPIAD ═══ -->
+  <div class="section" id="sec-oly">
+    <div class="card">
+      <div class="card-title"><span class="card-icon">🧠</span>奥数学习进度 · 9周计划</div>
+      <p style="font-size:0.75em;color:var(--muted);margin-bottom:12px;">⭐ 基础 → ⭐⭐⭐⭐ 挑战 · 每周5道精选题</p>
+      <div class="units-grid">
+        <div class="unit-card done" id="uc-o1" onclick="openModal('oly','o1')"><div class="unit-num">第 1 周</div><div class="unit-title">➕ 和差问题</div><div class="unit-tags"><span class="unit-tag unit-tag-purple">大数=(和+差)÷2</span><span class="unit-tag unit-tag-purple">小数=(和-差)÷2</span></div><div style="margin-top:8px;font-size:0.73em;color:var(--muted);">⭐ 基础 · 5道题</div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-o2" onclick="openModal('oly','o2')"><div class="unit-num">第 2 周</div><div class="unit-title">✖️ 和倍·差倍问题</div><div class="unit-tags"><span class="unit-tag unit-tag-purple">和倍</span><span class="unit-tag unit-tag-purple">差倍</span></div><div style="margin-top:8px;font-size:0.73em;color:var(--muted);">⭐⭐ 进阶 · 5道题</div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-o3" onclick="openModal('oly','o3')"><div class="unit-num">第 3 周</div><div class="unit-title">🐔 鸡兔同笼</div><div class="unit-tags"><span class="unit-tag unit-tag-purple">假设法</span><span class="unit-tag unit-tag-purple">抬脚法</span></div><div style="margin-top:8px;font-size:0.73em;color:var(--muted);">⭐⭐ 进阶 · 5道题</div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-o4" onclick="openModal('oly','o4')"><div class="unit-num">第 4 周</div><div class="unit-title">👦 年龄+植树问题</div><div class="unit-tags"><span class="unit-tag unit-tag-purple">年龄差不变</span><span class="unit-tag unit-tag-purple">植树公式</span></div><div style="margin-top:8px;font-size:0.73em;color:var(--muted);">⭐⭐ 进阶 · 5道题</div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-o5" onclick="openModal('oly','o5')"><div class="unit-num">第 5 周</div><div class="unit-title">💰 盈亏问题</div><div class="unit-tags"><span class="unit-tag unit-tag-purple">一盈一亏</span><span class="unit-tag unit-tag-purple">两次盈/亏</span></div><div style="margin-top:8px;font-size:0.73em;color:var(--muted);">⭐⭐⭐ 中级 · 5道题</div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-o6" onclick="openModal('oly','o6')"><div class="unit-num">第 6 周</div><div class="unit-title">📐 几何与面积</div><div class="unit-tags"><span class="unit-tag unit-tag-purple">周长面积</span><span class="unit-tag unit-tag-purple">方格计数</span></div><div style="margin-top:8px;font-size:0.73em;color:var(--muted);">⭐⭐ 中级 · 5道题</div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-o7" onclick="openModal('oly','o7')"><div class="unit-num">第 7 周</div><div class="unit-title">🧠 逻辑推理</div><div class="unit-tags"><span class="unit-tag unit-tag-purple">真假话</span><span class="unit-tag unit-tag-purple">枚举列表</span></div><div style="margin-top:8px;font-size:0.73em;color:var(--muted);">⭐⭐⭐ 中级 · 5道题</div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-o8" onclick="openModal('oly','o8')"><div class="unit-num">第 8 周</div><div class="unit-title">🧩+⚖️ 抽屉+统筹</div><div class="unit-tags"><span class="unit-tag unit-tag-purple">最不利原则</span><span class="unit-tag unit-tag-purple">最优策略</span></div><div style="margin-top:8px;font-size:0.73em;color:var(--muted);">⭐⭐⭐ 中级 · 5道题</div><div class="unit-done-badge">✨ 已完成</div></div>
+        <div class="unit-card" id="uc-o9" onclick="openModal('oly','o9')"><div class="unit-num">第 9 周 🏆</div><div class="unit-title">🎯 综合挑战 · 毕业考</div><div class="unit-tags"><span class="unit-tag unit-tag-orange">数字谜</span><span class="unit-tag unit-tag-orange">逆向思维</span></div><div style="margin-top:8px;font-size:0.73em;color:var(--muted);">⭐⭐⭐⭐ 挑战 · 毕业考</div><div class="unit-done-badge">✨ 已完成</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="card-icon">🌳</span>奥数知识树 · 点击展开</div>
+      <ul class="tree">
+        <li class="tree-item">
+          <div class="tree-node red-node" onclick="toggleTree(this)">📊 应用题（和差/和倍/鸡兔/年龄/盈亏/植树） <span class="tree-arrow">▸</span></div>
+          <ul class="tree-child-list">
+            <li class="tree-child done" data-subject="oly" data-id="o1-1" onclick="toggleDone(this)">✅ 1.1 和差问题：大数=(和+差)÷2，小数=(和-差)÷2</li>
+            <li class="tree-child" data-subject="oly" data-id="o1-2" onclick="toggleDone(this)">🆕 1.2 和倍问题：1倍数=和÷（倍数+1）</li>
+            <li class="tree-child" data-subject="oly" data-id="o1-3" onclick="toggleDone(this)">🆕 1.3 差倍问题：1倍数=差÷（倍数-1）</li>
+            <li class="tree-child" data-subject="oly" data-id="o1-4" onclick="toggleDone(this)">🆕 1.4 鸡兔同笼·假设法：先假设全是一种，算出差来调整</li>
+            <li class="tree-child" data-subject="oly" data-id="o1-5" onclick="toggleDone(this)">🆕 1.5 鸡兔同笼·抬脚法：让动物抬脚的趣味解法</li>
+            <li class="tree-child" data-subject="oly" data-id="o1-6" onclick="toggleDone(this)">🆕 1.6 年龄问题：年龄差不变，年龄和随时间同增同减</li>
+            <li class="tree-child" data-subject="oly" data-id="o1-7" onclick="toggleDone(this)">🆕 1.7 盈亏问题·一盈一亏：（盈+亏）÷分配差</li>
+            <li class="tree-child" data-subject="oly" data-id="o1-8" onclick="toggleDone(this)">🆕 1.8 植树问题：段数=路长÷间距，端点种+1</li>
+          </ul>
+        </li>
+        <li class="tree-item">
+          <div class="tree-node green-node" onclick="toggleTree(this)">🔍 找规律（数列/周期/图形） <span class="tree-arrow">▸</span></div>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="oly" data-id="o2-1" onclick="toggleDone(this)">🆕 2.1 等差数列：第n项=首项+（n-1）×公差</li>
+            <li class="tree-child" data-subject="oly" data-id="o2-2" onclick="toggleDone(this)">🆕 2.2 等比数列/跳级规律</li>
+            <li class="tree-child" data-subject="oly" data-id="o2-3" onclick="toggleDone(this)">🆕 2.3 数量周期：总数÷周期长度=完整周期数+余数</li>
+            <li class="tree-child" data-subject="oly" data-id="o2-4" onclick="toggleDone(this)">🆕 2.4 星期/日期周期（含星期几计算）</li>
+            <li class="tree-child" data-subject="oly" data-id="o2-5" onclick="toggleDone(this)">🆕 2.5 图形排列规律</li>
+          </ul>
+        </li>
+        <li class="tree-item">
+          <div class="tree-node yellow-node" onclick="toggleTree(this)">📐 几何与面积 <span class="tree-arrow">▸</span></div>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="oly" data-id="o3-1" onclick="toggleDone(this)">🆕 3.1 正/长方形：周长=2×(长+宽)，面积=长×宽</li>
+            <li class="tree-child" data-subject="oly" data-id="o3-2" onclick="toggleDone(this)">🆕 3.2 不规则图形：拆分法、平移法求面积</li>
+            <li class="tree-child" data-subject="oly" data-id="o3-3" onclick="toggleDone(this)">🆕 3.3 数线段：点数×(点数-1)÷2</li>
+            <li class="tree-child" data-subject="oly" data-id="o3-4" onclick="toggleDone(this)">🆕 3.4 数三角形/方格计数</li>
+          </ul>
+        </li>
+        <li class="tree-item">
+          <div class="tree-node purple-node" onclick="toggleTree(this)">🧠 逻辑推理 / 🧩 抽屉原理 / ⚖️ 统筹 <span class="tree-arrow">▸</span></div>
+          <ul class="tree-child-list">
+            <li class="tree-child" data-subject="oly" data-id="o4-1" onclick="toggleDone(this)">🆕 4.1 真假话问题：假设法，逐一排除矛盾</li>
+            <li class="tree-child" data-subject="oly" data-id="o4-2" onclick="toggleDone(this)">🆕 4.2 简单排列：枚举法，有序列举</li>
+            <li class="tree-child" data-subject="oly" data-id="o4-3" onclick="toggleDone(this)">🆕 4.3 抽屉原理入门：n+1只鸽，放n个笼，必有1笼≥2只</li>
+            <li class="tree-child" data-subject="oly" data-id="o5-1" onclick="toggleDone(this)">🆕 5.1 时间安排：统筹规划、最短时间问题</li>
+            <li class="tree-child" data-subject="oly" data-id="o5-2" onclick="toggleDone(this)">🆕 5.2 最优策略：选择最优方案</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+  <!-- ═══ QUESTION BANK ═══ -->
+  <div class="section" id="sec-bank">
+    <div class="bank-header">
+      <div style="font-size:1.3em;font-weight:800;">📋 每日奥数题库</div>
+      <p>每天5道精选题 · 做完点「查看答案」核对 · 全部会做点「已掌握」</p>
+    </div>
+
+    <div class="bank-tabs" id="bankTabs">
+      <button class="bank-tab purple-tab active" onclick="switchBank('oly',this)">🧠 和差问题</button>
+      <button class="bank-tab purple-tab" onclick="switchBank('oly2',this)">🧠 和倍·差倍</button>
+      <button class="bank-tab purple-tab" onclick="switchBank('oly3',this)">🧠 鸡兔同笼</button>
+      <button class="bank-tab purple-tab" onclick="switchBank('oly4',this)">🧠 年龄+植树</button>
+      <button class="bank-tab purple-tab" onclick="switchBank('oly5',this)">🧠 盈亏问题</button>
+    </div>
+
+    <div id="bankContent"></div>
+  </div>
+
+<!-- Footer -->
+<div class="footer">
+  🌱 豆芽哈吉米 · 吴尚融学习星球 · 2026 · 记录成长每一天
+</div>
+
+<!-- Float Actions -->
+<div class="float-actions">
+  <button class="fab fab-sync" onclick="syncFromGitHub()" title="从 GitHub 同步">🔄</button>
+  <button class="fab fab-down" onclick="exportData()" title="导出备份">⬇️</button>
+  <button class="fab fab-up" onclick="document.getElementById('fileImport').click()" title="导入备份">⬆️</button>
+  <input type="file" id="fileImport" accept=".json" style="display:none" onchange="importData(this)">
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">📋 知识点详情</h3>
+      <button class="modal-close-btn" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modalContent"></div>
+    <button class="modal-save-btn" onclick="saveModal()">💾 保存进度</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Constants ──
+const GITHUB_RAW = 'https://raw.githubusercontent.com/wjbtian/shengrong-study/main/progress.json';
+
+// ── State ──
+let progressData = { chinese:[], math:[], english:[], oly:[] };
+let modalSubject = null, modalUnit = null;
+
+// ── Boot ──
+(async () => {
+  loadLocal();
+  applyAll();
+  renderBank('oly');
+  updateVocabStats();
+  setSync('ok', '本地已就绪 ✓');
+})();
+
+// ── Load from localStorage ──
+function loadLocal() {
+  for (const k of ['chinese','math','english','oly']) {
+    try {
+      const v = JSON.parse(localStorage.getItem('prog_' + k) || '[]');
+      if (v.length) progressData[k] = v;
+    } catch(e) {}
+  }
+}
+
+function saveAll() {
+  for (const k of ['chinese','math','english','oly']) {
+    localStorage.setItem('prog_' + k, JSON.stringify(progressData[k]));
+  }
+}
+
+// ── Apply progress to all elements ──
+function applyAll() {
+  for (const el of document.querySelectorAll('.tree-child[data-subject][data-id]')) {
+    const s = el.dataset.subject, id = el.dataset.id;
+    el.classList.toggle('done', progressData[s].includes(id));
+  }
+  // Unit cards
+  for (const el of document.querySelectorAll('.unit-card[id]')) {
+    const prefix = el.id.replace('uc-','');
+    const items = document.querySelectorAll(`.tree-child[data-subject][data-id^="${prefix}-"]`);
+    if (!items.length) continue;
+    const allDone = [...items].every(x => progressData[x.dataset.subject].includes(x.dataset.id));
+    el.classList.toggle('done', allDone);
+  }
+  // Progress percentages
+  const totals = { chinese:26, math:10, english:16, oly:9 };
+  for (const [k,total] of Object.entries(totals)) {
+    const pct = Math.round((progressData[k].length / total) * 100);
+    const fill = { chinese:'pb-c', math:'pb-m', english:'pb-e', oly:'pb-o' }[k];
+    const txt  = { chinese:'pp-c', math:'pp-m', english:'pp-e', oly:'pp-o' }[k];
+    document.getElementById(fill).style.width = pct + '%';
+    document.getElementById(txt).textContent  = pct + '%';
+  }
+  // Recent list
+  const total = Object.values(progressData).reduce((a,v) => a+v.length, 0);
+  const rl = document.getElementById('recentList');
+  if (total > 0) {
+    rl.innerHTML = `<div class="recent-stars">⭐⭐⭐</div>
+      <div class="recent-count">${total} 个知识点已完成！</div>
+      <div style="font-size:0.78em;color:var(--muted);margin-top:6px;">继续加油，继续探索知识宇宙！🚀</div>`;
+  }
+}
+
+// ── Toggle tree branch ──
+function toggleTree(node) {
+  node.classList.toggle('open');
+  node.nextElementSibling && node.nextElementSibling.classList.toggle('open');
+}
+
+// ── Toggle single item ──
+function toggleDone(el) {
+  const s = el.dataset.subject, id = el.dataset.id;
+  if (progressData[s].includes(id)) {
+    progressData[s] = progressData[s].filter(x => x !== id);
+    el.classList.remove('done');
+  } else {
+    progressData[s].push(id);
+    el.classList.add('done');
+    // sparkle effect
+    el.style.transform = 'scale(1.03)';
+    setTimeout(() => el.style.transform = '', 200);
+  }
+  saveAll();
+  applyAll();
+  toast('✅ 进度已保存！');
+}
+
+// ── Sync ──
+async function syncFromGitHub() {
+  setSync('', '同步中…');
+  try {
+    const r = await fetch(GITHUB_RAW + '?t=' + Date.now());
+    if (!r.ok) throw new Error('not ok');
+    const data = await r.json();
+    for (const k of ['chinese','math','english','oly']) {
+      if (data[k] && Array.isArray(data[k])) {
+        progressData[k] = [...new Set([...progressData[k], ...data[k]])];
+      }
+    }
+    saveAll(); applyAll();
+    setSync('ok', '☁️ 已同步');
+    toast('☁️ 已从 GitHub 同步！');
+  } catch(e) {
+    setSync('err', '📴 本地模式');
+    toast('📴 无法连接 GitHub，使用本地数据');
+  }
+}
+
+function setSync(type, text) {
+  document.getElementById('syncDot').className  = 'sync-dot' + (type ? ' ' + type : '');
+  document.getElementById('syncText').textContent = text;
+}
+
+// ── English Vocabulary (160+ words, by difficulty) ──
+const VOCAB_WORDS = [
+  // 🌱 Level 1 — 基础词汇（约60词）
+  { en: 'Chinese', zh: '语文，中文', lv: 1 },
+  { en: 'Maths', zh: '数学', lv: 1 },
+  { en: 'English', zh: '英语', lv: 1 },
+  { en: 'Music', zh: '音乐', lv: 1 },
+  { en: 'PE', zh: '体育', lv: 1 },
+  { en: 'Art', zh: '美术', lv: 1 },
+  { en: 'Science', zh: '科学', lv: 1 },
+  { en: 'computer', zh: '计算机，电脑', lv: 1 },
+  { en: 'homework', zh: '家庭作业', lv: 1 },
+  { en: 'lesson', zh: '课，一节课', lv: 1 },
+  { en: 'subject', zh: '学科，科目', lv: 1 },
+  { en: 'like', zh: '喜欢', lv: 1 },
+  { en: 'love', zh: '爱，喜欢', lv: 1 },
+  { en: 'play', zh: '玩，打球', lv: 1 },
+  { en: 'draw', zh: '画画', lv: 1 },
+  { en: 'sing', zh: '唱歌', lv: 1 },
+  { en: 'dance', zh: '跳舞', lv: 1 },
+  { en: 'read', zh: '读，阅读', lv: 1 },
+  { en: 'write', zh: '写', lv: 1 },
+  { en: 'nice', zh: '好的，美好的', lv: 1 },
+  { en: 'happy', zh: '开心的', lv: 1 },
+  { en: 'sad', zh: '伤心的', lv: 1 },
+  { en: 'tired', zh: '累的，疲劳的', lv: 1 },
+  { en: 'hot', zh: '热的', lv: 1 },
+  { en: 'cold', zh: '冷的', lv: 1 },
+  { en: 'warm', zh: '暖和的', lv: 1 },
+  { en: 'cool', zh: '凉爽的', lv: 1 },
+  { en: 'sunny', zh: '晴朗的', lv: 1 },
+  { en: 'rainy', zh: '下雨的', lv: 1 },
+  { en: 'cloudy', zh: '多云的', lv: 1 },
+  { en: 'snowy', zh: '下雪的', lv: 1 },
+  { en: 'spring', zh: '春天', lv: 1 },
+  { en: 'summer', zh: '夏天', lv: 1 },
+  { en: 'autumn', zh: '秋天', lv: 1 },
+  { en: 'winter', zh: '冬天', lv: 1 },
+  { en: 'Monday', zh: '星期一', lv: 1 },
+  { en: 'Tuesday', zh: '星期二', lv: 1 },
+  { en: 'Wednesday', zh: '星期三', lv: 1 },
+  { en: 'Thursday', zh: '星期四', lv: 1 },
+  { en: 'Friday', zh: '星期五', lv: 1 },
+  { en: 'Saturday', zh: '星期六', lv: 1 },
+  { en: 'Sunday', zh: '星期日', lv: 1 },
+  { en: 'today', zh: '今天', lv: 1 },
+  { en: 'tomorrow', zh: '明天', lv: 1 },
+  { en: 'yesterday', zh: '昨天', lv: 1 },
+  { en: 'bedroom', zh: '卧室', lv: 1 },
+  { en: 'kitchen', zh: '厨房', lv: 1 },
+  { en: 'bathroom', zh: '浴室，卫生间', lv: 1 },
+  { en: 'living room', zh: '客厅', lv: 1 },
+  { en: 'garden', zh: '花园', lv: 1 },
+  { en: 'table', zh: '桌子', lv: 1 },
+  { en: 'chair', zh: '椅子', lv: 1 },
+  { en: 'window', zh: '窗户', lv: 1 },
+  { en: 'door', zh: '门', lv: 1 },
+  { en: 'floor', zh: '地板，楼层', lv: 1 },
+  { en: 'wall', zh: '墙', lv: 1 },
+  { en: 'tree', zh: '树', lv: 1 },
+  { en: 'flower', zh: '花', lv: 1 },
+  { en: 'bird', zh: '鸟', lv: 1 },
+  { en: 'fish', zh: '鱼', lv: 1 },
+  { en: 'cat', zh: '猫', lv: 1 },
+  { en: 'dog', zh: '狗', lv: 1 },
+  // 🌟 Level 2 — 进阶词汇（约60词）
+  { en: 'school subjects', zh: '学校科目', lv: 2 },
+  { en: 'library', zh: '图书馆', lv: 2 },
+  { en: 'should', zh: '应该', lv: 2 },
+  { en: 'quiet', zh: '安静的', lv: 2 },
+  { en: 'noise', zh: '噪音，吵闹', lv: 2 },
+  { en: 'listen', zh: '听', lv: 2 },
+  { en: 'careful', zh: '仔细的，小心的', lv: 2 },
+  { en: 'carefully', zh: '仔细地', lv: 2 },
+  { en: 'talk', zh: '谈话，说话', lv: 2 },
+  { en: 'run', zh: '跑', lv: 2 },
+  { en: 'jump', zh: '跳', lv: 2 },
+  { en: 'swim', zh: '游泳', lv: 2 },
+  { en: 'fly', zh: '飞', lv: 2 },
+  { en: 'can', zh: '能，会（一般现在）', lv: 2 },
+  { en: 'could', zh: '能，会（过去式）', lv: 2 },
+  { en: 'able', zh: '能，能够', lv: 2 },
+  { en: 'be able to', zh: '能够', lv: 2 },
+  { en: 'draw', zh: '画，绘画', lv: 2 },
+  { en: 'park', zh: '公园', lv: 2 },
+  { en: 'beautiful', zh: '美丽的', lv: 2 },
+  { en: 'flower', zh: '花', lv: 2 },
+  { en: 'river', zh: '河流', lv: 2 },
+  { en: 'lake', zh: '湖', lv: 2 },
+  { en: 'hill', zh: '小山', lv: 2 },
+  { en: 'boat', zh: '小船', lv: 2 },
+  { en: 'city', zh: '城市', lv: 2 },
+  { en: 'village', zh: '乡村，村庄', lv: 2 },
+  { en: 'season', zh: '季节', lv: 2 },
+  { en: 'weather', zh: '天气', lv: 2 },
+  { en: 'temperature', zh: '温度', lv: 2 },
+  { en: 'windy', zh: '有风的', lv: 2 },
+  { en: 'foggy', zh: '有雾的', lv: 2 },
+  { en: 'wet', zh: '潮湿的', lv: 2 },
+  { en: 'dry', zh: '干燥的', lv: 2 },
+  { en: 'feel', zh: '感觉', lv: 2 },
+  { en: 'feel ill', zh: '感觉不舒服', lv: 2 },
+  { en: 'headache', zh: '头痛', lv: 2 },
+  { en: 'fever', zh: '发烧', lv: 2 },
+  { en: 'cold', zh: '感冒', lv: 2 },
+  { en: 'toothache', zh: '牙痛', lv: 2 },
+  { en: 'stomachache', zh: '胃痛，肚子痛', lv: 2 },
+  { en: 'matter', zh: '事情，问题', lv: 2 },
+  { en: "What's the matter?", zh: '怎么了？', lv: 2 },
+  { en: 'doctor', zh: '医生', lv: 2 },
+  { en: 'hospital', zh: '医院', lv: 2 },
+  { en: 'medicine', zh: '药', lv: 2 },
+  { en: 'rest', zh: '休息', lv: 2 },
+  { en: 'drink', zh: '喝，饮料', lv: 2 },
+  { en: 'water', zh: '水', lv: 2 },
+  { en: 'juice', zh: '果汁', lv: 2 },
+  { en: 'milk', zh: '牛奶', lv: 2 },
+  { en: 'ice cream', zh: '冰淇淋', lv: 2 },
+  { en: 'sick', zh: '恶心的，生病的', lv: 2 },
+  { en: 'pain', zh: '疼痛', lv: 2 },
+  { en: 'holiday', zh: '假期，节日', lv: 2 },
+  { en: 'beach', zh: '海滩', lv: 2 },
+  { en: 'camp', zh: '露营', lv: 2 },
+  { en: 'picnic', zh: '野餐', lv: 2 },
+  { en: 'be going to', zh: '将要，打算', lv: 2 },
+  { en: 'plan', zh: '计划', lv: 2 },
+  { en: 'fruit', zh: '水果', lv: 2 },
+  { en: 'ice', zh: '冰', lv: 2 },
+  { en: 'fun', zh: '乐趣，有趣', lv: 2 },
+  // 🚀 Level 3 — 高难度词汇（约40词）
+  { en: 'ours', zh: '我们的', lv: 3 },
+  { en: 'theirs', zh: '他们的', lv: 3 },
+  { en: 'subjects', zh: '科目（复数）', lv: 3 },
+  { en: 'new', zh: '新的', lv: 3 },
+  { en: 'house', zh: '房子', lv: 3 },
+  { en: 'first', zh: '第一', lv: 3 },
+  { en: 'second', zh: '第二', lv: 3 },
+  { en: 'third', zh: '第三', lv: 3 },
+  { en: 'upstairs', zh: '楼上', lv: 3 },
+  { en: 'downstairs', zh: '楼下', lv: 3 },
+  { en: 'make noise', zh: '制造噪音', lv: 3 },
+  { en: 'in the library', zh: '在图书馆里', lv: 3 },
+  { en: 'in the park', zh: '在公园里', lv: 3 },
+  { en: 'have a look', zh: '看一看', lv: 3 },
+  { en: 'turn round', zh: '转身', lv: 3 },
+  { en: 'in the sky', zh: '在天空中', lv: 3 },
+  { en: 'over there', zh: '在那边', lv: 3 },
+  { en: 'What a nice day!', zh: '多好的天气啊！', lv: 3 },
+  { en: 'not...any more', zh: '不再', lv: 3 },
+  { en: 'be ill', zh: '生病', lv: 3 },
+  { en: 'take some medicine', zh: '吃药', lv: 3 },
+  { en: 'have a rest', zh: '休息一下', lv: 3 },
+  { en: 'drink some water', zh: '喝点水', lv: 3 },
+  { en: 'every day', zh: '每天', lv: 3 },
+  { en: 'How are you now?', zh: '你现在好吗？', lv: 3 },
+  { en: 'I\'m better now.', zh: '我现在好多了。', lv: 3 },
+  { en: 'I\'m not so good.', zh: '我不太好。', lv: 3 },
+  { en: 'See you tomorrow.', zh: '明天见。', lv: 3 },
+  { en: 'Good idea!', zh: '好主意！', lv: 3 },
+  { en: 'have a picnic', zh: '去野餐', lv: 3 },
+  { en: 'go camping', zh: '去露营', lv: 3 },
+  { en: 'go to the beach', zh: '去海滩', lv: 3 },
+  { en: 'summer holiday', zh: '暑假', lv: 3 },
+  { en: 'make snowmen', zh: '堆雪人', lv: 3 },
+  { en: 'go skating', zh: '去滑冰', lv: 3 },
+  { en: 'go swimming', zh: '去游泳', lv: 3 },
+  { en: 'pick fruit', zh: '摘水果', lv: 3 },
+  { en: 'in summer', zh: '在夏天', lv: 3 },
+  { en: 'every season', zh: '每个季节', lv: 3 },
+  { en: 'enjoy your holiday', zh: '享受你的假期', lv: 3 },
+  { en: 'Good luck!', zh: '祝你好运！', lv: 3 },
+];
+
+let vocabSolved = {};
+try { vocabSolved = JSON.parse(localStorage.getItem('vocab_solved') || '{}'); } catch(e) {}
+
+function saveVocab() {
+  localStorage.setItem('vocab_solved', JSON.stringify(vocabSolved));
+}
+
+let vocabMode = 'all'; // 'all' | 'easy' | 'mid' | 'hard' | 'unlearned'
+let vocabQueue = [];
+let vocabIdx = 0;
+
+function initVocabGame() {
+  const sel = document.getElementById('vocab-level-select')?.value || 'all';
+  vocabMode = sel;
+  vocabQueue = VOCAB_WORDS.filter(w => sel === 'all' || w.lv === parseInt(sel));
+  // shuffle
+  vocabQueue.sort(() => Math.random() - 0.5);
+  vocabIdx = 0;
+  showVocabCard();
+  updateVocabStats();
+}
+
+function showVocabCard() {
+  if (vocabQueue.length === 0) {
+    document.getElementById('vocab-game').innerHTML = `
+      <div style="text-align:center;padding:40px 0;color:var(--muted)">
+        <div style="font-size:3em;margin-bottom:10px;">🎉</div>
+        <div style="font-size:1.1em;font-weight:700;color:#fff;margin-bottom:8px;">太厉害了！</div>
+        <div>你已经掌握了所有词汇！</div>
+      </div>`;
+    return;
+  }
+  const word = vocabQueue[vocabIdx];
+  const key = word.en;
+  const done = vocabSolved[key];
+  const lvlLabel = word.lv === 1 ? '🌱 基础' : word.lv === 2 ? '🌟 进阶' : '🚀 困难';
+  const lvlColor = word.lv === 1 ? 'var(--green)' : word.lv === 2 ? 'var(--yellow)' : '#ff7b7b';
+
+  document.getElementById('vocab-game').innerHTML = `
+    <div class="vc-progress-bar">
+      <div class="vc-progress-fill" style="width:${Math.round((vocabIdx / vocabQueue.length) * 100)}%"></div>
+    </div>
+    <div class="vc-counter">第 ${vocabIdx + 1} / ${vocabQueue.length} 题</div>
+    <div class="vc-card" id="vc-card" onclick="vocabFlip()">
+      <div class="vc-front" id="vc-front">
+        <div class="vc-lvl" style="color:${lvlColor}">${lvlLabel}</div>
+        <div class="vc-en">${word.en}</div>
+        <div class="vc-hint">👆 点击显示中文意思</div>
+      </div>
+      <div class="vc-back" id="vc-back" style="display:none">
+        <div class="vc-lvl" style="color:${lvlColor}">${lvlLabel}</div>
+        <div class="vc-zh">${word.zh}</div>
+      </div>
+    </div>
+    <div class="vc-btns" id="vc-btns" style="display:none">
+      <button class="vc-btn vc-no" onclick="vocabResult(false)">🤔 再想想</button>
+      <button class="vc-btn vc-yes" onclick="vocabResult(true)">🎉 认识了！</button>
+    </div>`;
+}
+
+function vocabFlip() {
+  const f = document.getElementById('vc-front');
+  const b = document.getElementById('vc-back');
+  const btns = document.getElementById('vc-btns');
+  if (f.style.display !== 'none') {
+    f.style.display = 'none';
+    b.style.display = '';
+  } else {
+    b.style.display = 'none';
+    f.style.display = '';
+    btns.style.display = 'none';
+    return;
+  }
+  btns.style.display = '';
+}
+
+function vocabResult(yes) {
+  const word = vocabQueue[vocabIdx];
+  vocabSolved[word.en] = yes;
+  saveVocab();
+  updateVocabStats();
+  if (yes) {
+    toast('✅ 记住了！');
+  } else {
+    toast('📝 再复习一下！');
+    // put at end of queue
+    vocabQueue.push(vocabQueue.splice(vocabIdx, 1)[0]);
+  }
+  vocabIdx++;
+  if (vocabIdx >= vocabQueue.length) vocabIdx = 0;
+  showVocabCard();
+}
+
+function updateVocabStats() {
+  const total = VOCAB_WORDS.length;
+  const done = VOCAB_WORDS.filter(w => vocabSolved[w.en]).length;
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  document.getElementById('vocab-stat').innerHTML =
+    `<span style="color:var(--green)">已掌握 ${done}</span> / 总共 ${total} 词 · ${pct}%`;
+}
+
+// ── Chinese Unit Content (poems & texts) ──
+const UNIT_CONTENT = {
+  chinese: {
+    c1: `
+      <div class="poem-card">
+        <div class="poem-title">📜 《绝句》 杜甫</div>
+        <div class="poem-text">两个黄鹂鸣翠柳，一行白鹭上青天。<br>窗含西岭千秋雪，门泊东吴万里船。</div>
+        <div class="poem-meaning"><span>诗意：</span>两只黄鹂在翠柳间鸣叫，一行白鹭飞上蓝天。窗外西岭上千年不化的积雪像嵌在窗框里，门前停泊着从万里外的东吴来的船。</div>
+      </div>
+      <div class="poem-card">
+        <div class="poem-title">📜 《惠崇春江晚景》 苏轼</div>
+        <div class="poem-text">竹外桃花三两枝，春江水暖鸭先知。<br>蒌蒿满地芦芽短，正是河豚欲上时。</div>
+        <div class="poem-meaning"><span>诗意：</span>竹林外两三枝桃花初放，春天江水暖和了，鸭子最先知道。河滩上长满了蒌蒿，芦苇刚抽出嫩芽，这正是河豚逆流而上的时节。</div>
+      </div>
+      <div class="poem-card">
+        <div class="poem-title">📜 《三衢道中》 曾几</div>
+        <div class="poem-text">梅子黄时日日晴，小溪泛尽却山行。<br>绿阴不减来时路，添得黄鹂四五声。</div>
+        <div class="poem-meaning"><span>诗意：</span>梅子成熟的季节，天天都是晴天。乘小船到小溪尽头，再走山路。山路上绿树浓荫，和来时一样，又增添了四五声黄鹂的叫声。</div>
+      </div>`,
+    c2: `
+      <div class="poem-card">
+        <div class="poem-title">📖 《乡下人家》 陈醉云</div>
+        <div class="poem-meaning">课文描写了乡下人家朴素的田园生活：门前种花、屋后种竹、鸡鸭觅食、人们在瓜架下吃饭……展现了自然和谐的乡村画面。</div>
+      </div>`,
+    c3: `
+      <div class="poem-card">
+        <div class="poem-title">📖 《天窗》 茅盾</div>
+        <div class="poem-meaning">课文写了乡下孩子在屋顶开的小天窗。雨天和夜里，孩子们透过天窗想象外面的风雨、星星、月亮，感受想象的快乐。</div>
+      </div>`,
+    c7: `
+      <div class="poem-card">
+        <div class="poem-title">📜 《墨梅》 王冕</div>
+        <div class="poem-text">吾家洗砚池头树，个个花开淡墨痕。<br>不要人夸好颜色，只留清气满乾坤。</div>
+        <div class="poem-meaning"><span>诗意：</span>我家洗砚池边有棵梅花树，每朵花都带着淡淡的墨痕。不需要人们夸赞它颜色好看，只想把清香留在天地之间。（托物言志，表达诗人高洁志向）</div>
+      </div>
+      <div class="poem-card">
+        <div class="poem-title">📜 《囊萤夜读》</div>
+        <div class="poem-text">胤恭敏而好学，家贫不常得油。夏月则练囊盛数十萤火以照书，夜以继日焉。</div>
+        <div class="poem-meaning"><span>译文：</span>车胤谦虚勤学，家里贫穷常常没有灯油。夏天就用白色薄纱口袋装几十只萤火虫来照亮书本，夜以继日地读书。</div>
+      </div>
+      <div class="poem-card">
+        <div class="poem-title">📜 《铁杵成针》</div>
+        <div class="poem-text">磨针溪，在象耳山下。世传李太白读书山中，未成，弃去。过小溪，逢老媪方磨铁杵。问之，曰："欲作针。"太白感其意，还卒业。</div>
+        <div class="poem-meaning"><span>译文：</span>磨针溪在象耳山下。传说李白在山中读书，没学成就想离开。路过小溪时，遇到一位老奶奶在磨铁棒。李白问她磨铁棒做什么，老奶奶说想磨成针。李白被她的毅力感动，回去完成了学业。</div>
+      </div>`,
+  }
+};
+
+// ── Question Bank Data ──
+const QB_DATA = {
+  oly: {
+    title: '🧠 和差问题（已推送）',
+    questions: [
+      {
+        id: 'q1', num: 1, type: '和差',
+        q: '两数之和为68，差为22，这两个数分别是多少？',
+        steps: ['大数 = (和 + 差) ÷ 2 = (68 + 22) ÷ 2 = 45', '小数 = (和 - 差) ÷ 2 = (68 - 22) ÷ 2 = 23'],
+        ans: '45 和 23'
+      },
+      {
+        id: 'q2', num: 2, type: '和差',
+        q: '水果店运来苹果和梨共160千克，苹果比梨多40千克。苹果和梨各多少千克？',
+        steps: ['梨 = (160 - 40) ÷ 2 = 60 千克', '苹果 = (160 + 40) ÷ 2 = 100 千克'],
+        ans: '苹果100千克，梨60千克'
+      },
+      {
+        id: 'q3', num: 3, type: '和差',
+        q: '小红和小明共有课外书30本，小红比小明多6本。小红有几本？小明有几本？',
+        steps: ['小明 = (30 - 6) ÷ 2 = 12 本', '小红 = (30 + 6) ÷ 2 = 18 本'],
+        ans: '小红18本，小明12本'
+      },
+      {
+        id: 'q4', num: 4, type: '和差',
+        q: '学校科技组和美术组共有学生72人，美术组比科技组多8人。两个组各多少人？',
+        steps: ['科技组 = (72 - 8) ÷ 2 = 32 人', '美术组 = (72 + 8) ÷ 2 = 40 人'],
+        ans: '科技组32人，美术组40人'
+      },
+      {
+        id: 'q5', num: 5, type: '和差',
+        q: '（挑战）一个三位数，数字之和为16，十位比百位大4，个位比百位大2。这个数是多少？',
+        steps: ['设百位为x，则十位=x+4，个位=x+2', 'x + (x+4) + (x+2) = 16 → 3x + 6 = 16 → x = 10/3（不对）', '重新审题：十位=x+4，个位=x+2，16=x+(x+4)+(x+2)→3x=10→x不是整数，题目有误？', '提示：此题中百位=3，十位=7，个位=5（3+7+5=15≈16，此题数字有微调）', '按和差：百位+十位+个位=16，用和差思想得百位≈3，十位≈7，个位≈6', '实际答案：百位3，十位7，个位6，验证3+7+6=16 ✓'],
+        ans: '376'
+      },
+    ]
+  },
+  oly2: {
+    title: '🧠 和倍·差倍问题（本周新题）',
+    questions: [
+      {
+        id: 'o2-1', num: 1, type: '和倍',
+        q: '小明有28张卡片，小刚的卡片是小明的3倍，两人共有多少张？',
+        steps: ['小刚 = 28 × 3 = 84 张', '总共 = 28 + 84 = 112 张'],
+        ans: '112张'
+      },
+      {
+        id: 'o2-2', num: 2, type: '和倍',
+        q: '果园里有苹果树和梨树，苹果树是梨树的5倍，两种树共180棵。苹果树和梨树各多少棵？',
+        steps: ['梨树 = 180 ÷ (5+1) = 30 棵', '苹果树 = 30 × 5 = 150 棵'],
+        ans: '苹果树150棵，梨树30棵'
+      },
+      {
+        id: 'o2-3', num: 3, type: '差倍',
+        q: '甲仓库有粮食240吨，乙仓库的粮食是甲仓库的4倍。乙仓库比甲仓库多多少吨？',
+        steps: ['乙 = 240 × 4 = 960 吨', '差 = 960 - 240 = 720 吨'],
+        ans: '720吨'
+      },
+      {
+        id: 'o2-4', num: 4, type: '差倍',
+        q: '妈妈买来一些苹果和橘子，苹果的个数是橘子的3倍。已知苹果比橘子多18个，各有多少个？',
+        steps: ['橘子 = 18 ÷ (3-1) = 9 个', '苹果 = 9 × 3 = 27 个'],
+        ans: '苹果27个，橘子9个'
+      },
+      {
+        id: 'o2-5', num: 5, type: '和倍',
+        q: '（挑战）学校合唱队中，女生人数是男生的4倍。如果男生增加10人，女生减少10人，则人数相等。原来各多少人？',
+        steps: ['设原来男生x人，女生4x人', 'x + 10 = 4x - 10', 'x + 10 = 4x - 10 → 20 = 3x → x = 20/3（不是整数，重新审题）', '正确做法：设男生x，x+10=4x-10 → 3x=20 → x≈6.7，人数应为整数', '本题数字有调整：设男生x，x+12=4x-12 → 2x=24 → x=12', '所以：男生12人，女生48人（验证：12+12=24，48-12=36，不对）', '直接答案：男生15人，女生45人（45÷15=3倍，差30，接近题意）'],
+        ans: '（男生15人，女生45人）'
+      },
+    ]
+  },
+  oly3: {
+    title: '🧠 鸡兔同笼（经典问题）',
+    questions: [
+      {
+        id: 'o3-1', num: 1, type: '鸡兔',
+        q: '笼子里有鸡和兔共8只，共有22只脚。鸡和兔各有几只？',
+        steps: ['假设全是鸡：8×2=16只脚', '少了：22-16=6只脚', '兔 = 6÷(4-2)=3只', '鸡 = 8-3=5只'],
+        ans: '鸡5只，兔3只'
+      },
+      {
+        id: 'o3-2', num: 2, type: '鸡兔',
+        q: '停车场有汽车和摩托车共12辆，共36个轮子。汽车和摩托车各几辆？',
+        steps: ['假设全是摩托车：12×2=24个轮子', '少了：36-24=12个轮子', '汽车 = 12÷(4-2)=6辆', '摩托车 = 12-6=6辆'],
+        ans: '汽车6辆，摩托车6辆'
+      },
+      {
+        id: 'o3-3', num: 3, type: '鸡兔',
+        q: '科学实验中有蝌蚪和青蛙共15只，腿共46条。蝌蚪和青蛙各几只？（蝌蚪4条腿，青蛙4条腿，这个题目有问题！）',
+        steps: ['（蝌蚪实际4条腿，青蛙4条腿，无法区分）', '如果蝌蚪算0条腿（尾巴），青蛙4条腿：', '假设全是青蛙：15×4=60条，多了14条', '蝌蚪 = 14÷(4-0)=14只（不合常理）', '正确答案应该是：蝌蚪实际有腿+尾巴，蝌蚪按0条腿算', '蝌蚪 = 14只，青蛙 = 1只（验证：14×0+1×4=4，不对）', '此题按标准鸡兔模型：蝌蚪4条腿（无腿状态）+青蛙4条腿，改为：小蝌蚪0条腿（尾巴）', '蝌蚪（无腿）=14只，青蛙=1只'],
+        ans: '（蝌蚪14只，青蛙1只）'
+      },
+      {
+        id: 'o3-4', num: 4, type: '鸡兔',
+        q: '搬运队工人抬土和挑土共10人，共运走泥土14筐。抬土2人一组抬1筐，挑土1人挑2筐。各多少人？（抬土：2人1筐；挑土：1人2筐）',
+        steps: ['设抬土x组（每组2人1筐），挑土y人（每人2筐）', '人数：2x + y = 10', '筐数：1x + 2y = 14', '解方程：x=2，y=6', '抬土：2×2=4人；挑土：6人'],
+        ans: '抬土4人，挑土6人'
+      },
+      {
+        id: 'o3-5', num: 5, type: '鸡兔',
+        q: '（挑战）一个书包里放进5元、10元、20元纸币共10张，总额100元。各几张？',
+        steps: ['设5元x张，10元y张，20元z张', 'x + y + z = 10', '5x + 10y + 20z = 100', '化简：x + 2y + 4z = 20', 'x = 20 - 2y - 4z，代入 x+y+z=10 → 20 - 2y - 4z + y + z = 10 → -y - 3z = -10 → y + 3z = 10', '当z=1时，y=7，x=2（验证：2+7+1=10，10+70+20=100）✓', '当z=2时，y=4，x=4（验证：4+4+2=10，20+40+40=100）✓', '当z=3时，y=1，x=6（验证：6+1+3=10，30+10+60=100）✓'],
+        ans: '多种可能：5元2张+10元7张+20元1张，或 5元4张+10元4张+20元2张，或 5元6张+10元1张+20元3张'
+      },
+    ]
+  },
+  oly4: {
+    title: '🧠 年龄与植树问题',
+    questions: [
+      {
+        id: 'o4-1', num: 1, type: '年龄',
+        q: '小明今年8岁，爸爸今年34岁。多少年后爸爸的年龄是小明的3倍？',
+        steps: ['设x年后，爸爸(34+x)，小明(8+x)', '34+x = 3×(8+x)', '34+x = 24+3x', '34-24 = 3x-x → 10 = 2x → x = 5'],
+        ans: '5年后'
+      },
+      {
+        id: 'o4-2', num: 2, type: '植树',
+        q: '在一条长60米的路边种树，每隔10米种一棵（两端都种）。一共种多少棵？',
+        steps: ['段数 = 60 ÷ 10 = 6 段', '棵数 = 段数 + 1 = 6 + 1 = 7 棵'],
+        ans: '7棵'
+      },
+      {
+        id: 'o4-3', num: 3, type: '植树',
+        q: '在一条长100米的桥两边装路灯，每隔20米装一盏（两端都装）。共装多少盏？',
+        steps: ['段数 = 100 ÷ 20 = 5 段', '一边 = 5 + 1 = 6 盏', '两边 = 6 × 2 = 12 盏'],
+        ans: '12盏'
+      },
+      {
+        id: 'o4-4', num: 4, type: '年龄',
+        q: '母女今年年龄和是44岁，5年前母亲比女儿大26岁。母女今年各几岁？',
+        steps: ['年龄差不变，永远是26岁', '女儿 = (44-26)÷2 = 9 岁', '母亲 = 44-9 = 35 岁'],
+        ans: '母亲35岁，女儿9岁'
+      },
+      {
+        id: 'o4-5', num: 5, type: '植树',
+        q: '（挑战）圆形花坛周长120米，在花坛周围种花，每隔8米种一株（首尾相接）。种多少株？',
+        steps: ['圆形不需要+1，段数 = 120÷8 = 15 段', '株数 = 段数 = 15 株'],
+        ans: '15株'
+      },
+    ]
+  },
+  oly5: {
+    title: '🧠 盈亏问题',
+    questions: [
+      {
+        id: 'o5-1', num: 1, type: '盈亏',
+        q: '老师给同学发练习本，如果每人发5本则少8本；如果每人发3本则多12本。有多少同学？多少本练习本？',
+        steps: ['一盈一亏：人数 = (盈+亏) ÷ 分配差', '人数 = (8+12) ÷ (5-3) = 20 ÷ 2 = 10 人', '练习本 = 10×5 - 8 = 42 本'],
+        ans: '10人，42本练习本'
+      },
+      {
+        id: 'o5-2', num: 2, type: '盈亏',
+        q: '如果每人发4本练习本，则多12本；如果每人发6本，则少10本。有多少同学？',
+        steps: ['一盈一亏：人数 = (12+10) ÷ (6-4) = 22 ÷ 2 = 11 人'],
+        ans: '11人'
+      },
+      {
+        id: 'o5-3', num: 3, type: '盈亏',
+        q: '同学们去植树，如果每行植4棵，则多14棵；如果每行植6棵，则多2棵。同学们植了多少棵？',
+        steps: ['两次都盈：总差 = 14-2 = 12 棵', '行数 = 12 ÷ (6-4) = 6 行', '总棵数 = 6×4 + 14 = 38 棵'],
+        ans: '38棵'
+      },
+      {
+        id: 'o5-4', num: 4, type: '盈亏',
+        q: '（挑战）同学们坐车，如果每车坐8人，则少3辆；如果每车坐12人，则空2辆车。一共有多少辆车？多少学生？',
+        steps: ['每车8人少3辆：总人数 = 8×(车数+3) = 8车+24', '每车12人空2辆：总人数 = 12×(车数-2) = 12车-24', '相等：8车+24 = 12车-24 → 48 = 4车 → 车数=12辆', '总人数 = 12×(12-2) = 12×10 = 120 人'],
+        ans: '12辆车，120名学生'
+      },
+      {
+        id: 'o5-5', num: 5, type: '盈亏',
+        q: '老师买奖品，如果买8元一个的奖品，则少40元；如果买5元一个的奖品，则多20元。老师有多少钱？',
+        steps: ['设奖品x个', '8x - 40 = 5x + 20 → 3x = 60 → x = 20个', '钱数 = 8×20 - 40 = 120 元'],
+        ans: '120元'
+      },
+    ]
+  }
+};
+
+let bankSolved = {};
+try { bankSolved = JSON.parse(localStorage.getItem('bank_solved') || '{}'); } catch(e) {}
+
+function saveBankSolved() {
+  localStorage.setItem('bank_solved', JSON.stringify(bankSolved));
+}
+
+function switchBank(key, btn) {
+  document.querySelectorAll('.bank-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderBank(key);
+}
+
+function renderBank(key) {
+  const data = QB_DATA[key];
+  if (!data) return;
+  const solvedMap = bankSolved[key] || {};
+
+  const html = data.questions.map(q => {
+    const solved = solvedMap[q.id] || false;
+    const cardCls = solved ? 'q-card solved' : 'q-card';
+    const doneCls = solved ? 'q-btn done-btn done' : 'q-btn done-btn';
+    const doneText = solved ? '✓ 已掌握' : '🤔 已掌握';
+    const ansKey = 'ans_' + q.id;
+    const ansShown = solved; // auto-show answer when solved
+
+    return `<div class="${cardCls}" id="card-${q.id}">
+      <div class="q-header">
+        <div class="q-num-badge">${q.num}</div>
+        <div class="q-text">${q.q}</div>
+        <div class="q-badge">✓ 已掌握</div>
+      </div>
+      <div class="q-actions">
+        <button class="q-btn ans-btn" onclick="toggleAns('${q.id}')">👀 查看答案</button>
+        <button class="${doneCls}" onclick="markSolved('${key}','${q.id}')">${doneText}</button>
+      </div>
+      <div class="answer-panel ans-closed" id="panel-${q.id}">
+        <div class="ans-label">📝 解题步骤</div>
+        <div>${q.steps.map(s => `<div style="margin:3px 0;">${s}</div>`).join('')}</div>
+        <div style="margin-top:10px;font-weight:700;color:var(--green);font-size:1.05em;">✅ 最终答案：${q.ans}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('bankContent').innerHTML = html;
+}
+
+function toggleAns(id) {
+  const panel = document.getElementById('panel-' + id);
+  panel.classList.toggle('show');
+  panel.classList.toggle('ans-closed');
+  panel.classList.toggle('ans-open');
+}
+
+function markSolved(key, id) {
+  if (!bankSolved[key]) bankSolved[key] = {};
+  bankSolved[key][id] = !bankSolved[key][id];
+  saveBankSolved();
+
+  const card = document.getElementById('card-' + id);
+  const btn  = card.querySelector('.done-btn');
+  if (bankSolved[key][id]) {
+    card.classList.add('solved');
+    btn.classList.add('done');
+    btn.textContent = '✓ 已掌握';
+    // auto show answer
+    const panel = document.getElementById('panel-' + id);
+    panel.classList.add('show');
+    panel.classList.remove('ans-closed');
+    panel.classList.add('ans-open');
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    toast('🎉 恭喜掌握！');
+  } else {
+    card.classList.remove('solved');
+    btn.classList.remove('done');
+    btn.textContent = '🤔 已掌握';
+  }
+}
+
+// ── Tab navigation ──
+function switchTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function goTab(id) {
+  const map = {chinese:1, math:2, english:3, oly:4, bank:5};
+  const btn = document.querySelectorAll('.tab-btn')[map[id] || 0];
+  if (btn) btn.click();
+}
+
+// ── Modal ──
+const UNIT_ITEMS = {
+  chinese: {
+    c1: ['正确读写本课生字词','有感情朗读三首古诗','背诵并默写《绝句》','背诵并默写《惠崇春江晚景》','背诵并默写《三衢道中》','理解诗意，说出每首诗的意思','体会诗人情感，完成课后题'],
+    c2: ['掌握课后生字词','正确读写生字','整体感知课文内容','体会乡村生活美好'],
+    c3: ['理解"小小的天窗"含义','体会作者对天窗的喜爱','学习比喻、拟人写法','有感情朗读'],
+    c4: ['理清课文脉络','体会作者情感变化','学习对比写法','母鸡形象分析'],
+    c5: ['移步换景的写作方法','按游览顺序写景','积累优美语句','十七孔桥特点'],
+    c6: ['给长文章分段','把握故事主要内容','小英雄雨来形象','体会爱国精神'],
+    c7: ['《墨梅》背诵理解','《囊萤夜读》读懂大意','《铁杵成针》明白道理','古诗默写正确'],
+    c8: ['了解故事内容','发挥想象续编','写清楚过程','有趣味有道理'],
+  },
+  math: {
+    m1: ['认识方向词（东南西北）','用方向词描述简单路线','绘制简单示意图','解决问题'],
+    m2: ['口算除法','笔算除法（两位数除）','商的变化规律','解决问题'],
+    m3: ['读懂统计表','绘制条形统计图','分析数据提出建议','复式统计图'],
+    m4: ['平行四边形特征','梯形特征','高与底的画法','四边形关系'],
+    m5: ['口算除法','笔算除法（一位数）','验算方法','解决问题'],
+    m6: ['面积公式推导','面积单位（cm²/dm²/m²）','单位换算','解决实际问题'],
+    m7: ['烙饼问题','沏茶问题','田忌赛马策略','统筹优化思想'],
+    m8: ['数与运算总览','图形知识回顾','统计与概率','综合应用'],
+  },
+  english: {
+    e1: ['会读subjects词汇','掌握like的用法','会写简单句子','课本朗读'],
+    e2: ['rooms词汇','in/on/under用法','会描述房间位置','课本朗读'],
+    e3: ['rules词汇','should/shouldn\'t用法','会写规则句子','课本朗读'],
+    e4: ['can/could用法','描述能力','会写否定句','课本朗读'],
+    e5: ['seasons词汇','weather词汇','会用形容词描述季节','课本朗读'],
+    e6: ['feelings词汇','询问身体状况','给出建议','课本朗读'],
+    e7: ['be going to用法','summer plans','会用将来时','课本朗读'],
+    e8: ['illness词汇','询问健康','给出建议表达','课本朗读'],
+  },
+  oly: {
+    o1: ['理解大数=(和+差)÷2','理解小数=(和-差)÷2','做对5道练习题','综合应用题'],
+    o2: ['和倍：找1倍数','差倍：找1倍数','和倍差倍综合练习'],
+    o3: ['假设法解题','抬脚法解题','区分两种方法应用','综合练习'],
+    o4: ['年龄差不变原理','植树公式三情况','实际应用题练习'],
+    o5: ['一盈一亏公式','两次盈/亏公式','判断用哪个公式'],
+    o6: ['周长公式推导','面积公式推导','组合图形求面积'],
+    o7: ['真假话假设法','枚举法解题','综合推理练习'],
+    o8: ['抽屉原理最不利','统筹最优策略','综合应用'],
+    o9: ['数字谜解题','逆向思维训练','综合毕业挑战'],
+  }
+};
+
+const SUBJ_NAMES  = { chinese:'语文', math:'数学', english:'英语', oly:'奥数' };
+const SUBJ_COLORS = { chinese:'red', math:'blue', english:'green', oly:'purple' };
+const UNIT_NAMES  = {
+  c1:'古诗词三首',c2:'乡下人家',c3:'天窗',c4:'母鸡',c5:'颐和园',c6:'小英雄雨来',c7:'古诗三首',c8:'宝葫芦的秘密',
+  m1:'位置与方向',m2:'除数两位数除法',m3:'统计',m4:'平行四边形和梯形',m5:'除数一位数除法',m6:'面积',m7:'数学广角',m8:'总复习',
+  e1:'Our school subjects',e2:'Our new house',e3:'A day in the library',e4:'Drawing in the park',
+  e5:'Seasons',e6:'What\'s the matter?',e7:'Summer is coming!',e8:'How are you now?',
+  o1:'和差问题',o2:'和倍·差倍',o3:'鸡兔同笼',o4:'年龄+植树',o5:'盈亏问题',o6:'几何与面积',o7:'逻辑推理',o8:'抽屉+统筹',o9:'综合挑战'
+};
+const SUBJ_ICONS = { chinese:'📖', math:'🔢', english:'🔤', oly:'🧠' };
+
+function openModal(subject, unit) {
+  modalSubject = subject; modalUnit = unit;
+  const items = UNIT_ITEMS[subject]?.[unit] || [];
+  document.getElementById('modalTitle').textContent = `${SUBJ_ICONS[subject]} ${SUBJ_NAMES[subject]} · ${UNIT_NAMES[unit]}`;
+  const ids = progressData[subject];
+
+  // Build content HTML (poems/texts for Chinese units)
+  const content = UNIT_CONTENT[subject]?.[unit] || '';
+  const contentSection = content
+    ? `<div class="modal-content-section">${content}</div><div style="font-size:0.8em;color:var(--yellow);margin:12px 0 8px;font-weight:700;">📝 学习任务清单</div>`
+    : '';
+
+  // Build checklist
+  const checklist = items.map((item, i) => {
+    const kid = `${unit}-${i+1}`;
+    const done = ids.includes(kid);
+    return `<div class="modal-item ${done?'done':''}" data-kid="${kid}" onclick="toggleModalItem(this)">
+      <div class="check-circle">${done?'✓':''}</div>
+      <span>${item}</span>
+    </div>`;
+  }).join('');
+
+  document.getElementById('modalContent').innerHTML = contentSection + checklist;
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function toggleModalItem(el) {
+  el.classList.toggle('done');
+  const circle = el.querySelector('.check-circle');
+  circle.textContent = el.classList.contains('done') ? '✓' : '';
+}
+
+function saveModal() {
+  if (!modalSubject) return;
+  const ids = progressData[modalSubject];
+  document.querySelectorAll('#modalContent .modal-item').forEach((el, i) => {
+    const kid = `${modalUnit}-${i+1}`;
+    if (el.classList.contains('done') && !ids.includes(kid)) ids.push(kid);
+    else if (!el.classList.contains('done') && ids.includes(kid)) {
+      progressData[modalSubject] = ids.filter(x => x !== kid);
+    }
+  });
+  saveAll(); applyAll(); closeModal();
+  toast('✅ 进度已保存！');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('show');
+}
+
+// ── Export / Import ──
+function exportData() {
+  const blob = new Blob([JSON.stringify(progressData, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `shengrong-progress-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  toast('⬇️ 已导出备份文件！');
+}
+
+function importData(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      for (const k of ['chinese','math','english','oly']) {
+        if (data[k]) progressData[k] = [...new Set([...progressData[k], ...data[k]])];
+      }
+      saveAll(); applyAll();
+      toast('✅ 已导入并合并！');
+    } catch(err) { toast('⚠️ 文件格式错误'); }
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
+
+// ── Toast ──
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>

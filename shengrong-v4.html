@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>尚融的星球</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #21262d;
+    --border: #30363d;
+    --accent: #3fb950;
+    --accent2: #58a6ff;
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --pink: #ff79c6;
+    --yellow: #f1fa8c;
+    --purple: #bd93f9;
+  }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+  }
+  
+  /* === 左侧导航 === */
+  .sidebar {
+    width: 200px;
+    min-width: 200px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0;
+    overflow-y: auto;
+  }
+  
+  .sidebar-header {
+    padding: 0 20px 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+  
+  .sidebar-header h1 {
+    font-size: 18px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  
+  .sidebar-header p {
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 4px;
+  }
+  
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text2);
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+  }
+  
+  .nav-item:hover {
+    background: var(--surface2);
+    color: var(--text);
+  }
+  
+  .nav-item.active {
+    background: rgba(63, 185, 80, 0.1);
+    color: var(--accent);
+    border-left-color: var(--accent);
+  }
+  
+  .nav-item span { font-size: 16px; }
+  
+  /* === 主内容区 === */
+  .main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 32px 40px;
+  }
+  
+  .page-header {
+    margin-bottom: 28px;
+  }
+  
+  .page-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  
+  .page-header p {
+    font-size: 13px;
+    color: var(--text2);
+  }
+  
+  .page { display: none; }
+  .page.active { display: block; }
+  
+  /* === 通用按钮 === */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: #000; }
+  .btn-primary:hover { background: #4ade60; }
+  
+  .btn-group { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+  
+  /* === 卡片网格 === */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.2s;
+  }
+  
+  .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  
+  .card-img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+  }
+  
+  .card-body { padding: 14px; }
+  
+  .card-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  
+  .card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+  
+  .tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    background: var(--surface2);
+    color: var(--text2);
+  }
+  
+  .tag.pink { background: rgba(255,121,198,0.15); color: var(--pink); }
+  .tag.blue { background: rgba(88,166,255,0.15); color: var(--accent2); }
+  .tag.yellow { background: rgba(241,250,140,0.15); color: var(--yellow); }
+  .tag.purple { background: rgba(189,147,249,0.15); color: var(--purple); }
+  
+  .card-date {
+    font-size: 11px;
+    color: var(--text2);
+  }
+  
+  .card-desc {
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+  
+  /* === 日记列表 === */
+  .diary-list { display: flex; flex-direction: column; gap: 12px; }
+  
+  .diary-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .diary-item:hover { border-color: var(--accent); }
+  
+  .diary-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  
+  .diary-mood { font-size: 22px; }
+  .diary-date { font-size: 12px; color: var(--text2); }
+  
+  .diary-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  
+  .diary-preview {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+  
+  /* === 模态框 === */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  .modal-overlay.active { display: flex; }
+  
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 540px;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 28px;
+  }
+  
+  .modal h3 {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  
+  .modal-close {
+    float: right;
+    background: none;
+    border: none;
+    color: var(--text2);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+  }
+  
+  .modal-close:hover { color: var(--text); }
+  
+  /* === 表单 === */
+  .form-group { margin-bottom: 16px; }
+  
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    color: var(--text2);
+    margin-bottom: 6px;
+  }
+  
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+  }
+  
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  
+  .form-group textarea { min-height: 100px; }
+  
+  .mood-picker { display: flex; gap: 8px; flex-wrap: wrap; }
+  
+  .mood-opt {
+    font-size: 28px;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  
+  .mood-opt:hover,
+  .mood-opt.selected { border-color: var(--accent); background: rgba(63,185,80,0.1); }
+  
+  .form-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+  
+  /* === 收藏样式 === */
+  .fav-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    transition: all 0.2s;
+  }
+  
+  .fav-card:hover { border-color: var(--accent); }
+  
+  .fav-emoji { font-size: 36px; flex-shrink: 0; }
+  
+  .fav-info { flex: 1; }
+  
+  .fav-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  
+  .fav-desc { font-size: 13px; color: var(--text2); line-height: 1.5; margin-top: 6px; }
+  
+  /* === 空状态 === */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text2);
+  }
+  
+  .empty-state .emoji { font-size: 48px; margin-bottom: 16px; }
+  .empty-state p { font-size: 14px; }
+  
+  /* === 作品详情 === */
+  .work-detail-img {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    height: 260px;
+  }
+  
+  /* === 响应式 === */
+  @media (max-width: 640px) {
+    body { flex-direction: column; }
+    .sidebar { width: 100%; min-width: unset; flex-direction: row; padding: 0; border-right: none; border-bottom: 1px solid var(--border); overflow-x: auto; }
+    .sidebar-header { display: none; }
+    .nav-item { padding: 12px 16px; white-space: nowrap; }
+    .main { padding: 20px 16px; }
+    .card-grid { grid-template-columns: 1fr; }
+    .fav-card { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== 左侧导航 ========== -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <h1>🌱 尚融的星球</h1>
+    <p id="today-date"></p>
+  </div>
+  
+  <div class="nav-item active" data-page="works">
+    <span>🎨</span> 我的作品
+  </div>
+  <div class="nav-item" data-page="favorites">
+    <span>❤️</span> 我的收藏
+  </div>
+  <div class="nav-item" data-page="diary">
+    <span>📔</span> 我的日记
+  </div>
+</aside>
+
+<!-- ========== 主内容 ========== -->
+<main class="main">
+  
+  <!-- === 我的作品 === -->
+  <div class="page active" id="page-works">
+    <div class="page-header">
+      <h2>🎨 我的作品</h2>
+      <p>记录尚融的每一次创作</p>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="openAddWork()">➕ 添加作品</button>
+    </div>
+    <div class="card-grid" id="works-grid">
+      <!-- 动态渲染 -->
+    </div>
+  </div>
+  
+  <!-- === 我的收藏 === -->
+  <div class="page" id="page-favorites">
+    <div class="page-header">
+      <h2>❤️ 我的收藏</h2>
+      <p>喜欢的东西都在这里</p>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="openAddFav()">➕ 添加收藏</button>
+    </div>
+    <div class="card-grid" id="fav-grid">
+      <!-- 动态渲染 -->
+    </div>
+  </div>
+  
+  <!-- === 我的日记 === -->
+  <div class="page" id="page-diary">
+    <div class="page-header">
+      <h2>📔 我的日记</h2>
+      <p>记录每一天的心情和故事</p>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="openAddDiary()">✍️ 写日记</button>
+    </div>
+    <div class="diary-list" id="diary-list">
+      <!-- 动态渲染 -->
+    </div>
+  </div>
+  
+</main>
+
+<!-- ========== 模态框 ========== -->
+
+<!-- 添加作品 -->
+<div class="modal-overlay" id="modal-work">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-work')">×</button>
+    <h3>➕ 添加作品</h3>
+    <div class="form-group">
+      <label>标题</label>
+      <input id="work-title" placeholder="比如：我的第一幅水彩画">
+    </div>
+    <div class="form-group">
+      <label>分类标签</label>
+      <select id="work-tag">
+        <option value="绘画">🎨 绘画</option>
+        <option value="作文">📝 作文</option>
+        <option value="编程">💻 编程</option>
+        <option value="手工">✂️ 手工</option>
+        <option value="音乐">🎵 音乐</option>
+        <option value="体育">⚽ 体育</option>
+        <option value="比赛">🏆 比赛</option>
+        <option value="其他">✨ 其他</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>图标（点一下选）</label>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        <span class="mood-opt selected" data-emoji="🎨" onclick="selEmoji(this)">🎨</span>
+        <span class="mood-opt" data-emoji="📝" onclick="selEmoji(this)">📝</span>
+        <span class="mood-opt" data-emoji="💻" onclick="selEmoji(this)">💻</span>
+        <span class="mood-opt" data-emoji="✂️" onclick="selEmoji(this)">✂️</span>
+        <span class="mood-opt" data-emoji="🎵" onclick="selEmoji(this)">🎵</span>
+        <span class="mood-opt" data-emoji="⚽" onclick="selEmoji(this)">⚽</span>
+        <span class="mood-opt" data-emoji="🏆" onclick="selEmoji(this)">🏆</span>
+        <span class="mood-opt" data-emoji="✨" onclick="selEmoji(this)">✨</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>描述（选填）</label>
+      <textarea id="work-desc" placeholder="说说这个作品的故事..."></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn" onclick="closeModal('modal-work')">取消</button>
+      <button class="btn btn-primary" onclick="saveWork()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 添加收藏 -->
+<div class="modal-overlay" id="modal-fav">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-fav')">×</button>
+    <h3>➕ 添加收藏</h3>
+    <div class="form-group">
+      <label>名称</label>
+      <input id="fav-name" placeholder="比如：《三国演义》">
+    </div>
+    <div class="form-group">
+      <label>类型</label>
+      <select id="fav-type">
+        <option value="书籍">📚 书籍</option>
+        <option value="动漫">🎬 动漫/电影</option>
+        <option value="游戏">🎮 游戏</option>
+        <option value="音乐">🎵 音乐</option>
+        <option value="运动">⚽ 运动</option>
+        <option value="动物">🐶 动物</option>
+        <option value="食物">🍔 食物</option>
+        <option value="其他">✨ 其他</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>图标</label>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        <span class="mood-opt selected" data-emoji="📚" onclick="selEmojiFav(this)">📚</span>
+        <span class="mood-opt" data-emoji="🎬" onclick="selEmojiFav(this)">🎬</span>
+        <span class="mood-opt" data-emoji="🎮" onclick="selEmojiFav(this)">🎮</span>
+        <span class="mood-opt" data-emoji="🎵" onclick="selEmojiFav(this)">🎵</span>
+        <span class="mood-opt" data-emoji="⚽" onclick="selEmojiFav(this)">⚽</span>
+        <span class="mood-opt" data-emoji="🐶" onclick="selEmojiFav(this)">🐶</span>
+        <span class="mood-opt" data-emoji="🍔" onclick="selEmojiFav(this)">🍔</span>
+        <span class="mood-opt" data-emoji="✨" onclick="selEmojiFav(this)">✨</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>为什么喜欢？（选填）</label>
+      <textarea id="fav-desc" placeholder="说说为什么喜欢它..."></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn" onclick="closeModal('modal-fav')">取消</button>
+      <button class="btn btn-primary" onclick="saveFav()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 写日记 -->
+<div class="modal-overlay" id="modal-diary">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-diary')">×</button>
+    <h3>✍️ 写日记</h3>
+    <div class="form-group">
+      <label>今天心情</label>
+      <div class="mood-picker">
+        <span class="mood-opt" data-mood="😄" onclick="selMood(this)">😄</span>
+        <span class="mood-opt" data-mood="🙂" onclick="selMood(this)">🙂</span>
+        <span class="mood-opt" data-mood="😐" onclick="selMood(this)">😐</span>
+        <span class="mood-opt" data-mood="😔" onclick="selMood(this)">😔</span>
+        <span class="mood-opt" data-mood="😤" onclick="selMood(this)">😤</span>
+        <span class="mood-opt" data-mood="🤩" onclick="selMood(this)">🤩</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>标题</label>
+      <input id="diary-title" placeholder="今天发生了什么事？">
+    </div>
+    <div class="form-group">
+      <label>内容</label>
+      <textarea id="diary-content" placeholder="写下来吧，想写什么都行..."></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn" onclick="closeModal('modal-diary')">取消</button>
+      <button class="btn btn-primary" onclick="saveDiary()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 查看详情 -->
+<div class="modal-overlay" id="modal-detail">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-detail')">×</button>
+    <div id="detail-content"></div>
+  </div>
+</div>
+
+<script>
+// ===== 数据存储 =====
+const STORAGE_KEY = 'shengrong_data_v4';
+let data = { works: [], favorites: [], diary: [] };
+let workEmoji = '🎨';
+let favEmoji = '📚';
+let selectedMood = '😄';
+
+function loadData() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    data = JSON.parse(saved);
+  } else {
+    // 初始示例数据
+    data = {
+      works: [
+        { id: 1, title: '我的水彩风景画', tag: '绘画', emoji: '🎨', desc: '学校美术课画的第一幅风景水彩', date: '2026-03-15' },
+        { id: 2, title: 'Scratch 猫抓老鼠游戏', tag: '编程', emoji: '💻', desc: '用Scratch做的游戏，有3个关卡', date: '2026-04-02' },
+        { id: 3, title: '作文《我的小狗》', tag: '作文', emoji: '📝', desc: '写我家小狗的一篇作文，被老师表扬了', date: '2026-04-10' },
+        { id: 4, title: '钢琴曲《天空之城》', tag: '音乐', emoji: '🎵', desc: '练了两个月终于能完整弹下来了', date: '2026-04-05' },
+      ],
+      favorites: [
+        { id: 1, name: '《三国演义》', type: '书籍', emoji: '📚', desc: '喜欢里面的诸葛亮，超级聪明！', date: '2026-01-20' },
+        { id: 2, name: '《原神》', type: '游戏', emoji: '🎮', desc: '最喜欢温迪，风景超美！', date: '2026-02-15' },
+        { id: 3, name: '柯 基', type: '动物', emoji: '🐶', desc: '腿短短屁股圆圆的，太可爱了', date: '2026-03-01' },
+        { id: 4, name: '可乐鸡翅', type: '食物', emoji: '🍔', desc: '妈妈做的最好吃！', date: '2026-03-10' },
+      ],
+      diary: [
+        { id: 1, title: '数学考试得了100分！', mood: '🤩', content: '今天数学考试，试卷发下来一看——100分！爸爸说要带我去吃大餐，太开心了！', date: '2026-04-15' },
+        { id: 2, title: '下雨天，好无聊', mood: '😐', content: '今天下了一整天雨，不能出去玩，只能在家看书。还好有《三国演义》陪着我。', date: '2026-04-14' },
+        { id: 3, title: '足球比赛输了', mood: '😔', content: '今天的足球比赛我们班输了，0比2。不过老师说重在参与，下次再努力！', date: '2026-04-12' },
+      ]
+    };
+    saveData();
+  }
+}
+
+function saveData() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+// ===== 日期显示 =====
+function showToday() {
+  const now = new Date();
+  const days = ['周日','周一','周二','周三','周四','周五','周六'];
+  const str = `${now.getMonth()+1}月${now.getDate()}日 ${days[now.getDay()]}`;
+  document.getElementById('today-date').textContent = str;
+}
+
+// ===== 导航 =====
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    item.classList.add('active');
+    document.getElementById('page-' + item.dataset.page).classList.add('active');
+  });
+});
+
+// ===== 渲染作品 =====
+function renderWorks() {
+  const grid = document.getElementById('works-grid');
+  if (data.works.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><div class="emoji">🎨</div><p>还没有作品<br>点击上方「添加作品」开始记录吧</p></div>';
+    return;
+  }
+  grid.innerHTML = data.works.map(w => `
+    <div class="card" onclick="showWorkDetail(${w.id})">
+      <div class="card-img">${w.emoji}</div>
+      <div class="card-body">
+        <div class="card-title">${w.title}</div>
+        <div class="card-tags">
+          <span class="tag ${tagColor(w.tag)}">${w.tag}</span>
+        </div>
+        <div class="card-date">📅 ${w.date}</div>
+        ${w.desc ? `<div class="card-desc">${w.desc}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function tagColor(tag) {
+  const map = { '绘画':'pink','作文':'blue','编程':'purple','手工':'yellow','音乐':'purple','体育':'blue','比赛':'pink' };
+  return map[tag] || '';
+}
+
+// ===== 渲染收藏 =====
+function renderFavs() {
+  const grid = document.getElementById('fav-grid');
+  if (data.favorites.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><div class="emoji">❤️</div><p>还没有收藏<br>点击上方「添加收藏」开始记录吧</p></div>';
+    return;
+  }
+  grid.innerHTML = data.favorites.map(f => `
+    <div class="fav-card">
+      <div class="fav-emoji">${f.emoji}</div>
+      <div class="fav-info">
+        <div class="fav-title">${f.name}</div>
+        <div class="card-tags">
+          <span class="tag">${f.type}</span>
+        </div>
+        <div class="fav-date card-date">📅 ${f.date}</div>
+        ${f.desc ? `<div class="fav-desc">${f.desc}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===== 渲染日记 =====
+function renderDiary() {
+  const list = document.getElementById('diary-list');
+  const sorted = [...data.diary].sort((a, b) => b.id - a.id);
+  if (sorted.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="emoji">📔</div><p>还没有日记<br>点击上方「写日记」开始记录吧</p></div>';
+    return;
+  }
+  list.innerHTML = sorted.map(d => `
+    <div class="diary-item" onclick="showDiaryDetail(${d.id})">
+      <div class="diary-meta">
+        <span class="diary-mood">${d.mood}</span>
+        <span class="diary-date">📅 ${d.date}</span>
+      </div>
+      <div class="diary-title">${d.title}</div>
+      <div class="diary-preview">${d.content}</div>
+    </div>
+  `).join('');
+}
+
+// ===== 详情展示 =====
+function showWorkDetail(id) {
+  const w = data.works.find(x => x.id === id);
+  if (!w) return;
+  document.getElementById('detail-content').innerHTML = `
+    <div class="work-detail-img">${w.emoji}</div>
+    <h2 style="font-size:20px;margin-bottom:8px;">${w.title}</h2>
+    <div class="card-tags" style="margin-bottom:12px;">
+      <span class="tag ${tagColor(w.tag)}">${w.tag}</span>
+      <span class="tag">📅 ${w.date}</span>
+    </div>
+    ${w.desc ? `<p style="font-size:14px;color:var(--text2);line-height:1.7;">${w.desc}</p>` : ''}
+    <div style="margin-top:20px;display:flex;justify-content:flex-end;">
+      <button class="btn" onclick="deleteWork(${id})">🗑️ 删除</button>
+    </div>
+  `;
+  openModal('modal-detail');
+}
+
+function showDiaryDetail(id) {
+  const d = data.diary.find(x => x.id === id);
+  if (!d) return;
+  document.getElementById('detail-content').innerHTML = `
+    <div style="margin-bottom:16px;">
+      <span style="font-size:36px;margin-right:12px;">${d.mood}</span>
+      <span style="font-size:13px;color:var(--text2);">📅 ${d.date}</span>
+    </div>
+    <h2 style="font-size:20px;margin-bottom:16px;">${d.title}</h2>
+    <p style="font-size:14px;color:var(--text2);line-height:1.8;">${d.content.replace(/\n/g, '<br>')}</p>
+    <div style="margin-top:20px;display:flex;justify-content:flex-end;">
+      <button class="btn" onclick="deleteDiary(${id})">🗑️ 删除</button>
+    </div>
+  `;
+  openModal('modal-detail');
+}
+
+function deleteWork(id) {
+  if (!confirm('确定要删除这个作品吗？')) return;
+  data.works = data.works.filter(w => w.id !== id);
+  saveData(); renderWorks(); closeModal('modal-detail');
+}
+
+function deleteDiary(id) {
+  if (!confirm('确定要删除这篇日记吗？')) return;
+  data.diary = data.diary.filter(d => d.id !== id);
+  saveData(); renderDiary(); closeModal('modal-detail');
+}
+
+// ===== 添加操作 =====
+let selEmojiEl = null;
+function selEmoji(el) {
+  if (selEmojiEl) selEmojiEl.classList.remove('selected');
+  el.classList.add('selected');
+  selEmojiEl = el;
+  workEmoji = el.dataset.emoji;
+}
+
+let selEmojiFavEl = null;
+function selEmojiFav(el) {
+  if (selEmojiFavEl) selEmojiFavEl.classList.remove('selected');
+  el.classList.add('selected');
+  selEmojiFavEl = el;
+  favEmoji = el.dataset.emoji;
+}
+
+let selMoodEl = null;
+function selMood(el) {
+  if (selMoodEl) selMoodEl.classList.remove('selected');
+  el.classList.add('selected');
+  selMoodEl = el;
+  selectedMood = el.dataset.mood;
+}
+
+function openAddWork() {
+  document.getElementById('work-title').value = '';
+  document.getElementById('work-tag').value = '绘画';
+  document.getElementById('work-desc').value = '';
+  document.querySelectorAll('#modal-work .mood-opt').forEach(e => e.classList.remove('selected'));
+  document.querySelector('#modal-work .mood-opt').classList.add('selected');
+  selEmojiEl = document.querySelector('#modal-work .mood-opt');
+  workEmoji = '🎨';
+  openModal('modal-work');
+}
+
+function openAddFav() {
+  document.getElementById('fav-name').value = '';
+  document.getElementById('fav-type').value = '书籍';
+  document.getElementById('fav-desc').value = '';
+  document.querySelectorAll('#modal-fav .mood-opt').forEach(e => e.classList.remove('selected'));
+  document.querySelector('#modal-fav .mood-opt').classList.add('selected');
+  selEmojiFavEl = document.querySelector('#modal-fav .mood-opt');
+  favEmoji = '📚';
+  openModal('modal-fav');
+}
+
+function openAddDiary() {
+  document.getElementById('diary-title').value = '';
+  document.getElementById('diary-content').value = '';
+  document.querySelectorAll('#modal-diary .mood-opt').forEach(e => e.classList.remove('selected'));
+  document.querySelector('#modal-diary .mood-opt').classList.add('selected');
+  selMoodEl = document.querySelector('#modal-diary .mood-opt');
+  selectedMood = '😄';
+  openModal('modal-diary');
+}
+
+function saveWork() {
+  const title = document.getElementById('work-title').value.trim();
+  if (!title) { alert('请输入标题'); return; }
+  const tag = document.getElementById('work-tag').value;
+  const desc = document.getElementById('work-desc').value.trim();
+  const now = new Date();
+  const date = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+  const id = Date.now();
+  data.works.unshift({ id, title, tag, emoji: workEmoji, desc, date });
+  saveData(); renderWorks(); closeModal('modal-work');
+}
+
+function saveFav() {
+  const name = document.getElementById('fav-name').value.trim();
+  if (!name) { alert('请输入名称'); return; }
+  const type = document.getElementById('fav-type').value;
+  const desc = document.getElementById('fav-desc').value.trim();
+  const now = new Date();
+  const date = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+  const id = Date.now();
+  data.favorites.unshift({ id, name, type, emoji: favEmoji, desc, date });
+  saveData(); renderFavs(); closeModal('modal-fav');
+}
+
+function saveDiary() {
+  const title = document.getElementById('diary-title').value.trim();
+  const content = document.getElementById('diary-content').value.trim();
+  if (!title || !content) { alert('请填写标题和内容'); return; }
+  const now = new Date();
+  const date = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+  const id = Date.now();
+  data.diary.unshift({ id, title, mood: selectedMood, content, date });
+  saveData(); renderDiary(); closeModal('modal-diary');
+}
+
+// ===== 模态框 =====
+function openModal(id) { document.getElementById(id).classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+document.querySelectorAll('.modal-overlay').forEach(ov => {
+  ov.addEventListener('click', e => { if (e.target === ov) ov.classList.remove('active'); });
+});
+
+// ===== 初始化 =====
+loadData();
+showToday();
+renderWorks();
+renderFavs();
+renderDiary();
+</script>
+</body>
+</html>
