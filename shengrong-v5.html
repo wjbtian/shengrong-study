@@ -873,7 +873,18 @@
   .section-title { font-size: 16px; font-weight: 700; margin: 24px 0 14px; display: flex; align-items: center; gap: 10px; }
   .section-title .section-icon { font-size: 20px; }
 
-  @media (max-width: 768px) {
+  
+  /* 英语词汇样式 */
+  .ew-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+  .ew-card { background: rgba(22,27,34,0.8); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px; transition: all 0.2s; }
+  .ew-card:hover { border-color: rgba(88,166,255,0.3); transform: translateY(-2px); }
+  .ew-word { font-size: 15px; font-weight: 700; color: #58a6ff; margin-bottom: 4px; }
+  .ew-zh { font-size: 12px; color: #e6edf3; margin-bottom: 6px; }
+  .ew-sentence { font-size: 11px; color: #8b949e; font-style: italic; line-height: 1.4; }
+  .ew-unit.hidden { display: none; }
+  .ew-unit { display: block; }
+
+@media (max-width: 768px) {
     aside { width: 60px; }
     aside .sidebar-logo-text, aside .sidebar-logo-sub, aside .nav-item span { display: none; }
     aside .sidebar-logo { justify-content: center; padding: 0 0 16px; }
@@ -1468,7 +1479,13 @@
     <!-- 英语 -->
     <div class="learn-section">
       <h3>🔤 英语</h3>
-      <div class="unit-grid" id="english-grid"></div>
+      <div class="unit-grid" id="english-grid" style="margin-bottom:20px;"></div>
+
+    <!-- 英语词汇 -->
+    <div class="learn-section">
+      <h3>🔤 英语词汇闯关</h3>
+      <div class="unit-grid" id="english-words-grid"></div>
+    </div>
     </div>
 
     <!-- 数学 -->
@@ -1661,14 +1678,24 @@ function loadStore() {
       { id: 2, mood: '😐', title: '下雨天，好无聊', content: '今天下了一整天雨，不能出去玩，只能在家看书。还好有《三国演义》陪着我。', date: '2026-04-14' },
       { id: 3, mood: '😔', title: '足球比赛输了', content: '今天的足球比赛我们班输了，0比2。不过老师说重在参与，下次再努力！', date: '2026-04-12' },
       { id: 4, mood: '😄', title: '吉他学会了C和弦！', content: '今天吉他课学会了C和弦！老师说我的手指按弦很稳，好开心！', date: '2026-04-10' },
+      { id: 5, mood: '🤩', title: '吉他课又进步了！', content: '今天吉他课学会了G和弦和D和弦！三个和弦连起来弹，终于能弹出《小星星》了，好有成就感！', date: '2026-04-17' },
+      { id: 6, mood: '😄', title: '学校的樱花开了', content: '今天放学看到学校门口的樱花全开了，粉粉的一片，好漂亮！我和同学在树下拍了好多照片。', date: '2026-04-11' },
+      { id: 7, mood: '😤', title: '和同学吵架了', content: '今天体育课和同学抢篮球，吵了一架。回家想了想，其实我也有不对的地方，明天去跟他道歉。', date: '2026-04-09' },
+      { id: 8, mood: '😄', title: '看了《流浪地球》电影', content: '爸爸带我看《流浪地球》，电影太震撼了！原来太阳真的会毁灭，太阳系也会消失，地球要搬家到别的地方去。', date: '2026-04-08' },
+      { id: 9, mood: '🙂', title: '语文作业太多了', content: '今天语文作业写了很久，有抄写生字、有背诵古诗、还有作文。写完作文都晚上9点了，不过写得很认真！', date: '2026-04-07' },
+      { id: 10, mood: '🤩', title: '组装了一台电脑！', content: '爸爸带我组装了一台电脑！我自己把CPU、显卡、内存条都装上去了，虽然费了很大劲，但开机的那一刻超级激动！', date: '2026-04-06' },
     ],
     shines: [
       { id: 1, title: '吉他练习第1天', type: '🎸 吉他', icon: '🎸', desc: '今天开始学吉他！第一课，学会了C和弦。', date: '2026-04-10' },
       { id: 2, title: '足球比赛获胜', type: '⚽ 运动', icon: '⚽', desc: '班级足球赛，我们赢了2比1！', date: '2026-04-08' },
       { id: 3, title: '学校运动会60米第三名', type: '📸 照片', icon: '📸', desc: '60米短跑第三名！冲线那一刻太激动了', date: '2026-04-05' },
-      { id: 4, title: '水彩风景画', type: '🎨 绘画', icon: '🎨', desc: '美术课画的水彩 sunset，好喜欢这个颜色', date: '2026-04-02' },
+      { id: 4, title: '水彩风景画', type: '🎨 绘画', icon: '🎨', desc: '美术课画的水彩风景，好喜欢这个颜色', date: '2026-04-02' },
       { id: 5, title: 'Scratch 猫抓老鼠游戏', type: '🎮 游戏', icon: '🎮', desc: '自己做的游戏，可以玩！3个关卡', date: '2026-04-01' },
       { id: 6, title: '数学竞赛二等奖', type: '🏆 荣誉', icon: '🏆', desc: '校级数学竞赛二等奖，继续加油！', date: '2026-03-28' },
+      { id: 7, title: '吉他课学会G和弦', type: '🎸 吉他', icon: '🎸', desc: '吉他课又进步了！G和弦和D和弦都会弹了！', date: '2026-04-17' },
+      { id: 8, title: '学校樱花树下合影', type: '📸 照片', icon: '📸', desc: '放学看到学校门口樱花全开了，和同学在樱花树下拍了好多照片', date: '2026-04-11' },
+      { id: 9, title: '作文被老师表扬', type: '🏆 荣誉', icon: '🏆', desc: '写的《我最难忘的一天》被老师当范文在全班朗读，好开心！', date: '2026-04-09' },
+      { id: 10, title: '组装电脑成功开机', type: '🎮 游戏', icon: '💻', desc: '和爸爸一起组装电脑！CPU、显卡、内存都自己装上，开机那一刻超级激动', date: '2026-04-06' },
     ],
     sciences: [
       { id: 1, title: '为什么天空是蓝色的？', type: '自然', icon: '🌤️', desc: '太阳光看起来是白色的，但其实它是由红、橙、黄、绿、蓝、靛、紫七种颜色的光组成的。大气层里的空气分子会把蓝光散射到四面八方，所以当我们抬头看天空时，看到的就是被散射的蓝光。', date: '2026-04-15' },
@@ -1687,6 +1714,12 @@ function loadStore() {
       { id: 4, title: 'NASA 发现"第二地球" TOI-715 b', type: 'space', icon: '🌍', summary: 'NASA 宣布发现位于宜居带的超级地球，距离140光年，可能有液态水！', date: '2026-04-12' },
       { id: 5, title: '特斯拉 Optimus 机器人家庭版展示', type: 'robot', icon: '🤖', summary: '特斯拉展示 Optimus 叠衣服、洗碗、浇花的画面，未来可能进入千家万户。', date: '2026-04-11' },
       { id: 6, title: '国产Kimi 大模型支持200万字上下文', type: 'ai', icon: '🤖', summary: '月之暗面公司的 Kimi 大模型升级，可一次性处理200万字内容！', date: '2026-04-10' },
+      { id: 7, title: '中国成功发射天宫空间站扩展舱段', type: 'space', icon: '🚀', summary: '中国用长征火箭成功发射天宫空间站新舱段，神舟二十号航天员进入舱内作业，中国空间站从"T字构型"升级为更复杂的结构。', date: '2026-04-16' },
+      { id: 8, title: '小米发布自研Xiaomi AI 大模型', type: 'ai', icon: '🤖', summary: '小米发布新版大模型，在中文理解和生成能力上大幅提升，已接入小米汽车和手机助手。', date: '2026-04-09' },
+      { id: 9, title: '苹果 Apple Vision Pro 3 全球开售', type: 'tech', icon: '💡', summary: '苹果第三代空间计算头显发布，更轻更薄，重量减轻40%，搭载最新M4芯片，支持手势控制所有应用。', date: '2026-04-08' },
+      { id: 10, title: '深圳实现无人机外卖 5分钟送达', type: 'tech', icon: '🚀', summary: '美团无人机配送在深圳全面铺开，附近3公里内订单5分钟送达，已覆盖全市100多个社区。', date: '2026-04-07' },
+      { id: 11, title: 'DeepSeek 发布开源多模态模型', type: 'ai', icon: '🤖', summary: '中国AI公司DeepSeek发布最新开源模型，可同时理解文本、图像、视频，性能逼近GPT-5但开源免费！', date: '2026-04-06' },
+      { id: 12, title: '宇树科技人形机器人进学校当助教', type: 'robot', icon: '🤖', summary: '宇树科技人形机器人在北京海淀区多所小学当"AI助教"，协助老师讲解科学知识，学生们超级喜欢！', date: '2026-04-05' },
     ]
   };
   saveStore();
@@ -1908,6 +1941,131 @@ const SUBJECTS = {
   ]},
 };
 
+
+// ===== 英语词汇表 =====
+const ENGLISH_WORDS = {
+  'Unit 1': [
+    { word: 'helpful', zh: '愿意帮忙的', sentence: 'She is very helpful.' },
+    { word: 'clever', zh: '聪明的', sentence: 'The clever boy solved it.' },
+    { word: 'shy', zh: '害羞的', sentence: 'He is a little shy.' },
+    { word: 'polite', zh: '有礼貌的', sentence: 'Be polite to everyone.' },
+    { word: 'hard-working', zh: '勤奋的', sentence: 'My dad is hard-working.' },
+    { word: 'active', zh: '活跃的', sentence: 'She is very active in class.' },
+    { word: 'quiet', zh: '安静的', sentence: 'Please be quiet in the library.' },
+    { word: 'funny', zh: '有趣的/滑稽的', sentence: 'The story is so funny.' },
+  ],
+  'Unit 2': [
+    { word: 'Monday', zh: '星期一', sentence: 'I have PE on Monday.' },
+    { word: 'Tuesday', zh: '星期二', sentence: 'Tuesday is my favorite day.' },
+    { word: 'Wednesday', zh: '星期三', sentence: 'We have art on Wednesday.' },
+    { word: 'Thursday', zh: '星期四', sentence: 'Thursday is almost Friday!' },
+    { word: 'Friday', zh: '星期五', sentence: 'I am happy on Friday!' },
+    { word: 'Saturday', zh: '星期六', sentence: 'I play football on Saturday.' },
+    { word: 'Sunday', zh: '星期日', sentence: 'Sunday is a rest day.' },
+    { word: 'weekend', zh: '周末', sentence: 'What do you do on the weekend?' },
+  ],
+  'Unit 3': [
+    { word: 'chicken', zh: '鸡肉', sentence: 'I like chicken for lunch.' },
+    { word: 'fish', zh: '鱼', sentence: 'The fish is very fresh.' },
+    { word: 'noodles', zh: '面条', sentence: 'I would like some noodles.' },
+    { word: 'rice', zh: '米饭', sentence: 'I eat rice every day.' },
+    { word: 'vegetable', zh: '蔬菜', sentence: 'Eat more vegetables.' },
+    { word: 'juice', zh: '果汁', sentence: 'I want some apple juice.' },
+    { word: 'thirsty', zh: '渴的', sentence: 'I am very thirsty.' },
+    { word: 'delicious', zh: '美味的', sentence: 'The food is delicious!' },
+  ],
+  'Unit 4': [
+    { word: 'hobby', zh: '爱好', sentence: 'What is your hobby?' },
+    { word: 'draw', zh: '画画', sentence: 'I like to draw pictures.' },
+    { word: 'sing', zh: '唱歌', sentence: 'She can sing very well.' },
+    { word: 'dance', zh: '跳舞', sentence: 'I like to dance.' },
+    { word: 'cook', zh: '烹饪', sentence: 'My mum likes to cook.' },
+    { word: 'swim', zh: '游泳', sentence: 'I can swim very fast.' },
+    { word: 'read', zh: '阅读', sentence: 'I like to read books.' },
+    { word: 'piano', zh: '钢琴', sentence: 'He plays the piano every day.' },
+  ],
+  'Unit 5': [
+    { word: 'tall', zh: '高的', sentence: 'The tree is very tall.' },
+    { word: 'strong', zh: '强壮的', sentence: 'The elephant is strong.' },
+    { word: 'short', zh: '矮的/短的', sentence: 'He is short for his age.' },
+    { word: 'thin', zh: '瘦的', sentence: 'The cat is thin and cute.' },
+    { word: 'big', zh: '大的', sentence: 'The elephant has big ears.' },
+    { word: 'small', zh: '小的', sentence: 'The mouse is very small.' },
+    { word: 'long', zh: '长的', sentence: 'The snake is very long.' },
+    { word: 'young', zh: '年轻的', sentence: 'My grandfather is not young.' },
+  ],
+  'Unit 6': [
+    { word: 'play', zh: '玩', sentence: 'I play football every day.' },
+    { word: 'watch', zh: '观看', sentence: 'I watch TV on Sundays.' },
+    { word: 'read', zh: '读', sentence: 'I read books before sleep.' },
+    { word: 'sleep', zh: '睡觉', sentence: 'I sleep at 9 o'clock.' },
+    { word: 'climb', zh: '爬山', sentence: 'We climb mountains on weekends.' },
+    { word: 'eat', zh: '吃', sentence: 'I eat breakfast at 7:00.' },
+    { word: 'drink', zh: '喝', sentence: 'I drink water every day.' },
+    { word: 'do', zh: '做', sentence: 'What do you do on Sundays?' },
+  ],
+  'Unit 7': [
+    { word: 'spring', zh: '春天', sentence: 'Flowers bloom in spring.' },
+    { word: 'summer', zh: '夏天', sentence: 'Summer is very hot.' },
+    { word: 'autumn', zh: '秋天', sentence: 'Leaves turn yellow in autumn.' },
+    { word: 'winter', zh: '冬天', sentence: 'It is cold in winter.' },
+    { word: 'sunny', zh: '晴朗的', sentence: 'It is sunny today.' },
+    { word: 'windy', zh: '有风的', sentence: 'It is windy in autumn.' },
+    { word: 'rainy', zh: '下雨的', sentence: 'It is rainy today.' },
+    { word: 'snowy', zh: '下雪的', sentence: 'Winter is snowy.' },
+  ],
+  'Unit 8': [
+    { word: 'story', zh: '故事', sentence: 'Tell me a story, please.' },
+    { word: 'learn', zh: '学习', sentence: 'I learn English every day.' },
+    { word: 'write', zh: '写', sentence: 'I write a diary every day.' },
+    { word: 'listen', zh: '听', sentence: 'I listen to music.' },
+    { word: 'speak', zh: '说', sentence: 'I can speak English.' },
+    { word: 'think', zh: '想/思考', sentence: 'I think it is interesting.' },
+    { word: 'help', zh: '帮助', sentence: 'I want to help my mum.' },
+    { word: 'play', zh: '玩/打(球)', sentence: 'We play basketball at school.' },
+  ],
+};
+
+function renderEnglishWords() {
+  const container = document.getElementById('english-words-grid');
+  if (!container) return;
+  
+  // 按 Unit 分组显示，默认显示 Unit 1
+  const units = Object.keys(ENGLISH_WORDS);
+  
+  // 渲染单元标签
+  let tabsHtml = '<div class="filter-pills" id="ew-tabs">';
+  units.forEach((u, i) => {
+    tabsHtml += `<span class="filter-pill ${i===0?'active':''}" onclick="showWordUnit('${u}', this)">${u}</span>`;
+  });
+  tabsHtml += '</div>';
+  
+  // 渲染词汇表格
+  let tableHtml = '';
+  units.forEach((u, i) => {
+    tableHtml += `<div class="ew-unit ${i===0?'':'hidden'}" id="ew-unit-${u.replace(' ','-')}">
+      <div class="ew-grid">`;
+    ENGLISH_WORDS[u].forEach(w => {
+      tableHtml += `<div class="ew-card">
+        <div class="ew-word">${w.word}</div>
+        <div class="ew-zh">${w.zh}</div>
+        <div class="ew-sentence">${w.sentence}</div>
+      </div>`;
+    });
+    tableHtml += '</div></div>';
+  });
+  
+  container.innerHTML = tabsHtml + tableHtml;
+}
+
+function showWordUnit(unit, el) {
+  document.querySelectorAll('#ew-tabs .filter-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.ew-unit').forEach(u => u.classList.add('hidden'));
+  document.getElementById('ew-unit-' + unit.replace(' ','-')).classList.remove('hidden');
+}
+
+
 function renderLearn() {
   Object.values(SUBJECTS).forEach(sub => {
     const grid = document.getElementById(sub.title);
@@ -1922,6 +2080,7 @@ function renderLearn() {
   });
   renderPoems();
   renderOM();
+  renderEnglishWords();
 }
 
 function toggleUnit(key) {
