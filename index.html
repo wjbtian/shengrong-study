@@ -311,186 +311,111 @@
     .science-grid { grid-template-columns: 1fr; }
   }
 
-  /* ===== 照片墙 ===== */
-  .photowall {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 24px;
-    padding: 20px 0;
-    perspective: 1200px;
+    /* ===== 照片墙 - 错落散落风 ===== */
+  #photowall-section { padding: 20px; }
+
+  .pw-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px;
   }
-  /* 照片卡片 - 3D玻璃质感 */
-  .pw-item {
+  .pw-header h2 { font-size: 18px; font-weight: 700; color: var(--text); }
+  .pw-upload-btn {
+    padding: 6px 16px; border-radius: 8px; border: none; cursor: pointer;
+    background: var(--accent); color: #fff; font-size: 13px; font-weight: 600;
+    transition: all 0.2s;
+  }
+  .pw-upload-btn:hover { opacity: 0.85; }
+
+  #photowall {
     position: relative;
-    background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 16px;
-    padding: 12px;
-    padding-bottom: 40px;
+    min-height: 400px;
+    padding: 10px;
+  }
+
+  .pw-item {
+    position: absolute;
     cursor: pointer;
-    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.4s, border-color 0.3s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transform-style: preserve-3d;
-    animation: pw-float-in 0.6s cubic-bezier(0.34,1.56,0.64,1) backwards;
-    overflow: hidden;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s, z-index 0s;
+    animation: pwDropIn 0.6s ease both;
   }
-  /* 入场动画 - 逐个飘入 */
-  .pw-item:nth-child(1) { animation-delay: 0.05s; }
-  .pw-item:nth-child(2) { animation-delay: 0.1s; }
-  .pw-item:nth-child(3) { animation-delay: 0.15s; }
-  .pw-item:nth-child(4) { animation-delay: 0.2s; }
-  .pw-item:nth-child(5) { animation-delay: 0.25s; }
-  .pw-item:nth-child(6) { animation-delay: 0.3s; }
-  .pw-item:nth-child(7) { animation-delay: 0.35s; }
-  .pw-item:nth-child(8) { animation-delay: 0.4s; }
-  .pw-item:nth-child(9) { animation-delay: 0.45s; }
-  .pw-item:nth-child(10) { animation-delay: 0.5s; }
-  @keyframes pw-float-in {
-    from { opacity: 0; transform: translateY(30px) scale(0.85) rotateX(10deg); }
-    to { opacity: 1; transform: translateY(0) scale(1) rotateX(0deg); }
-  }
-  /* 3D悬浮光效 */
-  .pw-item::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 16px;
-    background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.12), transparent 60%);
-    opacity: 0;
-    transition: opacity 0.3s;
-    pointer-events: none;
-    z-index: 2;
-  }
-  .pw-item:hover::before { opacity: 1; }
-  /* 呼吸光边框 */
-  .pw-item::after {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    border-radius: 17px;
-    background: conic-gradient(from var(--glow-angle, 0deg), #ff0080, #7928ca, #0070f3, #00dfd8, #ff0080);
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.4s;
-    animation: pw-glow-spin 4s linear infinite;
-  }
-  .pw-item:hover::after { opacity: 0.6; }
-  @keyframes pw-glow-spin {
-    to { --glow-angle: 360deg; }
-  }
-  @property --glow-angle {
-    syntax: '<angle>';
-    initial-value: 0deg;
-    inherits: false;
-  }
-  /* Hover 3D弹起 */
   .pw-item:hover {
-    transform: translateY(-8px) scale(1.04) rotateX(2deg);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 30px rgba(120,40,200,0.15);
-    border-color: rgba(255,255,255,0.15);
-    z-index: 20;
+    transform: rotate(0deg) scale(1.12) !important;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.7), 0 0 0 2px rgba(63,185,80,0.3);
+    z-index: 100 !important;
   }
-  /* 照片区域 */
-  .pw-img-wrap {
-    width: 100%;
-    overflow: hidden;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255,255,255,0.03);
+
+  .pw-card {
+    background: #fff;
+    padding: 8px 8px 6px;
+    border-radius: 2px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: visible;
   }
+
   .pw-img {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 10px;
-    transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1), filter 0.3s;
+    width: 100%; display: block;
+    border-radius: 1px;
+    filter: saturate(0.85) contrast(1.02);
+    transition: filter 0.4s;
   }
-  .pw-item:hover .pw-img { transform: scale(1.08); filter: brightness(1.1) saturate(1.1); }
+  .pw-item:hover .pw-img {
+    filter: saturate(1.1) contrast(1.05) brightness(1.05);
+  }
+
   .pw-placeholder {
-    width: 100%;
-    min-height: 160px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 52px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, rgba(120,40,200,0.08), rgba(0,112,243,0.08));
-    animation: pw-emoji-pulse 3s ease-in-out infinite;
+    width: 100%; aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 48px;
+    background: linear-gradient(135deg, #f0f0f0, #e8e8e8);
+    border-radius: 1px;
   }
-  @keyframes pw-emoji-pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.08); }
+  .pw-placeholder span {
+    animation: pwFloat 3s ease-in-out infinite;
   }
-  .pw-caption {
-    position: absolute;
-    bottom: 10px;
-    left: 12px;
-    right: 12px;
-    text-align: center;
-    font-size: 12px;
-    color: rgba(255,255,255,0.7);
-    font-weight: 600;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    letter-spacing: 0.3px;
-  }
-  .pw-date {
-    position: absolute;
-    bottom: 26px;
-    left: 12px;
-    right: 12px;
-    text-align: center;
-    font-size: 10px;
-    color: rgba(255,255,255,0.3);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-family: 'Georgia', serif;
-  }
-  /* 胶带改为发光标签 */
+
+  /* 胶带效果 - 每张照片顶部半透明胶带 */
   .pw-tape {
     position: absolute;
-    top: -6px;
-    right: 10px;
-    width: auto;
-    min-width: 28px;
-    height: 22px;
-    background: linear-gradient(135deg, #7928ca, #ff0080);
-    border-radius: 11px;
-    box-shadow: 0 2px 12px rgba(121,40,202,0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 8px;
-    font-size: 10px;
-    color: #fff;
-    font-weight: 700;
-    animation: pw-badge-bounce 2s ease-in-out infinite;
+    top: -14px;
+    left: 50%;
+    width: 52px; height: 20px;
+    background: rgba(255, 235, 130, 0.55);
+    transform: translateX(-50%) rotate(var(--tape-rot, -2deg));
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    border-radius: 1px;
+    z-index: 5;
   }
-  .pw-tape::after { display: none; }
-  @keyframes pw-badge-bounce {
+
+  .pw-badge {
+    position: absolute; top: -10px; right: 8px;
+    font-size: 18px;
+    z-index: 6;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.4));
+    animation: pwFloat 2.5s ease-in-out infinite;
+  }
+
+  .pw-info { padding: 6px 2px 0; }
+  .pw-date {
+    font-size: 11px; color: #999;
+    font-family: 'Georgia', serif;
+  }
+  .pw-caption {
+    font-size: 12px; font-weight: 600;
+    color: #555; margin-top: 1px;
+  }
+
+  @keyframes pwDropIn {
+    0% { opacity: 0; transform: translateY(-40px) rotate(10deg) scale(0.7); }
+    60% { transform: translateY(5px) rotate(-2deg) scale(1.02); }
+    100% { opacity: 1; }
+  }
+  @keyframes pwFloat {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-3px); }
+    50% { transform: translateY(-6px); }
   }
-  .pw-empty {
-    width: 100%;
-    text-align: center;
-    padding: 60px 20px;
-    color: rgba(255,255,255,0.3);
-  }
-  .pw-empty .pw-empty-icon { font-size: 60px; margin-bottom: 16px; animation: pw-emoji-pulse 3s ease-in-out infinite; }
-  .pw-empty p { font-size: 14px; line-height: 1.8; }
-  .pw-empty .pw-add-hint { font-size: 12px; color: rgba(255,255,255,0.2); margin-top: 8px; }
 
-
-  /* ===== 首页照片墙 ===== */
+/* ===== 首页照片墙 ===== */
   .home-photos {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -2682,21 +2607,79 @@ function renderDiaryList() {
   }).join('');
 }
 function renderPhotoWall() {
-  var wall = document.getElementById('photowall');
-  if (!wall) return;
-  var arr = store.shines || [];
-  if (!arr.length) { wall.innerHTML = '<div class="pw-empty"><div class="pw-empty-icon">📷</div><p>还没有照片<br>点击上方「➕ 添加」上传第一张</p></div>'; return; }
-  wall.innerHTML = arr.map(function(s,i) {
-    var bg = s.image ? 'background-image:url('+s.image+');background-size:cover;background-position:center;' : '';
-    var inner = s.image ? '' : '<div class="pw-placeholder">'+(s.emoji||'🌟')+'</div>';
-    var badge = i < 3 ? '<div class="pw-tape">'+['🔥','⭐','💫'][i]+'</div>' : '';
-    return '<div class="pw-item" onclick="showShineDetail('+i+')" onmousemove="pw3D(this,event)" onmouseleave="pw3DReset(this)">' +
-      badge +
-      '<div class="pw-img-wrap"><div class="pw-photo" style="'+bg+'">' + inner + '</div></div>' +
-      '<div class="pw-caption">'+(s.title||'闪光时刻')+'</div>' +
-      '<div class="pw-date">'+(s.date||'')+'</div>' +
-    '</div>';
-  }).join('');
+    const wall = document.getElementById('photowall');
+    if (!wall) return;
+    const photos = store.shines.filter(s => s.photo);
+    
+    // 清空旧的空状态提示
+    wall.innerHTML = '';
+    
+    // 容器高度自适应
+    const cols = wall.offsetWidth < 500 ? 2 : 3;
+    const itemW = Math.floor((wall.offsetWidth - 60) / cols);
+    
+    // 预设散落位置：相对偏移，制造自然错落感
+    const scatterData = [];
+    const rotations = [-5, 3, -2, 4, -3, 2, -4, 5, -1, 3, -6, 2, 4, -3, 1, -2, 5, -4, 3, -1];
+    const sizes = []; // 让部分照片大一点部分小一点
+    for (let i = 0; i < photos.length; i++) {
+        const row = Math.floor(i / cols);
+        const col = i % cols;
+        const x = col * (itemW + 24) + 12 + (Math.sin(i * 2.7) * 12);
+        const y = row * (itemW + 30) + 10 + (Math.cos(i * 1.9) * 10);
+        const rot = rotations[i % rotations.length];
+        const scale = 0.88 + Math.abs(Math.sin(i * 1.3)) * 0.2; // 0.88 ~ 1.08
+        const w = Math.round(itemW * scale);
+        const tapeRot = -8 + Math.sin(i * 3.1) * 14;
+        scatterData.push({ x: Math.round(x), y: Math.round(y), rot, w, tapeRot: Math.round(tapeRot) });
+    }
+    
+    // 动态计算容器高度
+    if (photos.length > 0) {
+        const maxRow = Math.ceil(photos.length / cols);
+        const maxY = Math.max(...scatterData.map(d => d.y)) + itemW + 30;
+        wall.style.minHeight = Math.max(400, maxY) + 'px';
+    }
+    
+    // 空状态
+    if (photos.length === 0) {
+        wall.style.position = 'relative';
+        wall.innerHTML = `
+            <div style="text-align:center;padding:60px 20px;color:var(--text2)">
+                <div style="font-size:56px;margin-bottom:12px;opacity:0.4">📷</div>
+                <p style="font-size:14px;opacity:0.6">还没有照片，点击上方按钮添加吧</p>
+            </div>`;
+        wall.style.minHeight = '200px';
+        return;
+    }
+    
+    const badges = ['🔥','⭐','💫'];
+    wall.style.position = 'relative';
+    
+    photos.forEach((p, i) => {
+        const d = scatterData[i] || { x: i*170, y: 0, rot: 0, w: itemW, tapeRot: 0 };
+        const delay = (i * 0.08).toFixed(2);
+        const badge = i < 3 ? `<span class="pw-badge">${badges[i]}</span>` : '';
+        const tapeStyle = `--tape-rot: ${d.tapeRot}deg`;
+        
+        const el = document.createElement('div');
+        el.className = 'pw-item';
+        el.style.cssText = `left:${d.x}px;top:${d.y}px;width:${d.w}px;transform:rotate(${d.rot}deg);animation-delay:${delay}s;z-index:${i+1}`;
+        el.setAttribute('onclick', `openLightbox('${p.photo.replace(/'/g, "\'")}')`);
+        
+        el.innerHTML = `
+            <div class="pw-card" style="${tapeStyle}">
+                <div class="pw-tape"></div>
+                ${badge}
+                <img class="pw-img" src="${p.photo}" alt="${p.title||''}" loading="lazy" 
+                     onerror="this.outerHTML='<div class=\'pw-placeholder\'><span>${['🌸','🎸','🏀','🎮','🎨'][i%5]}</span></div>'">
+                <div class="pw-info">
+                    <div class="pw-date">${p.date||''}</div>
+                    <div class="pw-caption">${p.title||'精彩瞬间'}</div>
+                </div>
+            </div>`;
+        wall.appendChild(el);
+    });
 }
 /* 3D鼠标追踪效果 */
 function pw3D(el, e) {
