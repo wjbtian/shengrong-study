@@ -1376,7 +1376,7 @@
 <main class="main" id="main-content">
 
   
-  <!-- ========== 首页 ========== -->
+  <!-- === 首页 === -->
   <div class="page active" id="page-home">
     <canvas id="starfield" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.5;"></canvas>
 
@@ -1501,7 +1501,7 @@
     </div>
   </div>
 
-  <!-- ========== 学习 ========== -->
+  <!-- === 学习 === -->
   <!-- 学习页内容由 renderLearn() JS函数渲染 -->
   <div class="page" id="page-learn">
     <div class="page-header"><h2>📚 学习</h2><p>点击诗词卡查看原文和注释 · 点击单元标记完成</p></div>
@@ -1571,7 +1571,7 @@
       </div>
       <div class="photowall" id="photowall"></div>
     </div>
-  </div><!-- ========== 科技新闻 ========== -->
+  </div><!-- === 科技新闻 === -->
   <div class="page" id="page-tech">
     <div class="page-header"><h2>🔭 科技新闻</h2><p>AI · 航天 · 机器人，了解世界最前沿</p></div>
     <div class="btn-group">
@@ -1615,7 +1615,7 @@
 
 </main>
 
-<!-- ========== 模态框 ========== -->
+<!-- === 模态框 === -->
 <div class="modal-overlay" id="modal-detail">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('modal-detail')">×</button>
@@ -2266,7 +2266,7 @@ function toggleOM(id) {
             <span class="diary-date">📅 ${d.date}</span>
           </div>
           <div class="diary-title">${d.title}</div>
-<<<<<<< HEAD
+
           <div class="diary-preview">${d.content || ''}</div>
         </div>
       </div>`).join('')
@@ -2295,11 +2295,10 @@ function showDiaryDetail(id) {
   document.getElementById('detail-body').innerHTML = `
     <div style="margin-bottom:16px;"><span style="font-size:40px;margin-right:12px;">${d.mood}</span><span style="font-size:13px;color:var(--text2);">📅 ${d.date}</span></div>
     <h2 style="font-size:20px;margin-bottom:16px;">${d.title}</h2>
-<<<<<<< HEAD
+
     <p style="font-size:14px;color:var(--text2);line-height:1.8;">${d.content ? d.content.replace(/\n/g,'<br>') : ''}</p>
-=======
-    <p style="font-size:14px;color:var(--text2);line-height:1.8;">${d.content.replace(/\n/g,'<br>')}</p>
->>>>>>> 94f3c3143e1341a8cf77e78f48a20afcb4ee0d67
+
+
     <div style="margin-top:20px;display:flex;justify-content:flex-end;"><button class="btn btn-danger" onclick="deleteDiary(${id})">🗑️ 删除</button></div>`;
   openModal('modal-detail');
 }
