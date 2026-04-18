@@ -714,7 +714,18 @@
     background: rgba(0,0,0,0.15); border-radius: 10px;
   }
 
-  @media (max-width: 768px) {
+  
+  /* 日记/照片切换标签 */
+  .shine-tabs { display: flex; gap: 6px; }
+  .shine-tab {
+    padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600;
+    background: transparent; border: 1px solid rgba(255,255,255,0.12);
+    color: #555; cursor: pointer; transition: all 0.2s;
+  }
+  .shine-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .shine-tab:hover:not(.active) { border-color: rgba(255,255,255,0.25); color: #aaa; }
+
+@media (max-width: 768px) {
     .quick-entry { grid-template-columns: 1fr; }
     .home-bottom { grid-template-columns: 1fr; }
     .hero-greeting { font-size: 20px; }
@@ -1530,8 +1541,11 @@
     <div class="page-header"><h2>✨ 闪光时刻</h2><p>记录尚融最闪亮的瞬间</p></div>
 
     <div class="btn-group">
-      <button class="btn btn-primary" onclick="openAddDiary()">✍️ 写日记</button>
-      <button class="btn btn-primary" onclick="openAddShine()">📷 上传照片</button>
+      <div class="shine-tabs" id="shine-tabs">
+        <button class="shine-tab active" id="tab-diary" onclick="switchShineTab('diary')">✍️ 日记</button>
+        <button class="shine-tab" id="tab-photo" onclick="switchShineTab('photo')">📷 照片墙</button>
+      </div>
+      <button class="btn btn-primary" onclick="openAddShine()">➕ 添加</button>
     </div>
 
     <!-- 日记区 -->
@@ -1544,7 +1558,7 @@
     </div>
 
     <!-- 照片墙 -->
-    <div class="home-panel">
+    <div class="home-panel" id="shine-photo-panel" style="display:none;">
       <div class="home-panel-header" style="margin-bottom:16px;">
         <h3>📷 照片墙</h3>
       </div>
@@ -2415,10 +2429,10 @@ function saveTech() {
 let currentPhotoIndex = 0;
 let photoList = [];
 
-function openPhotoLightbox(imgSrc, title, date) {
+function openPhotoLightbox(photoIdx) {
   photoList = store.shines.filter(s => s.img).map(s => ({ src: s.img, title: s.title, date: s.date }));
-  currentPhotoIndex = photoList.findIndex(s => s.src === imgSrc);
-  if (currentPhotoIndex < 0) currentPhotoIndex = 0;
+  currentPhotoIndex = photoIdx;
+  if (currentPhotoIndex < 0 || currentPhotoIndex >= photoList.length) currentPhotoIndex = 0;
   showPhotoInLightbox(currentPhotoIndex);
   document.getElementById('photo-lightbox').classList.add('active');
   document.body.style.overflow = 'hidden';
@@ -2634,6 +2648,18 @@ function switchShineTab(tab) {
     photoBtn.classList.add('btn-primary'); photoBtn.classList.remove('btn-secondary');
     diaryBtn.classList.add('btn-secondary'); diaryBtn.classList.remove('btn-primary');
   }
+}
+
+
+let currentShineTab = 'diary';
+function switchShineTab(tab) {
+  currentShineTab = tab;
+  var diaryPanel = document.getElementById('shine-diary-panel') || document.querySelector('.home-panel:first-child');
+  var photoPanel = document.getElementById('shine-photo-panel');
+  document.getElementById('tab-diary').classList.toggle('active', tab==='diary');
+  document.getElementById('tab-photo').classList.toggle('active', tab==='photo');
+  if (diaryPanel) diaryPanel.style.display = tab==='diary' ? '' : 'none';
+  if (photoPanel) photoPanel.style.display = tab==='photo' ? '' : 'none';
 }
 
 // ===== 初始化 =====
