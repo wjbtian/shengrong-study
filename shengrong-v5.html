@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>尚融的星球</title>
+<title>永远的神的星球</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
@@ -311,114 +311,111 @@
     .science-grid { grid-template-columns: 1fr; }
   }
 
-  /* ===== 照片墙 ===== */
-  .photowall {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 28px;
-    padding: 12px 0;
-    justify-content: center;
+    /* ===== 照片墙 - 错落散落风 ===== */
+  #photowall-section { padding: 20px; }
+
+  .pw-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px;
   }
-  .pw-item {
+  .pw-header h2 { font-size: 18px; font-weight: 700; color: var(--text); }
+  .pw-upload-btn {
+    padding: 6px 16px; border-radius: 8px; border: none; cursor: pointer;
+    background: var(--accent); color: #fff; font-size: 13px; font-weight: 600;
+    transition: all 0.2s;
+  }
+  .pw-upload-btn:hover { opacity: 0.85; }
+
+  #photowall {
     position: relative;
-    width: 190px;
-    background: #fff;
-    padding: 10px 10px 36px;
-    box-shadow: 2px 4px 14px rgba(0,0,0,0.25);
+    min-height: 400px;
+    padding: 10px;
+  }
+
+  .pw-item {
+    position: absolute;
     cursor: pointer;
-    transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s, z-index 0s;
+    animation: pwDropIn 0.6s ease both;
+  }
+  .pw-item:hover {
+    transform: rotate(0deg) scale(1.12) !important;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.7), 0 0 0 2px rgba(63,185,80,0.3);
+    z-index: 100 !important;
+  }
+
+  .pw-card {
+    background: #fff;
+    padding: 8px 8px 6px;
     border-radius: 2px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: visible;
   }
-  .pw-item:nth-child(4n+1) { transform: rotate(-2deg); }
-  .pw-item:nth-child(4n+2) { transform: rotate(1.8deg); }
-  .pw-item:nth-child(4n+3) { transform: rotate(-1.2deg); }
-  .pw-item:nth-child(4n+4) { transform: rotate(2.3deg); }
-  .pw-item:hover { transform: rotate(0deg) scale(1.06) translateY(-4px); box-shadow: 6px 10px 24px rgba(0,0,0,0.35); z-index: 20; }
-  .pw-img-wrap {
-    width: 100%;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #f5f5f5;
-  }
+
   .pw-img {
-    width: 100%;
-    height: auto;
-    display: block;
+    width: 100%; display: block;
     border-radius: 1px;
-    transition: transform 0.3s;
+    filter: saturate(0.85) contrast(1.02);
+    transition: filter 0.4s;
   }
-  .pw-item:hover .pw-img { transform: scale(1.05); }
+  .pw-item:hover .pw-img {
+    filter: saturate(1.1) contrast(1.05) brightness(1.05);
+  }
+
   .pw-placeholder {
-    width: 100%;
-    min-height: 160px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 52px;
+    width: 100%; aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 48px;
+    background: linear-gradient(135deg, #f0f0f0, #e8e8e8);
     border-radius: 1px;
   }
-  .pw-caption {
-    position: absolute;
-    bottom: 8px;
-    left: 10px;
-    right: 10px;
-    text-align: center;
-    font-size: 12px;
-    color: #444;
-    font-family: 'Georgia', serif;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-weight: 500;
+  .pw-placeholder span {
+    animation: pwFloat 3s ease-in-out infinite;
   }
-  .pw-date {
-    position: absolute;
-    bottom: 24px;
-    left: 10px;
-    right: 10px;
-    text-align: center;
-    font-size: 10px;
-    color: #999;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-family: 'Georgia', serif;
-  }
+
+  /* 胶带效果 - 每张照片顶部半透明胶带 */
   .pw-tape {
     position: absolute;
-    top: -12px;
+    top: -14px;
     left: 50%;
-    transform: translateX(-50%);
-    width: 54px;
-    height: 20px;
-    background: rgba(255,240,100,0.85);
-    border-radius: 2px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-  }
-  .pw-tape::after {
-    content: '';
-    position: absolute;
-    inset: 3px;
-    background: rgba(255,255,255,0.3);
+    width: 52px; height: 20px;
+    background: rgba(255, 235, 130, 0.55);
+    transform: translateX(-50%) rotate(var(--tape-rot, -2deg));
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
     border-radius: 1px;
+    z-index: 5;
   }
-  .pw-empty {
-    width: 100%;
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--text2);
+
+  .pw-badge {
+    position: absolute; top: -10px; right: 8px;
+    font-size: 18px;
+    z-index: 6;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,0.4));
+    animation: pwFloat 2.5s ease-in-out infinite;
   }
-  .pw-empty .pw-empty-icon { font-size: 60px; margin-bottom: 16px; }
-  .pw-empty p { font-size: 14px; line-height: 1.8; }
-  .pw-empty .pw-add-hint { font-size: 12px; color: #666; margin-top: 8px; }
 
+  .pw-info { padding: 6px 2px 0; }
+  .pw-date {
+    font-size: 11px; color: #999;
+    font-family: 'Georgia', serif;
+  }
+  .pw-caption {
+    font-size: 12px; font-weight: 600;
+    color: #555; margin-top: 1px;
+  }
 
-  /* ===== 首页照片墙 ===== */
+  @keyframes pwDropIn {
+    0% { opacity: 0; transform: translateY(-40px) rotate(10deg) scale(0.7); }
+    60% { transform: translateY(5px) rotate(-2deg) scale(1.02); }
+    100% { opacity: 1; }
+  }
+  @keyframes pwFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+/* ===== 首页照片墙 ===== */
   .home-photos {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -1017,31 +1014,7 @@
     background: rgba(0,0,0,0.2); border-radius: 14px;
   }
   .pw-empty-icon { font-size: 48px; margin-bottom: 12px; }
-  #photowall {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 20px;
-  }
-  .pw-item {
-    cursor: pointer; transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
-  }
-  .pw-item:hover { transform: scale(1.04) translateY(-4px); z-index: 5; }
-  .pw-item:nth-child(3n+1) { transform: rotate(-2deg); }
-  .pw-item:nth-child(3n+1):hover { transform: scale(1.04) translateY(-4px) rotate(0deg); }
-  .pw-item:nth-child(3n+2) { transform: rotate(1deg); }
-  .pw-item:nth-child(3n+2):hover { transform: scale(1.04) translateY(-4px) rotate(0deg); }
-  .pw-item:nth-child(3n) { transform: rotate(-0.5deg); }
-  .pw-item:nth-child(3n):hover { transform: scale(1.04) translateY(-4px) rotate(0deg); }
-  .pw-img { width: 100%; display: block; border-radius: 4px; box-shadow: 3px 4px 12px rgba(0,0,0,0.4); }
-  .pw-placeholder { width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 48px; border-radius: 4px; box-shadow: 3px 4px 12px rgba(0,0,0,0.4); }
-  .pw-tape {
-    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-    width: 50px; height: 20px; background: rgba(255,255,255,0.6);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  }
-  .pw-date { font-size: 11px; color: var(--text2); text-align: center; margin-top: 8px; font-family: Georgia, serif; }
-  .pw-caption { font-size: 12px; font-weight: 600; text-align: center; margin-top: 4px; }
+
 
   /* ===== 赛博朋克网格背景 ===== */
   body::before {
@@ -1292,19 +1265,7 @@
   .diary-date { font-size: 11px; color: #8b949e; }
   .diary-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
   .diary-preview { font-size: 13px; color: #8b949e; line-height: 1.5; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-  .photowall { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; }
-  .pw-item { cursor: pointer; transition: transform 0.2s; }
-  .pw-item:hover { transform: scale(1.04) translateY(-4px); }
-  .pw-item:nth-child(3n+1) { transform: rotate(-2deg); }
-  .pw-item:nth-child(3n+1):hover { transform: scale(1.04) translateY(-4px) rotate(0deg); }
-  .pw-item:nth-child(3n+2) { transform: rotate(1deg); }
-  .pw-item:nth-child(3n+2):hover { transform: scale(1.04) translateY(-4px) rotate(0deg); }
-  .pw-img-wrap { width: 100%; display: block; }
-  .pw-img { width: 100%; display: block; border-radius: 4px; box-shadow: 3px 4px 12px rgba(0,0,0,0.4); }
-  .pw-placeholder { width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 48px; border-radius: 4px; box-shadow: 3px 4px 12px rgba(0,0,0,0.4); }
-  .pw-tape { width: 50px; height: 20px; background: rgba(255,255,255,0.5); margin: -10px auto 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
-  .pw-date { font-size: 11px; color: #8b949e; text-align: center; margin-top: 4px; font-family: Georgia, serif; }
-  .pw-caption { font-size: 12px; font-weight: 600; text-align: center; margin-top: 2px; }
+
   /* 科技新闻页 */
   .news-list { display: flex; flex-direction: column; gap: 12px; }
   .news-card { background: rgba(22,27,34,0.8); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.2s; display: flex; gap: 14px; align-items: flex-start; }
@@ -1352,13 +1313,14 @@
 </style>
 </head>
 <body>
+<div id="data-stream" style="display:none"></div>
 
 <!-- 侧边栏 -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-top">
     <div class="avatar">🎸</div>
     <div class="sidebar-name">
-      <h1>吴尚融</h1>
+      <h1>永远的神</h1>
       <p>四年级 · 10岁</p>
     </div>
     <button class="sidebar-toggle" id="sidebar-toggle" title="收起菜单" onclick="toggleSidebar()">☰</button>
@@ -1384,7 +1346,7 @@
     <div class="sysbar">
       <div class="sysbar-left">
         <span class="sys-dot online"></span>
-        <span class="sys-status">尚融星球 · ONLINE</span>
+        <span class="sys-status">永远的神星球 · ONLINE</span>
       </div>
       <div class="sysbar-center">
         <span class="sys-time" id="sys-time">--:--:--</span>
@@ -1399,7 +1361,7 @@
     <div class="hero-section">
       <div class="hero-emoji" id="hero-emoji">👋</div>
       <div class="hero-text">
-        <div class="hero-greeting" id="greeting-text">你好，吴尚融！</div>
+        <div class="hero-greeting" id="greeting-text">你好，永远的神！</div>
         <div class="hero-sub" id="greeting-sub">每天进步一点点 👣</div>
       </div>
       <div class="level-ring">
@@ -1545,18 +1507,19 @@
 
   <!-- 闪光时刻页内容由 renderShine() JS函数渲染 -->
   <div class="page" id="page-shine">
-    <div class="page-header"><h2>✨ 闪光时刻</h2><p>记录尚融最闪亮的瞬间</p></div>
+    <div class="page-header"><h2>✨ 闪光时刻</h2><p>记录永远的神最闪亮的瞬间</p></div>
 
     <div class="btn-group">
       <div class="shine-tabs" id="shine-tabs">
         <button class="shine-tab active" id="tab-diary" onclick="switchShineTab('diary')">✍️ 日记</button>
         <button class="shine-tab" id="tab-photo" onclick="switchShineTab('photo')">📷 照片墙</button>
+        <button class="shine-tab" id="tab-video" onclick="switchShineTab('video')">🎬 视频</button>
       </div>
       <button class="btn btn-primary" onclick="openAddShine()">➕ 添加</button>
     </div>
 
     <!-- 日记区 -->
-    <div class="home-panel" style="margin-bottom:20px;">
+    <div class="home-panel" id="shine-diary-panel" style="margin-bottom:20px;">
       <div class="home-panel-header" style="margin-bottom:14px;">
         <h3>✍️ 日记</h3>
         <span class="more-link" id="diary-count"></span>
@@ -1570,6 +1533,14 @@
         <h3>📷 照片墙</h3>
       </div>
       <div class="photowall" id="photowall"></div>
+    </div>
+
+    <!-- 视频区 -->
+    <div class="home-panel" id="shine-video-panel" style="display:none;">
+      <div class="home-panel-header" style="margin-bottom:16px;">
+        <h3>🎬 视频集</h3>
+      </div>
+      <div id="shine-video-list" style="display:grid;gap:16px;"></div>
     </div>
   </div><!-- === 科技新闻 === -->
   <div class="page" id="page-tech">
@@ -1755,6 +1726,7 @@ function loadStore() {
       { id: 8, title: '学校樱花树下合影', type: '📸 照片', icon: '📸', desc: '放学看到学校门口樱花全开了，和同学在樱花树下拍了好多照片', date: '2026-04-11' },
       { id: 9, title: '作文被老师表扬', type: '🏆 荣誉', icon: '🏆', desc: '写的《我最难忘的一天》被老师当范文在全班朗读，好开心！', date: '2026-04-09' },
       { id: 10, title: '组装电脑成功开机', type: '🎮 游戏', icon: '💻', desc: '和爸爸一起组装电脑！CPU、显卡、内存都自己装上，开机那一刻超级激动', date: '2026-04-06' },
+      { id: 11, title: '吉他弹奏最新练习', type: '🎸 吉他', icon: '🎸', desc: '吉他最新练习视频', date: '2026-04-18', video: 'https://jsonproxy.3g.qq.com/urlmapper/wFjotX', isVideo: true },
     ],
     sciences: [
       { id: 1, title: '为什么天空是蓝色的？', type: '自然', icon: '🌤️', desc: '太阳光看起来是白色的，但其实它是由红、橙、黄、绿、蓝、靛、紫七种颜色的光组成的。大气层里的空气分子会把蓝光散射到四面八方，所以当我们抬头看天空时，看到的就是被散射的蓝光。', date: '2026-04-15' },
@@ -1794,9 +1766,9 @@ function updateHomePage() {
   const greetingEl = document.getElementById('greeting-text');
   const subEl = document.getElementById('greeting-sub');
   if (greetingEl && subEl) {
-    if (h < 12) { greetingEl.textContent = '☀️ 早上好，吴尚融！'; subEl.textContent = '新的一天，充满能量 💪'; }
-    else if (h < 18) { greetingEl.textContent = '🌤️ 下午好，吴尚融！'; subEl.textContent = '下午也要加油哦 💪'; }
-    else { greetingEl.textContent = '🌙 晚上好，吴尚融！'; subEl.textContent = '今天学到了什么？'; }
+    if (h < 12) { greetingEl.textContent = '☀️ 早上好，永远的神！'; subEl.textContent = '新的一天，充满能量 💪'; }
+    else if (h < 18) { greetingEl.textContent = '🌤️ 下午好，永远的神！'; subEl.textContent = '下午也要加油哦 💪'; }
+    else { greetingEl.textContent = '🌙 晚上好，永远的神！'; subEl.textContent = '今天学到了什么？'; }
   }
 
   // 等级
@@ -1849,7 +1821,7 @@ function updateHomePage() {
   const photoScroll = document.getElementById('hb-photo-scroll');
   if (photoScroll) {
     if (!store.shines || !store.shines.length) {
-      photoScroll.innerHTML = '<div style="padding:16px;text-align:center;color:#8b949e;font-size:12px;">还没有照片<br><span style="font-size:11px;color:#58a6ff;cursor:pointer;" onclick='goPage("shine")'>去闪光时刻上传 →</span></div>';
+      photoScroll.innerHTML = `<div style="padding:16px;text-align:center;color:#8b949e;font-size:12px;">还没有照片<br><span style="font-size:11px;color:#58a6ff;cursor:pointer;" onclick="goPage('shine')">去闪光时刻上传 →</span></div>`;
     } else {
       const photos = store.shines.slice(0, 8);
       photoScroll.innerHTML = photos.map(s => `
@@ -1864,7 +1836,7 @@ function updateHomePage() {
   const newsListEl = document.getElementById('hb-news-list');
   if (newsListEl) {
     if (!store.news || !store.news.length) {
-      newsListEl.innerHTML = '<div style="padding:16px;text-align:center;color:#8b949e;font-size:12px;">还没有新闻<br><span style="font-size:11px;color:#58a6ff;cursor:pointer;" onclick="goPage('tech')">去科技新闻添加 →</span></div>';
+      newsListEl.innerHTML = `<div style="padding:16px;text-align:center;color:#8b949e;font-size:12px;">还没有新闻<br><span style="font-size:11px;color:#58a6ff;cursor:pointer;" onclick="goPage('tech')">去科技新闻添加 →</span></div>`;
     } else {
       const news = store.news.slice(0, 4);
       const icons = { ai:'🤖', space:'🚀', robot:'🤖', tech:'💡', game:'🎮' };
@@ -2057,7 +2029,7 @@ const ENGLISH_WORDS = {
     { word: 'play', zh: '玩', sentence: 'I play football every day.' },
     { word: 'watch', zh: '观看', sentence: 'I watch TV on Sundays.' },
     { word: 'read', zh: '读', sentence: 'I read books before sleep.' },
-    { word: 'sleep', zh: '睡觉', sentence: 'I sleep at 9 o'clock.' },
+    { word: 'sleep', zh: '睡觉', sentence: "I sleep at 9 o'clock." },
     { word: 'climb', zh: '爬山', sentence: 'We climb mountains on weekends.' },
     { word: 'eat', zh: '吃', sentence: 'I eat breakfast at 7:00.' },
     { word: 'drink', zh: '喝', sentence: 'I drink water every day.' },
@@ -2255,39 +2227,7 @@ function toggleOM(id) {
   saveStore(); renderOM(); updateHomePage(); showOM(id);
 }
 
-// ===== 闪光时刻 =====function renderShine() {
-  // 日记
-  const sortedDiary = [...store.diary].sort((a,b)=>b.id-a.id);
-  document.getElementById('diary-list').innerHTML = sortedDiary.length
-    ? sortedDiary.map(d => `<div class="diary-item" onclick="showDiaryDetail(${d.id})">
-        <div class="diary-item-mood">${d.mood}</div>
-        <div class="diary-item-body">
-          <div class="diary-meta">
-            <span class="diary-date">📅 ${d.date}</span>
-          </div>
-          <div class="diary-title">${d.title}</div>
 
-          <div class="diary-preview">${d.content || ''}</div>
-        </div>
-      </div>`).join('')
-    : '<div class="empty-state" style="padding:20px"><div class="emoji">✍️</div><p>还没有日记<br>点击上方「写日记」开始吧</p></div>';
-
-  document.getElementById('diary-count').textContent = `${store.diary.length} 篇`;
-
-  // 照片墙
-  const wall = document.getElementById('photowall');
-  if (!store.shines.length) {
-    wall.innerHTML = '<div class="pw-empty"><div class="pw-empty-icon">📷</div><p>还没有照片<br>点击「➕ 添加」上传第一张闪光时刻吧！</p><div class="pw-add-hint">📸 照片会显示在这里，支持点击放大欣赏</div></div>';
-    return;
-  }
-  wall.innerHTML = store.shines.map(s => `
-    <div class="pw-item" data-idx="${store.shines.indexOf(s)}" onclick="${s.img ? `openPhotoLightbox(${store.shines.indexOf(s)})` : `showShineDetail(${s.id})`}">
-      ${s.img ? `<div class="pw-img-wrap"><img class="pw-img" src="${s.img}" alt="${s.title}" loading="lazy"></div>` : `<div class="pw-placeholder" style="background:${s.bgColor||'#eee'}">${s.icon}</div>`}
-      <div class="pw-tape"></div>
-      <div class="pw-date">${s.date}</div>
-      <div class="pw-caption">${s.title}</div>
-    </div>`).join('');
-}
 
 function showDiaryDetail(id) {
   const d = store.diary.find(x => x.id === id);
@@ -2646,33 +2586,150 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') document.que
 let currentShineTab = 'diary';
 function switchShineTab(tab) {
   currentShineTab = tab;
-  const diaryPanel = document.getElementById('shine-diary-panel');
-  const photoPanel = document.getElementById('shine-photo-panel');
-  const diaryBtn = document.getElementById('tab-btn-diary');
-  const photoBtn = document.getElementById('tab-btn-photo');
-  if (tab === 'diary') {
-    diaryPanel.style.display = '';
-    photoPanel.style.display = 'none';
-    diaryBtn.classList.add('btn-primary'); diaryBtn.classList.remove('btn-secondary');
-    photoBtn.classList.add('btn-secondary'); photoBtn.classList.remove('btn-primary');
-  } else {
-    diaryPanel.style.display = 'none';
-    photoPanel.style.display = '';
-    photoBtn.classList.add('btn-primary'); photoBtn.classList.remove('btn-secondary');
-    diaryBtn.classList.add('btn-secondary'); diaryBtn.classList.remove('btn-primary');
-  }
-}
-
-
-let currentShineTab = 'diary';
-function switchShineTab(tab) {
-  currentShineTab = tab;
   var diaryPanel = document.getElementById('shine-diary-panel') || document.querySelector('.home-panel:first-child');
   var photoPanel = document.getElementById('shine-photo-panel');
+  var videoPanel = document.getElementById('shine-video-panel');
   document.getElementById('tab-diary').classList.toggle('active', tab==='diary');
   document.getElementById('tab-photo').classList.toggle('active', tab==='photo');
+  document.getElementById('tab-video').classList.toggle('active', tab==='video');
   if (diaryPanel) diaryPanel.style.display = tab==='diary' ? '' : 'none';
   if (photoPanel) photoPanel.style.display = tab==='photo' ? '' : 'none';
+  if (videoPanel) videoPanel.style.display = tab==='video' ? '' : 'none';
+}
+
+// ===== 闪光页渲染 =====
+function renderShine() {
+  renderDiaryList();
+  renderPhotoWall();
+  renderVideoList();
+}
+
+function renderVideoList() {
+  var el = document.getElementById('shine-video-list');
+  if (!el) return;
+  var videos = (store.shines || []).filter(s => s.isVideo && s.video);
+  if (!videos.length) {
+    el.innerHTML = '<div style="text-align:center;color:#444;padding:40px 0;">还没有视频，点击上方按钮添加 🎬</div>';
+    return;
+  }
+  el.innerHTML = videos.map(function(v) {
+    return '<div class="video-card" style="background:#0d0d0d;border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;">' +
+      '<video controls style="width:100%;max-height:300px;" src="' + v.video + '"></video>' +
+      '<div style="padding:14px;">' +
+        '<div style="font-size:16px;font-weight:600;color:#ccc;margin-bottom:6px;">' + (v.icon||'🎸') + ' ' + (v.title||'吉他弹奏') + '</div>' +
+        '<div style="font-size:12px;color:#555;">' + (v.desc||'') + '</div>' +
+        '<div style="font-size:11px;color:#333;margin-top:6px;">' + (v.date||'') + '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+function renderDiaryList() {
+  var el = document.getElementById('diary-list');
+  if (!el) return;
+  var arr = store.diary || [];
+  if (!arr.length) { el.innerHTML = '<div style="text-align:center;color:#444;padding:30px 0;">还没有日记，点击添加 ✍️</div>'; document.getElementById('diary-count').textContent=''; return; }
+  document.getElementById('diary-count').textContent = arr.length + ' 篇';
+  el.innerHTML = arr.map(function(d) {
+    return '<div class="diary-item" onclick="showDiaryDetail('+d.id+')" style="cursor:pointer;padding:14px;border:1px solid rgba(255,255,255,0.06);border-radius:10px;margin-bottom:8px;background:#0a0a0a;transition:all .15s;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">' +
+        '<span style="font-size:20px;">'+(d.mood||'📝')+'</span>' +
+        '<span style="font-size:11px;color:#444;">'+(d.date||'')+'</span>' +
+      '</div>' +
+      '<div class="diary-title" style="font-weight:600;color:#ccc;font-size:14px;margin-bottom:4px;">'+(d.title||'无标题')+'</div>' +
+      '<div class="diary-preview" style="font-size:12px;color:#555;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+(d.content ? d.content.replace(/\n/g,' ').substring(0,60) : '')+'</div>' +
+    '</div>';
+  }).join('');
+}
+function renderPhotoWall() {
+    const wall = document.getElementById('photowall');
+    if (!wall) return;
+    const photos = store.shines.filter(s => s.photo);
+    
+    // 清空旧的空状态提示
+    wall.innerHTML = '';
+    
+    // 容器高度自适应
+    const cols = wall.offsetWidth < 500 ? 2 : 3;
+    const itemW = Math.floor((wall.offsetWidth - 60) / cols);
+    
+    // 预设散落位置：相对偏移，制造自然错落感
+    const scatterData = [];
+    const rotations = [-5, 3, -2, 4, -3, 2, -4, 5, -1, 3, -6, 2, 4, -3, 1, -2, 5, -4, 3, -1];
+    const sizes = []; // 让部分照片大一点部分小一点
+    for (let i = 0; i < photos.length; i++) {
+        const row = Math.floor(i / cols);
+        const col = i % cols;
+        const x = col * (itemW + 24) + 12 + (Math.sin(i * 2.7) * 12);
+        const y = row * (itemW + 30) + 10 + (Math.cos(i * 1.9) * 10);
+        const rot = rotations[i % rotations.length];
+        const scale = 0.88 + Math.abs(Math.sin(i * 1.3)) * 0.2; // 0.88 ~ 1.08
+        const w = Math.round(itemW * scale);
+        const tapeRot = -8 + Math.sin(i * 3.1) * 14;
+        scatterData.push({ x: Math.round(x), y: Math.round(y), rot, w, tapeRot: Math.round(tapeRot) });
+    }
+    
+    // 动态计算容器高度
+    if (photos.length > 0) {
+        const maxRow = Math.ceil(photos.length / cols);
+        const maxY = Math.max(...scatterData.map(d => d.y)) + itemW + 30;
+        wall.style.minHeight = Math.max(400, maxY) + 'px';
+    }
+    
+    // 空状态
+    if (photos.length === 0) {
+        wall.style.position = 'relative';
+        wall.innerHTML = `
+            <div style="text-align:center;padding:60px 20px;color:var(--text2)">
+                <div style="font-size:56px;margin-bottom:12px;opacity:0.4">📷</div>
+                <p style="font-size:14px;opacity:0.6">还没有照片，点击上方按钮添加吧</p>
+            </div>`;
+        wall.style.minHeight = '200px';
+        return;
+    }
+    
+    const badges = ['🔥','⭐','💫'];
+    wall.style.position = 'relative';
+    
+    photos.forEach((p, i) => {
+        const d = scatterData[i] || { x: i*170, y: 0, rot: 0, w: itemW, tapeRot: 0 };
+        const delay = (i * 0.08).toFixed(2);
+        const badge = i < 3 ? `<span class="pw-badge">${badges[i]}</span>` : '';
+        const tapeStyle = `--tape-rot: ${d.tapeRot}deg`;
+        
+        const el = document.createElement('div');
+        el.className = 'pw-item';
+        el.style.cssText = `left:${d.x}px;top:${d.y}px;width:${d.w}px;transform:rotate(${d.rot}deg);animation-delay:${delay}s;z-index:${i+1}`;
+        el.setAttribute('onclick', `openLightbox('${p.photo.replace(/'/g, "\'")}')`);
+        
+        el.innerHTML = `
+            <div class="pw-card" style="${tapeStyle}">
+                <div class="pw-tape"></div>
+                ${badge}
+                <img class="pw-img" src="${p.photo}" alt="${p.title||''}" loading="lazy" 
+                     onerror="this.outerHTML='<div class=\'pw-placeholder\'><span>${['🌸','🎸','🏀','🎮','🎨'][i%5]}</span></div>'">
+                <div class="pw-info">
+                    <div class="pw-date">${p.date||''}</div>
+                    <div class="pw-caption">${p.title||'精彩瞬间'}</div>
+                </div>
+            </div>`;
+        wall.appendChild(el);
+    });
+}
+/* 3D鼠标追踪效果 */
+function pw3D(el, e) {
+  var rect = el.getBoundingClientRect();
+  var x = (e.clientX - rect.left) / rect.width;
+  var y = (e.clientY - rect.top) / rect.height;
+  var rotateY = (x - 0.5) * 20;
+  var rotateX = (0.5 - y) * 20;
+  el.style.setProperty('--mx', (x*100)+'%');
+  el.style.setProperty('--my', (y*100)+'%');
+  el.style.transform = 'translateY(-8px) scale(1.04) rotateX('+rotateX+'deg) rotateY('+rotateY+'deg)';
+}
+function pw3DReset(el) {
+  el.style.transform = '';
+  el.style.setProperty('--mx', '50%');
+  el.style.setProperty('--my', '50%');
 }
 
 // ===== 初始化 =====
@@ -2682,8 +2739,7 @@ renderLearn();
 renderShine();
 renderTech();
 </script>
-
-
+<style>
   /* 照片放大灯箱 */
   .photo-lightbox {
     display: none;
@@ -2811,6 +2867,6 @@ renderTech();
   .tw-task.done { background: transparent !important; border-color: rgba(255,255,255,0.2) !important; color: #fff !important; }
   .tw-check { font-size: 14px !important; flex-shrink: 0 !important; }
   h1, h2 { text-shadow: none !important; }
-</script>
+</style>
 </body>
 </html>
