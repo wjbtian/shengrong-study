@@ -203,10 +203,17 @@
   /* 日记 */
   .diary-list { display: flex; flex-direction: column; gap: 10px; }
   .diary-item {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px;
     cursor: pointer; transition: all 0.15s;
+    display: flex; gap: 14px; align-items: flex-start;
   }
-  .diary-item:hover { border-color: var(--accent); }
+  .diary-item:hover { border-color: var(--accent); border-radius: 12px; }
+  .diary-item-mood { font-size: 34px; flex-shrink: 0; line-height: 1; }
+  .diary-item-body { flex: 1; min-width: 0; }
+  .diary-item-body .diary-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
+  .diary-item-body .diary-date { font-size: 11px; color: #555; }
+  .diary-item-body .diary-title { font-size: 14px; font-weight: 700; color: var(--text1); margin-bottom: 3px; }
+  .diary-item-body .diary-preview { font-size: 12px; color: var(--text2); line-height: 1.6; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
   .diary-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
   .diary-mood { font-size: 24px; }
   .diary-date { font-size: 12px; color: var(--text2); }
@@ -2253,12 +2260,14 @@ function toggleOM(id) {
   const sortedDiary = [...store.diary].sort((a,b)=>b.id-a.id);
   document.getElementById('diary-list').innerHTML = sortedDiary.length
     ? sortedDiary.map(d => `<div class="diary-item" onclick="showDiaryDetail(${d.id})">
-        <div class="diary-meta">
-          <span class="diary-mood">${d.mood}</span>
-          <span class="diary-date">📅 ${d.date}</span>
+        <div class="diary-item-mood">${d.mood}</div>
+        <div class="diary-item-body">
+          <div class="diary-meta">
+            <span class="diary-date">📅 ${d.date}</span>
+          </div>
+          <div class="diary-title">${d.title}</div>
+          <div class="diary-preview">${d.content}</div>
         </div>
-        <div class="diary-title">${d.title}</div>
-        <div class="diary-preview">${d.content}</div>
       </div>`).join('')
     : '<div class="empty-state" style="padding:20px"><div class="emoji">✍️</div><p>还没有日记<br>点击上方「写日记」开始吧</p></div>';
 
@@ -2271,8 +2280,8 @@ function toggleOM(id) {
     return;
   }
   wall.innerHTML = store.shines.map(s => `
-    <div class="pw-item" onclick="showShineDetail(${s.id})">
-      ${s.img ? `<div class="pw-img-wrap"><img class="pw-img" src="${s.img}" alt="${s.title}"></div>` : `<div class="pw-placeholder" style="background:${s.bgColor||'#eee'}">${s.icon}</div>`}
+    <div class="pw-item" data-idx="${store.shines.indexOf(s)}" onclick="${s.img ? `openPhotoLightbox(${store.shines.indexOf(s)})` : `showShineDetail(${s.id})`}">
+      ${s.img ? `<div class="pw-img-wrap"><img class="pw-img" src="${s.img}" alt="${s.title}" loading="lazy"></div>` : `<div class="pw-placeholder" style="background:${s.bgColor||'#eee'}">${s.icon}</div>`}
       <div class="pw-tape"></div>
       <div class="pw-date">${s.date}</div>
       <div class="pw-caption">${s.title}</div>
