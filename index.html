@@ -2655,78 +2655,27 @@ function renderDiaryList() {
 }
 function renderPhotoWall() {
     const wall = document.getElementById('photowall');
-    if (!wall) return;
+    if (!wall) { console.log('[PW] photowall element not found'); return; }
     const photos = store.shines.filter(s => s.photo || s.img);
-    console.log('[DEBUG] renderPhotoWall called, store.shines length:', store.shines.length, 'photos found:', photos.length, 'photo ids:', photos.map(p => p.id).join(','));
+    console.log('[PW] Found', photos.length, 'photos with base64, IDs:', photos.map(p => p.id).join(','));
     
-    // 清空旧的空状态提示
     wall.innerHTML = '';
     
-    // 容器高度自适应
-    const cols = wall.offsetWidth < 500 ? 2 : 3;
-    const itemW = Math.floor((wall.offsetWidth - 60) / cols);
-    
-    // 预设散落位置：相对偏移，制造自然错落感
-    const scatterData = [];
-    const rotations = [-5, 3, -2, 4, -3, 2, -4, 5, -1, 3, -6, 2, 4, -3, 1, -2, 5, -4, 3, -1];
-    const sizes = []; // 让部分照片大一点部分小一点
-    for (let i = 0; i < photos.length; i++) {
-        const row = Math.floor(i / cols);
-        const col = i % cols;
-        const x = col * (itemW + 24) + 12 + (Math.sin(i * 2.7) * 12);
-        const y = row * (itemW + 30) + 10 + (Math.cos(i * 1.9) * 10);
-        const rot = rotations[i % rotations.length];
-        const scale = 0.88 + Math.abs(Math.sin(i * 1.3)) * 0.2; // 0.88 ~ 1.08
-        const w = Math.round(itemW * scale);
-        const tapeRot = -8 + Math.sin(i * 3.1) * 14;
-        scatterData.push({ x: Math.round(x), y: Math.round(y), rot, w, tapeRot: Math.round(tapeRot) });
-    }
-    
-    // 动态计算容器高度
-    if (photos.length > 0) {
-        const maxRow = Math.ceil(photos.length / cols);
-        const maxY = Math.max(...scatterData.map(d => d.y)) + itemW + 30;
-        wall.style.minHeight = Math.max(400, maxY) + 'px';
-    }
-    
-    // 空状态
     if (photos.length === 0) {
-        wall.style.position = 'relative';
-        wall.innerHTML = `
-            <div style="text-align:center;padding:60px 20px;color:var(--text2)">
-                <div style="font-size:56px;margin-bottom:12px;opacity:0.4">📷</div>
-                <p style="font-size:14px;opacity:0.6">还没有照片，点击上方按钮添加吧</p>
-            </div>`;
-        wall.style.minHeight = '200px';
+        wall.innerHTML = '<div style="text-align:center;padding:60px;color:var(--text2)"><div style="font-size:48px;opacity:0.4">📷</div><p style="opacity:0.6">还没有照片</p></div>';
         return;
     }
     
-    const badges = ['🔥','⭐','💫'];
-    wall.style.position = 'relative';
+    wall.style.display = 'flex';
+    wall.style.flexWrap = 'wrap';
+    wall.style.gap = '16px';
+    wall.style.padding = '16px';
     
-    photos.forEach((p, i) => {
-        const d = scatterData[i] || { x: i*170, y: 0, rot: 0, w: itemW, tapeRot: 0 };
-        const delay = (i * 0.08).toFixed(2);
-        const badge = i < 3 ? `<span class="pw-badge">${badges[i]}</span>` : '';
-        const tapeStyle = `--tape-rot: ${d.tapeRot}deg`;
-        
-        const el = document.createElement('div');
-        el.className = 'pw-item';
-        el.style.cssText = `left:${d.x}px;top:${d.y}px;width:${d.w}px;transform:rotate(${d.rot}deg);animation-delay:${delay}s;z-index:${i+1}`;
+    photos.forEach((p) => {
         const photoSrc = p.photo || p.img || '';
-        el.setAttribute('onclick', `openLightbox('${photoSrc.replace(/'/g, "\'")}')`);
-        
-        el.innerHTML = `
-            <div class="pw-card" style="${tapeStyle}">
-                <div class="pw-tape"></div>
-                ${badge}
-                <img class="pw-img" src="${photoSrc}" alt="${p.title||''}" loading="lazy" 
-                     onerror="this.outerHTML='<div class=\'pw-placeholder\'><span>${['🌸','🎸','🏀','🎮','🎨'][i%5]}</span></div>'">
-                <div class="pw-info">
-                    <div class="pw-date">${p.date||''}</div>
-                    <div class="pw-caption">${p.title||'精彩瞬间'}</div>
-                </div>
-            </div>`;
+        const el = document.createElement('div');
+        el.style.cssText = 'flex:0 0 calc(33.33% - 12px);min-width:120px;max-width:200px;cursor:pointer;position:relative;padding-top:8px';
+        el.innerHTML = '<img src="' + photoSrc + '" alt="' + p.title + '" style="width:100%;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.15)" onclick="openLightbox(\'' + photoSrc.replace(/'/g, "\\'") + '\')"><div style="text-align:center;font-size:12px;margin-top:4px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + p.title + '</div>';
         wall.appendChild(el);
     });
 }
@@ -2753,7 +2702,7 @@ updateHomePage();
 renderLearn();
 renderShine();
 renderTech();
-console.log('[DEBUG] Page initialized, store.shines:', store.shines.length, 'entries, photo ids:', store.shines.filter(s=>s.photo||s.img).map(s=>s.id).join(','));
+console.log('[DEBUG] Page init done, photos:', store.shines.filter(s=>s.photo||s.img).length);
 </script>
 <style>
   /* 照片放大灯箱 */
