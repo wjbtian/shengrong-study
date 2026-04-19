@@ -1528,7 +1528,7 @@
     </div>
 
     <!-- 照片墙 -->
-    <div class="home-panel" id="shine-photo-panel" style="display:none;">
+    <div class="home-panel" id="shine-photo-panel" style="margin-bottom:20px;">
       <div class="home-panel-header" style="margin-bottom:16px;">
         <h3>📷 照片墙</h3>
       </div>
@@ -1536,7 +1536,7 @@
     </div>
 
     <!-- 视频区 -->
-    <div class="home-panel" id="shine-video-panel" style="display:none;">
+    <div class="home-panel" id="shine-video-panel" style="margin-bottom:20px;">
       <div class="home-panel-header" style="margin-bottom:16px;">
         <h3>🎬 视频集</h3>
       </div>
@@ -2599,15 +2599,16 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') document.que
 let currentShineTab = 'diary';
 function switchShineTab(tab) {
   currentShineTab = tab;
-  var diaryPanel = document.getElementById('shine-diary-panel') || document.querySelector('.home-panel:first-child');
-  var photoPanel = document.getElementById('shine-photo-panel');
-  var videoPanel = document.getElementById('shine-video-panel');
   document.getElementById('tab-diary').classList.toggle('active', tab==='diary');
   document.getElementById('tab-photo').classList.toggle('active', tab==='photo');
   document.getElementById('tab-video').classList.toggle('active', tab==='video');
-  if (diaryPanel) diaryPanel.style.display = tab==='diary' ? '' : 'none';
-  if (photoPanel) photoPanel.style.display = tab==='photo' ? '' : 'none';
-  if (videoPanel) videoPanel.style.display = tab==='video' ? '' : 'none';
+  // 所有面板始终显示，tab只控制高亮
+  var diaryPanel = document.getElementById('shine-diary-panel');
+  var photoPanel = document.getElementById('shine-photo-panel');
+  var videoPanel = document.getElementById('shine-video-panel');
+  if (diaryPanel) diaryPanel.style.display = '';
+  if (photoPanel) photoPanel.style.display = '';
+  if (videoPanel) videoPanel.style.display = '';
 }
 
 // ===== 闪光页渲染 =====
