@@ -2651,7 +2651,7 @@ function renderDiaryList() {
 function renderPhotoWall() {
     const wall = document.getElementById('photowall');
     if (!wall) return;
-    const photos = store.shines.filter(s => s.photo);
+    const photos = store.shines.filter(s => s.photo || s.img);
     
     // 清空旧的空状态提示
     wall.innerHTML = '';
@@ -2707,13 +2707,14 @@ function renderPhotoWall() {
         const el = document.createElement('div');
         el.className = 'pw-item';
         el.style.cssText = `left:${d.x}px;top:${d.y}px;width:${d.w}px;transform:rotate(${d.rot}deg);animation-delay:${delay}s;z-index:${i+1}`;
-        el.setAttribute('onclick', `openLightbox('${p.photo.replace(/'/g, "\'")}')`);
+        const photoSrc = p.photo || p.img || '';
+        el.setAttribute('onclick', `openLightbox('${photoSrc.replace(/'/g, "\'")}')`);
         
         el.innerHTML = `
             <div class="pw-card" style="${tapeStyle}">
                 <div class="pw-tape"></div>
                 ${badge}
-                <img class="pw-img" src="${p.photo}" alt="${p.title||''}" loading="lazy" 
+                <img class="pw-img" src="${photoSrc}" alt="${p.title||''}" loading="lazy" 
                      onerror="this.outerHTML='<div class=\'pw-placeholder\'><span>${['🌸','🎸','🏀','🎮','🎨'][i%5]}</span></div>'">
                 <div class="pw-info">
                     <div class="pw-date">${p.date||''}</div>
