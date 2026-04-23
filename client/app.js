@@ -281,47 +281,147 @@ async function deleteDiary(id) {
 // ============================================================
 
 const SUBJECTS = {
-  chinese: { name: '语文', icon: '📖', units: 8, color: 'var(--accent)' },
-  math: { name: '数学', icon: '🔢', units: 6, color: 'var(--accent2)' },
-  english: { name: '英语', icon: '🔤', units: 6, color: 'var(--pink)' },
-  olympiad: { name: '奥数', icon: '🧮', units: 20, color: 'var(--yellow)' }
+  chinese: { 
+    name: '语文', 
+    icon: '📖', 
+    units: 8, 
+    color: 'var(--accent)',
+    items: [
+      { name: '第一单元生字', desc: '学习8个生字词，练习拼音和书写' },
+      { name: '第二单元生字', desc: '掌握更多汉字，练习组词造句' },
+      { name: '第三单元生字', desc: '巩固拼音，提升书写能力' },
+      { name: '第四单元生字', desc: '强化汉字记忆和运用' },
+      { name: '第五单元生字', desc: '提升读写综合能力' },
+      { name: '第六单元生字', desc: '扩展词汇量，练习写作' },
+      { name: '第七单元生字', desc: '综合练习，巩固所学' },
+      { name: '第八单元生字', desc: '期末复习，全面提升' }
+    ]
+  },
+  math: { 
+    name: '数学', 
+    icon: '🔢', 
+    units: 6, 
+    color: 'var(--accent2)',
+    items: [
+      { name: '大数的认识', desc: '学习万以内数的读写和大小比较' },
+      { name: '两位数乘除法', desc: '掌握两位数乘除法的计算方法' },
+      { name: '角的度量', desc: '认识角，会用量角器画角' },
+      { name: '三位数加减法', desc: '学习三位数加减法竖式计算' },
+      { name: '图形的认识', desc: '认识长方形、正方形和平行四边形' },
+      { name: '统计与可能性', desc: '学习数据收集和简单的统计方法' }
+    ]
+  },
+  english: { 
+    name: '英语', 
+    icon: '🔤', 
+    units: 6, 
+    color: 'var(--pink)',
+    items: [
+      { name: 'Greetings 问候语', desc: 'Hello, Hi, Good morning 等日常问候' },
+      { name: 'Colors 颜色', desc: 'Red, Blue, Green 等颜色单词' },
+      { name: 'Numbers 数字', desc: '1-20 数字的英语表达' },
+      { name: 'Family 家庭', desc: 'Dad, Mom, Brother 等家庭成员' },
+      { name: 'Animals 动物', desc: 'Cat, Dog, Bird 等动物单词' },
+      { name: 'Food 食物', desc: 'Apple, Bread, Water 等食物单词' }
+    ]
+  },
+  olympiad: { 
+    name: '奥数', 
+    icon: '🧮', 
+    units: 20, 
+    color: 'var(--yellow)',
+    items: [
+      { name: '和差问题', desc: '已知两数之和与差，求两数' },
+      { name: '和倍问题', desc: '已知两数之和与倍数关系' },
+      { name: '差倍问题', desc: '已知两数之差与倍数关系' },
+      { name: '植树问题', desc: '间隔与棵树的关系' },
+      { name: '年龄问题', desc: '年龄差倍变化规律' },
+      { name: '周期问题', desc: '找规律，算第N个是什么' },
+      { name: '还原问题', desc: '从结果倒推原数' },
+      { name: '鸡兔同笼', desc: '两种动物，头脚数求只数' },
+      { name: '盈亏问题', desc: '分配有余或不足的问题' },
+      { name: '行程问题', desc: '速度、时间、路程关系' },
+      { name: '工程问题', desc: '合作完成工作的时间' },
+      { name: '浓度问题', desc: '配溶液的百分比计算' },
+      { name: '利润问题', desc: '成本、定价与利润' },
+      { name: '统筹问题', desc: '安排顺序省时间' },
+      { name: '数字谜', desc: '竖式中的数字推理' },
+      { name: '逻辑推理', desc: '条件与结论的逻辑关系' },
+      { name: '排列组合', desc: '数数的有序与无序' },
+      { name: '找规律', desc: '数列和图形的变化规律' },
+      { name: '火柴棒游戏', desc: '移动火柴棒变算式' },
+      { name: '称重问题', desc: '称找出次品的次数' }
+    ]
+  }
 };
 
 async function renderLearn() {
   const progress = await api('GET', '/progress');
   const done = new Set([...(progress.doneUnits||[]), ...(progress.doneOM||[])]);
   
-  let html = '';
-  for (const [key, sub] of Object.entries(SUBJECTS)) {
-    const unitCount = sub.units;
-    const completed = [...Array(unitCount)].filter((_, i) => done.has(`${key}_${i+1}`)).length;
-    const pct = unitCount > 0 ? Math.round(completed / unitCount * 100) : 0;
-    
-    html += `
-      <div class="learn-section">
-        <h3 class="learn-section-title">${sub.icon} ${sub.name}</h3>
-        <div class="learn-progress">
-          <div class="progress-header">
-            <span class="progress-title">${sub.icon} ${sub.name}</span>
-            <span style="color:var(--text2);font-size:12px">${completed}/${unitCount}</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" style="width:${pct}%;background:linear-gradient(90deg,${sub.color},${sub.color}88)"></div>
-          </div>
-          <div class="progress-pct">${pct}% 完成</div>
-          <div class="unit-grid">
-            ${[...Array(unitCount)].map((_, i) => {
-              const uid = `${key}_${i+1}`;
-              const isDone = done.has(uid);
-              return `<button class="unit-btn${isDone?' done':''}" onclick="toggleUnit('${key}','${uid}',${!isDone})">${i+1}</button>`;
-            }).join('')}
-          </div>
-        </div>
-      </div>
-    `;
+  // 获取当前选中的科目，如果没有则默认选中第一个
+  const currentSubject = localStorage.getItem('learn_subject') || 'chinese';
+  const sub = SUBJECTS[currentSubject];
+  const unitCount = sub.items ? sub.items.length : sub.units;
+  const completed = [...Array(unitCount)].filter((_, i) => done.has(`${currentSubject}_${i+1}`)).length;
+  const pct = unitCount > 0 ? Math.round(completed / unitCount * 100) : 0;
+  
+  // 科目切换按钮
+  let subjectTabs = '';
+  for (const [key, s] of Object.entries(SUBJECTS)) {
+    const sDone = [...Array(s.items ? s.items.length : s.units)].filter((_, i) => done.has(`${key}_${i+1}`)).length;
+    const sTotal = s.items ? s.items.length : s.units;
+    subjectTabs += `<button class="subject-tab${key===currentSubject?' active':''}" onclick="switchSubject('${key}')">${s.icon} ${s.name} <span class="subject-count">${sDone}/${sTotal}</span></button>`;
   }
   
-  document.getElementById('learn-content').innerHTML = html;
+  // 单元列表（卡片式）
+  let unitHtml = '';
+  if (sub.items) {
+    unitHtml = sub.items.map((item, i) => {
+      const uid = `${currentSubject}_${i+1}`;
+      const isDone = done.has(uid);
+      return `
+        <div class="unit-card${isDone?' done':''}" onclick="toggleUnit('${currentSubject}','${uid}',${!isDone})">
+          <div class="unit-card-check">${isDone?'✓':'○'}</div>
+          <div class="unit-card-body">
+            <div class="unit-card-name">${item.name}</div>
+            <div class="unit-card-desc">${item.desc}</div>
+          </div>
+          <div class="unit-card-num">${i+1}</div>
+        </div>
+      `;
+    }).join('');
+  } else {
+    unitHtml = [...Array(unitCount)].map((_, i) => {
+      const uid = `${currentSubject}_${i+1}`;
+      const isDone = done.has(uid);
+      return `<button class="unit-btn${isDone?' done':''}" onclick="toggleUnit('${currentSubject}','${uid}',${!isDone})">${i+1}</button>`;
+    }).join('');
+  }
+  
+  document.getElementById('learn-content').innerHTML = `
+    <div class="learn-tabs">${subjectTabs}</div>
+    <div class="learn-overview">
+      <div class="learn-progress">
+        <div class="progress-header">
+          <span class="progress-title">${sub.icon} ${sub.name}</span>
+          <span style="color:var(--text2);font-size:12px">${completed}/${unitCount}</span>
+        </div>
+        <div class="progress-bar" style="height:12px">
+          <div class="progress-fill" style="width:${pct}%;background:linear-gradient(90deg,${sub.color},${sub.color}88)"></div>
+        </div>
+        <div class="progress-pct">${pct}% 完成</div>
+      </div>
+    </div>
+    <div class="unit-list">
+      ${unitHtml}
+    </div>
+  `;
+}
+
+function switchSubject(subject) {
+  localStorage.setItem('learn_subject', subject);
+  renderLearn();
 }
 
 async function toggleUnit(subject, unit, completed) {

@@ -1010,18 +1010,113 @@ body::before {
    学习页
    ============================================================ */
 
-.learn-section {
-  margin-bottom: 32px;
+.learn-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
-.learn-section-title {
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 14px;
+.subject-tab {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
+  padding: 10px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
   color: var(--text2);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.subject-tab:hover {
+  border-color: var(--border2);
+  color: var(--text);
+}
+
+.subject-tab.active {
+  background: var(--accent-dim);
+  border-color: rgba(74,222,128,0.4);
+  color: var(--accent);
+}
+
+.subject-count {
+  font-size: 11px;
+  color: var(--text3);
+  font-weight: 500;
+}
+
+.subject-tab.active .subject-count {
+  color: var(--accent);
+}
+
+.learn-overview {
+  margin-bottom: 24px;
+}
+
+.unit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.unit-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s var(--ease-spring);
+}
+
+.unit-card:hover {
+  border-color: var(--accent2);
+  transform: translateX(4px);
+}
+
+.unit-card.done {
+  border-color: rgba(74,222,128,0.25);
+  background: linear-gradient(90deg, rgba(74,222,128,0.05), var(--surface));
+}
+
+.unit-card.done .unit-card-check {
+  color: var(--accent);
+}
+
+.unit-card-check {
+  font-size: 20px;
+  color: var(--text3);
+  width: 28px;
+  text-align: center;
+}
+
+.unit-card-body {
+  flex: 1;
+}
+
+.unit-card-name {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.unit-card-desc {
+  font-size: 12px;
+  color: var(--text2);
+}
+
+.unit-card-num {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text3);
+  opacity: 0.5;
 }
 
 .learn-progress {
