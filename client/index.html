@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>永远的神的星球</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- 侧边栏 -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-top">
+    <div class="avatar">🎸</div>
+    <div class="sidebar-name">
+      <h1>永远的神</h1>
+      <p>四年级 · 10岁</p>
+    </div>
+    <button class="sidebar-toggle" id="sidebar-toggle" title="收起菜单" onclick="toggleSidebar()">☰</button>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">导航</div>
+    <a class="nav-item active" data-page="home" onclick="switchPage('home')"><span class="nav-icon">🏠</span><span class="nav-label">首页</span></a>
+    <a class="nav-item" data-page="diary" onclick="switchPage('diary')"><span class="nav-icon">📝</span><span class="nav-label">日记</span></a>
+    <a class="nav-item" data-page="learn" onclick="switchPage('learn')"><span class="nav-icon">📚</span><span class="nav-label">学习</span></a>
+    <a class="nav-item" data-page="shine" onclick="switchPage('shine')"><span class="nav-icon">✨</span><span class="nav-label">闪光时刻</span></a>
+    <a class="nav-item" data-page="tech" onclick="switchPage('tech')"><span class="nav-icon">🔬</span><span class="nav-label">科技探索</span></a>
+  </div>
+</aside>
+
+<!-- 主内容 -->
+<main class="main" id="main-content">
+  <!-- 首页 -->
+  <div id="page-home" class="page active">
+    <div class="greeting" id="greeting"></div>
+    <div class="stats-grid" id="stats-grid"></div>
+    <div class="home-sections">
+      <div class="home-section">
+        <h3>📝 最近日记</h3>
+        <div id="home-diary"></div>
+      </div>
+      <div class="home-section">
+        <h3>✨ 最近闪光</h3>
+        <div id="home-shines"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 日记页 -->
+  <div id="page-diary" class="page">
+    <div class="page-header">
+      <h2>📝 我的日记</h2>
+      <button class="btn btn-primary" onclick="openModal('modal-diary')">写日记</button>
+    </div>
+    <div class="diary-list" id="diary-list"></div>
+  </div>
+
+  <!-- 学习页 -->
+  <div id="page-learn" class="page">
+    <div class="page-header"><h2>📚 学习进度</h2></div>
+    <div class="learn-grid" id="learn-grid"></div>
+  </div>
+
+  <!-- 闪光时刻页 -->
+  <div id="page-shine" class="page">
+    <div class="page-header">
+      <h2>✨ 闪光时刻</h2>
+      <button class="btn btn-primary" onclick="openModal('modal-shine')">添加</button>
+    </div>
+    <div class="shine-wall" id="shine-wall"></div>
+  </div>
+
+  <!-- 科技探索页 -->
+  <div id="page-tech" class="page">
+    <div class="page-header">
+      <h2>🔬 科技探索</h2>
+      <button class="btn btn-primary" onclick="openModal('modal-tech')">添加</button>
+    </div>
+    <div class="tech-list" id="tech-list"></div>
+  </div>
+</main>
+
+<!-- 日记弹窗 -->
+<div class="modal-overlay" id="modal-diary" onclick="if(event.target===this)closeModal('modal-diary')">
+  <div class="modal">
+    <h3>写日记</h3>
+    <div class="mood-picker" id="mood-picker"></div>
+    <input id="diary-title" placeholder="今天发生了什么？" class="input">
+    <textarea id="diary-content" placeholder="详细写写吧..." rows="5"></textarea>
+    <div class="form-actions">
+      <button class="btn" onclick="closeModal('modal-diary')">取消</button>
+      <button class="btn btn-primary" onclick="saveDiary()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 闪光时刻弹窗 -->
+<div class="modal-overlay" id="modal-shine" onclick="if(event.target===this)closeModal('modal-shine')">
+  <div class="modal">
+    <h3>添加闪光时刻</h3>
+    <input id="shine-title" placeholder="标题" class="input">
+    <select id="shine-type" class="input">
+      <option value="📸 照片">📸 照片</option>
+      <option value="🏆 荣誉">🏆 荣誉</option>
+      <option value="🎸 吉他">🎸 吉他</option>
+      <option value="⚽ 运动">⚽ 运动</option>
+      <option value="🎨 绘画">🎨 绘画</option>
+      <option value="🎮 游戏">🎮 游戏</option>
+      <option value="💡 其他">💡 其他</option>
+    </select>
+    <input id="shine-desc" placeholder="简单描述..." class="input">
+    <input type="file" id="shine-photo" accept="image/*" class="input">
+    <div class="form-actions">
+      <button class="btn" onclick="closeModal('modal-shine')">取消</button>
+      <button class="btn btn-primary" onclick="saveShine()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 科技探索弹窗 -->
+<div class="modal-overlay" id="modal-tech" onclick="if(event.target===this)closeModal('modal-tech')">
+  <div class="modal">
+    <h3>添加科技新闻</h3>
+    <input id="tech-title" placeholder="新闻标题" class="input">
+    <textarea id="tech-summary" placeholder="简单描述这条新闻的内容..." rows="4"></textarea>
+    <div class="form-actions">
+      <button class="btn" onclick="closeModal('modal-tech')">取消</button>
+      <button class="btn btn-primary" onclick="saveTech()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 图片灯箱 -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="">
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
