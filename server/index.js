@@ -101,18 +101,48 @@ async function startServer() {
 
   // ===== 科技新闻 API =====
   app.get('/api/tech', (req, res) => {
-    const rows = all('SELECT * FROM tech ORDER BY date DESC, id DESC');
+    const rows = all('SELECT * FROM tech ORDER BY fav DESC, date DESC, id DESC');
     res.json(rows);
   });
 
   app.post('/api/tech', (req, res) => {
-    const { title, summary, source, date } = req.body;
-    const result = run('INSERT INTO tech (title, summary, source, date) VALUES (?, ?, ?, ?)', [title, summary, source || '', date]);
+    const { title, summary, source, category, date } = req.body;
+    const result = run('INSERT INTO tech (title, summary, source, category, date) VALUES (?, ?, ?, ?, ?)', [title, summary, source || '', category || '🔬 科学', date]);
     res.json({ id: result.lastInsertRowid, ok: true });
   });
 
   app.delete('/api/tech/:id', (req, res) => {
     run('DELETE FROM tech WHERE id = ?', [req.params.id]);
+    res.json({ ok: true });
+  });
+
+  // 收藏/取消收藏
+  app.put('/api/tech/:id/fav', (req, res) => {
+    const row = get('SELECT fav FROM tech WHERE id = ?', [req.params.id]);
+    if (!row) return res.status(404).json({ ok: false });
+    const newFav = row.fav ? 0 : 1;
+    run('UPDATE tech SET fav = ? WHERE id = ?', [newFav, req.params.id]);
+    res.json({ ok: true, fav: newFav });
+  });
+
+  // 每日推荐
+  app.get('/api/tech/daily', (req, res) => {
+    const today = new Date().toISOString().slice(0, 10);
+    const count = get('SELECT COUNT(*) as c FROM tech WHERE date = ?', [today]);
+    res.json({ hasDaily: count.c > 0, today });
+  });
+
+  // 批量添加种子数据
+  app.post('/api/tech/seed', (req, res) => {
+    const { items } = req.body;
+    if (!Array.isArray(items)) return res.status(400).json({ ok: false });
+    for (const item of items) {
+      const exists = get('SELECT id FROM tech WHERE title = ?', [item.title]);
+      if (!exists) {
+        run('INSERT INTO tech (title, summary, source, category, date) VALUES (?, ?, ?, ?, ?)',
+          [item.title, item.summary || '', item.source || '', item.category || '🔬 科学', item.date || today()]);
+      }
+    }
     res.json({ ok: true });
   });
 

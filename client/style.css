@@ -1400,6 +1400,11 @@ body::before {
   transform: translateY(-2px);
 }
 
+.tech-card.favorited {
+  border-color: rgba(239, 68, 68, 0.3);
+  background: linear-gradient(135deg, var(--surface), rgba(239, 68, 68, 0.03));
+}
+
 .tech-icon {
   font-size: 32px;
   flex-shrink: 0;
@@ -1425,11 +1430,46 @@ body::before {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .tech-date {
   font-size: 11px;
   color: var(--text3);
+}
+
+.tech-category {
+  font-size: 11px;
+  color: var(--accent2);
+  background: rgba(74, 222, 128, 0.08);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.tech-actions {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.btn-fav {
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+}
+
+.btn-fav:hover {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.btn-fav.active {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
 }
 
 /* ============================================================

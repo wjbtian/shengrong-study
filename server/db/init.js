@@ -60,6 +60,8 @@ async function initDB() {
       title TEXT NOT NULL,
       summary TEXT NOT NULL DEFAULT '',
       source TEXT,
+      category TEXT DEFAULT '🔬 科学',
+      fav INTEGER DEFAULT 0,
       date TEXT NOT NULL,
       created_at TEXT DEFAULT (datetime('now', 'localtime'))
     );

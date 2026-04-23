@@ -524,44 +524,112 @@ async function deleteShine(id) {
 // 科技探索
 // ============================================================
 
+// 科技探索默认内容库（适合10岁小孩的科学知识）
+const TECH_NEWS_BANK = [
+  { title: '🚀 SpaceX 星舰成功回收！', summary: 'SpaceX 的星舰火箭第一次成功用机械臂抓住了返回的助推器，就像用筷子夹住筷子一样厉害！这是人类太空探索的巨大进步。', category: '🚀 太空', source: '科技新闻' },
+  { title: '🤖 AI 能帮你写作业吗？', summary: '人工智能越来越聪明，可以回答问题、写文章、画画。但它不是万能的，真正的学习还是要靠自己动脑筋哦！', category: '🤖 AI', source: '科技新闻' },
+  { title: '🦕 科学家发现新恐龙化石', summary: '古生物学家在阿根廷发现了一种新的恐龙化石，这种恐龙有长长的脖子和巨大的身体，可能比霸王龙还要大！', category: '🦕 自然', source: '科学发现' },
+  { title: '🔋 新型电池充一次跑1000公里', summary: '科学家发明了一种新型固态电池，可以让电动汽车充一次电就跑1000公里，比现在的电池厉害多了！', category: '⚡ 能源', source: '科技新闻' },
+  { title: '🌊 海洋深处发现发光生物', summary: '深海探测器在海底3000米处发现了一种会发光的神秘生物，它们像星星一样在黑暗中闪闪发光。', category: '🐟 海洋', source: '自然探索' },
+  { title: '📱 手机为什么能定位？', summary: '手机定位靠GPS卫星，天上有很多卫星绕着地球转，它们告诉手机你在哪里，误差只有几米！', category: '📡 通信', source: '科普知识' },
+  { title: '🧬 基因是什么？', summary: '基因就像身体的说明书，决定了你长什么样子、有什么特点。每个人的基因都是独一无二的！', category: '🧬 生物', source: '科普知识' },
+  { title: '🌍 地球正在变暖', summary: '科学家发现地球的平均温度在慢慢升高，这是因为人类燃烧煤炭和石油产生了太多二氧化碳。保护环境很重要！', category: '🌍 环境', source: '科学新闻' },
+  { title: '🚁 无人机送快递', summary: '有些城市已经开始用无人机送快递了！无人机可以飞到楼顶，把包裹准确地送到你手上。', category: '🚁 科技', source: '科技新闻' },
+  { title: '🔭 韦伯望远镜拍到最远星系', summary: '詹姆斯·韦伯太空望远镜拍到了距离地球130亿光年的星系，那是宇宙刚诞生不久时的样子！', category: '🌌 天文', source: '天文发现' },
+  { title: '🐝 蜜蜂也会做数学题？', summary: '科学家发现蜜蜂能理解"零"的概念，还能做简单的加减法。小小的蜜蜂原来这么聪明！', category: '🐝 动物', source: '科学发现' },
+  { title: '💻 量子计算机是什么？', summary: '量子计算机是一种超级快的计算机，它用量子的力量来计算。未来它可能帮助科学家发明新药、解决难题！', category: '💻 计算机', source: '科普知识' },
+  { title: '🌋 火山为什么会喷发？', summary: '地球内部很热，岩浆像热汤一样在地下流动。当压力太大时，岩浆就会冲破地壳喷发出来，形成火山。', category: '🌋 地理', source: '科普知识' },
+  { title: '🦠 细菌有好有坏', summary: '不是所有细菌都可怕！有些细菌能帮我们消化食物、制造酸奶，还有些能产生抗生素来治病。', category: '🦠 生物', source: '健康科普' },
+  { title: '🎮 游戏不只是玩', summary: '有些游戏可以帮助学习，比如编程游戏、数学游戏、历史游戏。玩中学，学中玩！', category: '🎮 教育', source: '教育科技' }
+];
+
+// 获取今天的推荐（基于日期选择一条）
+function getDailyTech() {
+  const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
+  return TECH_NEWS_BANK[dayOfYear % TECH_NEWS_BANK.length];
+}
+
 async function renderTech() {
   const techs = await api('GET', '/tech');
   
+  // 如果是空的，自动填充默认内容
   if (techs.length === 0) {
-    document.getElementById('tech-list').innerHTML = `
-      <div class="empty-state">
-        <span class="emoji">🔬</span>
-        <p>还没有科技探索<br>点击右上角添加吧</p>
-      </div>
-    `;
-    return;
+    await seedTechNews();
+    return renderTech(); // 重新渲染
+  }
+  
+  // 检查今天是否有推荐，没有就加一条
+  const today = new Date().toISOString().slice(0, 10);
+  const hasToday = techs.some(t => t.date === today);
+  if (!hasToday) {
+    const daily = getDailyTech();
+    await api('POST', '/tech', { 
+      title: daily.title, 
+      summary: daily.summary, 
+      source: daily.source,
+      category: daily.category,
+      date: today 
+    });
+    return renderTech(); // 重新渲染
   }
   
   document.getElementById('tech-list').innerHTML = techs.map(t => `
-    <div class="tech-card">
-      <span class="tech-icon">🔬</span>
+    <div class="tech-card ${t.fav ? 'favorited' : ''}">
+      <span class="tech-icon">${t.category ? t.category.split(' ')[0] : '🔬'}</span>
       <div class="tech-body">
         <div class="tech-title">${t.title}</div>
         <div class="tech-summary">${t.summary || ''}</div>
         <div class="tech-meta">
           <span class="tech-date">${formatDate(t.date)}</span>
-          <button class="btn btn-sm btn-danger" onclick="deleteTech(${t.id})">🗑️</button>
+          <span class="tech-category">${t.category || '🔬 科学'}</span>
+          <div class="tech-actions">
+            <button class="btn btn-sm ${t.fav ? 'btn-fav active' : 'btn-fav'}" onclick="toggleFav(${t.id}, this)" title="收藏">
+              ${t.fav ? '❤️' : '🤍'}
+            </button>
+            <button class="btn btn-sm btn-danger" onclick="deleteTech(${t.id})">🗑️</button>
+          </div>
         </div>
       </div>
     </div>
   `).join('');
 }
 
+async function seedTechNews() {
+  // 随机选5条作为初始内容
+  const shuffled = [...TECH_NEWS_BANK].sort(() => 0.5 - Math.random());
+  const selected = shuffled.slice(0, 5);
+  const today = new Date().toISOString().slice(0, 10);
+  
+  for (const item of selected) {
+    await api('POST', '/tech', {
+      title: item.title,
+      summary: item.summary,
+      source: item.source,
+      category: item.category,
+      date: today
+    });
+  }
+}
+
+async function toggleFav(id, btn) {
+  const res = await api('PUT', `/tech/${id}/fav`);
+  if (res.ok) {
+    // 重新渲染
+    renderTech();
+  }
+}
+
 async function saveTech() {
   const title = document.getElementById('tech-title').value.trim();
   const summary = document.getElementById('tech-summary').value.trim();
+  const category = document.getElementById('tech-category').value;
   
   if (!title) {
     alert('请输入标题');
     return;
   }
   
-  await api('POST', '/tech', { title, summary, source: '', date: today() });
+  await api('POST', '/tech', { title, summary, source: '', category, date: today() });
   document.getElementById('tech-title').value = '';
   document.getElementById('tech-summary').value = '';
   closeModal('modal-tech');
