@@ -99,7 +99,32 @@ async function startServer() {
     res.json({ ok: true });
   });
 
-  // ===== 科技新闻 API =====
+  // ===== 吉他视频 API =====
+app.get('/api/guitar', (req, res) => {
+  const rows = all('SELECT * FROM guitar_videos ORDER BY date DESC, id DESC');
+  rows.forEach(r => { if (r.video_path) r.videoUrl = `/uploads/${r.video_path}`; });
+  res.json(rows);
+});
+
+app.post('/api/guitar', upload.single('video'), (req, res) => {
+  const { title, notes, date, duration, bpm, key_sig } = req.body;
+  const videoPath = req.file ? req.file.filename : null;
+  const result = run('INSERT INTO guitar_videos (title, video_path, duration, bpm, key_sig, notes, date) VALUES (?, ?, ?, ?, ?, ?, ?)',
+    [title, videoPath, duration || null, bpm || null, key_sig || null, notes || '', date]);
+  res.json({ id: result.lastInsertRowid, ok: true });
+});
+
+app.delete('/api/guitar/:id', (req, res) => {
+  const row = get('SELECT video_path FROM guitar_videos WHERE id = ?', [req.params.id]);
+  if (row && row.video_path) {
+    const p = path.join(__dirname, 'uploads', row.video_path);
+    if (fs.existsSync(p)) fs.unlinkSync(p);
+  }
+  run('DELETE FROM guitar_videos WHERE id = ?', [req.params.id]);
+  res.json({ ok: true });
+});
+
+// ===== 科技新闻 API =====
   app.get('/api/tech', (req, res) => {
     const rows = all('SELECT * FROM tech ORDER BY fav DESC, date DESC, id DESC');
     res.json(rows);

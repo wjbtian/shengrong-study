@@ -1629,6 +1629,143 @@ body::before {
 .song-status.learning { color: var(--yellow); }
 .song-status.done { color: var(--accent); }
 
+/* 吉他视频时间轴 */
+.guitar-latest {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.latest-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent2);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.latest-player {
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(0,0,0,0.3);
+}
+
+.latest-player video {
+  display: block;
+  width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+}
+
+.latest-info {
+  padding: 12px 16px;
+  background: rgba(0,0,0,0.2);
+}
+
+.latest-title {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.latest-meta {
+  font-size: 12px;
+  color: var(--text2);
+}
+
+.guitar-timeline-section {
+  margin-bottom: 24px;
+}
+
+.guitar-timeline-section h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.guitar-timeline {
+  position: relative;
+  padding-left: 24px;
+}
+
+.guitar-timeline::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--accent2), transparent);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 20px;
+  padding-left: 20px;
+}
+
+.timeline-item.latest .timeline-dot {
+  background: var(--accent2);
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2);
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -20px;
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--text2);
+  border: 2px solid var(--bg);
+}
+
+.timeline-content {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.timeline-date {
+  font-size: 12px;
+  color: var(--accent2);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.timeline-title {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.timeline-meta {
+  font-size: 12px;
+  color: var(--text2);
+  margin-bottom: 8px;
+}
+
+.timeline-notes {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.6;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.timeline-item video {
+  margin-top: 8px;
+  border-radius: 8px;
+}
+
 /* ============================================================
    模态框
    ============================================================ */

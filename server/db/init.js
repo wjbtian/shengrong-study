@@ -65,6 +65,18 @@ async function initDB() {
       date TEXT NOT NULL,
       created_at TEXT DEFAULT (datetime('now', 'localtime'))
     );
+
+    CREATE TABLE IF NOT EXISTS guitar_videos (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      video_path TEXT NOT NULL,
+      duration INTEGER,
+      bpm INTEGER,
+      key_sig TEXT,
+      notes TEXT,
+      date TEXT NOT NULL,
+      created_at TEXT DEFAULT (datetime('now', 'localtime'))
+    );
   `);
 
   saveDB();

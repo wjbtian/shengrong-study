@@ -176,6 +176,17 @@
           <p>每天练习一点点，进步看得见！</p>
         </div>
         
+        <!-- 最新视频播放器 -->
+        <div class="guitar-latest" id="guitar-latest">
+          <div class="latest-label">🎬 最新练习视频</div>
+          <div class="latest-player" id="latest-player">
+            <div class="empty-state">
+              <span class="emoji">🎸</span>
+              <p>还没有练习视频<br>点击下方按钮上传第一个吧</p>
+            </div>
+          </div>
+        </div>
+        
         <div class="guitar-stats">
           <div class="guitar-stat">
             <div class="guitar-stat-value" id="guitar-total">0</div>
@@ -186,12 +197,23 @@
             <div class="guitar-stat-label">学会曲目</div>
           </div>
           <div class="guitar-stat">
-            <div class="guitar-stat-value">117</div>
+            <div class="guitar-stat-value" id="guitar-bpm">--</div>
             <div class="guitar-stat-label">当前BPM</div>
           </div>
           <div class="guitar-stat">
-            <div class="guitar-stat-value" style="color: var(--accent2);">A</div>
+            <div class="guitar-stat-value" id="guitar-key" style="color: var(--accent2);">--</div>
             <div class="guitar-stat-label">主调</div>
+          </div>
+        </div>
+
+        <!-- 时间轴 -->
+        <div class="guitar-timeline-section">
+          <h3>📅 练习时间轴</h3>
+          <div class="guitar-timeline" id="guitar-timeline">
+            <div class="empty-state">
+              <span class="emoji">📅</span>
+              <p>还没有练习记录</p>
+            </div>
           </div>
         </div>
 
@@ -246,12 +268,14 @@
 
         <div class="card">
           <h3 class="card-title">📊 上次分析反馈</h3>
-          <p class="card-desc" style="margin-top:10px">
+          <p class="card-desc" style="margin-top:10px" id="guitar-feedback">
             <span class="tag green" style="margin-bottom:8px">✅ 弹得好的段落</span> 5-10秒、15-30秒、55-60秒<br><br>
             <span class="tag orange" style="margin-bottom:8px">⚠️ 需要加强</span> 0-5秒（刚开始）、30-50秒（中段）<br><br>
             <span class="tag" style="margin-bottom:8px">💪 总体评价</span> 节奏稳定，和弦正确，继续加油！
           </p>
         </div>
+
+        <button class="btn btn-primary" onclick="openModal('modal-guitar')" style="margin-top:20px">➕ 上传练习视频</button>
       </div>
     </div>
 
@@ -326,6 +350,33 @@
     <div class="form-actions">
       <button class="btn" onclick="closeModal('modal-shine')">取消</button>
       <button class="btn btn-primary" onclick="saveShine()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 吉他视频弹窗 -->
+<div class="modal-overlay" id="modal-guitar" onclick="if(event.target===this)closeModal('modal-guitar')">
+  <div class="modal">
+    <h3>🎸 上传练习视频</h3>
+    <div class="form-group">
+      <input id="guitar-video-title" placeholder="曲目名称（如：两只老虎）">
+    </div>
+    <div class="form-group">
+      <label>选择视频文件</label>
+      <input type="file" id="guitar-video-file" accept="video/*">
+    </div>
+    <div class="form-group">
+      <input id="guitar-video-bpm" placeholder="BPM（可选，如：117）" type="number">
+    </div>
+    <div class="form-group">
+      <input id="guitar-video-key" placeholder="主调（可选，如：A）">
+    </div>
+    <div class="form-group">
+      <textarea id="guitar-video-notes" placeholder="备注（可选）：练习感受、需要改进的地方..."></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn" onclick="closeModal('modal-guitar')">取消</button>
+      <button class="btn btn-primary" onclick="saveGuitarVideo()">上传</button>
     </div>
   </div>
 </div>

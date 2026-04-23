@@ -438,14 +438,118 @@ async function toggleUnit(subject, unit, completed) {
 // ============================================================
 
 async function updateGuitarPage() {
-  // 获取练习次数（从闪光时刻中统计吉他相关）
-  const shines = await api('GET', '/shines');
-  const guitarShines = shines.filter(s => s.type && s.type.includes('吉他'));
-  document.getElementById('guitar-total').textContent = guitarShines.length;
+  // 获取吉他视频列表
+  const videos = await api('GET', '/guitar');
   
-  // 简单统计已学曲目
-  const songsLearned = guitarShines.filter(s => s.title && (s.title.includes('两只老虎') || s.title.includes('完成'))).length;
-  document.getElementById('guitar-songs').textContent = songsLearned;
+  // 更新统计
+  document.getElementById('guitar-total').textContent = videos.length;
+  
+  // 统计学会曲目（从标题中提取）
+  const songs = new Set();
+  videos.forEach(v => {
+    if (v.title) {
+      ['两只老虎', '小星星', '生日快乐', '彩虹'].forEach(song => {
+        if (v.title.includes(song)) songs.add(song);
+      });
+    }
+  });
+  document.getElementById('guitar-songs').textContent = songs.size;
+  
+  // 最新视频自动播放
+  if (videos.length > 0) {
+    const latest = videos[0];
+    document.getElementById('latest-player').innerHTML = `
+      <video controls autoplay muted playsinline style="width:100%;border-radius:12px;">
+        <source src="${latest.videoUrl}" type="video/mp4">
+        您的浏览器不支持视频播放
+      </video>
+      <div class="latest-info">
+        <div class="latest-title">${latest.title}</div>
+        <div class="latest-meta">${formatDate(latest.date)} · ${latest.duration ? Math.round(latest.duration) + '秒' : ''}</div>
+      </div>
+    `;
+    
+    // 更新BPM和主调显示
+    if (latest.bpm) document.getElementById('guitar-bpm').textContent = latest.bpm;
+    if (latest.key_sig) document.getElementById('guitar-key').textContent = latest.key_sig;
+    
+    // 更新时间轴
+    renderGuitarTimeline(videos);
+    
+    // 更新反馈（如果有notes）
+    if (latest.notes) {
+      document.getElementById('guitar-feedback').innerHTML = latest.notes.replace(/\n/g, '<br>');
+    }
+  } else {
+    document.getElementById('latest-player').innerHTML = `
+      <div class="empty-state">
+        <span class="emoji">🎸</span>
+        <p>还没有练习视频<br>点击右下角按钮上传第一个吧</p>
+      </div>
+    `;
+    document.getElementById('guitar-timeline').innerHTML = `
+      <div class="empty-state">
+        <span class="emoji">📅</span>
+        <p>还没有练习记录</p>
+      </div>
+    `;
+  }
+}
+
+function renderGuitarTimeline(videos) {
+  if (videos.length === 0) return;
+  
+  const html = videos.map((v, i) => `
+    <div class="timeline-item${i === 0 ? ' latest' : ''}">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-date">${formatDate(v.date)}</div>
+        <div class="timeline-title">${v.title}</div>
+        ${v.bpm ? `<div class="timeline-meta">BPM: ${v.bpm}${v.key_sig ? ' · 调: ' + v.key_sig : ''}</div>` : ''}
+        ${v.notes ? `<div class="timeline-notes">${v.notes}</div>` : ''}
+        ${v.videoUrl ? `<video controls style="width:100%;max-width:300px;border-radius:8px;margin-top:8px;"><source src="${v.videoUrl}" type="video/mp4"></video>` : ''}
+      </div>
+    </div>
+  `).join('');
+  
+  document.getElementById('guitar-timeline').innerHTML = html;
+}
+
+async function saveGuitarVideo() {
+  const title = document.getElementById('guitar-video-title').value.trim();
+  const videoFile = document.getElementById('guitar-video-file').files[0];
+  const bpm = document.getElementById('guitar-video-bpm').value;
+  const keySig = document.getElementById('guitar-video-key').value;
+  const notes = document.getElementById('guitar-video-notes').value.trim();
+  
+  if (!title) {
+    alert('请输入曲目名称');
+    return;
+  }
+  if (!videoFile) {
+    alert('请选择视频文件');
+    return;
+  }
+  
+  const fd = new FormData();
+  fd.append('title', title);
+  fd.append('video', videoFile);
+  fd.append('date', today());
+  if (bpm) fd.append('bpm', bpm);
+  if (keySig) fd.append('key_sig', keySig);
+  if (notes) fd.append('notes', notes);
+  
+  await api('POST', '/guitar', fd);
+  
+  // 清空表单
+  document.getElementById('guitar-video-title').value = '';
+  document.getElementById('guitar-video-file').value = '';
+  document.getElementById('guitar-video-bpm').value = '';
+  document.getElementById('guitar-video-key').value = '';
+  document.getElementById('guitar-video-notes').value = '';
+  
+  closeModal('modal-guitar');
+  updateGuitarPage();
 }
 
 // ============================================================
