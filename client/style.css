@@ -94,7 +94,8 @@
   }
   .home-greeting h2 { font-size: 20px; margin-bottom: 4px; }
   .home-greeting p { font-size: 13px; color: var(--text2); }
-  .home-sections { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+  .home-sections { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+  .home-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .home-section-card {
     background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
     padding: 18px; cursor: pointer; transition: all 0.2s;

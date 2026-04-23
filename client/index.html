@@ -33,13 +33,13 @@
   <div id="page-home" class="page active">
     <div class="greeting" id="greeting"></div>
     <div class="stats-grid" id="stats-grid"></div>
-    <div class="home-sections">
-      <div class="home-section">
-        <h3>📝 最近日记</h3>
+    <div class="home-panels">
+      <div class="home-panel">
+        <div class="home-panel-header"><h3>📝 最近日记</h3><span class="more-link" onclick="switchPage('diary')">更多 →</span></div>
         <div id="home-diary"></div>
       </div>
-      <div class="home-section">
-        <h3>✨ 最近闪光</h3>
+      <div class="home-panel">
+        <div class="home-panel-header"><h3>✨ 最近闪光</h3><span class="more-link" onclick="switchPage('shine')">更多 →</span></div>
         <div id="home-shines"></div>
       </div>
     </div>
