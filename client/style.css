@@ -5480,3 +5480,285 @@ body::before {
     gap: 8px;
   }
 }
+
+/* ============================================================
+   好词好句 & 重点字词 & 错别字
+   ============================================================ */
+
+.good-words-section,
+.key-words-section,
+.typo-section {
+  margin-bottom: 24px;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.good-words-section h4,
+.key-words-section h4,
+.typo-section h4 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 好词标签 */
+.word-tags {
+  margin-bottom: 16px;
+}
+
+.word-tags h5 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text2);
+  margin-bottom: 10px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.word-tag {
+  padding: 6px 14px;
+  background: rgba(74, 222, 128, 0.1);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  border-radius: 20px;
+  font-size: 14px;
+  color: var(--accent);
+  transition: all var(--duration-normal);
+}
+
+.word-tag:hover {
+  background: rgba(74, 222, 128, 0.2);
+  transform: translateY(-2px);
+}
+
+.word-tag.primary {
+  background: rgba(129, 140, 248, 0.1);
+  border-color: rgba(129, 140, 248, 0.3);
+  color: var(--accent2);
+}
+
+.word-tag.primary:hover {
+  background: rgba(129, 140, 248, 0.2);
+}
+
+/* 好句 */
+.sentence-list h5 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text2);
+  margin-bottom: 10px;
+}
+
+.sentence-item {
+  padding: 12px 16px;
+  background: var(--surface2);
+  border-left: 3px solid var(--yellow);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.6;
+  font-style: italic;
+}
+
+/* 生字卡片 */
+.char-grid h5 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text2);
+  margin-bottom: 12px;
+}
+
+.char-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+}
+
+.char-card {
+  text-align: center;
+  padding: 16px 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: all var(--duration-normal);
+}
+
+.char-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.char-big {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+  font-family: 'Noto Serif SC', serif;
+}
+
+.char-pinyin {
+  font-size: 13px;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.char-meaning {
+  font-size: 12px;
+  color: var(--text2);
+  margin-bottom: 4px;
+}
+
+.char-example {
+  font-size: 11px;
+  color: var(--text3);
+}
+
+/* 词语表 */
+.word-list h5 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text2);
+  margin-bottom: 10px;
+  margin-top: 16px;
+}
+
+/* 错别字记录 */
+.typo-list {
+  min-height: 60px;
+}
+
+.typo-empty {
+  text-align: center;
+  color: var(--text3);
+  padding: 20px;
+  font-size: 14px;
+}
+
+.typo-loading {
+  text-align: center;
+  color: var(--accent);
+  padding: 20px;
+  font-size: 14px;
+}
+
+.typo-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  transition: all var(--duration-normal);
+}
+
+.typo-item:hover {
+  border-color: var(--danger);
+}
+
+.typo-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--danger);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.typo-word {
+  font-size: 18px;
+  font-weight: 700;
+  min-width: 40px;
+}
+
+.typo-word.wrong {
+  color: var(--danger);
+  text-decoration: line-through;
+}
+
+.typo-arrow {
+  color: var(--text3);
+  font-size: 14px;
+}
+
+.typo-input {
+  flex: 1;
+  padding: 6px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--accent);
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  max-width: 100px;
+}
+
+.typo-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.typo-date {
+  font-size: 12px;
+  color: var(--text3);
+  white-space: nowrap;
+}
+
+.typo-delete {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: all var(--duration-normal);
+}
+
+.typo-delete:hover {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: white;
+}
+
+.typo-upload {
+  margin-top: 16px;
+  text-align: center;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .char-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .typo-item {
+    flex-wrap: wrap;
+  }
+  
+  .typo-input {
+    max-width: 80px;
+  }
+}

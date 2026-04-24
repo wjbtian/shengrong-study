@@ -572,6 +572,150 @@ const CHINESE_DETAIL = {
   }
 };
 
+// --- 好词好句数据 ---
+const GOOD_WORDS = {
+  'ch_1': {
+    words: ['浩浩荡荡', '山崩地裂', '人声鼎沸', '风号浪吼', '水天相接'],
+    sentences: [
+      '浪潮越来越近，犹如千万匹白色战马齐头并进，浩浩荡荡地飞奔而来。',
+      '细细的溪水，流着山草和野花的香味，流着月光。'
+    ]
+  },
+  'ch_2': {
+    words: ['横七竖八', '聚精会神', '百思不得其解', '出乎意料'],
+    sentences: [
+      '20世纪的成就，真可以用"忽如一夜春风来，千树万树梨花开"来形容。',
+      '蝙蝠就像没头苍蝇似的到处乱撞，挂在绳子上的铃铛响个不停。'
+    ]
+  },
+  'ch_3': {
+    words: ['引人注意', '毫不可惜', '随遇而安', '慎重选择'],
+    sentences: [
+      '爬山虎的脚触着墙的时候，六七根细丝的头上就变成小圆片，巴住墙。',
+      '当四周很安静的时候，蟋蟀就在这平台上弹琴。'
+    ]
+  },
+  'ch_4': {
+    words: ['精疲力竭', '奔流不息', '气急败坏', '愤愤不平'],
+    sentences: [
+      '盘古倒下以后，他的身体发生了巨大的变化。',
+      '女娲先从各地拣来赤、青、黄、白、黑五种颜色的石头，燃起神火熔炼。'
+    ]
+  },
+  'ch_5': {
+    words: ['无可奈何', '白发苍苍', '摇摇晃晃', '安然无恙'],
+    sentences: [
+      '突然，一只老麻雀从一棵树上飞下来，像一块石头似的落在猎狗面前。',
+      '我奋力向峰顶爬去，一会儿攀着铁链上，一会儿手脚并用向上爬。'
+    ]
+  },
+  'ch_6': {
+    words: ['通情达理', '哄堂大笑', '垂头丧气', '得心应手'],
+    sentences: [
+      '金奎叔是个结实的汉子，他的胳膊比我的腿还粗。',
+      '这真应了一句古话：人不可貌相，海水不可斗量。'
+    ]
+  },
+  'ch_7': {
+    words: ['志存高远', '精忠报国', '大义凛然', '英勇无畏'],
+    sentences: [
+      '为中华之崛起而读书！',
+      '梅兰芳先生是闻名世界的京剧表演艺术家。'
+    ]
+  },
+  'ch_8': {
+    words: ['眉清目秀', '亭亭玉立', '明眸皓齿', '文质彬彬'],
+    sentences: [
+      '王戎七岁，尝与诸小儿游。看道边李树多子折枝，诸儿竞走取之，唯戎不动。',
+      '西门豹说："把新娘领来让我看看。"'
+    ]
+  }
+};
+
+// --- 重点字词数据 ---
+const KEY_WORDS = {
+  'ch_1': {
+    characters: [
+      { char: '潮', pinyin: 'cháo', meaning: '潮水', example: '观潮' },
+      { char: '据', pinyin: 'jù', meaning: '根据', example: '据说' },
+      { char: '堤', pinyin: 'dī', meaning: '河堤', example: '大堤' },
+      { char: '阔', pinyin: 'kuò', meaning: '宽阔', example: '宽阔' },
+      { char: '盼', pinyin: 'pàn', meaning: '盼望', example: '盼望' }
+    ],
+    words: ['潮水', '据说', '大堤', '宽阔', '盼望', '滚动', '顿时', '逐渐', '犹如', '山崩地裂']
+  },
+  'ch_2': {
+    characters: [
+      { char: '豌', pinyin: 'wān', meaning: '豌豆', example: '豌豆' },
+      { char: '按', pinyin: 'àn', meaning: '按照', example: '按照' },
+      { char: '舒', pinyin: 'shū', meaning: '舒服', example: '舒适' },
+      { char: '僵', pinyin: 'jiāng', meaning: '僵硬', example: '僵硬' },
+      { char: '硬', pinyin: 'yìng', meaning: '坚硬', example: '坚硬' }
+    ],
+    words: ['豌豆', '按照', '舒适', '僵硬', '虚弱', '耐心', '恐怕', '曾经', '雷达', '证明']
+  },
+  'ch_3': {
+    characters: [
+      { char: '操', pinyin: 'cāo', meaning: '操场', example: '操场' },
+      { char: '占', pinyin: 'zhàn', meaning: '占领', example: '占领' },
+      { char: '嫩', pinyin: 'nèn', meaning: '嫩绿', example: '嫩红' },
+      { char: '顺', pinyin: 'shùn', meaning: '顺利', example: '顺利' },
+      { char: '叠', pinyin: 'dié', meaning: '重叠', example: '重叠' }
+    ],
+    words: ['操场', '占领', '嫩红', '舒服', '均匀', '重叠', '空隙', '茎叶', '住宅', '隐蔽']
+  },
+  'ch_4': {
+    characters: [
+      { char: '睁', pinyin: 'zhēng', meaning: '睁眼', example: '睁眼' },
+      { char: '翻', pinyin: 'fān', meaning: '翻身', example: '翻身' },
+      { char: '斧', pinyin: 'fǔ', meaning: '斧头', example: '斧头' },
+      { char: '劈', pinyin: 'pī', meaning: '劈开', example: '劈开' },
+      { char: '缓', pinyin: 'huǎn', meaning: '缓慢', example: '缓缓' }
+    ],
+    words: ['睁眼', '翻身', '斧头', '劈开', '缓缓', '浑浊', '支撑', '劳累', '血液', '奔流不息']
+  },
+  'ch_5': {
+    characters: [
+      { char: '嗅', pinyin: 'xiù', meaning: '嗅觉', example: '嗅到' },
+      { char: '呆', pinyin: 'dāi', meaning: '发呆', example: '发呆' },
+      { char: '奈', pinyin: 'nài', meaning: '无奈', example: '无奈' },
+      { char: '巢', pinyin: 'cháo', meaning: '鸟巢', example: '鸟巢' },
+      { char: '齿', pinyin: 'chǐ', meaning: '牙齿', example: '牙齿' }
+    ],
+    words: ['嗅觉', '发呆', '无奈', '鸟巢', '牙齿', '身躯', '掩护', '幼儿', '搏斗', '庞大']
+  },
+  'ch_6': {
+    characters: [
+      { char: '段', pinyin: 'duàn', meaning: '段落', example: '段落' },
+      { char: '俩', pinyin: 'liǎ', meaning: '咱俩', example: '咱俩' },
+      { char: '练', pinyin: 'liàn', meaning: '练习', example: '练习' },
+      { char: '裤', pinyin: 'kù', meaning: '裤子', example: '裤子' },
+      { char: '逃', pinyin: 'táo', meaning: '逃跑', example: '逃跑' }
+    ],
+    words: ['段落', '咱俩', '练习', '裤子', '逃跑', '亏得', '挖洞', '砸锅', '否则', '帅气']
+  },
+  'ch_7': {
+    characters: [
+      { char: '肃', pinyin: 'sù', meaning: '严肃', example: '严肃' },
+      { char: '晰', pinyin: 'xī', meaning: '清晰', example: '清晰' },
+      { char: '振', pinyin: 'zhèn', meaning: '振动', example: '振兴' },
+      { char: '胸', pinyin: 'xiōng', meaning: '胸膛', example: '胸怀' },
+      { char: '怀', pinyin: 'huái', meaning: '怀抱', example: '怀抱' }
+    ],
+    words: ['严肃', '清晰', '振兴', '胸怀', '赞叹', '抱负', '屈辱', '租赁', '纠缠', '邀请']
+  },
+  'ch_8': {
+    characters: [
+      { char: '戎', pinyin: 'róng', meaning: '戎装', example: '王戎' },
+      { char: '尝', pinyin: 'cháng', meaning: '尝试', example: '尝试' },
+      { char: '诸', pinyin: 'zhū', meaning: '诸位', example: '诸位' },
+      { char: '竞', pinyin: 'jìng', meaning: '竞争', example: '竞走' },
+      { char: '唯', pinyin: 'wéi', meaning: '唯一', example: '唯一' }
+    ],
+    words: ['王戎', '尝试', '诸位', '竞走', '唯一', '媳妇', '淹没', '干旱', '迎接', '灌溉']
+  }
+};
+
 // --- 科目数据（横向鱼骨图版）---
 async function loadSubjectData(subject) {
   try {
@@ -699,6 +843,82 @@ function showChineseDetail(unitId, color) {
     html += '</div>';
   }
   
+  // 好词好句
+  const goodWords = GOOD_WORDS[unitId];
+  if (goodWords) {
+    html += '<div class="good-words-section">';
+    html += '<h4>🌟 好词好句积累</h4>';
+    
+    // 好词
+    if (goodWords.words.length > 0) {
+      html += '<div class="word-tags">';
+      html += '<h5>✨ 好词</h5>';
+      html += '<div class="tags">';
+      goodWords.words.forEach(w => {
+        html += `<span class="word-tag">${w}</span>`;
+      });
+      html += '</div></div>';
+    }
+    
+    // 好句
+    if (goodWords.sentences.length > 0) {
+      html += '<div class="sentence-list">';
+      html += '<h5>📝 好句</h5>';
+      goodWords.sentences.forEach(s => {
+        html += `<div class="sentence-item">"${s}"</div>`;
+      });
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+  
+  // 重点字词
+  const keyWords = KEY_WORDS[unitId];
+  if (keyWords) {
+    html += '<div class="key-words-section">';
+    html += '<h4>📖 重点字词</h4>';
+    
+    // 生字
+    if (keyWords.characters.length > 0) {
+      html += '<div class="char-grid">';
+      html += '<h5>🎯 生字表</h5>';
+      html += '<div class="char-list">';
+      keyWords.characters.forEach(c => {
+        html += `
+          <div class="char-card">
+            <div class="char-big">${c.char}</div>
+            <div class="char-pinyin">${c.pinyin}</div>
+            <div class="char-meaning">${c.meaning}</div>
+            <div class="char-example">${c.example}</div>
+          </div>`;
+      });
+      html += '</div></div>';
+    }
+    
+    // 词语
+    if (keyWords.words.length > 0) {
+      html += '<div class="word-list">';
+      html += '<h5>📚 词语表</h5>';
+      html += '<div class="word-tags">';
+      keyWords.words.forEach(w => {
+        html += `<span class="word-tag primary">${w}</span>`;
+      });
+      html += '</div></div>';
+    }
+    html += '</div>';
+  }
+  
+  // 错别字记录
+  html += '<div class="typo-section">';
+  html += '<h4>⚠️ 错别字记录</h4>';
+  html += '<div id="typo-list-' + unitId + '" class="typo-list">';
+  html += '<p class="typo-empty">暂无记录，上传默写图片后自动识别</p>';
+  html += '</div>';
+  html += '<div class="typo-upload">';
+  html += '<label class="btn btn-sm btn-primary" for="typo-upload-' + unitId + '">📷 上传默写图片</label>';
+  html += `<input type="file" id="typo-upload-${unitId}" accept="image/*" style="display:none" onchange="uploadTypoImage('${unitId}', this)">`;
+  html += '</div></div>';
+  
   // 知识点
   if (data.knowledge.length > 0) {
     html += '<div class="knowledge-section">';
@@ -729,6 +949,115 @@ function showChineseDetail(unitId, color) {
 function closeChineseDetail() {
   const detail = document.getElementById('chinese-detail');
   if (detail) detail.style.display = 'none';
+}
+
+// 上传默写图片（记录错别字）
+async function uploadTypoImage(unitId, input) {
+  const file = input.files[0];
+  if (!file) return;
+  
+  try {
+    // 显示上传中
+    const listEl = document.getElementById('typo-list-' + unitId);
+    if (listEl) {
+      listEl.innerHTML = '<p class="typo-loading">🔄 正在分析图片...</p>';
+    }
+    
+    // 上传到服务器
+    const formData = new FormData();
+    formData.append('image', file);
+    formData.append('unitId', unitId);
+    formData.append('date', new Date().toISOString().split('T')[0]);
+    
+    const res = await fetch(API + '/chinese/typo', {
+      method: 'POST',
+      body: formData
+    });
+    
+    const result = await res.json();
+    
+    if (result.ok) {
+      // 显示识别的错别字
+      showTypoList(unitId, result.typos || []);
+      alert('✅ 已记录 ' + (result.typos?.length || 0) + ' 个错别字');
+    } else {
+      // 上传成功但识别失败，手动输入
+      const manualTypo = prompt('图片上传成功！请输入错别字（多个用逗号分隔）：');
+      if (manualTypo) {
+        const typos = manualTypo.split(/[,，]/).map(t => t.trim()).filter(t => t);
+        await saveTypos(unitId, typos);
+        showTypoList(unitId, typos.map(t => ({ word: t, correct: '', date: new Date().toISOString().split('T')[0] })));
+      }
+    }
+  } catch (err) {
+    console.error('上传失败:', err);
+    // 离线模式：手动输入
+    const manualTypo = prompt('图片上传失败，请手动输入错别字（多个用逗号分隔）：');
+    if (manualTypo) {
+      const typos = manualTypo.split(/[,，]/).map(t => t.trim()).filter(t => t);
+      showTypoList(unitId, typos.map(t => ({ word: t, correct: '', date: new Date().toISOString().split('T')[0] })));
+    }
+  }
+  
+  // 清空input
+  input.value = '';
+}
+
+// 保存错别字到服务器
+async function saveTypos(unitId, typos) {
+  try {
+    await api('POST', '/chinese/typo', { unitId, typos });
+  } catch (err) {
+    console.error('保存错别字失败:', err);
+  }
+}
+
+// 显示错别字列表
+function showTypoList(unitId, typos) {
+  const listEl = document.getElementById('typo-list-' + unitId);
+  if (!listEl) return;
+  
+  if (!typos || typos.length === 0) {
+    listEl.innerHTML = '<p class="typo-empty">暂无错别字记录 👍</p>';
+    return;
+  }
+  
+  listEl.innerHTML = typos.map((t, idx) => `
+    <div class="typo-item">
+      <span class="typo-num">${idx + 1}</span>
+      <span class="typo-word wrong">${t.word}</span>
+      <span class="typo-arrow">→</span>
+      <input type="text" class="typo-input" placeholder="正确写法" value="${t.correct || ''}" 
+        onchange="updateTypoCorrect('${unitId}', ${idx}, this.value)">
+      <span class="typo-date">${t.date?.slice(5) || ''}</span>
+      <button class="typo-delete" onclick="deleteTypo('${unitId}', ${idx})">✕</button>
+    </div>
+  `).join('');
+}
+
+// 更新正确写法
+async function updateTypoCorrect(unitId, idx, correct) {
+  try {
+    await api('PUT', `/chinese/typo/${unitId}/${idx}`, { correct });
+  } catch (err) {
+    console.error('更新失败:', err);
+  }
+}
+
+// 删除错别字记录
+async function deleteTypo(unitId, idx) {
+  if (!confirm('确定删除这条记录吗？')) return;
+  try {
+    await api('DELETE', `/chinese/typo/${unitId}/${idx}`);
+    // 刷新列表
+    const listEl = document.getElementById('typo-list-' + unitId);
+    if (listEl) {
+      const items = listEl.querySelectorAll('.typo-item');
+      if (items[idx]) items[idx].remove();
+    }
+  } catch (err) {
+    console.error('删除失败:', err);
+  }
 }
 
 // 展开/收起单元详情（旧版时间轴用，保留兼容）
