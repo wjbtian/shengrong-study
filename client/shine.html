@@ -133,12 +133,6 @@
           <div class="shine-category-count" id="count-进步">0 个闪光</div>
           <div class="shine-category-preview" id="preview-进步"></div>
         </div>
-        <div class="shine-category-card" onclick="showCategory('好人好事')">
-          <div class="shine-category-icon">❤️</div>
-          <div class="shine-category-name">好人好事</div>
-          <div class="shine-category-count" id="count-好人好事">0 个闪光</div>
-          <div class="shine-category-preview" id="preview-好人好事"></div>
-        </div>
         <div class="shine-category-card" onclick="showCategory('其他')">
           <div class="shine-category-icon">💡</div>
           <div class="shine-category-name">其他精彩</div>
@@ -178,7 +172,6 @@
           <option value="🎤 表演">🎤 才艺展示</option>
           <option value="💡 发现">💡 发现</option>
           <option value="🌟 进步">🌟 进步</option>
-          <option value="❤️ 好人好事">❤️ 好人好事</option>
         </select>
       </div>
       <textarea class="textarea" id="shine-desc" placeholder="描述这个精彩瞬间..."></textarea>
@@ -234,12 +227,12 @@
   }
   
   function getCategoryEmoji(cat) {
-    const map = { '获奖': '🏆', '运动': '🚴', '创作': '🎨', '表演': '🎤', '进步': '🌟', '好人好事': '❤️', '其他': '💡' };
+    const map = { '获奖': '🏆', '运动': '🚴', '创作': '🎨', '表演': '🎤', '进步': '🌟', '其他': '💡' };
     return map[cat] || '✨';
   }
   
   function getCategoryName(cat) {
-    const map = { '获奖': '获奖荣誉', '运动': '运动时刻', '创作': '创意作品', '表演': '才艺展示', '进步': '进步突破', '好人好事': '好人好事', '其他': '其他精彩' };
+    const map = { '获奖': '获奖荣誉', '运动': '运动时刻', '创作': '创意作品', '表演': '才艺展示', '进步': '进步突破', '其他': '其他精彩' };
     return map[cat] || cat;
   }
   
@@ -344,7 +337,7 @@
   
   // 更新分类卡片
   function updateCategoryCards() {
-    const categories = ['获奖', '运动', '创作', '表演', '进步', '好人好事', '其他'];
+    const categories = ['获奖', '运动', '创作', '表演', '进步', '其他'];
     
     categories.forEach(cat => {
       const filtered = allShinesData.filter(s => s.type && s.type.includes(cat));
