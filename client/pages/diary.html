@@ -1,14 +1,65 @@
-<!-- 日记页 -->
-<div class="page-header">
-  <h1 class="page-title">📝 成长日记</h1>
-  <button class="btn btn-primary" id="btn-write-diary">✍️ 写日记</button>
+<!-- 日记页 - 全新设计 -->
+<div class="diary-hero">
+  <div class="diary-hero-content">
+    <div class="diary-hero-emoji">📔</div>
+    <h1 class="diary-hero-title">成长日记</h1>
+    <p class="diary-hero-subtitle">记录每一天的精彩瞬间</p>
+    <div class="diary-hero-stats">
+      <div class="diary-hero-stat">
+        <span class="diary-hero-stat-num" id="diary-total-count">0</span>
+        <span class="diary-hero-stat-label">篇日记</span>
+      </div>
+      <div class="diary-hero-stat">
+        <span class="diary-hero-stat-num" id="diary-streak">0</span>
+        <span class="diary-hero-stat-label">连续天数</span>
+      </div>
+      <div class="diary-hero-stat">
+        <span class="diary-hero-stat-num" id="diary-this-month">0</span>
+        <span class="diary-hero-stat-label">本月</span>
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-primary btn-write" id="btn-write-diary">
+    <span>✍️</span> 写日记
+  </button>
 </div>
 
-<!-- 日记心情墙 -->
-<div class="mood-wall" id="mood-wall">
-  <div class="mood-wall-title">最近心情</div>
-  <div class="mood-wall-items" id="mood-wall-items"></div>
+<!-- 心情统计 -->
+<div class="mood-stats-section">
+  <div class="section-header">
+    <h3 class="section-title">心情分布</h3>
+    <span class="section-subtitle">最近30天</span>
+  </div>
+  <div class="mood-distribution" id="mood-distribution">
+    <!-- 动态生成 -->
+  </div>
 </div>
 
-<!-- 日记列表 - 卡片式布局 -->
-<div id="diary-list" class="diary-card-list"></div>
+<!-- 心情墙 -->
+<div class="mood-wall-section">
+  <div class="section-header">
+    <h3 class="section-title">心情时光轴</h3>
+    <span class="section-subtitle">点击表情查看详情</span>
+  </div>
+  <div class="mood-wall" id="mood-wall">
+    <div class="mood-wall-items" id="mood-wall-items"></div>
+  </div>
+</div>
+
+<!-- 日记列表 -->
+<div class="diary-list-section">
+  <div class="section-header-with-action">
+    <div>
+      <h3 class="section-title">日记列表</h3>
+      <span class="section-subtitle">按时间倒序排列</span>
+    </div>
+    <div class="diary-filters">
+      <button class="diary-filter active" data-filter="all">全部</button>
+      <button class="diary-filter" data-filter="😄">😄 开心</button>
+      <button class="diary-filter" data-filter="🤩">🤩 超棒</button>
+      <button class="diary-filter" data-filter="😊">😊 不错</button>
+      <button class="diary-filter" data-filter="😔">😔 难过</button>
+    </div>
+  </div>
+  <div id="diary-list" class="diary-card-list"></div>
+</div>

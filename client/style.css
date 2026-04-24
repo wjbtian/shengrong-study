@@ -4653,3 +4653,456 @@ body::before {
     padding: 10px 12px;
   }
 }
+
+/* ============================================================
+   时间轴样式 - 学习页面
+   ============================================================ */
+
+.timeline-section {
+  margin-top: 32px;
+}
+
+.timeline-header {
+  margin-bottom: 32px;
+}
+
+.timeline {
+  position: relative;
+  padding: 20px 0;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(to bottom, var(--accent), var(--accent2));
+  transform: translateX(-50%);
+  border-radius: 3px;
+}
+
+.timeline-item {
+  position: relative;
+  width: 50%;
+  padding: 0 40px 40px 0;
+  box-sizing: border-box;
+}
+
+.timeline-item.right {
+  margin-left: 50%;
+  padding: 0 0 40px 40px;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-dot {
+  position: absolute;
+  right: -16px;
+  top: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 3px solid var(--dot-color, var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--dot-color, var(--accent));
+  z-index: 2;
+}
+
+.timeline-item.right .timeline-dot {
+  right: auto;
+  left: -16px;
+}
+
+.timeline-item.done .timeline-dot {
+  background: var(--dot-color, var(--accent));
+  color: white;
+}
+
+.timeline-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  cursor: pointer;
+  transition: all var(--duration-normal) ease;
+  position: relative;
+}
+
+.timeline-card:hover {
+  border-color: var(--border2);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+}
+
+.timeline-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.timeline-card-num {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.timeline-card-status {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.timeline-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.timeline-card-desc {
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.6;
+}
+
+.timeline-card-arrow {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--text3);
+  text-align: center;
+  transition: color var(--duration-normal);
+}
+
+.timeline-card:hover .timeline-card-arrow {
+  color: var(--accent);
+}
+
+/* 展开的详情 */
+.timeline-detail {
+  margin-top: 12px;
+  animation: slideDown 0.3s ease;
+}
+
+.timeline-detail-content {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+.timeline-detail-content h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.timeline-detail-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px 0;
+}
+
+.timeline-detail-content li {
+  padding: 8px 0;
+  padding-left: 24px;
+  position: relative;
+  font-size: 14px;
+  color: var(--text2);
+  border-bottom: 1px solid var(--border);
+}
+
+.timeline-detail-content li:last-child {
+  border-bottom: none;
+}
+
+.timeline-detail-content li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   鱼骨图样式 - 奥数页面
+   ============================================================ */
+
+.fishbone-section {
+  margin-top: 32px;
+}
+
+.fishbone {
+  position: relative;
+  padding: 40px 20px;
+  overflow-x: auto;
+}
+
+.fishbone-spine {
+  position: relative;
+  min-width: 800px;
+  padding: 60px 0;
+}
+
+.fishbone-spine::before {
+  content: '';
+  position: absolute;
+  left: 100px;
+  right: 100px;
+  top: 50%;
+  height: 4px;
+  background: linear-gradient(to right, var(--accent), var(--accent2), var(--yellow));
+  border-radius: 2px;
+  transform: translateY(-50%);
+}
+
+.fishbone-head {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  background: var(--surface);
+  padding: 12px 20px;
+  border-radius: var(--radius);
+  border: 2px solid var(--accent);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.fishbone-tail {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 32px;
+  background: var(--surface);
+  padding: 8px 16px;
+  border-radius: 50%;
+  border: 2px solid var(--yellow);
+}
+
+.fishbone-category {
+  position: relative;
+  margin: 40px 0;
+  padding-left: 140px;
+}
+
+.fishbone-category.up {
+  margin-top: -20px;
+}
+
+.fishbone-category.down {
+  margin-top: 60px;
+}
+
+.fishbone-bone {
+  position: relative;
+  background: var(--surface);
+  border: 2px solid var(--bone-color, var(--accent));
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.fishbone-bone::before {
+  content: '';
+  position: absolute;
+  left: -40px;
+  top: 50%;
+  width: 40px;
+  height: 2px;
+  background: var(--bone-color, var(--accent));
+}
+
+.fishbone-category.up .fishbone-bone::before {
+  transform: rotate(-30deg);
+  transform-origin: right center;
+}
+
+.fishbone-category.down .fishbone-bone::before {
+  transform: rotate(30deg);
+  transform-origin: right center;
+}
+
+.fishbone-category-label {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--bone-color, var(--accent));
+  padding: 8px 4px;
+  background: var(--surface2);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  min-width: 32px;
+  text-align: center;
+}
+
+.fishbone-topics {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.fishbone-topic {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all var(--duration-normal) ease;
+  font-size: 14px;
+}
+
+.fishbone-topic:hover {
+  border-color: var(--topic-color, var(--accent));
+  background: rgba(255,255,255,0.05);
+  transform: translateY(-2px);
+}
+
+.fishbone-topic.done {
+  border-color: var(--accent);
+  background: rgba(74,222,128,0.1);
+}
+
+.fishbone-topic .topic-icon {
+  font-size: 16px;
+}
+
+.fishbone-topic .topic-name {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.fishbone-detail {
+  width: 100%;
+  margin-top: 12px;
+  animation: slideDown 0.3s ease;
+}
+
+.fishbone-detail-content {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+.fishbone-detail-content h4 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.fishbone-detail-content .detail-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.fishbone-detail-content .detail-section {
+  margin-bottom: 16px;
+}
+
+.fishbone-detail-content .detail-section h5 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+
+.fishbone-detail-content .detail-section p {
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.6;
+  background: var(--surface);
+  padding: 12px;
+  border-radius: var(--radius-sm);
+}
+
+/* 移动端时间轴适配 */
+@media (max-width: 768px) {
+  .timeline::before {
+    left: 20px;
+  }
+  
+  .timeline-item,
+  .timeline-item.right {
+    width: 100%;
+    margin-left: 0;
+    padding-left: 56px;
+    padding-right: 0;
+  }
+  
+  .timeline-dot,
+  .timeline-item.right .timeline-dot {
+    left: 4px;
+    right: auto;
+  }
+  
+  .fishbone-spine {
+    min-width: auto;
+  }
+  
+  .fishbone-spine::before {
+    display: none;
+  }
+  
+  .fishbone-category {
+    padding-left: 0;
+    margin: 20px 0;
+  }
+  
+  .fishbone-bone::before {
+    display: none;
+  }
+  
+  .fishbone-bone {
+    flex-direction: column;
+  }
+  
+  .fishbone-category-label {
+    writing-mode: horizontal-tb;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .fishbone-head,
+  .fishbone-tail {
+    position: static;
+    transform: none;
+    margin: 10px 0;
+    display: inline-block;
+  }
+}

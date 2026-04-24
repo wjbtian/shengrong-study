@@ -430,63 +430,62 @@ function createDiaryCard(d) {
     </div>`;
 }
 
-// --- 科目数据 ---
+// --- 科目配置（全局可用）---
+const SUBJECT_CONFIG = {
+  chinese: {
+    title: '语文',
+    color: 'var(--accent)',
+    total: 8,
+    units: [
+      { id: 'ch_1', name: '第一单元：古诗词', desc: '背诵并理解古诗词的意境', keyPoints: ['古诗词的节奏与韵律', '理解诗词中的意象', '背诵《望庐山瀑布》等经典', '体会诗人情感'] },
+      { id: 'ch_2', name: '第二单元：现代文阅读', desc: '提高阅读理解能力', keyPoints: ['找出文章中心句', '理解段落大意', '分析人物形象', '概括文章主旨'] },
+      { id: 'ch_3', name: '第三单元：写作基础', desc: '学习写作的基本技巧', keyPoints: ['审题与立意', '开头与结尾的写法', '细节描写', '段落之间的过渡'] },
+      { id: 'ch_4', name: '第四单元：成语故事', desc: '积累常用成语', keyPoints: ['成语的来源与典故', '近义成语辨析', '成语的正确使用', '积累50个常用成语'] },
+      { id: 'ch_5', name: '第五单元：名著导读', desc: '阅读经典名著片段', keyPoints: ['《西游记》主要人物', '《三国演义》经典故事', '名著中的好词好句', '写读后感'] },
+      { id: 'ch_6', name: '第六单元：口语交际', desc: '练习表达能力', keyPoints: ['清晰表达观点', '倾听与回应', '演讲的基本技巧', '小组讨论'] },
+      { id: 'ch_7', name: '第七单元：综合复习', desc: '巩固所学知识', keyPoints: ['系统梳理知识点', '错题整理', '模拟测试', '查漏补缺'] },
+      { id: 'ch_8', name: '第八单元：期末检测', desc: '检验学习成果', keyPoints: ['全面复习', '调整心态', '考试技巧', '总结反思'] }
+    ]
+  },
+  math: {
+    title: '数学',
+    color: 'var(--accent2)',
+    total: 6,
+    units: [
+      { id: 'math_1', name: '大数的认识', desc: '认识亿以内的数', keyPoints: ['数位顺序表', '亿以内数的读写', '数的大小比较', '近似数与四舍五入'] },
+      { id: 'math_2', name: '角的度量', desc: '学习角的分类和度量', keyPoints: ['直线、射线、线段', '角的分类（锐角、直角、钝角）', '用量角器量角', '画指定度数的角'] },
+      { id: 'math_3', name: '三位数乘法', desc: '掌握乘法运算', keyPoints: ['口算乘法', '笔算三位数乘两位数', '因数中间有0的乘法', '速度、时间、路程关系'] },
+      { id: 'math_4', name: '平行四边形', desc: '认识平行四边形和梯形', keyPoints: ['平行与垂直', '画垂线和平行线', '平行四边形的特征', '梯形的特征'] },
+      { id: 'math_5', name: '除数是两位数的除法', desc: '学习除法运算', keyPoints: ['口算除法', '笔算除法', '商的变化规律', '用除法解决实际问题'] },
+      { id: 'math_6', name: '统计', desc: '学习条形统计图', keyPoints: ['条形统计图的认识', '绘制条形统计图', '分析统计图数据', '平均数的意义'] }
+    ]
+  },
+  english: {
+    title: '英语',
+    color: '#f472b6',
+    total: 6,
+    units: [
+      { id: 'en_1', name: 'My Classroom', desc: '教室里的物品', keyPoints: ['classroom, window, door等词汇', 'Where is...? 句型', '介词 in, on, under', '祈使句'] },
+      { id: 'en_2', name: 'My Schoolbag', desc: '书包里的文具', keyPoints: ['schoolbag, book, pencil等词汇', 'What\'s in your...?', '颜色词汇', '名词复数'] },
+      { id: 'en_3', name: 'My Friends', desc: '描述朋友的外貌', keyPoints: ['tall, short, strong等形容词', 'He/She has...', '描述人物外貌', '一般疑问句'] },
+      { id: 'en_4', name: 'My Home', desc: '家里的房间', keyPoints: ['bedroom, kitchen, living room', 'Where are...?', '介词用法', 'There is/are...'] },
+      { id: 'en_5', name: 'Dinner\'s Ready', desc: '食物和餐具', keyPoints: ['beef, chicken, noodles等食物', 'What would you like?', '餐具词汇', '用餐礼仪表达'] },
+      { id: 'en_6', name: 'Meet My Family', desc: '家庭成员', keyPoints: ['parents, uncle, aunt等', 'How many people...?', '职业词汇', '介绍家人'] }
+    ]
+  }
+};
+
+// --- 科目数据（时间轴版）---
 async function loadSubjectData(subject) {
   try {
-    // 获取进度
     const progress = await api('GET', '/progress');
     const doneUnits = progress?.doneUnits || [];
-    
-    // 科目配置
-    const config = {
-      chinese: {
-        title: '语文',
-        color: 'var(--accent)',
-        total: 8,
-        units: [
-          { id: 'ch_1', name: '第一单元：古诗词', desc: '背诵并理解古诗词的意境' },
-          { id: 'ch_2', name: '第二单元：现代文阅读', desc: '提高阅读理解能力' },
-          { id: 'ch_3', name: '第三单元：写作基础', desc: '学习写作的基本技巧' },
-          { id: 'ch_4', name: '第四单元：成语故事', desc: '积累常用成语' },
-          { id: 'ch_5', name: '第五单元：名著导读', desc: '阅读经典名著片段' },
-          { id: 'ch_6', name: '第六单元：口语交际', desc: '练习表达能力' },
-          { id: 'ch_7', name: '第七单元：综合复习', desc: '巩固所学知识' },
-          { id: 'ch_8', name: '第八单元：期末检测', desc: '检验学习成果' }
-        ]
-      },
-      math: {
-        title: '数学',
-        color: 'var(--accent2)',
-        total: 6,
-        units: [
-          { id: 'math_1', name: '大数的认识', desc: '认识亿以内的数' },
-          { id: 'math_2', name: '角的度量', desc: '学习角的分类和度量' },
-          { id: 'math_3', name: '三位数乘法', desc: '掌握乘法运算' },
-          { id: 'math_4', name: '平行四边形', desc: '认识平行四边形和梯形' },
-          { id: 'math_5', name: '除数是两位数的除法', desc: '学习除法运算' },
-          { id: 'math_6', name: '统计', desc: '学习条形统计图' }
-        ]
-      },
-      english: {
-        title: '英语',
-        color: '#f472b6',
-        total: 6,
-        units: [
-          { id: 'en_1', name: 'My Classroom', desc: '教室里的物品' },
-          { id: 'en_2', name: 'My Schoolbag', desc: '书包里的文具' },
-          { id: 'en_3', name: 'My Friends', desc: '描述朋友的外貌' },
-          { id: 'en_4', name: 'My Home', desc: '家里的房间' },
-          { id: 'en_5', name: 'Dinner\'s Ready', desc: '食物和餐具' },
-          { id: 'en_6', name: 'Meet My Family', desc: '家庭成员' }
-        ]
-      }
-    };
-    
-    const cfg = config[subject];
+    const cfg = SUBJECT_CONFIG[subject];
     if (!cfg) return;
     
     // 计算进度
-    const subjectDone = doneUnits.filter(u => u.startsWith(subject === 'chinese' ? 'ch_' : subject === 'math' ? 'math_' : 'en_'));
+    const prefix = subject === 'chinese' ? 'ch_' : subject === 'math' ? 'math_' : 'en_';
+    const subjectDone = doneUnits.filter(u => u.startsWith(prefix));
     const done = subjectDone.length;
     const percent = Math.round((done / cfg.total) * 100);
     
@@ -511,28 +510,63 @@ async function loadSubjectData(subject) {
       doneEl.style.color = cfg.color;
     }
     
-    // 渲染单元列表
-    const container = document.getElementById(subject + '-content');
+    // 渲染时间轴
+    const container = document.getElementById(subject + '-timeline');
     if (!container) return;
     
-    container.innerHTML = cfg.units.map(u => {
+    container.innerHTML = cfg.units.map((u, idx) => {
       const isDone = doneUnits.includes(u.id);
+      const isLeft = idx % 2 === 0;
       return `
-        <div class="topic-card ${isDone ? 'done' : ''}" data-id="${u.id}">
-          <div class="topic-status">${isDone ? '✅' : '⭕'}</div>
-          <div class="topic-info">
-            <div class="topic-name">${u.name}</div>
-            <div class="topic-desc">${u.desc}</div>
+        <div class="timeline-item ${isLeft ? 'left' : 'right'} ${isDone ? 'done' : ''}" data-id="${u.id}">
+          <div class="timeline-dot" style="--dot-color: ${cfg.color}">
+            ${isDone ? '✓' : idx + 1}
           </div>
-          <button class="btn btn-sm ${isDone ? 'btn-done' : 'btn-primary'}" 
-            onclick="toggleSubjectUnit('${subject}', '${u.id}', ${isDone})">
-            ${isDone ? '已完成' : '标记完成'}
-          </button>
+          <div class="timeline-card" onclick="toggleUnitDetail('${subject}', '${u.id}')">
+            <div class="timeline-card-header">
+              <span class="timeline-card-num">Unit ${idx + 1}</span>
+              <span class="timeline-card-status" style="color: ${isDone ? cfg.color : 'var(--text3)'}">
+                ${isDone ? '✅ 已完成' : '⭕ 进行中'}
+              </span>
+            </div>
+            <h3 class="timeline-card-title">${u.name}</h3>
+            <p class="timeline-card-desc">${u.desc}</p>
+            <div class="timeline-card-arrow">▼ 点击查看重点</div>
+          </div>
+          <div class="timeline-detail" id="detail-${u.id}" style="display:none">
+            <div class="timeline-detail-content">
+              <h4>📌 单元重点</h4>
+              <ul>
+                ${u.keyPoints.map(p => `<li>${p}</li>`).join('')}
+              </ul>
+              <button class="btn btn-sm ${isDone ? 'btn-done' : 'btn-primary'}" 
+                onclick="event.stopPropagation(); toggleSubjectUnit('${subject}', '${u.id}', ${isDone})">
+                ${isDone ? '标记未完成' : '标记完成'}
+              </button>
+            </div>
+          </div>
         </div>`;
     }).join('');
     
   } catch (err) {
     console.error('加载科目数据失败:', err);
+  }
+}
+
+// 展开/收起单元详情
+function toggleUnitDetail(subject, unitId) {
+  const detail = document.getElementById('detail-' + unitId);
+  if (!detail) return;
+  const isVisible = detail.style.display !== 'none';
+  
+  // 先收起所有其他详情
+  document.querySelectorAll('.timeline-detail').forEach(d => {
+    if (d.id !== 'detail-' + unitId) d.style.display = 'none';
+  });
+  
+  detail.style.display = isVisible ? 'none' : 'block';
+  if (!isVisible) {
+    detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 }
 
@@ -552,10 +586,75 @@ async function toggleSubjectUnit(subject, unit, isDone) {
   }
 }
 
-// --- 奥数数据 ---
+// --- 奥数配置 ---
+const OLYMPIAD_CONFIG = [
+  {
+    category: '基础应用题',
+    color: '#4ade80',
+    topics: [
+      { id: 'om_1_1', name: '和差问题', desc: '已知两数的和与差，求这两个数', method: '大数=(和+差)÷2，小数=(和-差)÷2', example: '甲乙两数和为50，差为10，甲=30，乙=20' },
+      { id: 'om_1_2', name: '和倍问题', desc: '已知两数的和与倍数关系', method: '小数=和÷(倍数+1)，大数=小数×倍数', example: '甲乙和为60，甲是乙的2倍，乙=20，甲=40' },
+      { id: 'om_1_3', name: '差倍问题', desc: '已知两数的差与倍数关系', method: '小数=差÷(倍数-1)，大数=小数×倍数', example: '甲比乙大30，甲是乙的4倍，乙=10，甲=40' }
+    ]
+  },
+  {
+    category: '生活应用题',
+    color: '#38bdf8',
+    topics: [
+      { id: 'om_2_1', name: '年龄问题', desc: '利用年龄差不变解题', method: '年龄差永远不变，画线段图分析', example: '爸爸35岁，儿子5岁，几年后爸爸是儿子的3倍？' },
+      { id: 'om_2_2', name: '植树问题', desc: '间隔与棵数的关系', method: '两端都植：棵数=间隔数+1；一端植：棵数=间隔数', example: '100米路每隔5米植树，两端都植，需21棵' },
+      { id: 'om_2_3', name: '盈亏问题', desc: '分配中的盈与亏', method: '(盈+亏)÷两次分配差=人数', example: '每人分5个多10个，每人分7个少6个，有8人' }
+    ]
+  },
+  {
+    category: '数量关系',
+    color: '#f472b6',
+    topics: [
+      { id: 'om_3_1', name: '平均数问题', desc: '求平均数的方法', method: '总数÷份数=平均数，移多补少', example: '三门成绩分别是85、90、95，平均分=90' },
+      { id: 'om_3_2', name: '归一问题', desc: '先求单一量', method: '先求1份的量，再求多份的量', example: '3小时做12个，5小时做多少个？先求每小时4个' },
+      { id: 'om_3_3', name: '归总问题', desc: '总量不变的问题', method: '总量=单一量×份数，新单一量=总量÷新份数', example: '每天读20页，15天读完；每天读25页，12天读完' }
+    ]
+  },
+  {
+    category: '行程问题',
+    color: '#fbbf24',
+    topics: [
+      { id: 'om_4_1', name: '行程问题', desc: '路程、速度、时间', method: '路程=速度×时间，速度=路程÷时间', example: '速度60km/h，行驶3小时，路程=180km' },
+      { id: 'om_4_2', name: '相遇问题', desc: '两人相向而行', method: '相遇时间=总路程÷速度和', example: 'AB相距300km，甲速60，乙速40，3小时相遇' },
+      { id: 'om_4_3', name: '追及问题', desc: '同向而行的追赶', method: '追及时间=路程差÷速度差', example: '甲先走2小时，速度40，乙速60，4小时追上' }
+    ]
+  },
+  {
+    category: '经典趣题',
+    color: '#a78bfa',
+    topics: [
+      { id: 'om_5_1', name: '鸡兔同笼', desc: '经典假设法', method: '假设全是鸡，多出来的脚÷2=兔数', example: '头35个，脚94只，鸡23只，兔12只' },
+      { id: 'om_5_2', name: '牛吃草问题', desc: '生长与消耗', method: '草每天生长量=(牛1×天1-牛2×天2)÷(天1-天2)', example: '10牛20天吃完，15牛10天吃完，25牛5天吃完' },
+      { id: 'om_5_3', name: '工程问题', desc: '工作效率问题', method: '工效=1÷工时，合作工效=工效和', example: '甲10天完成，乙15天完成，合作6天完成' }
+    ]
+  },
+  {
+    category: '分数与比例',
+    color: '#fb923c',
+    topics: [
+      { id: 'om_6_1', name: '分数应用题', desc: '分数的乘除应用', method: '找单位"1"，画线段图，列方程', example: '一本书看了3/5，还剩80页，全书200页' },
+      { id: 'om_6_2', name: '百分数应用', desc: '百分数的实际应用', method: '百分数=部分÷整体×100%', example: '原价200元，打8折，现价160元' },
+      { id: 'om_6_3', name: '比和比例', desc: '按比例分配', method: '总量÷总份数=每份量', example: '甲乙丙按2:3:5分100元，分别得20、30、50' }
+    ]
+  },
+  {
+    category: '几何专题',
+    color: '#22d3ee',
+    topics: [
+      { id: 'om_7_1', name: '几何初步', desc: '周长与面积', method: '长方形周长=2×(长+宽)，面积=长×宽', example: '长8cm宽5cm的长方形，周长26cm，面积40cm²' },
+      { id: 'om_7_2', name: '立体几何', desc: '体积与表面积', method: '长方体体积=长×宽×高，表面积=2×(lw+lh+wh)', example: '棱长3cm的正方体，体积27cm³，表面积54cm²' }
+    ]
+  }
+];
+
+// --- 奥数数据（鱼骨图版）---
 async function loadOlympiadData() {
   try {
-    // 获取进度
     const progress = await api('GET', '/progress');
     const doneOM = progress?.doneOM || [];
     const total = 20;
@@ -576,51 +675,74 @@ async function loadOlympiadData() {
     const doneEl = document.getElementById('olympiad-done');
     if (doneEl) doneEl.textContent = done;
     
-    // 专题列表
-    const container = document.getElementById('olympiad-content');
+    // 渲染鱼骨图
+    const container = document.getElementById('olympiad-fishbone');
     if (!container) return;
     
-    const topics = [
-      { id: 'om_1_1', name: '和差问题', desc: '已知两数的和与差，求这两个数' },
-      { id: 'om_1_2', name: '和倍问题', desc: '已知两数的和与倍数关系' },
-      { id: 'om_1_3', name: '差倍问题', desc: '已知两数的差与倍数关系' },
-      { id: 'om_2_1', name: '年龄问题', desc: '利用年龄差不变解题' },
-      { id: 'om_2_2', name: '植树问题', desc: '间隔与棵数的关系' },
-      { id: 'om_2_3', name: '盈亏问题', desc: '分配中的盈与亏' },
-      { id: 'om_3_1', name: '平均数问题', desc: '求平均数的方法' },
-      { id: 'om_3_2', name: '归一问题', desc: '先求单一量' },
-      { id: 'om_3_3', name: '归总问题', desc: '总量不变的问题' },
-      { id: 'om_4_1', name: '行程问题', desc: '路程、速度、时间' },
-      { id: 'om_4_2', name: '相遇问题', desc: '两人相向而行' },
-      { id: 'om_4_3', name: '追及问题', desc: '同向而行的追赶' },
-      { id: 'om_5_1', name: '鸡兔同笼', desc: '经典假设法' },
-      { id: 'om_5_2', name: '牛吃草问题', desc: '生长与消耗' },
-      { id: 'om_5_3', name: '工程问题', desc: '工作效率问题' },
-      { id: 'om_6_1', name: '分数应用题', desc: '分数的乘除应用' },
-      { id: 'om_6_2', name: '百分数应用', desc: '百分数的实际应用' },
-      { id: 'om_6_3', name: '比和比例', desc: '按比例分配' },
-      { id: 'om_7_1', name: '几何初步', desc: '周长与面积' },
-      { id: 'om_7_2', name: '立体几何', desc: '体积与表面积' }
-    ];
-    
-    container.innerHTML = topics.map(t => {
-      const isDone = doneOM.includes(t.id);
-      return `
-        <div class="topic-card ${isDone ? 'done' : ''}" data-id="${t.id}">
-          <div class="topic-status">${isDone ? '✅' : '⭕'}</div>
-          <div class="topic-info">
-            <div class="topic-name">${t.name}</div>
-            <div class="topic-desc">${t.desc}</div>
+    container.innerHTML = `
+      <div class="fishbone-spine">
+        <div class="fishbone-head">🎯 奥数知识体系</div>
+        ${OLYMPIAD_CONFIG.map((cat, catIdx) => `
+          <div class="fishbone-category ${catIdx % 2 === 0 ? 'up' : 'down'}">
+            <div class="fishbone-bone" style="--bone-color: ${cat.color}">
+              <div class="fishbone-category-label">${cat.category}</div>
+              <div class="fishbone-topics">
+                ${cat.topics.map(t => {
+                  const isDone = doneOM.includes(t.id);
+                  return `
+                    <div class="fishbone-topic ${isDone ? 'done' : ''}" 
+                      onclick="toggleOlympiadDetail('${t.id}')"
+                      style="--topic-color: ${cat.color}">
+                      <span class="topic-icon">${isDone ? '✅' : '🔸'}</span>
+                      <span class="topic-name">${t.name}</span>
+                    </div>
+                    <div class="fishbone-detail" id="om-detail-${t.id}" style="display:none">
+                      <div class="fishbone-detail-content">
+                        <h4>${t.name}</h4>
+                        <p class="detail-desc">${t.desc}</p>
+                        <div class="detail-section">
+                          <h5>📝 解题方法</h5>
+                          <p>${t.method}</p>
+                        </div>
+                        <div class="detail-section">
+                          <h5>💡 典型例题</h5>
+                          <p>${t.example}</p>
+                        </div>
+                        <button class="btn btn-sm ${isDone ? 'btn-done' : 'btn-primary'}" 
+                          onclick="event.stopPropagation(); toggleTopic('${t.id}', ${isDone})">
+                          ${isDone ? '标记未完成' : '标记完成'}
+                        </button>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
           </div>
-          <button class="btn btn-sm ${isDone ? 'btn-done' : 'btn-primary'}" 
-            onclick="toggleTopic('${t.id}', ${isDone})">
-            ${isDone ? '已完成' : '标记完成'}
-          </button>
-        </div>`;
-    }).join('');
+        `).join('')}
+        <div class="fishbone-tail">🏆</div>
+      </div>
+    `;
     
   } catch (err) {
     console.error('加载奥数数据失败:', err);
+  }
+}
+
+// 展开/收起奥数专题详情
+function toggleOlympiadDetail(topicId) {
+  const detail = document.getElementById('om-detail-' + topicId);
+  if (!detail) return;
+  const isVisible = detail.style.display !== 'none';
+  
+  // 先收起所有其他详情
+  document.querySelectorAll('.fishbone-detail').forEach(d => {
+    if (d.id !== 'om-detail-' + topicId) d.style.display = 'none';
+  });
+  
+  detail.style.display = isVisible ? 'none' : 'block';
+  if (!isVisible) {
+    detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 }
 
