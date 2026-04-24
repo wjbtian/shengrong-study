@@ -5106,3 +5106,377 @@ body::before {
     display: inline-block;
   }
 }
+
+/* ============================================================
+   横向鱼骨图 - 语文/数学学习路线图
+   ============================================================ */
+
+.fishbone-h-section {
+  margin-top: 32px;
+  padding: 0 24px;
+}
+
+.fishbone-h-header {
+  margin-bottom: 32px;
+}
+
+.fishbone-h-spine {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 40px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow-x: auto;
+  gap: 16px;
+}
+
+.fishbone-h-spine::before {
+  content: '';
+  position: absolute;
+  left: 80px;
+  right: 80px;
+  top: 50%;
+  height: 4px;
+  background: linear-gradient(to right, var(--accent), var(--accent2), var(--yellow));
+  border-radius: 2px;
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+.fishbone-h-start,
+.fishbone-h-end {
+  position: relative;
+  z-index: 1;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 10px 16px;
+  background: var(--surface2);
+  border: 2px solid var(--accent);
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.fishbone-h-node {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all var(--duration-normal) ease;
+  flex-shrink: 0;
+}
+
+.fishbone-h-node:hover {
+  transform: translateY(-8px);
+}
+
+.fishbone-h-node-dot {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 3px solid var(--node-color, var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--node-color, var(--accent));
+  margin-bottom: 12px;
+  transition: all var(--duration-normal);
+}
+
+.fishbone-h-node:hover .fishbone-h-node-dot {
+  background: var(--node-color, var(--accent));
+  color: white;
+  box-shadow: 0 0 20px var(--node-color, var(--accent));
+}
+
+.fishbone-h-node.done .fishbone-h-node-dot {
+  background: var(--accent);
+  color: white;
+}
+
+.fishbone-h-node-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  text-align: center;
+  white-space: nowrap;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fishbone-h-node-desc {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 4px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* 详情展开区域 */
+.fishbone-h-detail {
+  margin-top: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  position: relative;
+  animation: slideDown 0.4s ease;
+}
+
+.fishbone-h-detail::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: var(--arrow-left, 50%);
+  transform: translateX(-50%) rotate(45deg);
+  width: 16px;
+  height: 16px;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+}
+
+.detail-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--surface2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--text3);
+  transition: all var(--duration-normal);
+}
+
+.detail-close:hover {
+  background: var(--danger);
+  color: white;
+}
+
+.fishbone-h-detail-content h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.fishbone-h-detail-content .detail-subtitle {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* 课文列表 */
+.lesson-list {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.lesson-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: all var(--duration-normal);
+}
+
+.lesson-item:hover {
+  border-color: var(--border2);
+  transform: translateX(8px);
+}
+
+.lesson-num {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.lesson-info h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.lesson-info p {
+  font-size: 13px;
+  color: var(--text2);
+}
+
+/* 古诗词区域 */
+.poem-section {
+  background: linear-gradient(135deg, rgba(74,222,128,0.05), rgba(129,140,248,0.05));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.poem-section h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.poem-item {
+  padding: 16px;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+}
+
+.poem-item:last-child {
+  margin-bottom: 0;
+}
+
+.poem-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.poem-author {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 8px;
+}
+
+.poem-content {
+  font-size: 15px;
+  color: var(--text2);
+  line-height: 2;
+  font-family: 'Noto Serif SC', serif;
+}
+
+/* 知识点区域 */
+.knowledge-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.knowledge-card {
+  padding: 20px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.knowledge-card h5 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.knowledge-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.knowledge-card li {
+  padding: 6px 0;
+  padding-left: 20px;
+  position: relative;
+  font-size: 14px;
+  color: var(--text2);
+}
+
+.knowledge-card li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* 习作区域 */
+.writing-section {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.writing-section h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--yellow);
+  margin-bottom: 12px;
+}
+
+.writing-section p {
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.8;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .fishbone-h-spine {
+    padding: 24px 12px;
+    gap: 12px;
+  }
+  
+  .fishbone-h-node-dot {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+  }
+  
+  .fishbone-h-node-label {
+    font-size: 11px;
+    max-width: 70px;
+  }
+  
+  .fishbone-h-detail {
+    padding: 20px;
+  }
+  
+  .knowledge-section {
+    grid-template-columns: 1fr;
+  }
+  
+  .lesson-item {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

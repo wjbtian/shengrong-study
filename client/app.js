@@ -475,7 +475,104 @@ const SUBJECT_CONFIG = {
   }
 };
 
-// --- 科目数据（时间轴版）---
+// --- 语文详细数据（横向鱼骨图用）---
+const CHINESE_DETAIL = {
+  'ch_1': {
+    lessons: [
+      { num: 1, title: '观潮', author: '赵宗成、朱明元', desc: '描写钱塘江大潮的壮观景象' },
+      { num: 2, title: '走月亮', author: '吴然', desc: '描绘月夜漫步的温馨画面' },
+      { num: 3, title: '现代诗二首', author: '刘大白、徐志摩', desc: '《秋晚的江上》《花牛歌》' }
+    ],
+    poems: [
+      { title: '暮江吟', author: '白居易', content: '一道残阳铺水中，半江瑟瑟半江红。\n可怜九月初三夜，露似真珠月似弓。' },
+      { title: '题西林壁', author: '苏轼', content: '横看成岭侧成峰，远近高低各不同。\n不识庐山真面目，只缘身在此山中。' }
+    ],
+    knowledge: ['边读边想象画面', '调动多种感官', '体会优美生动的语句'],
+    writing: '推荐一个好地方：写清楚推荐理由'
+  },
+  'ch_2': {
+    lessons: [
+      { num: 5, title: '一个豆荚里的五粒豆', author: '安徒生', desc: '生命的力量与希望' },
+      { num: 6, title: '夜间飞行的秘密', author: '', desc: '蝙蝠与雷达的科学原理' },
+      { num: 7, title: '呼风唤雨的世纪', author: '', desc: '科技改变生活' }
+    ],
+    poems: [
+      { title: '雪梅', author: '卢钺', content: '梅雪争春未肯降，骚人阁笔费评章。\n梅须逊雪三分白，雪却输梅一段香。' }
+    ],
+    knowledge: ['阅读时尝试从不同角度思考', '提出问题并解决', '理解课文内容'],
+    writing: '小小"动物园"：把家人比作动物'
+  },
+  'ch_3': {
+    lessons: [
+      { num: 9, title: '古诗三首', author: '', desc: '《暮江吟》《题西林壁》《雪梅》' },
+      { num: 10, title: '爬山虎的脚', author: '叶圣陶', desc: '细致观察植物' },
+      { num: 11, title: '蟋蟀的住宅', author: '法布尔', desc: '昆虫的建筑艺术' }
+    ],
+    poems: [
+      { title: '嫦娥', author: '李商隐', content: '云母屏风烛影深，长河渐落晓星沉。\n嫦娥应悔偷灵药，碧海青天夜夜心。' }
+    ],
+    knowledge: ['体会文章准确生动的表达', '连续细致的观察', '写观察日记'],
+    writing: '写观察日记：记录连续观察'
+  },
+  'ch_4': {
+    lessons: [
+      { num: 12, title: '盘古开天地', author: '', desc: '中国古代神话故事' },
+      { num: 13, title: '精卫填海', author: '', desc: '坚持不懈的精神' },
+      { num: 14, title: '普罗米修斯', author: '', desc: '希腊神话中的英雄' }
+    ],
+    poems: [],
+    knowledge: ['了解故事的起因、经过、结果', '感受神话中神奇的想象', '复述故事'],
+    writing: '我和____过一天：想象作文'
+  },
+  'ch_5': {
+    lessons: [
+      { num: 16, title: '麻雀', author: '屠格涅夫', desc: '母爱的伟大力量' },
+      { num: 17, title: '爬天都峰', author: '黄亦波', desc: '战胜困难的勇气' }
+    ],
+    poems: [
+      { title: '出塞', author: '王昌龄', content: '秦时明月汉时关，万里长征人未还。\n但使龙城飞将在，不教胡马度阴山。' },
+      { title: '凉州词', author: '王翰', content: '葡萄美酒夜光杯，欲饮琵琶马上催。\n醉卧沙场君莫笑，古来征战几人回。' }
+    ],
+    knowledge: ['了解作者是怎样把事情写清楚的', '按顺序写一件事', '把事情的经过写清楚'],
+    writing: '生活万花筒：写一件印象深刻的事'
+  },
+  'ch_6': {
+    lessons: [
+      { num: 18, title: '牛和鹅', author: '任大霖', desc: '换个角度看问题' },
+      { num: 19, title: '一只窝囊的大老虎', author: '叶至善', desc: '童年的趣事' },
+      { num: 20, title: '陀螺', author: '高洪波', desc: '童年的玩具与感悟' }
+    ],
+    poems: [
+      { title: '别董大', author: '高适', content: '千里黄云白日曛，北风吹雁雪纷纷。\n莫愁前路无知己，天下谁人不识君。' }
+    ],
+    knowledge: ['学习用批注的方法阅读', '通过人物的动作、语言、神态体会心情', '记一次游戏'],
+    writing: '记一次游戏：把游戏过程写清楚'
+  },
+  'ch_7': {
+    lessons: [
+      { num: 21, title: '古诗三首', author: '', desc: '《出塞》《凉州词》《夏日绝句》' },
+      { num: 22, title: '为中华之崛起而读书', author: '', desc: '周恩来的少年志向' },
+      { num: 23, title: '梅兰芳蓄须', author: '', desc: '艺术家的民族气节' }
+    ],
+    poems: [
+      { title: '夏日绝句', author: '李清照', content: '生当作人杰，死亦为鬼雄。\n至今思项羽，不肯过江东。' }
+    ],
+    knowledge: ['关注主要人物和事件', '学习把握文章的主要内容', '写信'],
+    writing: '写信：注意书信格式'
+  },
+  'ch_8': {
+    lessons: [
+      { num: 25, title: '王戎不取道旁李', author: '', desc: '《世说新语》中的智慧' },
+      { num: 26, title: '西门豹治邺', author: '', desc: '破除迷信、兴修水利' },
+      { num: 27, title: '故事二则', author: '', desc: '《扁鹊治病》《纪昌学射》' }
+    ],
+    poems: [],
+    knowledge: ['了解故事情节', '简要复述课文', '写心得体会'],
+    writing: '我的心儿怦怦跳：写一件让自己心跳的事'
+  }
+};
+
+// --- 科目数据（横向鱼骨图版）---
 async function loadSubjectData(subject) {
   try {
     const progress = await api('GET', '/progress');
@@ -510,50 +607,131 @@ async function loadSubjectData(subject) {
       doneEl.style.color = cfg.color;
     }
     
-    // 渲染时间轴
-    const container = document.getElementById(subject + '-timeline');
+    // 渲染横向鱼骨图
+    const container = document.getElementById(subject + '-fishbone-h');
     if (!container) return;
     
-    container.innerHTML = cfg.units.map((u, idx) => {
+    // 保留开始和结束标记，中间插入单元节点
+    const startEl = container.querySelector('.fishbone-h-start');
+    const endEl = container.querySelector('.fishbone-h-end');
+    
+    // 清除旧节点（保留开始和结束）
+    container.querySelectorAll('.fishbone-h-node').forEach(n => n.remove());
+    
+    cfg.units.forEach((u, idx) => {
       const isDone = doneUnits.includes(u.id);
-      const isLeft = idx % 2 === 0;
-      return `
-        <div class="timeline-item ${isLeft ? 'left' : 'right'} ${isDone ? 'done' : ''}" data-id="${u.id}">
-          <div class="timeline-dot" style="--dot-color: ${cfg.color}">
-            ${isDone ? '✓' : idx + 1}
-          </div>
-          <div class="timeline-card" onclick="toggleUnitDetail('${subject}', '${u.id}')">
-            <div class="timeline-card-header">
-              <span class="timeline-card-num">Unit ${idx + 1}</span>
-              <span class="timeline-card-status" style="color: ${isDone ? cfg.color : 'var(--text3)'}">
-                ${isDone ? '✅ 已完成' : '⭕ 进行中'}
-              </span>
-            </div>
-            <h3 class="timeline-card-title">${u.name}</h3>
-            <p class="timeline-card-desc">${u.desc}</p>
-            <div class="timeline-card-arrow">▼ 点击查看重点</div>
-          </div>
-          <div class="timeline-detail" id="detail-${u.id}" style="display:none">
-            <div class="timeline-detail-content">
-              <h4>📌 单元重点</h4>
-              <ul>
-                ${u.keyPoints.map(p => `<li>${p}</li>`).join('')}
-              </ul>
-              <button class="btn btn-sm ${isDone ? 'btn-done' : 'btn-primary'}" 
-                onclick="event.stopPropagation(); toggleSubjectUnit('${subject}', '${u.id}', ${isDone})">
-                ${isDone ? '标记未完成' : '标记完成'}
-              </button>
-            </div>
-          </div>
-        </div>`;
-    }).join('');
+      const node = document.createElement('div');
+      node.className = `fishbone-h-node ${isDone ? 'done' : ''}`;
+      node.style.setProperty('--node-color', cfg.color);
+      node.innerHTML = `
+        <div class="fishbone-h-node-dot">${isDone ? '✓' : idx + 1}</div>
+        <div class="fishbone-h-node-label">${u.name.split('：')[0]}</div>
+        <div class="fishbone-h-node-desc">${isDone ? '已完成' : '进行中'}</div>
+      `;
+      node.onclick = () => showChineseDetail(u.id, cfg.color);
+      
+      // 插入到结束标记之前
+      container.insertBefore(node, endEl);
+    });
+    
+    // 绑定关闭按钮
+    const closeBtn = document.getElementById(subject + '-detail-close');
+    if (closeBtn) {
+      closeBtn.onclick = () => closeChineseDetail();
+    }
     
   } catch (err) {
     console.error('加载科目数据失败:', err);
   }
 }
 
-// 展开/收起单元详情
+// 显示语文单元详情（横向鱼骨图下方展开）
+function showChineseDetail(unitId, color) {
+  const detail = document.getElementById('chinese-detail');
+  const content = document.getElementById('chinese-detail-content');
+  const data = CHINESE_DETAIL[unitId];
+  if (!detail || !content || !data) return;
+  
+  // 计算箭头位置（根据单元索引）
+  const unitIndex = parseInt(unitId.split('_')[1]) - 1;
+  const nodes = document.querySelectorAll('#chinese-fishbone-h .fishbone-h-node');
+  if (nodes[unitIndex]) {
+    const rect = nodes[unitIndex].getBoundingClientRect();
+    const containerRect = document.getElementById('chinese-fishbone-h').getBoundingClientRect();
+    const left = rect.left - containerRect.left + rect.width / 2;
+    detail.style.setProperty('--arrow-left', left + 'px');
+  }
+  
+  // 构建详情内容
+  let html = `
+    <h3 style="color: ${color}">📖 ${data.lessons[0]?.title || '单元详情'}</h3>
+    <p class="detail-subtitle">第${unitId.split('_')[1]}单元 · 包含 ${data.lessons.length} 篇课文</p>
+  `;
+  
+  // 课文列表
+  if (data.lessons.length > 0) {
+    html += '<div class="lesson-list">';
+    data.lessons.forEach(l => {
+      html += `
+        <div class="lesson-item">
+          <div class="lesson-num">${l.num}</div>
+          <div class="lesson-info">
+            <h4>${l.title}</h4>
+            <p>${l.author ? l.author + ' · ' : ''}${l.desc}</p>
+          </div>
+        </div>`;
+    });
+    html += '</div>';
+  }
+  
+  // 古诗词
+  if (data.poems.length > 0) {
+    html += '<div class="poem-section">';
+    html += '<h4>🌸 古诗词</h4>';
+    data.poems.forEach(p => {
+      html += `
+        <div class="poem-item">
+          <div class="poem-title">${p.title}</div>
+          <div class="poem-author">[${p.author}]</div>
+          <div class="poem-content">${p.content.replace(/\n/g, '<br>')}</div>
+        </div>`;
+    });
+    html += '</div>';
+  }
+  
+  // 知识点
+  if (data.knowledge.length > 0) {
+    html += '<div class="knowledge-section">';
+    html += '<div class="knowledge-card">';
+    html += '<h5>📌 单元重点</h5>';
+    html += '<ul>';
+    data.knowledge.forEach(k => {
+      html += `<li>${k}</li>`;
+    });
+    html += '</ul></div>';
+    
+    // 习作
+    if (data.writing) {
+      html += '<div class="knowledge-card">';
+      html += '<h5>✍️ 习作要求</h5>';
+      html += `<p style="font-size:14px;color:var(--text2);line-height:1.6">${data.writing}</p>`;
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+  
+  content.innerHTML = html;
+  detail.style.display = 'block';
+  detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// 关闭语文详情
+function closeChineseDetail() {
+  const detail = document.getElementById('chinese-detail');
+  if (detail) detail.style.display = 'none';
+}
+
+// 展开/收起单元详情（旧版时间轴用，保留兼容）
 function toggleUnitDetail(subject, unitId) {
   const detail = document.getElementById('detail-' + unitId);
   if (!detail) return;

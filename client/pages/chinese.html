@@ -1,9 +1,9 @@
-<!-- 语文页 - 时间轴设计 -->
+<!-- 语文页 - 横向鱼骨图设计 -->
 <div class="subject-hero" style="--subject-color: var(--accent);">
   <div class="subject-hero-icon">📚</div>
   <div class="subject-hero-info">
     <h1 class="subject-hero-title">语文学习</h1>
-    <p class="subject-hero-subtitle">四年级上册 · 8个单元</p>
+    <p class="subject-hero-subtitle">四年级上册 · 8个单元 · 循序渐进</p>
   </div>
   <div class="subject-hero-progress">
     <div class="progress-ring-wrap">
@@ -22,13 +22,25 @@
   </div>
 </div>
 
-<!-- 时间轴 -->
-<div class="timeline-section">
-  <div class="timeline-header">
-    <h2 class="section-title">学习进度</h2>
-    <p class="section-subtitle">点击单元查看重点内容</p>
+<!-- 横向鱼骨图 -->
+<div class="fishbone-h-section">
+  <div class="fishbone-h-header">
+    <h2 class="section-title">📖 学习路线图</h2>
+    <p class="section-subtitle">从左到右，循序渐进 · 点击单元查看详细内容</p>
   </div>
-  <div class="timeline" id="chinese-timeline">
-    <!-- 动态生成 -->
+  
+  <!-- 主干 -->
+  <div class="fishbone-h-spine" id="chinese-fishbone-h">
+    <div class="fishbone-h-start">🌱 开始</div>
+    <!-- 动态生成单元节点 -->
+    <div class="fishbone-h-end">🏆 完成</div>
+  </div>
+  
+  <!-- 展开的详情区域 -->
+  <div class="fishbone-h-detail" id="chinese-detail" style="display:none">
+    <div class="detail-close" onclick="closeChineseDetail()">✕</div>
+    <div class="fishbone-h-detail-content" id="chinese-detail-content">
+      <!-- 动态填充 -->
+    </div>
   </div>
 </div>
