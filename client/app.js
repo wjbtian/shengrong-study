@@ -126,25 +126,25 @@ async function renderHome(container) {
     </div>
     
     <div class="home-grid">
-      <div class="home-section-card" onclick="navigate('/diary')">
-        <div class="home-section-icon">📝</div>
-        <div class="home-section-title">成长日记</div>
-        <div class="home-section-count" id="diary-count">加载中...</div>
+      <div class="stat-card green" onclick="navigate('/diary')">
+        <div class="stat-icon">📝</div>
+        <div class="stat-label">成长日记</div>
+        <div class="stat-count" id="diary-count">加载中...</div>
       </div>
-      <div class="home-section-card" onclick="navigate('/shine')">
-        <div class="home-section-icon">✨</div>
-        <div class="home-section-title">闪光时刻</div>
-        <div class="home-section-count" id="shine-count">加载中...</div>
+      <div class="stat-card pink" onclick="navigate('/shine')">
+        <div class="stat-icon">✨</div>
+        <div class="stat-label">闪光时刻</div>
+        <div class="stat-count" id="shine-count">加载中...</div>
       </div>
-      <div class="home-section-card" onclick="navigate('/guitar')">
-        <div class="home-section-icon">🎸</div>
-        <div class="home-section-title">吉他练习</div>
-        <div class="home-section-count" id="guitar-count">加载中...</div>
+      <div class="stat-card blue" onclick="navigate('/guitar')">
+        <div class="stat-icon">🎸</div>
+        <div class="stat-label">吉他练习</div>
+        <div class="stat-count" id="guitar-count">加载中...</div>
       </div>
-      <div class="home-section-card" onclick="navigate('/tech')">
-        <div class="home-section-icon">🚀</div>
-        <div class="home-section-title">科技探索</div>
-        <div class="home-section-count" id="tech-count">加载中...</div>
+      <div class="stat-card orange" onclick="navigate('/tech')">
+        <div class="stat-icon">🚀</div>
+        <div class="stat-label">科技探索</div>
+        <div class="stat-count" id="tech-count">加载中...</div>
       </div>
     </div>
     
