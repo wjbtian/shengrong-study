@@ -168,19 +168,48 @@ async function loadPageData(page) {
 // --- 首页数据 ---
 async function loadHomeData() {
   updateGreeting();
+  updateTodayDate();
   
   try {
-    const [diary, shines, guitar, tech] = await Promise.all([
+    const [diary, shines, guitar, tech, progress] = await Promise.all([
       api('GET', '/diary'),
       api('GET', '/shines'),
       api('GET', '/guitar'),
-      api('GET', '/tech')
+      api('GET', '/tech'),
+      api('GET', '/progress')
     ]);
     
+    // 统计卡片
+    document.getElementById('home-diary-count').textContent = diary?.length || 0;
+    document.getElementById('home-shine-count').textContent = shines?.length || 0;
+    document.getElementById('home-guitar-count').textContent = guitar?.length || 0;
+    document.getElementById('home-tech-count').textContent = tech?.length || 0;
+    
+    // 本周趋势
+    document.getElementById('diary-trend').textContent = '+' + countThisWeek(diary) + ' 本周';
+    document.getElementById('shine-trend').textContent = '+' + countThisWeek(shines) + ' 本周';
+    document.getElementById('guitar-trend').textContent = '+' + countThisWeek(guitar) + ' 本周';
+    document.getElementById('tech-trend').textContent = '+' + countThisWeek(tech) + ' 本周';
+    
+    // 快速入口
     document.getElementById('diary-count').textContent = (diary?.length || 0) + ' 篇';
     document.getElementById('shine-count').textContent = (shines?.length || 0) + ' 个';
     document.getElementById('guitar-count').textContent = (guitar?.length || 0) + ' 次';
     document.getElementById('tech-count').textContent = (tech?.length || 0) + ' 条';
+    
+    // 学习进度
+    const doneUnits = progress?.doneUnits || [];
+    const doneOM = progress?.doneOM || [];
+    updateSubjectProgress('chinese', doneUnits, 'chinese_'); 8, 8);
+    updateSubjectProgress('math', doneUnits, 'math_', 6, 6);
+    updateSubjectProgress('english', doneUnits, 'english_', 6, 6);
+    updateOlympiadProgress(doneOM);
+    
+    // 活跃度图表
+    renderActivityChart(diary, shines, guitar);
+    
+    // 心情趋势
+    renderMoodTimeline(diary);
     
     // 最近日记
     const recentDiary = (diary || []).slice(0, 3);
@@ -197,6 +226,93 @@ async function loadHomeData() {
   } catch (err) {
     console.error('加载首页数据失败:', err);
   }
+}
+
+function updateTodayDate() {
+  const el = document.getElementById('today-date');
+  if (el) {
+    const d = new Date();
+    const days = ['周日','周一','周二','周三','周四','周五','周六'];
+    el.textContent = `${d.getMonth()+1}月${d.getDate()}日 ${days[d.getDay()]}`;
+  }
+}
+
+function countThisWeek(items) {
+  if (!items?.length) return 0;
+  const weekAgo = new Date(Date.now() - 7 * 86400000).toISOString().split('T')[0];
+  return items.filter(i => i.date >= weekAgo).length;
+}
+
+function updateSubjectProgress(subject, doneUnits, prefix, total, units) {
+  const done = doneUnits.filter(u => u.startsWith(prefix)).length;
+  const percent = Math.round((done / total) * 100);
+  const bar = document.getElementById('bar-' + subject);
+  const label = document.getElementById('progress-' + subject);
+  if (bar) bar.style.width = percent + '%';
+  if (label) label.textContent = percent + '%';
+}
+
+function updateOlympiadProgress(doneOM) {
+  const total = 20;
+  const done = doneOM?.length || 0;
+  const percent = Math.round((done / total) * 100);
+  const bar = document.getElementById('bar-olympiad');
+  const label = document.getElementById('progress-olympiad');
+  if (bar) bar.style.width = percent + '%';
+  if (label) label.textContent = percent + '%';
+}
+
+function renderActivityChart(diary, shines, guitar) {
+  const chart = document.getElementById('activity-chart');
+  if (!chart) return;
+  
+  const days = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(Date.now() - i * 86400000);
+    days.push(d.toISOString().split('T')[0]);
+  }
+  
+  const dayLabels = ['一','二','三','四','五','六','日'];
+  const today = new Date().getDay();
+  
+  chart.innerHTML = days.map((date, idx) => {
+    const dCount = diary?.filter(d => d.date === date).length || 0;
+    const sCount = shines?.filter(s => s.date === date).length || 0;
+    const gCount = guitar?.filter(g => g.date === date).length || 0;
+    const total = dCount + sCount + gCount;
+    const maxHeight = 120;
+    const height = Math.max(4, (total / 5) * maxHeight);
+    
+    const dayIndex = (today - 6 + idx + 7) % 7;
+    const label = dayLabels[dayIndex === 0 ? 6 : dayIndex - 1];
+    const isToday = idx === 6;
+    
+    return `
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <div style="display:flex;gap:2px;align-items:flex-end;height:${maxHeight}px;">
+          <div class="activity-bar" style="width:8px;height:${dCount ? Math.max(4, (dCount/3)*maxHeight) : 0}px;background:var(--accent);" data-value="${dCount}" title="日记 ${dCount}"></div>
+          <div class="activity-bar" style="width:8px;height:${sCount ? Math.max(4, (sCount/3)*maxHeight) : 0}px;background:var(--accent2);" data-value="${sCount}" title="闪光 ${sCount}"></div>
+          <div class="activity-bar" style="width:8px;height:${gCount ? Math.max(4, (gCount/3)*maxHeight) : 0}px;background:var(--yellow);" data-value="${gCount}" title="吉他 ${gCount}"></div>
+        </div>
+        <span style="font-size:11px;color:${isToday ? 'var(--accent)' : 'var(--text3)'};font-weight:${isToday ? 700 : 400};">${label}</span>
+      </div>`;
+  }).join('');
+}
+
+function renderMoodTimeline(diary) {
+  const timeline = document.getElementById('mood-timeline');
+  if (!timeline || !diary?.length) {
+    if (timeline) timeline.innerHTML = '<p style="color:var(--text3)">暂无心情数据</p>';
+    return;
+  }
+  
+  const recent = diary.slice(-7);
+  timeline.innerHTML = recent.map(d => `
+    <div class="mood-day">
+      <div class="mood-emoji">${d.mood || '😊'}</div>
+      <span class="mood-date">${d.date?.slice(5) || ''}</span>
+    </div>
+  `).join('');
 }
 
 function updateGreeting() {
@@ -216,6 +332,15 @@ async function loadDiaryData() {
     const container = document.getElementById('diary-list');
     if (!container) return;
     
+    // 更新统计
+    updateDiaryStats(diary);
+    
+    // 渲染心情分布
+    renderMoodDistribution(diary);
+    
+    // 渲染时间轴
+    renderDiaryTimeline(diary);
+    
     if (!diary || !diary.length) {
       container.innerHTML = `
         <div class="empty-state">
@@ -229,6 +354,113 @@ async function loadDiaryData() {
   } catch (err) {
     console.error('加载日记失败:', err);
   }
+}
+
+function updateDiaryStats(diary) {
+  const total = diary?.length || 0;
+  document.getElementById('diary-total').textContent = total;
+  
+  // 连续天数
+  const streak = calcDiaryStreak(diary);
+  document.getElementById('diary-streak').textContent = streak;
+  
+  // 开心指数
+  const happyMoods = ['😄','🤩','😊'];
+  const happyCount = diary?.filter(d => happyMoods.includes(d.mood)).length || 0;
+  const happyPercent = total ? Math.round((happyCount / total) * 100) : 0;
+  document.getElementById('diary-happy').textContent = happyPercent + '%';
+  
+  // 本月篇数
+  const thisMonth = new Date().toISOString().slice(0, 7);
+  const monthCount = diary?.filter(d => d.date?.startsWith(thisMonth)).length || 0;
+  document.getElementById('diary-this-month').textContent = monthCount;
+}
+
+function calcDiaryStreak(diary) {
+  if (!diary?.length) return 0;
+  const dates = [...new Set(diary.map(d => d.date).filter(Boolean))].sort().reverse();
+  if (!dates.length) return 0;
+  
+  let streak = 1;
+  const today = new Date().toISOString().split('T')[0];
+  const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+  
+  if (dates[0] !== today && dates[0] !== yesterday) return 0;
+  
+  for (let i = 1; i < dates.length; i++) {
+    const prev = new Date(dates[i-1]);
+    const curr = new Date(dates[i]);
+    const diff = (prev - curr) / 86400000;
+    if (diff === 1) streak++;
+    else break;
+  }
+  return streak;
+}
+
+function renderMoodDistribution(diary) {
+  const container = document.getElementById('mood-distribution');
+  if (!container) return;
+  
+  if (!diary?.length) {
+    container.innerHTML = '<p style="color:var(--text3)">暂无数据</p>';
+    return;
+  }
+  
+  const moodMap = {};
+  diary.forEach(d => {
+    moodMap[d.mood] = (moodMap[d.mood] || 0) + 1;
+  });
+  
+  const moodColors = {
+    '😄': 'var(--accent)',
+    '🤩': 'var(--yellow)',
+    '😊': '#38bdf8',
+    '🙂': 'var(--accent2)',
+    '😐': 'var(--text2)',
+    '😔': 'var(--text3)',
+    '😤': 'var(--orange)',
+    '😢': 'var(--red)'
+  };
+  
+  const maxCount = Math.max(...Object.values(moodMap));
+  
+  container.innerHTML = Object.entries(moodMap)
+    .sort((a, b) => b[1] - a[1])
+    .map(([mood, count]) => {
+      const percent = Math.round((count / diary.length) * 100);
+      return `
+        <div class="mood-item">
+          <span class="mood-item-emoji">${mood}</span>
+          <div class="mood-item-info">
+            <div class="mood-item-name">${percent}%</div>
+            <div class="mood-item-bar">
+              <div class="mood-item-fill" style="width:${(count/maxCount)*100}%;background:${moodColors[mood] || 'var(--accent)'}"></div>
+            </div>
+          </div>
+          <span class="mood-item-count">${count}</span>
+        </div>`;
+    }).join('');
+}
+
+function renderDiaryTimeline(diary) {
+  const container = document.getElementById('diary-timeline');
+  if (!container) return;
+  
+  if (!diary?.length) {
+    container.innerHTML = '<p style="color:var(--text3)">暂无数据</p>';
+    return;
+  }
+  
+  const recent = diary.slice(-10).reverse();
+  container.innerHTML = recent.map(d => `
+    <div class="timeline-item">
+      <div class="timeline-dot">${d.mood || '😊'}</div>
+      <div class="timeline-content">
+        <div class="timeline-date">${formatDate(d.date)}</div>
+        <div class="timeline-title">${d.title}</div>
+      </div>
+    </div>
+  `).join('');
 }
 
 function createDiaryCard(d) {

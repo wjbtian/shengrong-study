@@ -1,6 +1,7 @@
 <!-- 首页内容 -->
 <div class="hero-section">
   <div class="hero-greeting" id="greeting">你好，永远的神！</div>
+  <div class="hero-subtitle">今天是 <span id="today-date"></span>，继续加油！</div>
   <div class="hero-level">
     <svg viewBox="0 0 100 100">
       <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="6"/>
@@ -12,6 +13,116 @@
       <div class="level-label">探索者</div>
     </div>
   </div>
+</div>
+
+<!-- 数据概览卡片 -->
+<div class="stats-overview">
+  <div class="stat-card-large">
+    <div class="stat-icon-large">📝</div>
+    <div class="stat-info">
+      <div class="stat-value-large" id="home-diary-count">0</div>
+      <div class="stat-label-large">篇日记</div>
+    </div>
+    <div class="stat-trend" id="diary-trend">+0 本周</div>
+  </div>
+  <div class="stat-card-large">
+    <div class="stat-icon-large">✨</div>
+    <div class="stat-info">
+      <div class="stat-value-large" id="home-shine-count">0</div>
+      <div class="stat-label-large">个闪光</div>
+    </div>
+    <div class="stat-trend" id="shine-trend">+0 本周</div>
+  </div>
+  <div class="stat-card-large">
+    <div class="stat-icon-large">🎸</div>
+    <div class="stat-info">
+      <div class="stat-value-large" id="home-guitar-count">0</div>
+      <div class="stat-label-large">次练习</div>
+    </div>
+    <div class="stat-trend" id="guitar-trend">+0 本周</div>
+  </div>
+  <div class="stat-card-large">
+    <div class="stat-icon-large">🚀</div>
+    <div class="stat-info">
+      <div class="stat-value-large" id="home-tech-count">0</div>
+      <div class="stat-label-large">条科技</div>
+    </div>
+    <div class="stat-trend" id="tech-trend">+0 本周</div>
+  </div>
+</div>
+
+<!-- 学习进度图表 -->
+<div class="section-header">
+  <h2 class="section-title">📊 学习进度</h2>
+</div>
+<div class="chart-section">
+  <div class="chart-card">
+    <div class="chart-header">
+      <span class="chart-title">各科完成度</span>
+      <span class="chart-subtitle">实时追踪</span>
+    </div>
+    <div class="progress-bars" id="subject-progress">
+      <div class="progress-item">
+        <div class="progress-label">
+          <span>📚 语文</span>
+          <span id="progress-chinese">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:0%;background:var(--accent)" id="bar-chinese"></div>
+        </div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label">
+          <span>🔢 数学</span>
+          <span id="progress-math">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:0%;background:var(--accent2)" id="bar-math"></div>
+        </div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label">
+          <span>🌍 英语</span>
+          <span id="progress-english">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:0%;background:var(--yellow)" id="bar-english"></div>
+        </div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label">
+          <span>🧮 奥数</span>
+          <span id="progress-olympiad">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:0%;background:#f472b6" id="bar-olympiad"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="chart-card">
+    <div class="chart-header">
+      <span class="chart-title">🎯 本周活跃度</span>
+      <span class="chart-subtitle">近7天记录</span>
+    </div>
+    <div class="activity-chart" id="activity-chart">
+      <!-- 动态生成 -->
+    </div>
+    <div class="activity-legend">
+      <span class="legend-item"><span class="legend-dot" style="background:var(--accent)"></span>日记</span>
+      <span class="legend-item"><span class="legend-dot" style="background:var(--accent2)"></span>闪光</span>
+      <span class="legend-item"><span class="legend-dot" style="background:var(--yellow)"></span>吉他</span>
+    </div>
+  </div>
+</div>
+
+<!-- 心情趋势 -->
+<div class="section-header">
+  <h2 class="section-title">😊 心情趋势</h2>
+</div>
+<div class="mood-chart-card">
+  <div class="mood-timeline" id="mood-timeline"></div>
 </div>
 
 <div class="section-header">

@@ -3,4 +3,47 @@
   <h1 class="page-title">📝 成长日记</h1>
   <button class="btn btn-primary" id="btn-write-diary">✍️ 写日记</button>
 </div>
+
+<!-- 日记统计 -->
+<div class="diary-stats">
+  <div class="diary-stat-card">
+    <div class="diary-stat-icon">📖</div>
+    <div class="diary-stat-value" id="diary-total">0</div>
+    <div class="diary-stat-label">总篇数</div>
+  </div>
+  <div class="diary-stat-card">
+    <div class="diary-stat-icon">🔥</div>
+    <div class="diary-stat-value" id="diary-streak">0</div>
+    <div class="diary-stat-label">连续天数</div>
+  </div>
+  <div class="diary-stat-card">
+    <div class="diary-stat-icon">😊</div>
+    <div class="diary-stat-value" id="diary-happy">0%</div>
+    <div class="diary-stat-label">开心指数</div>
+  </div>
+  <div class="diary-stat-card">
+    <div class="diary-stat-icon">📅</div>
+    <div class="diary-stat-value" id="diary-this-month">0</div>
+    <div class="diary-stat-label">本月篇数</div>
+  </div>
+</div>
+
+<!-- 心情分布 -->
+<div class="section-header">
+  <h2 class="section-title">😊 心情分布</h2>
+</div>
+<div class="mood-distribution" id="mood-distribution">
+  <!-- 动态生成 -->
+</div>
+
+<!-- 日记时间轴 -->
+<div class="section-header">
+  <h2 class="section-title">📅 日记时间轴</h2>
+</div>
+<div class="diary-timeline" id="diary-timeline"></div>
+
+<!-- 日记列表 -->
+<div class="section-header">
+  <h2 class="section-title">📝 全部日记</h2>
+</div>
 <div id="diary-list"></div>
