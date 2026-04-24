@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-const API = '';
+const API = window.location.origin;
 let currentPage = 'home';
 let selectedMood = '😄';
 const MOODS = ['😄','🤩','😊','🙂','😐','😔','😤','😢'];
