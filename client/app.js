@@ -1627,12 +1627,45 @@ function createPhotoCard(s) {
     other: '💫 其他'
   };
   
+  // 处理多张照片
+  let photos = [];
+  if (s.photo) {
+    try {
+      const parsed = JSON.parse(s.photo);
+      photos = Array.isArray(parsed) ? parsed : [parsed];
+    } catch (e) {
+      photos = [s.photo];
+    }
+  }
+  if (s.image) photos.push(s.image);
+  
+  // 生成图片 HTML
+  let imgHtml = '';
+  if (photos.length === 0) {
+    imgHtml = `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:48px;">✨</div>`;
+  } else if (photos.length === 1) {
+    imgHtml = `<img src="${photos[0]}" class="photo-img" alt="${s.title}" loading="lazy">`;
+  } else {
+    // 多张照片 - 显示缩略图网格
+    imgHtml = `
+      <div class="photo-grid-multi">
+        ${photos.slice(0, 4).map((p, i) => `
+          <div class="photo-grid-item ${i === 0 ? 'photo-grid-main' : ''}">
+            <img src="${p}" alt="${s.title}" loading="lazy">
+            ${i === 3 && photos.length > 4 ? `<div class="photo-grid-more">+${photos.length - 3}</div>` : ''}
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+  
   return `
-    <div class="photo-card" data-id="${s.id}">
+    <div class="photo-card" data-id="${s.id}" data-photos='${JSON.stringify(photos)}'>
       <div class="photo-img-wrap">
-        ${s.image ? `<img src="${s.image}" class="photo-img" alt="${s.title}" loading="lazy">` : `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:48px;">✨</div>`}
+        ${imgHtml}
         <div class="photo-overlay">
           <span class="photo-date">${formatDate(s.date)}</span>
+          ${photos.length > 1 ? `<span class="photo-count">📸 ${photos.length}</span>` : ''}
         </div>
       </div>
       <div class="photo-info">
