@@ -247,9 +247,124 @@ function createDiaryCard(d) {
 
 // --- 科目数据 ---
 async function loadSubjectData(subject) {
-  const container = document.getElementById(subject + '-content');
-  if (!container) return;
-  container.innerHTML = '<p>科目内容加载中...</p>';
+  try {
+    // 获取进度
+    const progress = await api('GET', '/progress');
+    const doneUnits = progress?.doneUnits || [];
+    
+    // 科目配置
+    const config = {
+      chinese: {
+        title: '语文',
+        color: 'var(--accent)',
+        total: 8,
+        units: [
+          { id: 'ch_1', name: '第一单元：古诗词', desc: '背诵并理解古诗词的意境' },
+          { id: 'ch_2', name: '第二单元：现代文阅读', desc: '提高阅读理解能力' },
+          { id: 'ch_3', name: '第三单元：写作基础', desc: '学习写作的基本技巧' },
+          { id: 'ch_4', name: '第四单元：成语故事', desc: '积累常用成语' },
+          { id: 'ch_5', name: '第五单元：名著导读', desc: '阅读经典名著片段' },
+          { id: 'ch_6', name: '第六单元：口语交际', desc: '练习表达能力' },
+          { id: 'ch_7', name: '第七单元：综合复习', desc: '巩固所学知识' },
+          { id: 'ch_8', name: '第八单元：期末检测', desc: '检验学习成果' }
+        ]
+      },
+      math: {
+        title: '数学',
+        color: 'var(--accent2)',
+        total: 6,
+        units: [
+          { id: 'math_1', name: '大数的认识', desc: '认识亿以内的数' },
+          { id: 'math_2', name: '角的度量', desc: '学习角的分类和度量' },
+          { id: 'math_3', name: '三位数乘法', desc: '掌握乘法运算' },
+          { id: 'math_4', name: '平行四边形', desc: '认识平行四边形和梯形' },
+          { id: 'math_5', name: '除数是两位数的除法', desc: '学习除法运算' },
+          { id: 'math_6', name: '统计', desc: '学习条形统计图' }
+        ]
+      },
+      english: {
+        title: '英语',
+        color: '#f472b6',
+        total: 6,
+        units: [
+          { id: 'en_1', name: 'My Classroom', desc: '教室里的物品' },
+          { id: 'en_2', name: 'My Schoolbag', desc: '书包里的文具' },
+          { id: 'en_3', name: 'My Friends', desc: '描述朋友的外貌' },
+          { id: 'en_4', name: 'My Home', desc: '家里的房间' },
+          { id: 'en_5', name: 'Dinner\'s Ready', desc: '食物和餐具' },
+          { id: 'en_6', name: 'Meet My Family', desc: '家庭成员' }
+        ]
+      }
+    };
+    
+    const cfg = config[subject];
+    if (!cfg) return;
+    
+    // 计算进度
+    const subjectDone = doneUnits.filter(u => u.startsWith(subject === 'chinese' ? 'ch_' : subject === 'math' ? 'math_' : 'en_'));
+    const done = subjectDone.length;
+    const percent = Math.round((done / cfg.total) * 100);
+    
+    // 更新进度环
+    const ring = document.getElementById(subject + '-progress-ring');
+    if (ring) {
+      const circumference = 339.292;
+      const offset = circumference - (percent / 100) * circumference;
+      ring.style.strokeDashoffset = offset;
+      ring.style.stroke = cfg.color;
+    }
+    
+    const percentEl = document.getElementById(subject + '-percent');
+    if (percentEl) {
+      percentEl.textContent = percent + '%';
+      percentEl.style.color = cfg.color;
+    }
+    
+    const doneEl = document.getElementById(subject + '-done');
+    if (doneEl) {
+      doneEl.textContent = done;
+      doneEl.style.color = cfg.color;
+    }
+    
+    // 渲染单元列表
+    const container = document.getElementById(subject + '-content');
+    if (!container) return;
+    
+    container.innerHTML = cfg.units.map(u => {
+      const isDone = doneUnits.includes(u.id);
+      return `
+        <div class="topic-card ${isDone ? 'done' : ''}" data-id="${u.id}">
+          <div class="topic-status">${isDone ? '✅' : '⭕'}</div>
+          <div class="topic-info">
+            <div class="topic-name">${u.name}</div>
+            <div class="topic-desc">${u.desc}</div>
+          </div>
+          <button class="btn btn-sm ${isDone ? 'btn-done' : 'btn-primary'}" 
+            onclick="toggleSubjectUnit('${subject}', '${u.id}', ${isDone})">
+            ${isDone ? '已完成' : '标记完成'}
+          </button>
+        </div>`;
+    }).join('');
+    
+  } catch (err) {
+    console.error('加载科目数据失败:', err);
+  }
+}
+
+// 标记科目单元完成
+async function toggleSubjectUnit(subject, unit, isDone) {
+  try {
+    if (isDone) {
+      await api('DELETE', `/progress/${subject}/${unit}`);
+    } else {
+      await api('POST', `/progress/${subject}/${unit}`);
+    }
+    loadSubjectData(subject);
+    // 同时刷新首页统计
+    if (getRoute() === 'home') loadHomeData();
+  } catch (err) {
+    console.error('标记失败:', err);
+  }
 }
 
 // --- 奥数数据 ---
