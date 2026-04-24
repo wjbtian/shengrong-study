@@ -2,6 +2,18 @@
 // 尚融成长网站 - JavaScript v2.0
 // ============================================================
 
+// 页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', () => {
+  // 高亮当前导航
+  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.nav-item').forEach(n => {
+    const href = n.getAttribute('href');
+    if (href && href === currentPage) {
+      n.classList.add('active');
+    }
+  });
+});
+
 const API = '';
 let currentPage = 'home';
 let selectedMood = '😄';
@@ -38,26 +50,37 @@ async function api(method, path, body) {
 }
 
 // ============================================================
-// 页面切换
+// 页面切换（单页模式，保留用于首页）
 // ============================================================
 
 function switchPage(page) {
+  // 独立页面直接跳转
+  const pageMap = {
+    'diary': 'diary.html',
+    'chinese': 'chinese.html',
+    'math': 'math.html',
+    'english': 'english.html',
+    'olympiad': 'olympiad.html',
+    'guitar': 'guitar.html',
+    'shine': 'shine.html',
+    'tech': 'tech.html'
+  };
+  
+  if (pageMap[page]) {
+    window.location.href = pageMap[page];
+    return;
+  }
+  
+  // 首页用单页切换
   currentPage = page;
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById(`page-${page}`).classList.add('active');
+  const pageEl = document.getElementById(`page-${page}`);
+  if (pageEl) pageEl.classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n => {
     n.classList.toggle('active', n.dataset.page === page);
   });
   
-  if (page === 'diary') renderDiary();
-  if (page === 'chinese') renderSubject('chinese');
-  if (page === 'math') renderSubject('math');
-  if (page === 'english') renderSubject('english');
-  if (page === 'olympiad') renderSubject('olympiad');
-  if (page === 'shine') renderShine();
-  if (page === 'tech') renderTech();
   if (page === 'home') updateHomePage();
-  if (page === 'guitar') updateGuitarPage();
 }
 
 function toggleSidebar() {
