@@ -2488,8 +2488,117 @@ body::before {
   .shine-wall { grid-template-columns: 1fr; }
 }
 
+/* === 科目页面样式 === */
+.subject-hero {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+}
+
+.subject-hero-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius);
+  background: var(--subject-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.subject-hero-info {
+  flex: 1;
+}
+
+.subject-hero-info h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.subject-hero-info p {
+  font-size: 14px;
+  color: var(--text2);
+}
+
+.subject-hero-progress {
+  flex-shrink: 0;
+}
+
+.progress-ring {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.progress-ring svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.progress-ring-bg {
+  fill: none;
+  stroke: var(--surface3);
+  stroke-width: 8;
+}
+
+.progress-ring-fill {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.5s var(--ease-smooth);
+}
+
+.progress-ring-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.subject-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.subject-stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  text-align: center;
+}
+
+.subject-stat-value {
+  display: block;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.subject-stat-label {
+  font-size: 12px;
+  color: var(--text2);
+}
+
 @media (max-width: 480px) {
   .stats-grid { grid-template-columns: 1fr; }
   .guitar-stats { grid-template-columns: 1fr 1fr; }
   .page-title { font-size: 22px; }
+  .subject-hero { flex-direction: column; text-align: center; }
+  .subject-stats { grid-template-columns: 1fr; }
 }

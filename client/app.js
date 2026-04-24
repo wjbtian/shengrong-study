@@ -50,7 +50,10 @@ function switchPage(page) {
   });
   
   if (page === 'diary') renderDiary();
-  if (page === 'learn') renderLearn();
+  if (page === 'chinese') renderSubject('chinese');
+  if (page === 'math') renderSubject('math');
+  if (page === 'english') renderSubject('english');
+  if (page === 'olympiad') renderSubject('olympiad');
   if (page === 'shine') renderShine();
   if (page === 'tech') renderTech();
   if (page === 'home') updateHomePage();
@@ -688,33 +691,23 @@ const SUBJECTS = {
   }
 };
 
-async function renderLearn() {
+async function renderSubject(subjectKey) {
   const progress = await api('GET', '/progress');
   const done = new Set([...(progress.doneUnits||[]), ...(progress.doneOM||[])]);
   
-  // 获取当前选中的科目，如果没有则默认选中第一个
-  const currentSubject = localStorage.getItem('learn_subject') || 'chinese';
-  const sub = SUBJECTS[currentSubject];
+  const sub = SUBJECTS[subjectKey];
   const unitCount = sub.items ? sub.items.length : sub.units;
-  const completed = [...Array(unitCount)].filter((_, i) => done.has(`${currentSubject}_${i+1}`)).length;
+  const completed = [...Array(unitCount)].filter((_, i) => done.has(`${subjectKey}_${i+1}`)).length;
   const pct = unitCount > 0 ? Math.round(completed / unitCount * 100) : 0;
-  
-  // 科目切换按钮
-  let subjectTabs = '';
-  for (const [key, s] of Object.entries(SUBJECTS)) {
-    const sDone = [...Array(s.items ? s.items.length : s.units)].filter((_, i) => done.has(`${key}_${i+1}`)).length;
-    const sTotal = s.items ? s.items.length : s.units;
-    subjectTabs += `<button class="subject-tab${key===currentSubject?' active':''}" onclick="switchSubject('${key}')">${s.icon} ${s.name} <span class="subject-count">${sDone}/${sTotal}</span></button>`;
-  }
   
   // 单元列表（卡片式）
   let unitHtml = '';
   if (sub.items) {
     unitHtml = sub.items.map((item, i) => {
-      const uid = `${currentSubject}_${i+1}`;
+      const uid = `${subjectKey}_${i+1}`;
       const isDone = done.has(uid);
       return `
-        <div class="unit-card${isDone?' done':''}" onclick="toggleUnit('${currentSubject}','${uid}',${!isDone})">
+        <div class="unit-card${isDone?' done':''}" onclick="toggleUnit('${subjectKey}','${uid}',${!isDone})">
           <div class="unit-card-check">${isDone?'✓':'○'}</div>
           <div class="unit-card-body">
             <div class="unit-card-name">${item.name}</div>
@@ -726,24 +719,46 @@ async function renderLearn() {
     }).join('');
   } else {
     unitHtml = [...Array(unitCount)].map((_, i) => {
-      const uid = `${currentSubject}_${i+1}`;
+      const uid = `${subjectKey}_${i+1}`;
       const isDone = done.has(uid);
-      return `<button class="unit-btn${isDone?' done':''}" onclick="toggleUnit('${currentSubject}','${uid}',${!isDone})">${i+1}</button>`;
+      return `<button class="unit-btn${isDone?' done':''}" onclick="toggleUnit('${subjectKey}','${uid}',${!isDone})">${i+1}</button>`;
     }).join('');
   }
   
-  document.getElementById('learn-content').innerHTML = `
-    <div class="learn-tabs">${subjectTabs}</div>
-    <div class="learn-overview">
-      <div class="learn-progress">
-        <div class="progress-header">
-          <span class="progress-title">${sub.icon} ${sub.name}</span>
-          <span style="color:var(--text2);font-size:12px">${completed}/${unitCount}</span>
+  // 获取容器
+  const container = document.getElementById(`${subjectKey}-content`);
+  if (!container) return;
+  
+  container.innerHTML = `
+    <div class="subject-hero" style="--subject-color: ${sub.color}">
+      <div class="subject-hero-icon">${sub.icon}</div>
+      <div class="subject-hero-info">
+        <h3>${sub.name}</h3>
+        <p>${sub.desc || '认真学习，每天进步一点点'}</p>
+      </div>
+      <div class="subject-hero-progress">
+        <div class="progress-ring">
+          <svg viewBox="0 0 100 100">
+            <circle class="progress-ring-bg" cx="50" cy="50" r="42"/>
+            <circle class="progress-ring-fill" cx="50" cy="50" r="42" 
+              style="stroke-dasharray: 264; stroke-dashoffset: ${264 * (1 - pct/100)}; stroke: ${sub.color}"/>
+          </svg>
+          <div class="progress-ring-text">${pct}%</div>
         </div>
-        <div class="progress-bar" style="height:12px">
-          <div class="progress-fill" style="width:${pct}%;background:linear-gradient(90deg,${sub.color},${sub.color}88)"></div>
-        </div>
-        <div class="progress-pct">${pct}% 完成</div>
+      </div>
+    </div>
+    <div class="subject-stats">
+      <div class="subject-stat">
+        <span class="subject-stat-value">${completed}</span>
+        <span class="subject-stat-label">已完成</span>
+      </div>
+      <div class="subject-stat">
+        <span class="subject-stat-value">${unitCount - completed}</span>
+        <span class="subject-stat-label">待学习</span>
+      </div>
+      <div class="subject-stat">
+        <span class="subject-stat-value">${unitCount}</span>
+        <span class="subject-stat-label">总单元</span>
       </div>
     </div>
     <div class="unit-list">
@@ -752,18 +767,17 @@ async function renderLearn() {
   `;
 }
 
-function switchSubject(subject) {
-  localStorage.setItem('learn_subject', subject);
-  renderLearn();
-}
-
 async function toggleUnit(subject, unit, completed) {
   if (completed) {
     await api('POST', `/progress/${subject}/${unit}`);
   } else {
     await api('DELETE', `/progress/${subject}/${unit}`);
   }
-  renderLearn();
+  // 刷新当前科目页面
+  const pageMap = { chinese: 'chinese', math: 'math', english: 'english', olympiad: 'olympiad' };
+  if (pageMap[subject]) {
+    renderSubject(pageMap[subject]);
+  }
 }
 
 // ============================================================
