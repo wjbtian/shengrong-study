@@ -88,73 +88,406 @@ function closeLightbox() {
 }
 
 // ============================================================
+// 每日成长轨迹数据
+// ============================================================
+
+let dailyCheckData = JSON.parse(localStorage.getItem(TODAY_KEY + '_check') || 'null');
+let selectedCheckMood = '😊';
+
+function getTodayCheckData() {
+  return JSON.parse(localStorage.getItem(TODAY_KEY + '_check') || 'null');
+}
+
+function saveTodayCheckData(data) {
+  localStorage.setItem(TODAY_KEY + '_check', JSON.stringify(data));
+  dailyCheckData = data;
+}
+
+// ============================================================
 // 首页
 // ============================================================
 
 async function updateHomePage() {
-  // 问候语
-  const h = new Date().getHours();
-  let greet = h < 6 ? '夜深了，注意休息' : h < 9 ? '早上好，新的一天' : h < 12 ? '上午好' : h < 14 ? '中午好' : h < 18 ? '下午好' : h < 21 ? '晚上好' : '夜深了';
-  document.getElementById('greeting').textContent = `${greet}，尚融 🌟`;
-  document.getElementById('hero-date').textContent = today();
+  // 设置日期
+  document.getElementById('growth-date').textContent = `${today()} ${['周日','周一','周二','周三','周四','周五','周六'][new Date().getDay()]}`;
   
-  // 加载数据
-  const [diary, shines, progress] = await Promise.all([
-    api('GET', '/diary'),
-    api('GET', '/shines'),
-    api('GET', '/progress')
-  ]);
+  // 加载统计数据
+  const diary = await api('GET', '/diary');
+  const shines = await api('GET', '/shines');
+  const guitar = await api('GET', '/guitar');
   
-  // 统计数据
-  const omCount = progress.doneOM ? progress.doneOM.length : 0;
-  const unitCount = progress.doneUnits ? progress.doneUnits.length : 0;
-  document.getElementById('stat-diary').textContent = diary.length;
-  document.getElementById('stat-shine').textContent = shines.length;
+  document.getElementById('hero-stat-diary').textContent = diary.length || 0;
+  document.getElementById('hero-stat-shine').textContent = shines.length || 0;
+  document.getElementById('hero-stat-days').textContent = Math.max(1, diary.length || 1);
   
-  // 计算等级（每3篇日记或2个闪光+1个学习单元升一级）
-  const level = Math.min(10, Math.floor((diary.length * 1 + shines.length * 1.5 + unitCount * 0.5 + omCount * 0.3) / 3));
-  document.getElementById('level-num').textContent = level || 1;
-  const pct = Math.min(100, (diary.length * 1 + shines.length * 1.5 + unitCount * 0.5 + omCount * 0.3) / 30 * 100);
-  document.getElementById('level-circle').style.strokeDashoffset = 213.6 * (1 - pct / 100);
+  // 渲染成长时间轴
+  renderGrowthTimeline();
   
-  // 快捷卡片进度
-  const totalUnits = 8 + 6 + 6 + 20; // 语文+数学+英语+奥数
-  const doneUnits = unitCount + omCount;
-  document.getElementById('learn-bar').style.width = (doneUnits / totalUnits * 100) + '%';
-  document.getElementById('learn-count').textContent = `${Math.round(doneUnits / totalUnits * 100)}% 完成`;
+  // 更新能量值
+  updateEnergyBar();
   
-  document.getElementById('guitar-count').textContent = '1 首开始';
+  // 显示每日总结（如果有）
+  renderDailySummary();
   
-  const shinePct = Math.min(100, shines.length * 10);
-  document.getElementById('shine-bar').style.width = shinePct + '%';
-  document.getElementById('shine-count').textContent = shines.length + ' 个闪光';
+  // 加载最新内容
+  renderLatestDiary(diary.slice(0, 3));
+  renderLatestShine(shines.slice(0, 2));
   
-  // 今日任务
-  loadTodayTasks();
+  // 加载科技新闻
+  const tech = await api('GET', '/tech');
+  renderLatestTech(tech.slice(0, 3));
   
-  // 最近日记
-  if (diary.length === 0) {
-    document.getElementById('home-diary').innerHTML = '<div class="news-item"><span class="news-icon">📝</span><div class="news-body"><div class="news-title">还没有日记</div><div class="news-date">点击右上角写一篇吧</div></div></div>';
-  } else {
-    document.getElementById('home-diary').innerHTML = diary.slice(0, 4).map(d => `
-      <div class="news-item" onclick="switchPage('diary')">
-        <span class="news-icon">${d.mood}</span>
-        <div class="news-body">
-          <div class="news-title">${d.title}</div>
-          <div class="news-date">${formatDate(d.date)}</div>
-        </div>
+  // 更新任务进度
+  updateTodayProgress();
+}
+
+// ============================================================
+// 成长时间轴渲染
+// ============================================================
+
+function renderGrowthTimeline() {
+  const container = document.getElementById('growth-timeline');
+  const data = getTodayCheckData();
+  
+  if (!data || !data.items || data.items.length === 0) {
+    container.innerHTML = `
+      <div class="growth-empty">
+        <div class="growth-empty-icon">🌅</div>
+        <p>今天还没有记录哦～</p>
+        <p class="growth-empty-hint">点击"记录今日"告诉豆芽今天发生了什么！</p>
       </div>
-    `).join('');
+    `;
+    return;
   }
   
-  // 最近闪光
+  container.innerHTML = data.items.map(item => `
+    <div class="growth-item">
+      <div class="growth-item-time">${item.time}</div>
+      <div class="growth-item-content">
+        <div class="growth-item-title">
+          <span>${item.icon}</span>
+          <span>${item.title}</span>
+        </div>
+        <div class="growth-item-desc">${item.desc}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// 能量条更新
+// ============================================================
+
+function updateEnergyBar() {
+  const data = getTodayCheckData();
+  let energy = 0;
+  
+  if (data) {
+    // 基础能量
+    energy += 20;
+    // 学习记录
+    if (data.learn && data.learn.tags) energy += data.learn.tags.length * 15;
+    if (data.learn && data.learn.detail) energy += 10;
+    // 兴趣记录
+    if (data.hobby && data.hobby.tags) energy += data.hobby.tags.length * 10;
+    // 心情记录
+    if (data.mood) energy += 10;
+    // 挑战记录
+    if (data.challenge) energy += 15;
+  }
+  
+  energy = Math.min(100, energy);
+  document.getElementById('energy-value').textContent = energy + '%';
+  document.getElementById('energy-fill').style.width = energy + '%';
+  
+  // 更新提示语
+  const hints = [
+    '记录学习、运动、兴趣，能量值会上升哦！',
+    '加油！再记录一点就能升级了！',
+    '太棒了！今天的能量满满！',
+    '哇！超级能量！你是今天最闪亮的星！'
+  ];
+  const hintIndex = Math.min(3, Math.floor(energy / 25));
+  document.getElementById('energy-hint').textContent = hints[hintIndex];
+}
+
+// ============================================================
+// 每日总结渲染
+// ============================================================
+
+function renderDailySummary() {
+  const data = getTodayCheckData();
+  const summaryEl = document.getElementById('daily-summary');
+  
+  if (!data || !data.summary) {
+    summaryEl.style.display = 'none';
+    return;
+  }
+  
+  summaryEl.style.display = 'block';
+  document.getElementById('summary-content').innerHTML = data.summary;
+}
+
+// ============================================================
+// 生成每日总结
+// ============================================================
+
+function generateDailySummary(data) {
+  const parts = [];
+  
+  // 开场
+  const greetings = ['今天真是充实的一天！', '哇，今天过得好精彩！', '又是成长的一天呢！'];
+  parts.push(`<p>${greetings[Math.floor(Math.random() * greetings.length)]}</p>`);
+  
+  // 学习部分
+  if (data.learn && data.learn.tags && data.learn.tags.length > 0) {
+    parts.push(`<p>📚 <strong>学习方面：</strong>今天学习了${data.learn.tags.join('、')}，${data.learn.detail || '真棒！'}</p>`);
+  }
+  
+  // 兴趣部分
+  if (data.hobby && data.hobby.tags && data.hobby.tags.length > 0) {
+    parts.push(`<p>🎸 <strong>兴趣练习：</strong>今天练习了${data.hobby.tags.join('、')}，${data.hobby.detail || '坚持就是胜利！'}</p>`);
+  }
+  
+  // 心情
+  if (data.mood) {
+    const moodTexts = {
+      '😄': '今天心情超级好！',
+      '🤩': '今天特别兴奋！',
+      '😊': '今天心情不错～',
+      '🙂': '今天心情平稳。',
+      '😐': '今天有点平淡。',
+      '😔': '今天有点低落，没关系，明天会更好！',
+      '😤': '今天遇到了挑战，但你很勇敢！',
+      '😢': '今天有点难过，抱抱你，明天又是新的一天！'
+    };
+    parts.push(`<p>${data.mood} <strong>心情：</strong>${moodTexts[data.mood] || ''} ${data.moodDetail || ''}</p>`);
+  }
+  
+  // 挑战
+  if (data.challenge) {
+    parts.push(`<p>💪 <strong>挑战与突破：</strong>${data.challenge} 你真的很棒，面对困难不放弃！</p>`);
+  }
+  
+  // 结尾鼓励
+  const encouragements = [
+    '<p>🌟 <strong>豆芽寄语：</strong>每一天的努力都在让你变得更强大，继续保持这份热情，未来可期！</p>',
+    '<p>🌟 <strong>豆芽寄语：</strong>你的进步我看在眼里，今天的付出是明天的收获，加油！</p>',
+    '<p>🌟 <strong>豆芽寄语：</strong>成长就是每天进步一点点，你已经做得很好了，为自己鼓掌！</p>'
+  ];
+  parts.push(encouragements[Math.floor(Math.random() * encouragements.length)]);
+  
+  return parts.join('');
+}
+
+// ============================================================
+// 每日记录交互
+// ============================================================
+
+function toggleCheckTag(el) {
+  el.classList.toggle('selected');
+}
+
+function selectCheckMood(mood) {
+  selectedCheckMood = mood;
+  document.querySelectorAll('#check-mood-picker .mood-item').forEach(el => {
+    el.classList.toggle('selected', el.dataset.mood === mood);
+  });
+}
+
+async function saveDailyCheck() {
+  // 收集数据
+  const learnTags = Array.from(document.querySelectorAll('#check-learn-tags .check-tag.selected')).map(el => el.textContent);
+  const learnDetail = document.getElementById('check-learn-detail').value;
+  const hobbyTags = Array.from(document.querySelectorAll('#check-hobby-tags .check-tag.selected')).map(el => el.textContent);
+  const hobbyDetail = document.getElementById('check-hobby-detail').value;
+  const moodDetail = document.getElementById('check-mood-detail').value;
+  const challenge = document.getElementById('check-challenge').value;
+  
+  const now = new Date();
+  const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  
+  // 构建时间轴项目
+  const items = [];
+  if (learnTags.length > 0) {
+    items.push({
+      time: timeStr,
+      icon: '📚',
+      title: `学习：${learnTags.join('、')}`,
+      desc: learnDetail || '认真学习的一天'
+    });
+  }
+  if (hobbyTags.length > 0) {
+    items.push({
+      time: timeStr,
+      icon: '🎸',
+      title: `兴趣：${hobbyTags.join('、')}`,
+      desc: hobbyDetail || '坚持练习，进步看得见'
+    });
+  }
+  if (selectedCheckMood) {
+    items.push({
+      time: timeStr,
+      icon: selectedCheckMood,
+      title: '心情记录',
+      desc: moodDetail || '记录当下的心情'
+    });
+  }
+  if (challenge) {
+    items.push({
+      time: timeStr,
+      icon: '💪',
+      title: '挑战与突破',
+      desc: challenge
+    });
+  }
+  
+  // 生成总结
+  const summary = generateDailySummary({
+    learn: { tags: learnTags, detail: learnDetail },
+    hobby: { tags: hobbyTags, detail: hobbyDetail },
+    mood: selectedCheckMood,
+    moodDetail: moodDetail,
+    challenge: challenge
+  });
+  
+  // 保存数据
+  const data = {
+    date: today(),
+    items: items,
+    summary: summary,
+    learn: { tags: learnTags, detail: learnDetail },
+    hobby: { tags: hobbyTags, detail: hobbyDetail },
+    mood: selectedCheckMood,
+    moodDetail: moodDetail,
+    challenge: challenge
+  };
+  
+  saveTodayCheckData(data);
+  
+  // 关闭弹窗并刷新
+  closeModal('modal-daily-check');
+  updateHomePage();
+  
+  // 显示成功提示
+  showToast('🌟 成长记录已保存！能量值上升！');
+}
+
+function showToast(message) {
+  const toast = document.createElement('div');
+  toast.style.cssText = `
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--surface2);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 12px 24px;
+    border-radius: 24px;
+    font-size: 14px;
+    z-index: 9999;
+    animation: slideUp 0.3s ease;
+  `;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transition = 'opacity 0.5s';
+    setTimeout(() => toast.remove(), 500);
+  }, 3000);
+}
+
+// ============================================================
+// 预览切换
+// ============================================================
+
+function switchPreview(type) {
+  document.querySelectorAll('.preview-tab').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.preview-panel').forEach(el => el.classList.remove('active'));
+  
+  event.target.classList.add('active');
+  document.getElementById(`preview-${type}-panel`).classList.add('active');
+}
+
+// ============================================================
+// 渲染最新内容
+// ============================================================
+
+function renderLatestDiary(diary) {
+  if (diary.length === 0) {
+    document.getElementById('home-diary').innerHTML = '<div class="news-item"><span class="news-icon">📝</span><div class="news-body"><div class="news-title">还没有日记</div><div class="news-date">点击右上角写一篇吧</div></div></div>';
+    return;
+  }
+  document.getElementById('home-diary').innerHTML = diary.map(d => `
+    <div class="news-item" onclick="switchPage('diary')">
+      <span class="news-icon">${d.mood || '📝'}</span>
+      <div class="news-body">
+        <div class="news-title">${d.title}</div>
+        <div class="news-date">${formatDate(d.date)}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderLatestShine(shines) {
   if (shines.length === 0) {
     document.getElementById('home-shines').innerHTML = '<div class="news-item"><span class="news-icon">✨</span><div class="news-body"><div class="news-title">还没有闪光时刻</div><div class="news-date">记录第一个精彩瞬间吧</div></div></div>';
-  } else {
-    document.getElementById('home-shines').innerHTML = `
-      <div class="photo-scroll">
-        ${shines.slice(0, 6).map(s => `
-          <div class="photo-thumb" ${s.photoUrl ? `onclick="openLightbox('${s.photoUrl}')"` : ''}>
+    return;
+  }
+  document.getElementById('home-shines').innerHTML = `
+    <div class="photo-scroll">
+      ${shines.map(s => `
+        <div class="photo-thumb" ${s.photoUrl ? `onclick="openLightbox('${s.photoUrl}')"` : ''}>
+          <div class="shine-card-small">
+            <div class="shine-emoji">${s.type ? s.type.split(' ')[0] : '✨'}</div>
+            <div class="shine-title-small">${s.title}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderLatestTech(tech) {
+  if (tech.length === 0) {
+    document.getElementById('home-tech').innerHTML = '<div class="news-item"><span class="news-icon">🔬</span><div class="news-body"><div class="news-title">还没有科技新闻</div><div class="news-date">去探索科技世界吧</div></div></div>';
+    return;
+  }
+  document.getElementById('home-tech').innerHTML = tech.map(t => `
+    <div class="news-item" onclick="switchPage('tech')">
+      <span class="news-icon">🔬</span>
+      <div class="news-body">
+        <div class="news-title">${t.title}</div>
+        <div class="news-date">${t.category || '科技'}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// 今日任务
+// ============================================================
+
+function updateTodayProgress() {
+  const tasks = document.querySelectorAll('.today-task');
+  const completed = document.querySelectorAll('.today-task.done').length;
+  document.getElementById('today-progress').textContent = `${completed}/${tasks.length}`;
+}
+
+function loadTodayTasks() {
+  // 从localStorage加载任务状态
+  const saved = localStorage.getItem(TODAY_KEY + '_tasks');
+  if (saved) {
+    const done = JSON.parse(saved);
+    document.querySelectorAll('.today-task').forEach(el => {
+      if (done.includes(el.dataset.task)) {
+        el.classList.add('done');
+        el.querySelector('.task-check').textContent = '✓';
+      }
+    });
+  }
+  updateTodayProgress();
             ${s.photoUrl ? `<img src="${s.photoUrl}" alt="${s.title}">` : `<div style="padding:20px;text-align:center;font-size:24px">${s.icon || '✨'}</div>`}
             <div class="photo-caption">${s.title}</div>
           </div>

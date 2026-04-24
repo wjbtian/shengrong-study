@@ -1946,6 +1946,476 @@ body::before {
 }
 
 /* ============================================================
+   首页大标题签名区
+   ============================================================ */
+
+.hero-signature {
+  text-align: center;
+  padding: 40px 20px 30px;
+  position: relative;
+}
+
+.hero-avatar-large {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-dim), var(--accent2-dim));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  margin: 0 auto 20px;
+  border: 3px solid var(--border2);
+  box-shadow: 0 8px 32px rgba(74,222,128,0.15);
+  animation: avatarPulse 3s ease-in-out infinite;
+}
+
+@keyframes avatarPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.hero-name {
+  font-family: var(--font-display);
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-tagline {
+  font-size: 15px;
+  color: var(--text2);
+  margin-bottom: 6px;
+}
+
+.hero-bio {
+  font-size: 13px;
+  color: var(--text3);
+  font-style: italic;
+  margin-bottom: 24px;
+}
+
+.hero-stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-top: 16px;
+}
+
+.hero-stat-item {
+  text-align: center;
+}
+
+.hero-stat-num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+  font-family: var(--font-mono);
+}
+
+.hero-stat-label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 2px;
+}
+
+/* ============================================================
+   每日成长轨迹
+   ============================================================ */
+
+.daily-growth-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin: 0 20px 24px;
+}
+
+.section-header-with-action {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.section-subtitle {
+  font-size: 13px;
+  color: var(--text3);
+}
+
+.growth-timeline {
+  min-height: 120px;
+  margin-bottom: 20px;
+}
+
+.growth-empty {
+  text-align: center;
+  padding: 30px;
+  color: var(--text3);
+}
+
+.growth-empty-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  opacity: 0.6;
+}
+
+.growth-empty-hint {
+  font-size: 13px;
+  margin-top: 8px;
+  color: var(--text2);
+}
+
+.growth-item {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background: var(--surface2);
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+  border-left: 3px solid var(--accent);
+  animation: slideUp 0.3s ease;
+}
+
+.growth-item-time {
+  font-size: 12px;
+  color: var(--text3);
+  font-family: var(--font-mono);
+  white-space: nowrap;
+  min-width: 50px;
+}
+
+.growth-item-content {
+  flex: 1;
+}
+
+.growth-item-title {
+  font-weight: 500;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.growth-item-desc {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.5;
+}
+
+/* 能量条 */
+.energy-bar-container {
+  background: var(--surface2);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+}
+
+.energy-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.energy-value {
+  color: var(--accent);
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+.energy-track {
+  height: 10px;
+  background: var(--surface3);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.energy-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 5px;
+  transition: width 0.6s var(--ease-spring);
+  position: relative;
+}
+
+.energy-fill::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
+  animation: energyShine 2s ease-in-out infinite;
+}
+
+@keyframes energyShine {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+.energy-hint {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+  text-align: center;
+}
+
+/* ============================================================
+   每日正能量总结
+   ============================================================ */
+
+.daily-summary-card {
+  background: linear-gradient(135deg, rgba(74,222,128,0.08), rgba(129,140,248,0.08));
+  border: 1px solid var(--accent-dim);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin: 0 20px 24px;
+  animation: slideUp 0.5s ease;
+}
+
+.summary-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.summary-icon {
+  font-size: 20px;
+}
+
+.summary-title {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.summary-content {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text);
+}
+
+.summary-content p {
+  margin-bottom: 8px;
+}
+
+.summary-footer {
+  text-align: right;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.summary-author {
+  font-size: 13px;
+  color: var(--text3);
+  font-style: italic;
+}
+
+/* ============================================================
+   快速入口
+   ============================================================ */
+
+.quick-access-section {
+  margin: 0 20px 24px;
+}
+
+.quick-access-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.quick-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 20px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-spring);
+}
+
+.quick-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border2);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.quick-card.highlight {
+  background: linear-gradient(135deg, var(--accent-dim), var(--accent2-dim));
+  border-color: var(--accent);
+}
+
+.quick-card-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.quick-card-title {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.quick-card-desc {
+  font-size: 12px;
+  color: var(--text3);
+}
+
+/* ============================================================
+   首页内容预览
+   ============================================================ */
+
+.home-preview-section {
+  margin: 0 20px 24px;
+}
+
+.preview-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+
+.preview-tab {
+  padding: 8px 16px;
+  border-radius: var(--radius-xs);
+  border: none;
+  background: transparent;
+  color: var(--text3);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.preview-tab:hover {
+  color: var(--text2);
+  background: var(--surface2);
+}
+
+.preview-tab.active {
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.preview-panel {
+  display: none;
+}
+
+.preview-panel.active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+/* ============================================================
+   每日记录弹窗
+   ============================================================ */
+
+.modal-large {
+  max-width: 600px;
+  width: 90vw;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.modal-subtitle {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 20px;
+}
+
+.daily-check-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.check-section {
+  background: var(--surface2);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+}
+
+.check-section h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--text2);
+}
+
+.check-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.check-tag {
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.check-tag:hover {
+  border-color: var(--border2);
+}
+
+.check-tag.selected {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+#check-mood-picker {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+#check-mood-picker .mood-item {
+  font-size: 24px;
+  padding: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  opacity: 0.5;
+}
+
+#check-mood-picker .mood-item:hover {
+  opacity: 0.8;
+  transform: scale(1.1);
+}
+
+#check-mood-picker .mood-item.selected {
+  opacity: 1;
+  background: var(--accent-dim);
+  transform: scale(1.2);
+}
+
+/* ============================================================
    动画
    ============================================================ */
 

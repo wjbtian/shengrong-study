@@ -56,54 +56,110 @@
     
     <!-- 首页 -->
     <div id="page-home" class="page active">
-      <div class="hero">
-        <span class="hero-emoji">🌱</span>
-        <div class="hero-text">
-          <div class="hero-greeting" id="greeting"></div>
-          <div class="hero-sub" id="hero-date"></div>
-          <div class="hero-meta">
-            <div class="hero-stat"><span>📝</span><span id="stat-diary">0</span> 篇日记</div>
-            <div class="hero-stat"><span>✨</span><span id="stat-shine">0</span> 次闪光</div>
-            <div class="hero-stat"><span>🎸</span><span id="stat-guitar">0</span> 首练习</div>
+      <!-- 大标题签名区 -->
+      <div class="hero-signature">
+        <div class="hero-avatar-large">🌱</div>
+        <h1 class="hero-name">吴尚融</h1>
+        <p class="hero-tagline">四年级小学生 · 吉他手 · 科技探索者</p>
+        <p class="hero-bio">每一天都在成长，每一刻都值得记录</p>
+        <div class="hero-stats-row">
+          <div class="hero-stat-item">
+            <div class="hero-stat-num" id="hero-stat-days">1</div>
+            <div class="hero-stat-label">天记录</div>
           </div>
-        </div>
-        <div class="hero-level">
-          <svg viewBox="0 0 76 76">
-            <circle cx="38" cy="38" r="34" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="4"/>
-            <circle id="level-circle" cx="38" cy="38" r="34" fill="none" stroke="var(--accent)" stroke-width="4" 
-              stroke-dasharray="213.6" stroke-dashoffset="213.6" stroke-linecap="round" transform="rotate(-90 38 38)"/>
-          </svg>
-          <div class="hero-level-center">
-            <span class="level-num" id="level-num">1</span>
-            <span class="level-label">等级</span>
+          <div class="hero-stat-item">
+            <div class="hero-stat-num" id="hero-stat-diary">0</div>
+            <div class="hero-stat-label">篇日记</div>
+          </div>
+          <div class="hero-stat-item">
+            <div class="hero-stat-num" id="hero-stat-shine">0</div>
+            <div class="hero-stat-label">个闪光时刻</div>
           </div>
         </div>
       </div>
 
-      <div class="quick-grid">
-        <div class="quick-card green" onclick="switchPage('learn')">
-          <span class="quick-icon">📚</span>
-          <div class="quick-title">学习进度</div>
-          <div class="quick-desc">语数英+奥数，每天进步一点点</div>
-          <div class="quick-bar"><div class="quick-bar-fill" id="learn-bar" style="width:0%; background: linear-gradient(90deg, var(--accent), #5eea8f);"></div></div>
-          <div class="quick-count" id="learn-count">0% 完成</div>
+      <!-- 每日成长轨迹 - 核心功能 -->
+      <div class="daily-growth-section">
+        <div class="section-header-with-action">
+          <div>
+            <h2 class="section-title">📈 今日成长轨迹</h2>
+            <p class="section-subtitle" id="growth-date"></p>
+          </div>
+          <button class="btn btn-primary" onclick="openModal('modal-daily-check')">✏️ 记录今日</button>
         </div>
-        <div class="quick-card purple" onclick="switchPage('guitar')">
-          <span class="quick-icon">🎸</span>
-          <div class="quick-title">吉他练习</div>
-          <div class="quick-desc">两只老虎弹起来，加油！</div>
-          <div class="quick-bar"><div class="quick-bar-fill" id="guitar-bar" style="width:0%; background: linear-gradient(90deg, var(--accent2), #a5b4fc);"></div></div>
-          <div class="quick-count" id="guitar-count">0 首完成</div>
+        
+        <!-- 成长时间轴 -->
+        <div class="growth-timeline" id="growth-timeline">
+          <div class="growth-empty">
+            <div class="growth-empty-icon">🌅</div>
+            <p>今天还没有记录哦～</p>
+            <p class="growth-empty-hint">点击"记录今日"告诉豆芽今天发生了什么！</p>
+          </div>
         </div>
-        <div class="quick-card orange" onclick="switchPage('shine')">
-          <span class="quick-icon">✨</span>
-          <div class="quick-title">闪光时刻</div>
-          <div class="quick-desc">记录每一个精彩瞬间</div>
-          <div class="quick-bar"><div class="quick-bar-fill" id="shine-bar" style="width:0%; background: linear-gradient(90deg, var(--orange), #fbbf24);"></div></div>
-          <div class="quick-count" id="shine-count">0 个闪光</div>
+
+        <!-- 每日能量值 -->
+        <div class="energy-bar-container">
+          <div class="energy-label">
+            <span>⚡ 今日能量值</span>
+            <span class="energy-value" id="energy-value">0%</span>
+          </div>
+          <div class="energy-track">
+            <div class="energy-fill" id="energy-fill" style="width: 0%"></div>
+          </div>
+          <p class="energy-hint" id="energy-hint">记录学习、运动、兴趣，能量值会上升哦！</p>
         </div>
       </div>
 
+      <!-- 每日正能量总结 -->
+      <div class="daily-summary-card" id="daily-summary" style="display: none;">
+        <div class="summary-header">
+          <span class="summary-icon">🌟</span>
+          <span class="summary-title">今日成长总结</span>
+        </div>
+        <div class="summary-content" id="summary-content"></div>
+        <div class="summary-footer">
+          <span class="summary-author">— 豆芽哈吉米</span>
+        </div>
+      </div>
+
+      <!-- 快速入口 -->
+      <div class="quick-access-section">
+        <h2 class="section-title">🚀 快速入口</h2>
+        <div class="quick-access-grid">
+          <div class="quick-card" onclick="switchPage('diary')">
+            <div class="quick-card-icon">📝</div>
+            <div class="quick-card-title">写日记</div>
+            <div class="quick-card-desc">记录心情和想法</div>
+          </div>
+          <div class="quick-card" onclick="switchPage('learn')">
+            <div class="quick-card-icon">📚</div>
+            <div class="quick-card-title">去学习</div>
+            <div class="quick-card-desc">追踪学习进度</div>
+          </div>
+          <div class="quick-card" onclick="switchPage('guitar')">
+            <div class="quick-card-icon">🎸</div>
+            <div class="quick-card-title">练吉他</div>
+            <div class="quick-card-desc">上传练习视频</div>
+          </div>
+          <div class="quick-card" onclick="switchPage('tech')">
+            <div class="quick-card-icon">🔬</div>
+            <div class="quick-card-title">看科技</div>
+            <div class="quick-card-desc">探索新世界</div>
+          </div>
+          <div class="quick-card" onclick="switchPage('shine')">
+            <div class="quick-card-icon">✨</div>
+            <div class="quick-card-title">闪光时刻</div>
+            <div class="quick-card-desc">珍藏精彩瞬间</div>
+          </div>
+          <div class="quick-card highlight" onclick="openModal('modal-daily-check')">
+            <div class="quick-card-icon">💬</div>
+            <div class="quick-card-title">跟豆芽说</div>
+            <div class="quick-card-desc">分享今天的故事</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 今日任务 -->
       <div class="today-widget">
         <div class="today-header">
           <span class="today-icon">📋</span>
@@ -130,20 +186,23 @@
         </div>
       </div>
 
-      <div class="home-bottom">
-        <div class="bottom-panel">
-          <div class="panel-header">
-            <span class="panel-title">📝 最近日记</span>
-            <span class="panel-more" onclick="switchPage('diary')">更多 →</span>
-          </div>
-          <div class="news-list" id="home-diary"></div>
+      <!-- 最新内容预览 -->
+      <div class="home-preview-section">
+        <div class="preview-tabs">
+          <button class="preview-tab active" onclick="switchPreview('diary')">📝 日记</button>
+          <button class="preview-tab" onclick="switchPreview('shine')">✨ 闪光</button>
+          <button class="preview-tab" onclick="switchPreview('tech')">🔬 科技</button>
         </div>
-        <div class="bottom-panel">
-          <div class="panel-header">
-            <span class="panel-title">✨ 闪光时刻</span>
-            <span class="panel-more" onclick="switchPage('shine')">更多 →</span>
+        <div class="preview-content">
+          <div class="preview-panel active" id="preview-diary-panel">
+            <div class="news-list" id="home-diary"></div>
           </div>
-          <div id="home-shines"></div>
+          <div class="preview-panel" id="preview-shine-panel">
+            <div id="home-shines"></div>
+          </div>
+          <div class="preview-panel" id="preview-tech-panel">
+            <div class="tech-list" id="home-tech"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -377,6 +436,66 @@
     <div class="form-actions">
       <button class="btn" onclick="closeModal('modal-guitar')">取消</button>
       <button class="btn btn-primary" onclick="saveGuitarVideo()">上传</button>
+    </div>
+  </div>
+</div>
+
+<!-- 每日记录弹窗 -->
+<div class="modal-overlay" id="modal-daily-check" onclick="if(event.target===this)closeModal('modal-daily-check')">
+  <div class="modal modal-large">
+    <h3>📈 记录今日成长</h3>
+    <p class="modal-subtitle">告诉豆芽今天发生了什么，帮你生成成长总结！</p>
+    
+    <div class="daily-check-form">
+      <div class="check-section">
+        <h4>📚 今天学了什么？</h4>
+        <div class="check-tags" id="check-learn-tags">
+          <span class="check-tag" onclick="toggleCheckTag(this)">语文</span>
+          <span class="check-tag" onclick="toggleCheckTag(this)">数学</span>
+          <span class="check-tag" onclick="toggleCheckTag(this)">英语</span>
+          <span class="check-tag" onclick="toggleCheckTag(this)">奥数</span>
+          <span class="check-tag" onclick="toggleCheckTag(this)">阅读</span>
+          <span class="check-tag" onclick="toggleCheckTag(this)">科学</span>
+        </div>
+        <textarea id="check-learn-detail" placeholder="具体学了什么内容？有什么收获？"></textarea>
+      </div>
+      
+      <div class="check-section">
+        <h4>🎸 兴趣练习</h4>
+        <div class="check-tags" id="check-hobby-tags">
+          <span class="check-tag" onclick="toggleCheckTag(this)">吉他</span>
+          <span class="check-tag" onclick="toggleCheckTag(this)">运动</span>
+          <span class="check-tag" onclick="toggleCheckTag(this)">画画</span>
+          <span class="check-tag" onclick="toggleCheckTag(this)">编程</span>
+          <span class="check-tag" onclick="toggleCheckTag(this)">其他</span>
+        </div>
+        <textarea id="check-hobby-detail" placeholder="练习了什么？感觉怎么样？"></textarea>
+      </div>
+      
+      <div class="check-section">
+        <h4>😊 心情与感悟</h4>
+        <div class="mood-picker" id="check-mood-picker">
+          <span class="mood-item" data-mood="😄" onclick="selectCheckMood('😄')">😄</span>
+          <span class="mood-item" data-mood="🤩" onclick="selectCheckMood('🤩')">🤩</span>
+          <span class="mood-item" data-mood="😊" onclick="selectCheckMood('😊')">😊</span>
+          <span class="mood-item" data-mood="🙂" onclick="selectCheckMood('🙂')">🙂</span>
+          <span class="mood-item" data-mood="😐" onclick="selectCheckMood('😐')">😐</span>
+          <span class="mood-item" data-mood="😔" onclick="selectCheckMood('😔')">😔</span>
+          <span class="mood-item" data-mood="😤" onclick="selectCheckMood('😤')">😤</span>
+          <span class="mood-item" data-mood="😢" onclick="selectCheckMood('😢')">😢</span>
+        </div>
+        <textarea id="check-mood-detail" placeholder="今天有什么特别的感受或想法？"></textarea>
+      </div>
+      
+      <div class="check-section">
+        <h4>💪 挑战与突破</h4>
+        <textarea id="check-challenge" placeholder="今天遇到什么困难？怎么解决的？"></textarea>
+      </div>
+    </div>
+    
+    <div class="form-actions">
+      <button class="btn" onclick="closeModal('modal-daily-check')">取消</button>
+      <button class="btn btn-primary" onclick="saveDailyCheck()">🌟 生成成长总结</button>
     </div>
   </div>
 </div>
