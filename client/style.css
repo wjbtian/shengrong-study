@@ -4449,153 +4449,160 @@ body::before {
   color: var(--text2);
 }
 
-/* === 日记页面统计 === */
-.diary-stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 32px;
-}
-
-.diary-stat-card {
-  background: var(--surface);
+/* === 日记心情墙 === */
+.mood-wall {
+  background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
   border-radius: var(--radius);
-  padding: 20px;
-  text-align: center;
+  padding: 24px;
+  margin-bottom: 32px;
   border: 1px solid var(--border);
-  transition: all var(--duration-normal) ease;
 }
 
-.diary-stat-card:hover {
-  border-color: var(--border2);
-  transform: translateY(-2px);
-}
-
-.diary-stat-icon {
-  font-size: 32px;
-  margin-bottom: 8px;
-}
-
-.diary-stat-value {
-  font-size: 32px;
-  font-weight: 800;
-  color: var(--text);
-}
-
-.diary-stat-label {
-  font-size: 13px;
+.mood-wall-title {
+  font-size: 14px;
+  font-weight: 600;
   color: var(--text2);
-  margin-top: 4px;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-/* 心情分布 */
-.mood-distribution {
+.mood-wall-items {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: 32px;
 }
 
-.mood-item {
+.mood-wall-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   padding: 12px 16px;
   background: var(--surface);
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
-  flex: 1;
-  min-width: 140px;
+  transition: all var(--duration-normal) ease;
+  cursor: pointer;
 }
 
-.mood-item-emoji {
-  font-size: 24px;
+.mood-wall-item:hover {
+  transform: translateY(-4px);
+  border-color: var(--border2);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
 }
 
-.mood-item-info {
-  flex: 1;
+.mood-wall-emoji {
+  font-size: 32px;
+  line-height: 1;
 }
 
-.mood-item-name {
-  font-size: 13px;
-  color: var(--text2);
+.mood-wall-date {
+  font-size: 11px;
+  color: var(--text3);
 }
 
-.mood-item-bar {
-  height: 6px;
-  background: var(--surface2);
-  border-radius: 3px;
-  margin-top: 4px;
+/* === 日记卡片列表 === */
+.diary-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.diary-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 24px;
+  border: 1px solid var(--border);
+  transition: all var(--duration-normal) ease;
+  position: relative;
   overflow: hidden;
 }
 
-.mood-item-fill {
-  height: 100%;
-  border-radius: 3px;
-  transition: width 1s var(--ease-smooth);
-}
-
-.mood-item-count {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text);
-}
-
-/* 日记时间轴 */
-.diary-timeline {
-  position: relative;
-  padding-left: 32px;
-  margin-bottom: 32px;
-}
-
-.diary-timeline::before {
+.diary-card::before {
   content: '';
   position: absolute;
-  left: 11px;
+  left: 0;
   top: 0;
   bottom: 0;
-  width: 2px;
-  background: var(--border);
+  width: 4px;
+  background: var(--accent);
+  opacity: 0;
+  transition: opacity var(--duration-normal);
 }
 
-.timeline-item {
-  position: relative;
-  padding-bottom: 24px;
+.diary-card:hover {
+  border-color: var(--border2);
+  transform: translateX(4px);
 }
 
-.timeline-dot {
-  position: absolute;
-  left: -26px;
-  top: 4px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: var(--surface);
-  border: 2px solid var(--accent);
+.diary-card:hover::before {
+  opacity: 1;
+}
+
+.diary-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.diary-card-mood {
+  font-size: 36px;
+  line-height: 1;
+}
+
+.diary-card-date {
+  font-size: 13px;
+  color: var(--text3);
+  background: var(--surface2);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+.diary-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.diary-card-content {
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.7;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.diary-card-footer {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.diary-card-tag {
+  font-size: 12px;
+  color: var(--text3);
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 10px;
+  gap: 4px;
 }
 
-.timeline-content {
-  background: var(--surface);
-  border-radius: var(--radius-sm);
-  padding: 16px;
-  border: 1px solid var(--border);
-}
-
-.timeline-date {
-  font-size: 12px;
-  color: var(--text2);
-  margin-bottom: 4px;
-}
-
-.timeline-title {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text);
-}
+/* 日记卡片不同心情的左边框色 */
+.diary-card[data-mood="😄"]::before { background: var(--accent); }
+.diary-card[data-mood="🤩"]::before { background: var(--yellow); }
+.diary-card[data-mood="😊"]::before { background: #38bdf8; }
+.diary-card[data-mood="🙂"]::before { background: var(--accent2); }
+.diary-card[data-mood="😐"]::before { background: var(--text2); }
+.diary-card[data-mood="😔"]::before { background: var(--text3); }
+.diary-card[data-mood="😤"]::before { background: var(--orange); }
+.diary-card[data-mood="😢"]::before { background: var(--red); }
 
 /* === 移动端优化 === */
 @media (max-width: 480px) {

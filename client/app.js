@@ -365,14 +365,8 @@ async function loadDiaryData() {
     const container = document.getElementById('diary-list');
     if (!container) return;
     
-    // 更新统计
-    updateDiaryStats(diary);
-    
-    // 渲染心情分布
-    renderMoodDistribution(diary);
-    
-    // 渲染时间轴
-    renderDiaryTimeline(diary);
+    // 渲染心情墙
+    renderMoodWall(diary);
     
     if (!diary || !diary.length) {
       container.innerHTML = `
@@ -389,123 +383,49 @@ async function loadDiaryData() {
   }
 }
 
-function updateDiaryStats(diary) {
-  const total = diary?.length || 0;
-  document.getElementById('diary-total').textContent = total;
-  
-  // 连续天数
-  const streak = calcDiaryStreak(diary);
-  document.getElementById('diary-streak').textContent = streak;
-  
-  // 开心指数
-  const happyMoods = ['😄','🤩','😊'];
-  const happyCount = diary?.filter(d => happyMoods.includes(d.mood)).length || 0;
-  const happyPercent = total ? Math.round((happyCount / total) * 100) : 0;
-  document.getElementById('diary-happy').textContent = happyPercent + '%';
-  
-  // 本月篇数
-  const thisMonth = new Date().toISOString().slice(0, 7);
-  const monthCount = diary?.filter(d => d.date?.startsWith(thisMonth)).length || 0;
-  document.getElementById('diary-this-month').textContent = monthCount;
-}
-
-function calcDiaryStreak(diary) {
-  if (!diary?.length) return 0;
-  const dates = [...new Set(diary.map(d => d.date).filter(Boolean))].sort().reverse();
-  if (!dates.length) return 0;
-  
-  let streak = 1;
-  const today = new Date().toISOString().split('T')[0];
-  const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-  
-  if (dates[0] !== today && dates[0] !== yesterday) return 0;
-  
-  for (let i = 1; i < dates.length; i++) {
-    const prev = new Date(dates[i-1]);
-    const curr = new Date(dates[i]);
-    const diff = (prev - curr) / 86400000;
-    if (diff === 1) streak++;
-    else break;
-  }
-  return streak;
-}
-
-function renderMoodDistribution(diary) {
-  const container = document.getElementById('mood-distribution');
+function renderMoodWall(diary) {
+  const container = document.getElementById('mood-wall-items');
   if (!container) return;
   
   if (!diary?.length) {
-    container.innerHTML = '<p style="color:var(--text3)">暂无数据</p>';
+    container.innerHTML = '<span style="color:var(--text3)">还没有日记</span>';
     return;
   }
   
-  const moodMap = {};
-  diary.forEach(d => {
-    moodMap[d.mood] = (moodMap[d.mood] || 0) + 1;
-  });
-  
-  const moodColors = {
-    '😄': 'var(--accent)',
-    '🤩': 'var(--yellow)',
-    '😊': '#38bdf8',
-    '🙂': 'var(--accent2)',
-    '😐': 'var(--text2)',
-    '😔': 'var(--text3)',
-    '😤': 'var(--orange)',
-    '😢': 'var(--red)'
-  };
-  
-  const maxCount = Math.max(...Object.values(moodMap));
-  
-  container.innerHTML = Object.entries(moodMap)
-    .sort((a, b) => b[1] - a[1])
-    .map(([mood, count]) => {
-      const percent = Math.round((count / diary.length) * 100);
-      return `
-        <div class="mood-item">
-          <span class="mood-item-emoji">${mood}</span>
-          <div class="mood-item-info">
-            <div class="mood-item-name">${percent}%</div>
-            <div class="mood-item-bar">
-              <div class="mood-item-fill" style="width:${(count/maxCount)*100}%;background:${moodColors[mood] || 'var(--accent)'}"></div>
-            </div>
-          </div>
-          <span class="mood-item-count">${count}</span>
-        </div>`;
-    }).join('');
-}
-
-function renderDiaryTimeline(diary) {
-  const container = document.getElementById('diary-timeline');
-  if (!container) return;
-  
-  if (!diary?.length) {
-    container.innerHTML = '<p style="color:var(--text3)">暂无数据</p>';
-    return;
-  }
-  
-  const recent = diary.slice(-10).reverse();
+  // 取最近14条日记的心情
+  const recent = diary.slice(-14).reverse();
   container.innerHTML = recent.map(d => `
-    <div class="timeline-item">
-      <div class="timeline-dot">${d.mood || '😊'}</div>
-      <div class="timeline-content">
-        <div class="timeline-date">${formatDate(d.date)}</div>
-        <div class="timeline-title">${d.title}</div>
-      </div>
+    <div class="mood-wall-item" title="${d.title}">
+      <span class="mood-wall-emoji">${d.mood || '😊'}</span>
+      <span class="mood-wall-date">${d.date?.slice(5) || ''}</span>
     </div>
   `).join('');
 }
 
 function createDiaryCard(d) {
+  // 根据心情获取标签文字
+  const moodLabels = {
+    '😄': '开心',
+    '🤩': '超棒',
+    '😊': '不错',
+    '🙂': '还好',
+    '😐': '一般',
+    '😔': '难过',
+    '😤': '生气',
+    '😢': '伤心'
+  };
+  
   return `
-    <div class="diary-item" data-id="${d.id}">
-      <span class="diary-mood">${d.mood}</span>
-      <div class="diary-body">
-        <div class="diary-meta">
-          <span class="diary-date">${formatDate(d.date)}</span>
-        </div>
-        <div class="diary-title">${d.title}</div>
-        <div class="diary-preview">${d.content}</div>
+    <div class="diary-card" data-id="${d.id}" data-mood="${d.mood}">
+      <div class="diary-card-header">
+        <span class="diary-card-mood">${d.mood}</span>
+        <span class="diary-card-date">${formatDate(d.date)}</span>
+      </div>
+      <div class="diary-card-title">${d.title}</div>
+      <div class="diary-card-content">${d.content}</div>
+      <div class="diary-card-footer">
+        <span class="diary-card-tag">${moodLabels[d.mood] || '心情'}</span>
+        <span class="diary-card-tag">📖 ${d.content?.length || 0} 字</span>
       </div>
     </div>`;
 }
