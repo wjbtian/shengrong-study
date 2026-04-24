@@ -119,7 +119,12 @@
     if (n.getAttribute('href') === 'diary.html') n.classList.add('active');
   });
   // 初始化页面
-  renderDiary();
+  console.log('🔄 正在加载日记...');
+  renderDiary().then(() => {
+    console.log('✅ 日记加载完成');
+  }).catch(err => {
+    console.error('❌ 日记加载失败:', err);
+  });
 </script>
 </body>
 </html>

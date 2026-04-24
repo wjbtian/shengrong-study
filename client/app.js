@@ -575,18 +575,21 @@ function pickMood(m) {
 }
 
 async function renderDiary() {
-  const diary = await api('GET', '/diary');
-  if (diary.length === 0) {
-    document.getElementById('diary-list').innerHTML = `
-      <div class="empty-state">
-        <span class="emoji">📝</span>
-        <p>还没有日记<br>点击右上角写一篇吧</p>
-      </div>
-    `;
-    return;
-  }
-  
-  document.getElementById('diary-list').innerHTML = diary.map(d => `
+  try {
+    const diary = await api('GET', '/diary');
+    console.log('📔 日记数据:', diary);
+    
+    if (!diary || !Array.isArray(diary) || diary.length === 0) {
+      document.getElementById('diary-list').innerHTML = `
+        <div class="empty-state">
+          <span class="emoji">📝</span>
+          <p>还没有日记<br>点击右上角写一篇吧</p>
+        </div>
+      `;
+      return;
+    }
+    
+    document.getElementById('diary-list').innerHTML = diary.map(d => `
     <div class="diary-item" onclick="viewDiaryDetail(${d.id})">
       <span class="diary-mood">${d.mood}</span>
       <div class="diary-body">
@@ -601,6 +604,15 @@ async function renderDiary() {
       </div>
     </div>
   `).join('');
+  } catch (err) {
+    console.error('❌ 加载日记失败:', err);
+    document.getElementById('diary-list').innerHTML = `
+      <div class="empty-state">
+        <span class="emoji">⚠️</span>
+        <p>加载失败<br>请检查网络连接</p>
+      </div>
+    `;
+  }
 }
 
 function viewDiaryDetail(id) {
