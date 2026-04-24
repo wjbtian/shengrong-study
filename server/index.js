@@ -25,6 +25,13 @@ const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
 async function startServer() {
   // 初始化数据库
   await initDB();
+  
+  // 如果是新数据库，初始化示例数据
+  const diaryCount = get('SELECT COUNT(*) as c FROM diary');
+  if (!diaryCount || diaryCount.c === 0) {
+    console.log('新数据库，初始化示例数据...');
+    require('./db/seed');
+  }
 
   // 中间件
   app.use(cors());

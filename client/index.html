@@ -323,6 +323,11 @@
 <script>
   // 初始化首页
   updateHomePage();
+  
+  // 测试API连接
+  fetch('/api/diary').then(r => r.json()).then(data => {
+    console.log('✅ API连接成功，日记数据:', data.length, '条');
+  }).catch(e => console.error('❌ API错误:', e));
 </script>
 </body>
 </html>
