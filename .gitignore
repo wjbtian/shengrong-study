@@ -4,8 +4,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Database
-server/db/*.db
+# Database (保留示例数据)
+# server/db/*.db
 
 # Environment
 .env
