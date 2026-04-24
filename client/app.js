@@ -171,36 +171,59 @@ async function loadHomeData() {
   updateTodayDate();
   
   try {
+    console.log('开始加载首页数据...');
     const [diary, shines, guitar, tech, progress] = await Promise.all([
-      api('GET', '/diary'),
-      api('GET', '/shines'),
-      api('GET', '/guitar'),
-      api('GET', '/tech'),
-      api('GET', '/progress')
+      api('GET', '/diary').catch(e => { console.error('日记API失败:', e); return []; }),
+      api('GET', '/shines').catch(e => { console.error('闪光API失败:', e); return []; }),
+      api('GET', '/guitar').catch(e => { console.error('吉他API失败:', e); return []; }),
+      api('GET', '/tech').catch(e => { console.error('科技API失败:', e); return []; }),
+      api('GET', '/progress').catch(e => { console.error('进度API失败:', e); return {}; })
     ]);
+    console.log('数据加载完成:', { diary: diary?.length, shines: shines?.length, guitar: guitar?.length, tech: tech?.length });
     
     // 统计卡片
-    document.getElementById('home-diary-count').textContent = diary?.length || 0;
-    document.getElementById('home-shine-count').textContent = shines?.length || 0;
-    document.getElementById('home-guitar-count').textContent = guitar?.length || 0;
-    document.getElementById('home-tech-count').textContent = tech?.length || 0;
+    const diaryCountEl = document.getElementById('home-diary-count');
+    if (diaryCountEl) diaryCountEl.textContent = diary?.length || 0;
+    
+    const shineCountEl = document.getElementById('home-shine-count');
+    if (shineCountEl) shineCountEl.textContent = shines?.length || 0;
+    
+    const guitarCountEl = document.getElementById('home-guitar-count');
+    if (guitarCountEl) guitarCountEl.textContent = guitar?.length || 0;
+    
+    const techCountEl = document.getElementById('home-tech-count');
+    if (techCountEl) techCountEl.textContent = tech?.length || 0;
     
     // 本周趋势
-    document.getElementById('diary-trend').textContent = '+' + countThisWeek(diary) + ' 本周';
-    document.getElementById('shine-trend').textContent = '+' + countThisWeek(shines) + ' 本周';
-    document.getElementById('guitar-trend').textContent = '+' + countThisWeek(guitar) + ' 本周';
-    document.getElementById('tech-trend').textContent = '+' + countThisWeek(tech) + ' 本周';
+    const diaryTrendEl = document.getElementById('diary-trend');
+    if (diaryTrendEl) diaryTrendEl.textContent = '+' + countThisWeek(diary) + ' 本周';
+    
+    const shineTrendEl = document.getElementById('shine-trend');
+    if (shineTrendEl) shineTrendEl.textContent = '+' + countThisWeek(shines) + ' 本周';
+    
+    const guitarTrendEl = document.getElementById('guitar-trend');
+    if (guitarTrendEl) guitarTrendEl.textContent = '+' + countThisWeek(guitar) + ' 本周';
+    
+    const techTrendEl = document.getElementById('tech-trend');
+    if (techTrendEl) techTrendEl.textContent = '+' + countThisWeek(tech) + ' 本周';
     
     // 快速入口
-    document.getElementById('diary-count').textContent = (diary?.length || 0) + ' 篇';
-    document.getElementById('shine-count').textContent = (shines?.length || 0) + ' 个';
-    document.getElementById('guitar-count').textContent = (guitar?.length || 0) + ' 次';
-    document.getElementById('tech-count').textContent = (tech?.length || 0) + ' 条';
+    const quickDiaryEl = document.getElementById('diary-count');
+    if (quickDiaryEl) quickDiaryEl.textContent = (diary?.length || 0) + ' 篇';
+    
+    const quickShineEl = document.getElementById('shine-count');
+    if (quickShineEl) quickShineEl.textContent = (shines?.length || 0) + ' 个';
+    
+    const quickGuitarEl = document.getElementById('guitar-count');
+    if (quickGuitarEl) quickGuitarEl.textContent = (guitar?.length || 0) + ' 次';
+    
+    const quickTechEl = document.getElementById('tech-count');
+    if (quickTechEl) quickTechEl.textContent = (tech?.length || 0) + ' 条';
     
     // 学习进度
     const doneUnits = progress?.doneUnits || [];
     const doneOM = progress?.doneOM || [];
-    updateSubjectProgress('chinese', doneUnits, 'chinese_'); 8, 8);
+    updateSubjectProgress('chinese', doneUnits, 'chinese_', 8, 8);
     updateSubjectProgress('math', doneUnits, 'math_', 6, 6);
     updateSubjectProgress('english', doneUnits, 'english_', 6, 6);
     updateOlympiadProgress(doneOM);
@@ -212,16 +235,24 @@ async function loadHomeData() {
     renderMoodTimeline(diary);
     
     // 最近日记
-    const recentDiary = (diary || []).slice(0, 3);
-    document.getElementById('recent-diary').innerHTML = recentDiary.length 
-      ? recentDiary.map(d => createDiaryCard(d)).join('')
-      : '<p style="color:var(--text-3)">还没有日记</p>';
+    const recentDiaryEl = document.getElementById('recent-diary');
+    if (recentDiaryEl) {
+      const recentDiary = (diary || []).slice(0, 3);
+      recentDiaryEl.innerHTML = recentDiary.length 
+        ? recentDiary.map(d => createDiaryCard(d)).join('')
+        : '<p style="color:var(--text3)">还没有日记</p>';
+    }
     
     // 最近闪光
-    const recentShine = (shines || []).slice(0, 3);
-    document.getElementById('recent-shine').innerHTML = recentShine.length
-      ? recentShine.map(s => createShineCard(s)).join('')
-      : '<p style="color:var(--text-3)">还没有闪光时刻</p>';
+    const recentShineEl = document.getElementById('recent-shine');
+    if (recentShineEl) {
+      const recentShine = (shines || []).slice(0, 3);
+      recentShineEl.innerHTML = recentShine.length
+        ? recentShine.map(s => createShineCard(s)).join('')
+        : '<p style="color:var(--text3)">还没有闪光时刻</p>';
+    }
+    
+    console.log('首页数据渲染完成');
       
   } catch (err) {
     console.error('加载首页数据失败:', err);
@@ -281,18 +312,20 @@ function renderActivityChart(diary, shines, guitar) {
     const gCount = guitar?.filter(g => g.date === date).length || 0;
     const total = dCount + sCount + gCount;
     const maxHeight = 120;
-    const height = Math.max(4, (total / 5) * maxHeight);
     
     const dayIndex = (today - 6 + idx + 7) % 7;
     const label = dayLabels[dayIndex === 0 ? 6 : dayIndex - 1];
     const isToday = idx === 6;
     
+    // 计算每根柱子的高度（最多3条记录就满高度）
+    const getHeight = (count) => count ? Math.max(4, Math.min(maxHeight, (count / 3) * maxHeight)) : 0;
+    
     return `
       <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
         <div style="display:flex;gap:2px;align-items:flex-end;height:${maxHeight}px;">
-          <div class="activity-bar" style="width:8px;height:${dCount ? Math.max(4, (dCount/3)*maxHeight) : 0}px;background:var(--accent);" data-value="${dCount}" title="日记 ${dCount}"></div>
-          <div class="activity-bar" style="width:8px;height:${sCount ? Math.max(4, (sCount/3)*maxHeight) : 0}px;background:var(--accent2);" data-value="${sCount}" title="闪光 ${sCount}"></div>
-          <div class="activity-bar" style="width:8px;height:${gCount ? Math.max(4, (gCount/3)*maxHeight) : 0}px;background:var(--yellow);" data-value="${gCount}" title="吉他 ${gCount}"></div>
+          <div class="activity-bar" style="width:8px;height:${getHeight(dCount)}px;background:var(--accent);" data-value="${dCount}" title="日记 ${dCount}"></div>
+          <div class="activity-bar" style="width:8px;height:${getHeight(sCount)}px;background:var(--accent2);" data-value="${sCount}" title="闪光 ${sCount}"></div>
+          <div class="activity-bar" style="width:8px;height:${getHeight(gCount)}px;background:var(--yellow);" data-value="${gCount}" title="吉他 ${gCount}"></div>
         </div>
         <span style="font-size:11px;color:${isToday ? 'var(--accent)' : 'var(--text3)'};font-weight:${isToday ? 700 : 400};">${label}</span>
       </div>`;
