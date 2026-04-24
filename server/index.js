@@ -30,7 +30,7 @@ async function startServer() {
   const diaryCount = get('SELECT COUNT(*) as c FROM diary');
   if (!diaryCount || diaryCount.c === 0) {
     console.log('新数据库，初始化示例数据...');
-    require('./db/seed');
+    await require('./db/seed');
   }
 
   // 中间件
