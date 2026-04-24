@@ -5743,9 +5743,14 @@ body::before {
   color: white;
 }
 
-.typo-upload {
-  margin-top: 16px;
+.typo-hint {
   text-align: center;
+  padding: 12px;
+  background: rgba(74, 222, 128, 0.05);
+  border: 1px dashed rgba(74, 222, 128, 0.3);
+  border-radius: var(--radius-sm);
+  color: var(--text2);
+  font-size: 13px;
 }
 
 /* 移动端适配 */

@@ -912,12 +912,10 @@ function showChineseDetail(unitId, color) {
   html += '<div class="typo-section">';
   html += '<h4>⚠️ 错别字记录</h4>';
   html += '<div id="typo-list-' + unitId + '" class="typo-list">';
-  html += '<p class="typo-empty">暂无记录，上传默写图片后自动识别</p>';
+  html += '<p class="typo-empty">暂无记录</p>';
   html += '</div>';
-  html += '<div class="typo-upload">';
-  html += '<label class="btn btn-sm btn-primary" for="typo-upload-' + unitId + '">📷 上传默写图片</label>';
-  html += `<input type="file" id="typo-upload-${unitId}" accept="image/*" style="display:none" onchange="uploadTypoImage('${unitId}', this)">`;
-  html += '</div></div>';
+  html += '<div class="typo-hint">💡 在微信对话中发送默写图片，我会帮你记录到这里</div>';
+  html += '</div>';
   
   // 知识点
   if (data.knowledge.length > 0) {
@@ -951,66 +949,36 @@ function closeChineseDetail() {
   if (detail) detail.style.display = 'none';
 }
 
-// 上传默写图片（记录错别字）
-async function uploadTypoImage(unitId, input) {
-  const file = input.files[0];
-  if (!file) return;
-  
+// 添加错别字记录（从微信对话中添加）
+async function addTypoRecord(unitId, word, correct) {
   try {
-    // 显示上传中
-    const listEl = document.getElementById('typo-list-' + unitId);
-    if (listEl) {
-      listEl.innerHTML = '<p class="typo-loading">🔄 正在分析图片...</p>';
-    }
-    
-    // 上传到服务器
-    const formData = new FormData();
-    formData.append('image', file);
-    formData.append('unitId', unitId);
-    formData.append('date', new Date().toISOString().split('T')[0]);
-    
-    const res = await fetch(API + '/chinese/typo', {
-      method: 'POST',
-      body: formData
+    const res = await api('POST', '/chinese/typo', {
+      unitId,
+      word,
+      correct: correct || '',
+      date: new Date().toISOString().split('T')[0]
     });
     
-    const result = await res.json();
-    
-    if (result.ok) {
-      // 显示识别的错别字
-      showTypoList(unitId, result.typos || []);
-      alert('✅ 已记录 ' + (result.typos?.length || 0) + ' 个错别字');
-    } else {
-      // 上传成功但识别失败，手动输入
-      const manualTypo = prompt('图片上传成功！请输入错别字（多个用逗号分隔）：');
-      if (manualTypo) {
-        const typos = manualTypo.split(/[,，]/).map(t => t.trim()).filter(t => t);
-        await saveTypos(unitId, typos);
-        showTypoList(unitId, typos.map(t => ({ word: t, correct: '', date: new Date().toISOString().split('T')[0] })));
-      }
+    if (res.ok) {
+      // 刷新显示
+      loadTypoList(unitId);
     }
   } catch (err) {
-    console.error('上传失败:', err);
-    // 离线模式：手动输入
-    const manualTypo = prompt('图片上传失败，请手动输入错别字（多个用逗号分隔）：');
-    if (manualTypo) {
-      const typos = manualTypo.split(/[,，]/).map(t => t.trim()).filter(t => t);
-      showTypoList(unitId, typos.map(t => ({ word: t, correct: '', date: new Date().toISOString().split('T')[0] })));
-    }
+    console.error('添加错别字记录失败:', err);
   }
-  
-  // 清空input
-  input.value = '';
 }
 
-// 保存错别字到服务器
-async function saveTypos(unitId, typos) {
+// 加载错别字列表
+async function loadTypoList(unitId) {
   try {
-    await api('POST', '/chinese/typo', { unitId, typos });
+    const res = await api('GET', `/chinese/typo/${unitId}`);
+    showTypoList(unitId, res.typos || []);
   } catch (err) {
-    console.error('保存错别字失败:', err);
+    console.error('加载错别字失败:', err);
   }
 }
+
+
 
 // 显示错别字列表
 function showTypoList(unitId, typos) {
