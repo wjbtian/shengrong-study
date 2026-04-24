@@ -107,6 +107,13 @@
           <div class="shine-category-count" id="count-获奖">0 个闪光</div>
           <div class="shine-category-preview" id="preview-获奖"></div>
         </div>
+        <div class="shine-category-card" onclick="showCategory('运动')">
+          <div class="shine-category-icon">🚴</div>
+          <div class="shine-category-name">运动时刻</div>
+          <div class="shine-category-desc">爬山、羽毛球、骑车</div>
+          <div class="shine-category-count" id="count-运动">0 个闪光</div>
+          <div class="shine-category-preview" id="preview-运动"></div>
+        </div>
         <div class="shine-category-card" onclick="showCategory('创作')">
           <div class="shine-category-icon">🎨</div>
           <div class="shine-category-name">创意作品</div>
@@ -114,8 +121,9 @@
           <div class="shine-category-preview" id="preview-创作"></div>
         </div>
         <div class="shine-category-card" onclick="showCategory('表演')">
-          <div class="shine-category-icon">🎭</div>
-          <div class="shine-category-name">舞台表演</div>
+          <div class="shine-category-icon">🎤</div>
+          <div class="shine-category-name">才艺展示</div>
+          <div class="shine-category-desc">演出、表演、展示</div>
           <div class="shine-category-count" id="count-表演">0 个闪光</div>
           <div class="shine-category-preview" id="preview-表演"></div>
         </div>
@@ -165,15 +173,23 @@
       <div class="form-group">
         <select id="shine-type">
           <option value="🏆 获奖">🏆 获奖</option>
+          <option value="🚴 运动">🚴 运动（爬山/羽毛球/骑车等）</option>
           <option value="🎨 创作">🎨 创作</option>
-          <option value="🎭 表演">🎭 表演</option>
+          <option value="🎤 表演">🎤 才艺展示</option>
           <option value="💡 发现">💡 发现</option>
           <option value="🌟 进步">🌟 进步</option>
           <option value="❤️ 好人好事">❤️ 好人好事</option>
         </select>
       </div>
       <textarea class="textarea" id="shine-desc" placeholder="描述这个精彩瞬间..."></textarea>
-      <input type="file" class="input" id="shine-photo" accept="image/*">
+      <div class="form-group">
+        <label style="color:var(--text2);font-size:13px;margin-bottom:8px;display:block;">📸 上传照片</label>
+        <input type="file" class="input" id="shine-photo" accept="image/*" onchange="previewShinePhoto(this)">
+        <div id="shine-photo-preview" style="margin-top:12px;display:none;">
+          <img id="shine-photo-preview-img" style="max-width:100%;max-height:200px;border-radius:8px;border:1px solid var(--border);">
+          <button type="button" class="btn" style="margin-top:8px;font-size:12px;" onclick="clearShinePhoto()">清除</button>
+        </div>
+      </div>
     </div>
     <div class="modal-footer">
       <button class="btn" onclick="closeModal('modal-shine')">取消</button>
@@ -218,13 +234,32 @@
   }
   
   function getCategoryEmoji(cat) {
-    const map = { '获奖': '🏆', '创作': '🎨', '表演': '🎭', '进步': '🌟', '好人好事': '❤️', '其他': '💡' };
+    const map = { '获奖': '🏆', '运动': '🚴', '创作': '🎨', '表演': '🎤', '进步': '🌟', '好人好事': '❤️', '其他': '💡' };
     return map[cat] || '✨';
   }
   
   function getCategoryName(cat) {
-    const map = { '获奖': '获奖荣誉', '创作': '创意作品', '表演': '舞台表演', '进步': '进步突破', '好人好事': '好人好事', '其他': '其他精彩' };
+    const map = { '获奖': '获奖荣誉', '运动': '运动时刻', '创作': '创意作品', '表演': '才艺展示', '进步': '进步突破', '好人好事': '好人好事', '其他': '其他精彩' };
     return map[cat] || cat;
+  }
+  
+  // 照片预览
+  function previewShinePhoto(input) {
+    const preview = document.getElementById('shine-photo-preview');
+    const img = document.getElementById('shine-photo-preview-img');
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        img.src = e.target.result;
+        preview.style.display = 'block';
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+  
+  function clearShinePhoto() {
+    document.getElementById('shine-photo').value = '';
+    document.getElementById('shine-photo-preview').style.display = 'none';
   }
   
   function renderCategoryTimeline(shines) {
@@ -309,7 +344,7 @@
   
   // 更新分类卡片
   function updateCategoryCards() {
-    const categories = ['获奖', '创作', '表演', '进步', '好人好事', '其他'];
+    const categories = ['获奖', '运动', '创作', '表演', '进步', '好人好事', '其他'];
     
     categories.forEach(cat => {
       const filtered = allShinesData.filter(s => s.type && s.type.includes(cat));
