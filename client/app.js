@@ -716,7 +716,119 @@ const KEY_WORDS = {
   }
 };
 
-// --- 科目数据（横向鱼骨图版）---
+// --- 数学思维导图数据 ---
+const MATH_FORMULAS = {
+  'math_1': [
+    { name: '数位顺序', formula: '个位 → 十位 → 百位 → 千位 → 万位', type: '概念' },
+    { name: '大数读法', formula: '从高位读起，每级末尾的0不读', type: '规则' }
+  ],
+  'math_2': [
+    { name: '公顷与平方米', formula: '1公顷 = 10,000平方米', type: '换算' },
+    { name: '平方千米', formula: '1平方千米 = 100公顷', type: '换算' }
+  ],
+  'math_3': [
+    { name: '角的分类', formula: '锐角 < 90° < 直角 < 钝角 < 180° < 平角 < 360°', type: '分类' },
+    { name: '量角器使用', formula: '中心对顶点，0线对一边，看另一边度数', type: '方法' }
+  ],
+  'math_4': [
+    { name: '三位数乘两位数', formula: '先用个位乘，再用十位乘，最后相加', type: '算法' },
+    { name: '积的变化规律', formula: '一个因数不变，另一个乘几，积也乘几', type: '规律' }
+  ],
+  'math_5': [
+    { name: '平行四边形', formula: '对边平行且相等', type: '性质' },
+    { name: '梯形', formula: '只有一组对边平行', type: '性质' }
+  ],
+  'math_6': [
+    { name: '除数是两位数的除法', formula: '先看被除数前两位，不够除看前三位', type: '算法' },
+    { name: '商的变化规律', formula: '被除数和除数同时乘或除以相同数，商不变', type: '规律' }
+  ]
+};
+
+const MATH_MISTAKES = [];
+
+// --- 英语单词与对话数据 ---
+const ENGLISH_VOCAB = {
+  'en_1': [
+    { word: 'classroom', phonetic: '/ˈklɑːsruːm/', meaning: '教室', example: 'This is my classroom.' },
+    { word: 'window', phonetic: '/ˈwɪndəʊ/', meaning: '窗户', example: 'Open the window, please.' },
+    { word: 'blackboard', phonetic: '/ˈblækbɔːd/', meaning: '黑板', example: 'Look at the blackboard.' },
+    { word: 'light', phonetic: '/laɪt/', meaning: '灯', example: 'Turn on the light.' },
+    { word: 'picture', phonetic: '/ˈpɪktʃə/', meaning: '图画', example: 'There is a picture on the wall.' }
+  ],
+  'en_2': [
+    { word: 'schoolbag', phonetic: '/ˈskuːlbæɡ/', meaning: '书包', example: 'My schoolbag is heavy.' },
+    { word: 'maths', phonetic: '/mæθs/', meaning: '数学', example: 'I like maths.' },
+    { word: 'English', phonetic: '/ˈɪŋɡlɪʃ/', meaning: '英语', example: 'We have English today.' },
+    { word: 'Chinese', phonetic: '/ˌtʃaɪˈniːz/', meaning: '语文', example: 'Chinese is interesting.' },
+    { word: 'storybook', phonetic: '/ˈstɔːribʊk/', meaning: '故事书', example: 'I have a storybook.' }
+  ],
+  'en_3': [
+    { word: 'strong', phonetic: '/strɒŋ/', meaning: '强壮的', example: 'He is strong.' },
+    { word: 'friendly', phonetic: '/ˈfrendli/', meaning: '友好的', example: 'She is friendly.' },
+    { word: 'quiet', phonetic: '/ˈkwaɪət/', meaning: '安静的', example: 'Be quiet, please.' },
+    { word: 'hair', phonetic: '/heə/', meaning: '头发', example: 'She has long hair.' },
+    { word: 'glasses', phonetic: '/ˈɡlɑːsɪz/', meaning: '眼镜', example: 'He wears glasses.' }
+  ],
+  'en_4': [
+    { word: 'bedroom', phonetic: '/ˈbedruːm/', meaning: '卧室', example: 'This is my bedroom.' },
+    { word: 'living room', phonetic: '/ˈlɪvɪŋ ruːm/', meaning: '客厅', example: 'Watch TV in the living room.' },
+    { word: 'kitchen', phonetic: '/ˈkɪtʃɪn/', meaning: '厨房', example: 'Mom is in the kitchen.' },
+    { word: 'bathroom', phonetic: '/ˈbɑːθruːm/', meaning: '浴室', example: 'The bathroom is clean.' },
+    { word: 'study', phonetic: '/ˈstʌdi/', meaning: '书房', example: 'Dad is in the study.' }
+  ],
+  'en_5': [
+    { word: 'beef', phonetic: '/biːf/', meaning: '牛肉', example: 'I like beef.' },
+    { word: 'chicken', phonetic: '/ˈtʃɪkɪn/', meaning: '鸡肉', example: 'Have some chicken.' },
+    { word: 'noodles', phonetic: '/ˈnuːdlz/', meaning: '面条', example: 'I love noodles.' },
+    { word: 'soup', phonetic: '/suːp/', meaning: '汤', example: 'The soup is hot.' },
+    { word: 'vegetable', phonetic: '/ˈvedʒtəbl/', meaning: '蔬菜', example: 'Eat more vegetables.' }
+  ],
+  'en_6': [
+    { word: 'parents', phonetic: '/ˈpeərənts/', meaning: '父母', example: 'My parents are kind.' },
+    { word: 'cousin', phonetic: '/ˈkʌzn/', meaning: '堂/表兄弟姐妹', example: 'He is my cousin.' },
+    { word: 'uncle', phonetic: '/ˈʌŋkl/', meaning: '叔叔', example: 'My uncle is a doctor.' },
+    { word: 'aunt', phonetic: '/ɑːnt/', meaning: '阿姨', example: 'My aunt is a teacher.' },
+    { word: 'baby', phonetic: '/ˈbeɪbi/', meaning: '婴儿', example: 'The baby is cute.' }
+  ]
+};
+
+const ENGLISH_DIALOGUES = {
+  'en_1': [
+    { title: '介绍教室', a: 'We have a new classroom.', b: 'Really? Let\'s go and see!' },
+    { title: '询问位置', a: 'Where is it?', b: 'It\'s near the window.' }
+  ],
+  'en_2': [
+    { title: '谈论书包', a: 'What\'s in your schoolbag?', b: 'An English book, a maths book...' },
+    { title: '颜色询问', a: 'What colour is it?', b: 'It\'s black and white.' }
+  ],
+  'en_3': [
+    { title: '描述朋友', a: 'Who\'s he?', b: 'He is Zhang Peng. He is tall and strong.' },
+    { title: '外貌询问', a: 'What\'s her name?', b: 'Her name is Amy. She has long hair.' }
+  ],
+  'en_4': [
+    { title: '介绍房间', a: 'Is this your bedroom?', b: 'Yes, it is. It\'s nice.' },
+    { title: '物品位置', a: 'Where are the keys?', b: 'They are in the door.' }
+  ],
+  'en_5': [
+    { title: '点餐', a: 'What would you like?', b: 'I\'d like some beef, please.' },
+    { title: '用餐', a: 'Dinner\'s ready!', b: 'Thanks! Everything looks good.' }
+  ],
+  'en_6': [
+    { title: '介绍家人', a: 'How many people are there in your family?', b: 'Six. My parents, my...' },
+    { title: '职业询问', a: 'What\'s your father\'s job?', b: 'He is a doctor.' }
+  ]
+};
+
+const ENGLISH_SCENES = [
+  { id: 'en_1', name: 'My Classroom', icon: '🏫', color: '#818cf8', desc: '教室物品与位置' },
+  { id: 'en_2', name: 'My Schoolbag', icon: '🎒', color: '#f472b6', desc: '学习用品' },
+  { id: 'en_3', name: 'My Friends', icon: '👫', color: '#4ade80', desc: '人物描述' },
+  { id: 'en_4', name: 'My Home', icon: '🏠', color: '#fbbf24', desc: '房间与家具' },
+  { id: 'en_5', name: 'Dinner\'s Ready', icon: '🍽️', color: '#f87171', desc: '食物与用餐' },
+  { id: 'en_6', name: 'Meet My Family', icon: '👨‍👩‍👧‍👦', color: '#a78bfa', desc: '家庭成员' }
+];
+
+// --- 科目数据加载 ---
 async function loadSubjectData(subject) {
   try {
     const progress = await api('GET', '/progress');
@@ -751,42 +863,85 @@ async function loadSubjectData(subject) {
       doneEl.style.color = cfg.color;
     }
     
-    // 渲染横向鱼骨图
-    const container = document.getElementById(subject + '-fishbone-h');
-    if (!container) return;
-    
-    // 保留开始和结束标记，中间插入单元节点
-    const startEl = container.querySelector('.fishbone-h-start');
-    const endEl = container.querySelector('.fishbone-h-end');
-    
-    // 清除旧节点（保留开始和结束）
-    container.querySelectorAll('.fishbone-h-node').forEach(n => n.remove());
-    
-    cfg.units.forEach((u, idx) => {
-      const isDone = doneUnits.includes(u.id);
-      const node = document.createElement('div');
-      node.className = `fishbone-h-node ${isDone ? 'done' : ''}`;
-      node.style.setProperty('--node-color', cfg.color);
-      node.innerHTML = `
-        <div class="fishbone-h-node-dot">${isDone ? '✓' : idx + 1}</div>
-        <div class="fishbone-h-node-label">${u.name.split('：')[0]}</div>
-        <div class="fishbone-h-node-desc">${isDone ? '已完成' : '进行中'}</div>
-      `;
-      node.onclick = () => showChineseDetail(u.id, cfg.color);
-      
-      // 插入到结束标记之前
-      container.insertBefore(node, endEl);
-    });
-    
-    // 绑定关闭按钮
-    const closeBtn = document.getElementById(subject + '-detail-close');
-    if (closeBtn) {
-      closeBtn.onclick = () => closeChineseDetail();
+    // 根据学科渲染不同布局
+    if (subject === 'chinese') {
+      renderChineseFishbone(cfg, doneUnits);
+    } else if (subject === 'math') {
+      renderMathMindmap(cfg, doneUnits);
+    } else if (subject === 'english') {
+      renderEnglishScenes(cfg, doneUnits);
     }
     
   } catch (err) {
     console.error('加载科目数据失败:', err);
   }
+}
+
+// 渲染语文横向鱼骨图
+function renderChineseFishbone(cfg, doneUnits) {
+  const container = document.getElementById('chinese-fishbone-h');
+  if (!container) return;
+  
+  const startEl = container.querySelector('.fishbone-h-start');
+  const endEl = container.querySelector('.fishbone-h-end');
+  container.querySelectorAll('.fishbone-h-node').forEach(n => n.remove());
+  
+  cfg.units.forEach((u, idx) => {
+    const isDone = doneUnits.includes(u.id);
+    const node = document.createElement('div');
+    node.className = `fishbone-h-node ${isDone ? 'done' : ''}`;
+    node.style.setProperty('--node-color', cfg.color);
+    node.innerHTML = `
+      <div class="fishbone-h-node-dot">${isDone ? '✓' : idx + 1}</div>
+      <div class="fishbone-h-node-label">${u.name.split('：')[0]}</div>
+      <div class="fishbone-h-node-desc">${isDone ? '已完成' : '进行中'}</div>
+    `;
+    node.onclick = () => showChineseDetail(u.id, cfg.color);
+    container.insertBefore(node, endEl);
+  });
+  
+  const closeBtn = document.getElementById('chinese-detail-close');
+  if (closeBtn) closeBtn.onclick = () => closeChineseDetail();
+}
+
+// 渲染数学思维导图
+function renderMathMindmap(cfg, doneUnits) {
+  const container = document.getElementById('math-mindmap');
+  if (!container) return;
+  
+  container.innerHTML = cfg.units.map((u, idx) => {
+    const isDone = doneUnits.includes(u.id);
+    const formulas = MATH_FORMULAS[u.id] || [];
+    return `
+      <div class="mindmap-node ${isDone ? 'done' : ''}" onclick="showMathDetail('${u.id}')">
+        <div class="mindmap-node-header">
+          <span class="mindmap-num">${idx + 1}</span>
+          <span class="mindmap-status">${isDone ? '✓' : '○'}</span>
+        </div>
+        <h3 class="mindmap-title">${u.name.split('：')[1] || u.name}</h3>
+        <p class="mindmap-desc">${u.desc}</p>
+        <div class="mindmap-formula-preview">
+          ${formulas.slice(0, 1).map(f => `<span class="formula-badge">${f.name}</span>`).join('')}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// 渲染英语情景场景
+function renderEnglishScenes(cfg, doneUnits) {
+  const container = document.getElementById('english-scenes');
+  if (!container) return;
+  
+  container.innerHTML = ENGLISH_SCENES.map((scene, idx) => {
+    const isDone = doneUnits.includes(scene.id);
+    return `
+      <div class="scene-card ${isDone ? 'done' : ''}" onclick="showEnglishDetail('${scene.id}')" style="--scene-color: ${scene.color}">
+        <div class="scene-icon">${scene.icon}</div>
+        <h3 class="scene-name">${scene.name}</h3>
+        <p class="scene-desc">${scene.desc}</p>
+        <div class="scene-status">${isDone ? '✅ 已完成' : '⭕ 学习中'}</div>
+      </div>`;
+  }).join('');
 }
 
 // 显示语文单元详情（横向鱼骨图下方展开）
@@ -979,6 +1134,129 @@ async function loadTypoList(unitId) {
 }
 
 
+
+// 显示数学单元详情
+function showMathDetail(unitId) {
+  const container = document.getElementById('math-formulas');
+  if (!container) return;
+  
+  const formulas = MATH_FORMULAS[unitId] || [];
+  const cfg = SUBJECT_CONFIG.math;
+  const unit = cfg.units.find(u => u.id === unitId);
+  
+  // 滚动到公式区
+  container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  
+  container.innerHTML = `
+    <div class="formula-unit-header">
+      <h3 style="color: ${cfg.color}">📐 ${unit?.name || '单元公式'}</h3>
+      <button class="btn btn-sm" onclick="renderMathFormulas()">返回全部</button>
+    </div>
+    <div class="formula-cards">
+      ${formulas.map(f => `
+        <div class="formula-card">
+          <div class="formula-header">
+            <span class="formula-type">${f.type}</span>
+            <h4>${f.name}</h4>
+          </div>
+          <div class="formula-body">${f.formula}</div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="formula-actions">
+      <button class="btn btn-primary" onclick="toggleSubjectUnit('math', '${unitId}', false)">
+        ✅ 标记完成
+      </button>
+    </div>
+  `;
+}
+
+// 渲染所有数学公式
+function renderMathFormulas() {
+  const container = document.getElementById('math-formulas');
+  if (!container) return;
+  
+  const allFormulas = [];
+  Object.entries(MATH_FORMULAS).forEach(([unitId, formulas]) => {
+    const unit = SUBJECT_CONFIG.math.units.find(u => u.id === unitId);
+    formulas.forEach(f => {
+      allFormulas.push({ ...f, unitName: unit?.name?.split('：')[1] || '' });
+    });
+  });
+  
+  container.innerHTML = `
+    <div class="formula-cards">
+      ${allFormulas.map(f => `
+        <div class="formula-card">
+          <div class="formula-header">
+            <span class="formula-type">${f.type}</span>
+            <span class="formula-unit">${f.unitName}</span>
+          </div>
+          <h4>${f.name}</h4>
+          <div class="formula-body">${f.formula}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+// 显示英语单元详情
+function showEnglishDetail(unitId) {
+  const vocabContainer = document.getElementById('english-vocab');
+  const dialogueContainer = document.getElementById('english-dialogues');
+  
+  const vocabs = ENGLISH_VOCAB[unitId] || [];
+  const dialogues = ENGLISH_DIALOGUES[unitId] || [];
+  const scene = ENGLISH_SCENES.find(s => s.id === unitId);
+  
+  // 渲染单词卡片
+  if (vocabContainer) {
+    vocabContainer.innerHTML = `
+      <div class="vocab-scene-header" style="--scene-color: ${scene?.color || '#f472b6'}">
+        <span class="vocab-scene-icon">${scene?.icon || '🌍'}</span>
+        <h3>${scene?.name || 'Unit'}</h3>
+      </div>
+      <div class="vocab-flip-grid">
+        ${vocabs.map((v, idx) => `
+          <div class="vocab-flip-card" onclick="this.classList.toggle('flipped')">
+            <div class="vocab-flip-inner">
+              <div class="vocab-flip-front">
+                <span class="vocab-word">${v.word}</span>
+                <span class="vocab-phonetic">${v.phonetic}</span>
+              </div>
+              <div class="vocab-flip-back">
+                <span class="vocab-meaning">${v.meaning}</span>
+                <span class="vocab-example">${v.example}</span>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+  
+  // 渲染情景对话
+  if (dialogueContainer) {
+    dialogueContainer.innerHTML = dialogues.map((d, idx) => `
+      <div class="dialogue-card">
+        <div class="dialogue-title">${d.title}</div>
+        <div class="dialogue-content">
+          <div class="dialogue-line dialogue-a">
+            <span class="dialogue-speaker">A</span>
+            <span class="dialogue-text">${d.a}</span>
+          </div>
+          <div class="dialogue-line dialogue-b">
+            <span class="dialogue-speaker">B</span>
+            <span class="dialogue-text">${d.b}</span>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+  
+  // 滚动到单词区
+  if (vocabContainer) vocabContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
 // 显示错别字列表
 function showTypoList(unitId, typos) {

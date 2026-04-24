@@ -5753,6 +5753,497 @@ body::before {
   font-size: 13px;
 }
 
+/* ============================================================
+   数学思维导图
+   ============================================================ */
+
+.mindmap-section {
+  padding: 40px 24px;
+}
+
+.mindmap-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.mindmap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.mindmap-node {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  cursor: pointer;
+  transition: all var(--duration-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.mindmap-node::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--accent2);
+  opacity: 0.5;
+}
+
+.mindmap-node:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent2);
+  box-shadow: 0 8px 24px rgba(129, 140, 248, 0.15);
+}
+
+.mindmap-node.done::before {
+  opacity: 1;
+  background: var(--accent2);
+}
+
+.mindmap-node.done {
+  border-color: rgba(129, 140, 248, 0.3);
+}
+
+.mindmap-node-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.mindmap-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(129, 140, 248, 0.1);
+  color: var(--accent2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.mindmap-status {
+  font-size: 18px;
+}
+
+.mindmap-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.mindmap-desc {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.mindmap-formula-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.formula-badge {
+  padding: 4px 10px;
+  background: rgba(129, 140, 248, 0.1);
+  border: 1px solid rgba(129, 140, 248, 0.2);
+  border-radius: 12px;
+  font-size: 12px;
+  color: var(--accent2);
+}
+
+/* 公式区 */
+.formula-section {
+  padding: 40px 24px;
+}
+
+.formula-unit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.formula-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.formula-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all var(--duration-normal);
+}
+
+.formula-card:hover {
+  border-color: var(--accent2);
+  transform: translateY(-2px);
+}
+
+.formula-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.formula-type {
+  padding: 4px 10px;
+  background: rgba(129, 140, 248, 0.1);
+  border-radius: 12px;
+  font-size: 12px;
+  color: var(--accent2);
+}
+
+.formula-unit {
+  font-size: 12px;
+  color: var(--text3);
+}
+
+.formula-card h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.formula-body {
+  padding: 12px;
+  background: var(--surface2);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--accent2);
+  font-family: 'Courier New', monospace;
+  line-height: 1.6;
+}
+
+.formula-actions {
+  margin-top: 24px;
+  text-align: center;
+}
+
+/* 错题本 */
+.mistake-section {
+  padding: 40px 24px;
+}
+
+.mistake-empty {
+  text-align: center;
+  padding: 48px 24px;
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+}
+
+.mistake-empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.mistake-empty p {
+  font-size: 16px;
+  color: var(--text2);
+  margin-bottom: 8px;
+}
+
+.mistake-hint {
+  font-size: 13px;
+  color: var(--text3);
+}
+
+/* ============================================================
+   英语情景场景
+   ============================================================ */
+
+.scene-section {
+  padding: 40px 24px;
+}
+
+.scene-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.scene-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.scene-card {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--duration-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.scene-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--scene-color, #f472b6);
+  opacity: 0.5;
+}
+
+.scene-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: var(--scene-color, #f472b6);
+  box-shadow: 0 12px 32px rgba(244, 114, 182, 0.15);
+}
+
+.scene-card.done::before {
+  opacity: 1;
+}
+
+.scene-card.done {
+  border-color: var(--scene-color, #f472b6);
+}
+
+.scene-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.scene-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.scene-desc {
+  font-size: 13px;
+  color: var(--text2);
+  margin-bottom: 12px;
+}
+
+.scene-status {
+  font-size: 12px;
+  padding: 4px 12px;
+  background: var(--surface2);
+  border-radius: 12px;
+  display: inline-block;
+}
+
+/* 单词翻转卡片 */
+.vocab-section {
+  padding: 40px 24px;
+}
+
+.vocab-scene-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--scene-color, #f472b6);
+}
+
+.vocab-scene-icon {
+  font-size: 32px;
+}
+
+.vocab-scene-header h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.vocab-flip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.vocab-flip-card {
+  height: 140px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.vocab-flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.vocab-flip-card.flipped .vocab-flip-inner {
+  transform: rotateY(180deg);
+}
+
+.vocab-flip-front,
+.vocab-flip-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.vocab-flip-front {
+  background: var(--surface);
+  border: 2px solid var(--border);
+}
+
+.vocab-flip-back {
+  background: linear-gradient(135deg, rgba(244, 114, 182, 0.1), rgba(244, 114, 182, 0.05));
+  border: 2px solid rgba(244, 114, 182, 0.3);
+  transform: rotateY(180deg);
+}
+
+.vocab-word {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.vocab-phonetic {
+  font-size: 13px;
+  color: var(--text2);
+  font-family: 'Courier New', monospace;
+}
+
+.vocab-meaning {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.vocab-example {
+  font-size: 12px;
+  color: var(--text2);
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* 情景对话 */
+.dialogue-section {
+  padding: 40px 24px;
+}
+
+.dialogue-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+  transition: all var(--duration-normal);
+}
+
+.dialogue-card:hover {
+  border-color: rgba(244, 114, 182, 0.3);
+}
+
+.dialogue-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent2);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.dialogue-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dialogue-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.dialogue-speaker {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(244, 114, 182, 0.1);
+  color: #f472b6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.dialogue-b .dialogue-speaker {
+  background: rgba(74, 222, 128, 0.1);
+  color: var(--accent);
+}
+
+.dialogue-text {
+  flex: 1;
+  padding: 8px 12px;
+  background: var(--surface2);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* 听力记录 */
+.listening-section {
+  padding: 40px 24px;
+}
+
+.listening-empty {
+  text-align: center;
+  padding: 48px 24px;
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+}
+
+.listening-empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.listening-empty p {
+  font-size: 16px;
+  color: var(--text2);
+  margin-bottom: 8px;
+}
+
+.listening-hint {
+  font-size: 13px;
+  color: var(--text3);
+}
+
 /* 移动端适配 */
 @media (max-width: 768px) {
   .char-list {
@@ -5765,5 +6256,21 @@ body::before {
   
   .typo-input {
     max-width: 80px;
+  }
+  
+  .mindmap-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .scene-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .vocab-flip-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .formula-cards {
+    grid-template-columns: 1fr;
   }
 }

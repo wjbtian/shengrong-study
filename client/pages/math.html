@@ -1,9 +1,9 @@
-<!-- 数学页 - 时间轴设计 -->
+<!-- 数学页 - 思维导图网格设计 -->
 <div class="subject-hero" style="--subject-color: var(--accent2);">
   <div class="subject-hero-icon">🔢</div>
   <div class="subject-hero-info">
     <h1 class="subject-hero-title">数学学习</h1>
-    <p class="subject-hero-subtitle">四年级上册 · 6个单元</p>
+    <p class="subject-hero-subtitle">四年级上册 · 6个单元 · 思维导图式学习</p>
   </div>
   <div class="subject-hero-progress">
     <div class="progress-ring-wrap">
@@ -22,13 +22,39 @@
   </div>
 </div>
 
-<!-- 时间轴 -->
-<div class="timeline-section">
-  <div class="timeline-header">
-    <h2 class="section-title">学习进度</h2>
-    <p class="section-subtitle">点击单元查看重点内容</p>
+<!-- 思维导图网格 -->
+<div class="mindmap-section">
+  <div class="mindmap-header">
+    <h2 class="section-title">🧠 知识网络</h2>
+    <p class="section-subtitle">点击节点展开知识分支</p>
   </div>
-  <div class="timeline" id="math-timeline">
+  <div class="mindmap-grid" id="math-mindmap">
     <!-- 动态生成 -->
+  </div>
+</div>
+
+<!-- 公式卡片区 -->
+<div class="formula-section">
+  <div class="section-header">
+    <h2 class="section-title">📐 重点公式</h2>
+    <p class="section-subtitle">本单元核心公式与定理</p>
+  </div>
+  <div class="formula-grid" id="math-formulas">
+    <!-- 动态生成 -->
+  </div>
+</div>
+
+<!-- 错题本 -->
+<div class="mistake-section">
+  <div class="section-header">
+    <h2 class="section-title">❌ 错题本</h2>
+    <p class="section-subtitle">记录错题，避免再犯</p>
+  </div>
+  <div class="mistake-list" id="math-mistakes">
+    <div class="mistake-empty">
+      <div class="mistake-empty-icon">📝</div>
+      <p>暂无错题记录</p>
+      <span class="mistake-hint">在微信对话中发送错题照片，我会帮你记录</span>
+    </div>
   </div>
 </div>

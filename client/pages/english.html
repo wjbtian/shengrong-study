@@ -1,9 +1,9 @@
-<!-- 英语页 - 时间轴设计 -->
+<!-- 英语页 - 单词卡片翻转设计 -->
 <div class="subject-hero" style="--subject-color: #f472b6;">
   <div class="subject-hero-icon">🌍</div>
   <div class="subject-hero-info">
     <h1 class="subject-hero-title">英语学习</h1>
-    <p class="subject-hero-subtitle">四年级上册 · 6个单元</p>
+    <p class="subject-hero-subtitle">四年级上册 · 6个单元 · 情景式学习</p>
   </div>
   <div class="subject-hero-progress">
     <div class="progress-ring-wrap">
@@ -22,13 +22,50 @@
   </div>
 </div>
 
-<!-- 时间轴 -->
-<div class="timeline-section">
-  <div class="timeline-header">
-    <h2 class="section-title">学习进度</h2>
-    <p class="section-subtitle">点击单元查看重点内容</p>
+<!-- 单元情景导航 -->
+<div class="scene-section">
+  <div class="scene-header">
+    <h2 class="section-title">🎭 单元情景</h2>
+    <p class="section-subtitle">点击场景进入学习</p>
   </div>
-  <div class="timeline" id="english-timeline">
+  <div class="scene-grid" id="english-scenes">
     <!-- 动态生成 -->
+  </div>
+</div>
+
+<!-- 单词卡片区 -->
+<div class="vocab-section">
+  <div class="section-header">
+    <h2 class="section-title">🎴 单词卡片</h2>
+    <p class="section-subtitle">点击翻转查看释义</p>
+  </div>
+  <div class="vocab-grid" id="english-vocab">
+    <!-- 动态生成 -->
+  </div>
+</div>
+
+<!-- 情景对话 -->
+<div class="dialogue-section">
+  <div class="section-header">
+    <h2 class="section-title">💬 情景对话</h2>
+    <p class="section-subtitle">重点句型与表达</p>
+  </div>
+  <div class="dialogue-list" id="english-dialogues">
+    <!-- 动态生成 -->
+  </div>
+</div>
+
+<!-- 听力记录 -->
+<div class="listening-section">
+  <div class="section-header">
+    <h2 class="section-title">🎧 听力记录</h2>
+    <p class="section-subtitle">记录听力练习情况</p>
+  </div>
+  <div class="listening-list" id="english-listening">
+    <div class="listening-empty">
+      <div class="listening-empty-icon">🎵</div>
+      <p>暂无听力记录</p>
+      <span class="listening-hint">在微信对话中告诉我听力练习情况</span>
+    </div>
   </div>
 </div>
