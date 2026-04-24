@@ -71,7 +71,7 @@
     <!-- 首页 -->
     <div id="page-home" class="page active">
       <!-- 大标题签名区 -->
-      <div class="hero-signature">
+      <div class="hero-signature reveal">
         <div class="hero-avatar-large">🌱</div>
         <h1 class="hero-name">吴尚融</h1>
         <p class="hero-tagline">四年级小学生 · 吉他手 · 科技探索者</p>
@@ -93,7 +93,7 @@
       </div>
 
       <!-- 每日成长轨迹 - 核心功能 -->
-      <div class="daily-growth-section">
+      <div class="daily-growth-section reveal reveal-delay-1">
         <div class="section-header-with-action">
           <div>
             <h2 class="section-title">📈 今日成长轨迹</h2>
@@ -136,35 +136,35 @@
       </div>
 
       <!-- 快速入口 -->
-      <div class="quick-section">
+      <div class="quick-section reveal reveal-delay-2">
         <h2 class="section-title">🚀 快速入口</h2>
         <div class="quick-grid">
-          <a href="diary.html" class="quick-card">
+          <a href="diary.html" class="quick-card hover-lift">
             <div class="quick-icon">📝</div>
             <div class="quick-name">写日记</div>
             <div class="quick-desc">记录今日心情</div>
           </a>
-          <a href="chinese.html" class="quick-card">
+          <a href="chinese.html" class="quick-card hover-lift">
             <div class="quick-icon">📖</div>
             <div class="quick-name">语文</div>
             <div class="quick-desc" id="learn-count">开始学习</div>
           </a>
-          <a href="guitar.html" class="quick-card">
+          <a href="guitar.html" class="quick-card hover-lift">
             <div class="quick-icon">🎸</div>
             <div class="quick-name">吉他</div>
             <div class="quick-desc" id="guitar-count">1 首开始</div>
           </a>
-          <a href="tech.html" class="quick-card">
+          <a href="tech.html" class="quick-card hover-lift">
             <div class="quick-icon">🔬</div>
             <div class="quick-name">科技</div>
             <div class="quick-desc">探索新世界</div>
           </a>
-          <a href="shine.html" class="quick-card">
+          <a href="shine.html" class="quick-card hover-lift">
             <div class="quick-icon">✨</div>
             <div class="quick-name">闪光时刻</div>
             <div class="quick-desc" id="shine-count">0 个闪光</div>
           </a>
-          <a href="#" class="quick-card" onclick="showDailyCheck();return false;">
+          <a href="#" class="quick-card hover-lift" onclick="showDailyCheck();return false;">
             <div class="quick-icon">🌱</div>
             <div class="quick-name">跟豆芽说</div>
             <div class="quick-desc">分享今天的事</div>
@@ -173,7 +173,7 @@
       </div>
 
       <!-- 今日任务 -->
-      <div class="tasks-section">
+      <div class="tasks-section reveal reveal-delay-3">
         <div class="section-header-with-action">
           <div>
             <h2 class="section-title">📋 今日任务</h2>
@@ -204,22 +204,22 @@
       </div>
 
       <!-- 数据可视化 -->
-      <div class="charts-section">
+      <div class="charts-section reveal reveal-delay-1">
         <h2 class="section-title">📊 成长数据</h2>
         <div class="charts-grid">
-          <div class="chart-card">
+          <div class="chart-card hover-lift card-3d">
             <h3 class="chart-title">📚 学习进度</h3>
             <canvas id="chart-learning"></canvas>
           </div>
-          <div class="chart-card">
+          <div class="chart-card hover-lift card-3d">
             <h3 class="chart-title">📅 打卡日历</h3>
             <div id="calendar-heatmap"></div>
           </div>
-          <div class="chart-card">
+          <div class="chart-card hover-lift card-3d">
             <h3 class="chart-title">⚡ 能量趋势</h3>
             <canvas id="chart-energy"></canvas>
           </div>
-          <div class="chart-card">
+          <div class="chart-card hover-lift card-3d">
             <h3 class="chart-title">😊 心情分布</h3>
             <canvas id="chart-mood"></canvas>
           </div>
@@ -227,7 +227,7 @@
       </div>
 
       <!-- 内容预览 -->
-      <div class="home-bottom">
+      <div class="home-bottom reveal reveal-delay-2">
         <div class="preview-panel">
           <div class="preview-header">
             <div class="preview-tabs">

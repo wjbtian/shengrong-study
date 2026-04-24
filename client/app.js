@@ -1303,12 +1303,138 @@ function renderCalendarHeatmap() {
 document.addEventListener('DOMContentLoaded', () => {
   updateHomePage();
   initCharts();
+  initScrollReveal();
+  initMouseEffects();
+  
+  // 为首页英雄区添加粒子效果
+  const heroSection = document.querySelector('.hero-section');
+  if (heroSection) {
+    heroSection.style.position = 'relative';
+    createParticles(heroSection, 15);
+  }
   
   // 移动端默认收起
   if (window.innerWidth < 768) {
     document.getElementById('sidebar').classList.add('collapsed');
   }
 });
+
+// ============================================================
+// 滚动显示动画
+// ============================================================
+
+function initScrollReveal() {
+  const revealElements = document.querySelectorAll('.reveal');
+  
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+        // 可选：只触发一次
+        // revealObserver.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  });
+  
+  revealElements.forEach(el => revealObserver.observe(el));
+}
+
+// ============================================================
+// 鼠标跟随效果
+// ============================================================
+
+function initMouseEffects() {
+  // 为卡片添加3D倾斜效果
+  const cards = document.querySelectorAll('.card-3d');
+  
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = (y - centerY) / 20;
+      const rotateY = (centerX - x) / 20;
+      
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+    });
+  });
+}
+
+// ============================================================
+// 打字机效果
+// ============================================================
+
+function typewriter(element, text, speed = 50) {
+  let i = 0;
+  element.textContent = '';
+  
+  function type() {
+    if (i < text.length) {
+      element.textContent += text.charAt(i);
+      i++;
+      setTimeout(type, speed);
+    }
+  }
+  
+  type();
+}
+
+// ============================================================
+// 数字滚动动画
+// ============================================================
+
+function animateNumber(element, target, duration = 1000) {
+  const start = 0;
+  const increment = target / (duration / 16);
+  let current = start;
+  
+  function update() {
+    current += increment;
+    if (current < target) {
+      element.textContent = Math.floor(current);
+      requestAnimationFrame(update);
+    } else {
+      element.textContent = target;
+    }
+  }
+  
+  update();
+}
+
+// ============================================================
+// 粒子效果（轻量级）
+// ============================================================
+
+function createParticles(container, count = 20) {
+  const colors = ['#4ade80', '#818cf8', '#fbbf24', '#f472b6'];
+  
+  for (let i = 0; i < count; i++) {
+    const particle = document.createElement('div');
+    particle.style.cssText = `
+      position: absolute;
+      width: ${Math.random() * 4 + 2}px;
+      height: ${Math.random() * 4 + 2}px;
+      background: ${colors[Math.floor(Math.random() * colors.length)]};
+      border-radius: 50%;
+      left: ${Math.random() * 100}%;
+      top: ${Math.random() * 100}%;
+      opacity: ${Math.random() * 0.3 + 0.1};
+      animation: float ${Math.random() * 3 + 2}s ease-in-out infinite;
+      animation-delay: ${Math.random() * 2}s;
+      pointer-events: none;
+    `;
+    container.appendChild(particle);
+  }
+}
 
 // CSS动画
 const style = document.createElement('style');
