@@ -4021,6 +4021,10 @@ body::before {
   transform: rotate(-90deg);
 }
 
+.progress-ring circle {
+  transition: stroke-dashoffset 0.8s ease;
+}
+
 .progress-ring-text {
   position: absolute;
   inset: 0;

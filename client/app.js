@@ -845,8 +845,10 @@ async function loadSubjectData(subject) {
     // 更新进度环
     const ring = document.getElementById(subject + '-progress-ring');
     if (ring) {
-      const circumference = 339.292;
+      const circumference = 2 * Math.PI * 54; // 339.292
       const offset = circumference - (percent / 100) * circumference;
+      // 确保 stroke-dasharray 已设置
+      ring.setAttribute('stroke-dasharray', circumference);
       ring.style.strokeDashoffset = offset;
       ring.style.stroke = cfg.color;
     }
@@ -1417,8 +1419,9 @@ async function loadOlympiadData() {
     // 更新进度环
     const ring = document.getElementById('olympiad-progress-ring');
     if (ring) {
-      const circumference = 339.292;
+      const circumference = 2 * Math.PI * 54;
       const offset = circumference - (percent / 100) * circumference;
+      ring.setAttribute('stroke-dasharray', circumference);
       ring.style.strokeDashoffset = offset;
     }
     
