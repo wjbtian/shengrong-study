@@ -512,30 +512,95 @@ async function loadGuitarData() {
 async function loadShineData() {
   try {
     const shines = await api('GET', '/shines');
-    const container = document.getElementById('shine-content');
-    if (!container) return;
+    const wall = document.getElementById('shine-wall');
+    const statsWrap = document.getElementById('shine-stats');
+    if (!wall) return;
+    
+    // 更新统计
+    if (statsWrap) {
+      document.getElementById('shine-count').textContent = shines?.length || 0;
+      document.getElementById('shine-streak').textContent = calcStreak(shines);
+      document.getElementById('shine-fav').textContent = shines?.filter(s => s.fav).length || 0;
+    }
     
     if (!shines || !shines.length) {
-      container.innerHTML = `
-        <div class="empty-state">
+      wall.innerHTML = `
+        <div class="empty-state" style="grid-column: 1/-1;">
           <span class="emoji">✨</span>
           <p>还没有闪光时刻<br>点击右上角记录一个吧</p>
         </div>`;
       return;
     }
     
-    container.innerHTML = shines.map(s => createShineCard(s)).join('');
+    // 获取当前筛选
+    const activeFilter = document.querySelector('#shine-filters .tech-filter.active');
+    const filter = activeFilter?.dataset.filter || 'all';
+    
+    const filtered = filter === 'all' ? shines : shines.filter(s => s.type === filter);
+    
+    wall.innerHTML = filtered.map(s => createPhotoCard(s)).join('');
+    
+    // 绑定筛选事件
+    document.querySelectorAll('#shine-filters .tech-filter').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('#shine-filters .tech-filter').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        loadShineData();
+      };
+    });
+    
   } catch (err) {
     console.error('加载闪光时刻失败:', err);
   }
 }
 
-function createShineCard(s) {
+function createPhotoCard(s) {
+  const typeLabels = {
+    award: '🏆 获奖',
+    sport: '⚽ 运动', 
+    art: '🎨 创意',
+    talent: '🎸 才艺',
+    progress: '📈 进步',
+    other: '💫 其他'
+  };
+  
   return `
-    <div class="shine-card" data-id="${s.id}">
-      <div class="shine-title">${s.title}</div>
-      <div class="shine-date">${formatDate(s.date)}</div>
+    <div class="photo-card" data-id="${s.id}">
+      <div class="photo-img-wrap">
+        ${s.image ? `<img src="${s.image}" class="photo-img" alt="${s.title}" loading="lazy">` : `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:48px;">✨</div>`}
+        <div class="photo-overlay">
+          <span class="photo-date">${formatDate(s.date)}</span>
+        </div>
+      </div>
+      <div class="photo-info">
+        <div class="photo-title">${s.title}</div>
+        <div class="photo-tags">
+          <span class="photo-tag ${s.type || 'other'}">${typeLabels[s.type] || '💫 其他'}</span>
+          ${s.fav ? '<span class="photo-tag" style="background:rgba(251,191,36,0.2);color:var(--yellow);">⭐ 精选</span>' : ''}
+        </div>
+      </div>
     </div>`;
+}
+
+function calcStreak(shines) {
+  if (!shines?.length) return 0;
+  const dates = [...new Set(shines.map(s => s.date).filter(Boolean))].sort().reverse();
+  if (!dates.length) return 0;
+  
+  let streak = 1;
+  const today = new Date().toISOString().split('T')[0];
+  const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+  
+  if (dates[0] !== today && dates[0] !== yesterday) return 0;
+  
+  for (let i = 1; i < dates.length; i++) {
+    const prev = new Date(dates[i-1]);
+    const curr = new Date(dates[i]);
+    const diff = (prev - curr) / 86400000;
+    if (diff === 1) streak++;
+    else break;
+  }
+  return streak;
 }
 
 // --- 科技数据 ---

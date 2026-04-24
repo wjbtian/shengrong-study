@@ -3,4 +3,41 @@
   <h1 class="page-title">✨ 闪光时刻</h1>
   <button class="btn btn-primary" id="btn-add-shine">📸 记录闪光</button>
 </div>
-<div id="shine-content"></div>
+
+<!-- 统计面板 -->
+<div class="stats-grid" id="shine-stats">
+  <div class="stat-card">
+    <div class="stat-icon">🏆</div>
+    <div class="stat-value" id="shine-count">0</div>
+    <div class="stat-label">闪光时刻</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">🔥</div>
+    <div class="stat-value" id="shine-streak">0</div>
+    <div class="stat-label">连续记录(天)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">⭐</div>
+    <div class="stat-value" id="shine-fav">0</div>
+    <div class="stat-label">精选时刻</div>
+  </div>
+</div>
+
+<!-- 分类筛选 -->
+<div class="tech-filters" id="shine-filters">
+  <button class="tech-filter active" data-filter="all">全部</button>
+  <button class="tech-filter" data-filter="award">🏆 获奖</button>
+  <button class="tech-filter" data-filter="sport">⚽ 运动</button>
+  <button class="tech-filter" data-filter="art">🎨 创意</button>
+  <button class="tech-filter" data-filter="talent">🎸 才艺</button>
+  <button class="tech-filter" data-filter="progress">📈 进步</button>
+  <button class="tech-filter" data-filter="other">💫 其他</button>
+</div>
+
+<!-- 照片墙 -->
+<div class="photo-wall" id="shine-wall"></div>
+
+<!-- 加载更多 -->
+<div class="load-more-wrap">
+  <button class="btn btn-secondary" id="btn-load-more">加载更多</button>
+</div>
