@@ -2595,6 +2595,106 @@ body::before {
   color: var(--text2);
 }
 
+/* === 数据可视化 === */
+.charts-section {
+  margin-bottom: 40px;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.chart-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: all 0.3s ease;
+}
+
+.chart-card:hover {
+  border-color: var(--border2);
+  transform: translateY(-2px);
+}
+
+.chart-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chart-title::before {
+  content: '';
+  width: 4px;
+  height: 16px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+/* 打卡日历热力图 */
+.calendar-heatmap {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: var(--surface3);
+  color: var(--text3);
+}
+
+.calendar-day:hover {
+  transform: scale(1.15);
+  z-index: 1;
+}
+
+.calendar-day.level-0 { background: var(--surface3); }
+.calendar-day.level-1 { background: rgba(74,222,128,0.2); color: var(--accent); }
+.calendar-day.level-2 { background: rgba(74,222,128,0.4); color: var(--accent); }
+.calendar-day.level-3 { background: rgba(74,222,128,0.6); color: #fff; }
+.calendar-day.level-4 { background: rgba(74,222,128,0.8); color: #fff; }
+.calendar-day.level-5 { background: var(--accent); color: #000; }
+
+.calendar-day.today {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.calendar-legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--text2);
+}
+
+.calendar-legend-item {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+@media (max-width: 768px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 480px) {
   .stats-grid { grid-template-columns: 1fr; }
   .guitar-stats { grid-template-columns: 1fr 1fr; }

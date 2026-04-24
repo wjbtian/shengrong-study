@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌱</text></svg>">
 </head>
 <body>
@@ -198,6 +199,29 @@
           <div class="today-task" data-task="read" onclick="toggleTask(this)">
             <div class="task-check">○</div>
             <span class="task-name">📖 阅读</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 数据可视化 -->
+      <div class="charts-section">
+        <h2 class="section-title">📊 成长数据</h2>
+        <div class="charts-grid">
+          <div class="chart-card">
+            <h3 class="chart-title">📚 学习进度</h3>
+            <canvas id="chart-learning"></canvas>
+          </div>
+          <div class="chart-card">
+            <h3 class="chart-title">📅 打卡日历</h3>
+            <div id="calendar-heatmap"></div>
+          </div>
+          <div class="chart-card">
+            <h3 class="chart-title">⚡ 能量趋势</h3>
+            <canvas id="chart-energy"></canvas>
+          </div>
+          <div class="chart-card">
+            <h3 class="chart-title">😊 心情分布</h3>
+            <canvas id="chart-mood"></canvas>
           </div>
         </div>
       </div>

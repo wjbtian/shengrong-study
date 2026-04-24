@@ -1117,11 +1117,192 @@ async function deleteTech(id) {
 }
 
 // ============================================================
+// 数据可视化
+// ============================================================
+
+function initCharts() {
+  // 学习进度饼图
+  const learningCtx = document.getElementById('chart-learning');
+  if (learningCtx) {
+    new Chart(learningCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['语文', '数学', '英语', '奥数'],
+        datasets: [{
+          data: [30, 45, 25, 15],
+          backgroundColor: ['#f472b6', '#818cf8', '#fbbf24', '#4ade80'],
+          borderWidth: 0,
+          hoverOffset: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { color: '#8888a0', padding: 16, usePointStyle: true }
+          }
+        },
+        cutout: '65%'
+      }
+    });
+  }
+
+  // 能量趋势折线图
+  const energyCtx = document.getElementById('chart-energy');
+  if (energyCtx) {
+    new Chart(energyCtx, {
+      type: 'line',
+      data: {
+        labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+        datasets: [{
+          label: '能量值',
+          data: [65, 78, 90, 85, 92, 88, 95],
+          borderColor: '#4ade80',
+          backgroundColor: 'rgba(74,222,128,0.1)',
+          borderWidth: 3,
+          tension: 0.4,
+          fill: true,
+          pointBackgroundColor: '#4ade80',
+          pointBorderColor: '#080810',
+          pointBorderWidth: 2,
+          pointRadius: 5,
+          pointHoverRadius: 7
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(255,255,255,0.05)' },
+            ticks: { color: '#8888a0' }
+          },
+          y: {
+            grid: { color: 'rgba(255,255,255,0.05)' },
+            ticks: { color: '#8888a0' },
+            min: 0,
+            max: 100
+          }
+        }
+      }
+    });
+  }
+
+  // 心情分布图
+  const moodCtx = document.getElementById('chart-mood');
+  if (moodCtx) {
+    new Chart(moodCtx, {
+      type: 'bar',
+      data: {
+        labels: ['😄', '🤩', '😊', '🙂', '😐', '😔', '😤', '😢'],
+        datasets: [{
+          label: '次数',
+          data: [12, 5, 18, 8, 3, 2, 1, 0],
+          backgroundColor: [
+            'rgba(74,222,128,0.8)',
+            'rgba(251,191,36,0.8)',
+            'rgba(129,140,248,0.8)',
+            'rgba(244,114,182,0.8)',
+            'rgba(148,163,184,0.8)',
+            'rgba(96,165,250,0.8)',
+            'rgba(251,146,60,0.8)',
+            'rgba(248,113,113,0.8)'
+          ],
+          borderRadius: 8,
+          borderSkipped: false
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { color: '#8888a0', font: { size: 20 } }
+          },
+          y: {
+            grid: { color: 'rgba(255,255,255,0.05)' },
+            ticks: { color: '#8888a0' },
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  }
+
+  // 打卡日历热力图
+  renderCalendarHeatmap();
+}
+
+function renderCalendarHeatmap() {
+  const container = document.getElementById('calendar-heatmap');
+  if (!container) return;
+
+  const days = ['日', '一', '二', '三', '四', '五', '六'];
+  const today = new Date();
+  const currentMonth = today.getMonth();
+  const currentYear = today.getFullYear();
+  
+  // 获取当月第一天和最后一天
+  const firstDay = new Date(currentYear, currentMonth, 1);
+  const lastDay = new Date(currentYear, currentMonth + 1, 0);
+  const startPadding = firstDay.getDay();
+  const totalDays = lastDay.getDate();
+
+  let html = '<div class="calendar-heatmap">';
+  
+  // 填充月初空白
+  for (let i = 0; i < startPadding; i++) {
+    html += '<div></div>';
+  }
+  
+  // 生成日期
+  for (let day = 1; day <= totalDays; day++) {
+    const date = new Date(currentYear, currentMonth, day);
+    const isToday = day === today.getDate();
+    
+    // 模拟打卡数据（实际应从数据库获取）
+    const level = Math.floor(Math.random() * 6);
+    const levelClass = `level-${level}`;
+    const todayClass = isToday ? 'today' : '';
+    
+    html += `<div class="calendar-day ${levelClass} ${todayClass}" title="${currentYear}-${currentMonth+1}-${day}">${day}</div>`;
+  }
+  
+  html += '</div>';
+  
+  // 添加图例
+  html += `
+    <div class="calendar-legend">
+      <span>少</span>
+      <div class="calendar-legend-item" style="background: var(--surface3)"></div>
+      <div class="calendar-legend-item" style="background: rgba(74,222,128,0.2)"></div>
+      <div class="calendar-legend-item" style="background: rgba(74,222,128,0.4)"></div>
+      <div class="calendar-legend-item" style="background: rgba(74,222,128,0.6)"></div>
+      <div class="calendar-legend-item" style="background: rgba(74,222,128,0.8)"></div>
+      <div class="calendar-legend-item" style="background: var(--accent)"></div>
+      <span>多</span>
+    </div>
+  `;
+  
+  container.innerHTML = html;
+}
+
+// ============================================================
 // 初始化
 // ============================================================
 
 document.addEventListener('DOMContentLoaded', () => {
   updateHomePage();
+  initCharts();
   
   // 移动端默认收起
   if (window.innerWidth < 768) {
