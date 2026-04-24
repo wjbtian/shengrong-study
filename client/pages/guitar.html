@@ -1,5 +1,56 @@
 <!-- 吉他页 -->
 <div class="page-header">
   <h1 class="page-title">🎸 吉他练习</h1>
+  <button class="btn btn-primary" id="btn-upload-guitar">📹 上传视频</button>
 </div>
-<div id="guitar-content"></div>
+
+<!-- 统计卡片 -->
+<div class="stats-grid" id="guitar-stats">
+  <div class="stat-card">
+    <div class="stat-icon">🎵</div>
+    <div class="stat-value" id="guitar-total">0</div>
+    <div class="stat-label">练习次数</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">⏱️</div>
+    <div class="stat-value" id="guitar-duration">0</div>
+    <div class="stat-label">总时长(分钟)</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">🎼</div>
+    <div class="stat-value" id="guitar-songs">0</div>
+    <div class="stat-label">学会曲目</div>
+  </div>
+</div>
+
+<!-- 最新视频 -->
+<div class="section-header">
+  <h2 class="section-title">最新练习</h2>
+</div>
+<div id="guitar-latest"></div>
+
+<!-- 历史记录 -->
+<div class="section-header">
+  <h2 class="section-title">练习历史</h2>
+</div>
+<div id="guitar-list"></div>
+
+<!-- 上传弹窗 -->
+<div class="modal" id="modal-guitar">
+  <div class="modal-overlay" onclick="closeModal('modal-guitar')"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">📹 上传练习视频</h3>
+      <button class="modal-close" onclick="closeModal('modal-guitar')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="text" class="input" id="guitar-title" placeholder="曲目名称">
+      <input type="file" class="input" id="guitar-video" accept="video/*">
+      <textarea class="textarea" id="guitar-notes" placeholder="练习笔记（可选）"></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn" onclick="closeModal('modal-guitar')">取消</button>
+      <button class="btn btn-primary" onclick="saveGuitar()">上传</button>
+    </div>
+  </div>
+</div>

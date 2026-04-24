@@ -111,6 +111,40 @@ function bindPageEvents(page) {
     const btn = document.getElementById('btn-add-shine');
     if (btn) btn.addEventListener('click', () => openModal('modal-shine'));
   }
+  
+  // 吉他页事件
+  if (page === 'guitar') {
+    const btn = document.getElementById('btn-upload-guitar');
+    if (btn) btn.addEventListener('click', () => openModal('modal-guitar'));
+  }
+  
+  // 科技页事件
+  if (page === 'tech') {
+    const btn = document.getElementById('btn-add-tech');
+    if (btn) btn.addEventListener('click', () => openModal('modal-tech'));
+    
+    // 分类筛选
+    document.querySelectorAll('.tech-filter').forEach(f => {
+      f.addEventListener('click', () => {
+        document.querySelectorAll('.tech-filter').forEach(x => x.classList.remove('active'));
+        f.classList.add('active');
+        filterTech(f.dataset.filter);
+      });
+    });
+  }
+}
+
+// 科技新闻筛选
+function filterTech(category) {
+  const cards = document.querySelectorAll('.tech-card');
+  cards.forEach(card => {
+    const cat = card.querySelector('.tech-category')?.textContent || '';
+    if (category === 'all' || cat.includes(category.replace(/[🔬🤖🚀💻🔋]/g, '').trim())) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
 }
 
 // ============================================================
@@ -220,16 +254,143 @@ async function loadSubjectData(subject) {
 
 // --- 奥数数据 ---
 async function loadOlympiadData() {
-  const container = document.getElementById('olympiad-content');
-  if (!container) return;
-  container.innerHTML = '<p>奥数内容加载中...</p>';
+  try {
+    // 获取进度
+    const progress = await api('GET', '/progress');
+    const doneOM = progress?.doneOM || [];
+    const total = 20;
+    const done = doneOM.length;
+    const percent = Math.round((done / total) * 100);
+    
+    // 更新进度环
+    const ring = document.getElementById('olympiad-progress-ring');
+    if (ring) {
+      const circumference = 339.292;
+      const offset = circumference - (percent / 100) * circumference;
+      ring.style.strokeDashoffset = offset;
+    }
+    
+    const percentEl = document.getElementById('olympiad-percent');
+    if (percentEl) percentEl.textContent = percent + '%';
+    
+    const doneEl = document.getElementById('olympiad-done');
+    if (doneEl) doneEl.textContent = done;
+    
+    // 专题列表
+    const container = document.getElementById('olympiad-content');
+    if (!container) return;
+    
+    const topics = [
+      { id: 'om_1_1', name: '和差问题', desc: '已知两数的和与差，求这两个数' },
+      { id: 'om_1_2', name: '和倍问题', desc: '已知两数的和与倍数关系' },
+      { id: 'om_1_3', name: '差倍问题', desc: '已知两数的差与倍数关系' },
+      { id: 'om_2_1', name: '年龄问题', desc: '利用年龄差不变解题' },
+      { id: 'om_2_2', name: '植树问题', desc: '间隔与棵数的关系' },
+      { id: 'om_2_3', name: '盈亏问题', desc: '分配中的盈与亏' },
+      { id: 'om_3_1', name: '平均数问题', desc: '求平均数的方法' },
+      { id: 'om_3_2', name: '归一问题', desc: '先求单一量' },
+      { id: 'om_3_3', name: '归总问题', desc: '总量不变的问题' },
+      { id: 'om_4_1', name: '行程问题', desc: '路程、速度、时间' },
+      { id: 'om_4_2', name: '相遇问题', desc: '两人相向而行' },
+      { id: 'om_4_3', name: '追及问题', desc: '同向而行的追赶' },
+      { id: 'om_5_1', name: '鸡兔同笼', desc: '经典假设法' },
+      { id: 'om_5_2', name: '牛吃草问题', desc: '生长与消耗' },
+      { id: 'om_5_3', name: '工程问题', desc: '工作效率问题' },
+      { id: 'om_6_1', name: '分数应用题', desc: '分数的乘除应用' },
+      { id: 'om_6_2', name: '百分数应用', desc: '百分数的实际应用' },
+      { id: 'om_6_3', name: '比和比例', desc: '按比例分配' },
+      { id: 'om_7_1', name: '几何初步', desc: '周长与面积' },
+      { id: 'om_7_2', name: '立体几何', desc: '体积与表面积' }
+    ];
+    
+    container.innerHTML = topics.map(t => {
+      const isDone = doneOM.includes(t.id);
+      return `
+        <div class="topic-card ${isDone ? 'done' : ''}" data-id="${t.id}">
+          <div class="topic-status">${isDone ? '✅' : '⭕'}</div>
+          <div class="topic-info">
+            <div class="topic-name">${t.name}</div>
+            <div class="topic-desc">${t.desc}</div>
+          </div>
+          <button class="btn btn-sm ${isDone ? 'btn-done' : 'btn-primary'}" 
+            onclick="toggleTopic('${t.id}', ${isDone})">
+            ${isDone ? '已完成' : '标记完成'}
+          </button>
+        </div>`;
+    }).join('');
+    
+  } catch (err) {
+    console.error('加载奥数数据失败:', err);
+  }
 }
 
 // --- 吉他数据 ---
 async function loadGuitarData() {
-  const container = document.getElementById('guitar-content');
-  if (!container) return;
-  container.innerHTML = '<p>吉他内容加载中...</p>';
+  try {
+    const videos = await api('GET', '/guitar');
+    
+    // 更新统计
+    const totalEl = document.getElementById('guitar-total');
+    const durationEl = document.getElementById('guitar-duration');
+    const songsEl = document.getElementById('guitar-songs');
+    
+    if (totalEl) totalEl.textContent = videos?.length || 0;
+    
+    let totalDuration = 0;
+    const songs = new Set();
+    (videos || []).forEach(v => {
+      if (v.duration) totalDuration += parseInt(v.duration);
+      if (v.title) songs.add(v.title);
+    });
+    
+    if (durationEl) durationEl.textContent = Math.round(totalDuration / 60);
+    if (songsEl) songsEl.textContent = songs.size;
+    
+    // 最新视频
+    const latestEl = document.getElementById('guitar-latest');
+    if (latestEl) {
+      if (videos && videos.length > 0) {
+        const latest = videos[0];
+        latestEl.innerHTML = `
+          <div class="guitar-latest-card">
+            <video controls class="guitar-video" poster="">
+              <source src="/uploads/${latest.video_path}" type="video/mp4">
+            </video>
+            <div class="guitar-video-info">
+              <div class="guitar-video-title">${latest.title}</div>
+              <div class="guitar-video-meta">
+                <span>📅 ${formatDate(latest.date)}</span>
+                ${latest.bpm ? `<span>🎵 ${latest.bpm} BPM</span>` : ''}
+                ${latest.key_sig ? `<span>🎼 ${latest.key_sig}</span>` : ''}
+              </div>
+              ${latest.notes ? `<div class="guitar-video-notes">${latest.notes}</div>` : ''}
+            </div>
+          </div>`;
+      } else {
+        latestEl.innerHTML = '<p style="color:var(--text-3)">还没有练习视频</p>';
+      }
+    }
+    
+    // 历史列表
+    const listEl = document.getElementById('guitar-list');
+    if (listEl) {
+      if (videos && videos.length > 1) {
+        listEl.innerHTML = videos.slice(1).map(v => `
+          <div class="guitar-item" data-id="${v.id}">
+            <div class="guitar-item-title">${v.title}</div>
+            <div class="guitar-item-meta">
+              <span>${formatDate(v.date)}</span>
+              ${v.duration ? `<span>${Math.round(v.duration/60)}分钟</span>` : ''}
+            </div>
+          </div>`).join('');
+      } else {
+        listEl.innerHTML = '<p style="color:var(--text-3)">暂无更多历史记录</p>';
+      }
+    }
+    
+  } catch (err) {
+    console.error('加载吉他数据失败:', err);
+  }
 }
 
 // --- 闪光时刻数据 ---
@@ -264,9 +425,197 @@ function createShineCard(s) {
 
 // --- 科技数据 ---
 async function loadTechData() {
-  const container = document.getElementById('tech-content');
-  if (!container) return;
-  container.innerHTML = '<p>科技内容加载中...</p>';
+  try {
+    const news = await api('GET', '/tech');
+    const container = document.getElementById('tech-content');
+    if (!container) return;
+    
+    if (!news || !news.length) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <span class="emoji">🔬</span>
+          <p>还没有科技新闻<br>点击右上角添加一条吧</p>
+        </div>`;
+      return;
+    }
+    
+    container.innerHTML = news.map(t => `
+      <div class="tech-card ${t.fav ? 'fav' : ''}" data-id="${t.id}">
+        <div class="tech-category">${t.category || '🔬 科学'}</div>
+        <div class="tech-title">${t.title}</div>
+        <div class="tech-summary">${t.summary || ''}</div>
+        <div class="tech-meta">
+          <span>${formatDate(t.date)}</span>
+          ${t.source ? `<span>📰 ${t.source}</span>` : ''}
+        </div>
+        <div class="tech-actions">
+          <button class="btn-icon" onclick="toggleTechFav(${t.id})" title="收藏">
+            ${t.fav ? '⭐' : '☆'}
+          </button>
+          <button class="btn-icon" onclick="deleteTech(${t.id})" title="删除">🗑️</button>
+        </div>
+      </div>`).join('');
+      
+  } catch (err) {
+    console.error('加载科技数据失败:', err);
+  }
+}
+
+// ============================================================
+// 交互函数
+// ============================================================
+
+// --- 科技新闻 ---
+async function toggleTechFav(id) {
+  try {
+    await api('PUT', `/tech/${id}/fav`);
+    loadTechData();
+  } catch (err) {
+    console.error('收藏失败:', err);
+  }
+}
+
+async function deleteTech(id) {
+  if (!confirm('确定删除这条新闻吗？')) return;
+  try {
+    await api('DELETE', `/tech/${id}`);
+    loadTechData();
+  } catch (err) {
+    console.error('删除失败:', err);
+  }
+}
+
+async function saveTech() {
+  const title = document.getElementById('tech-title').value.trim();
+  const category = document.getElementById('tech-category').value;
+  const summary = document.getElementById('tech-summary').value.trim();
+  const source = document.getElementById('tech-source').value.trim();
+  
+  if (!title) return alert('请输入标题');
+  
+  try {
+    await api('POST', '/tech', { title, category, summary, source, date: new Date().toISOString().slice(0,10) });
+    closeModal('modal-tech');
+    document.getElementById('tech-title').value = '';
+    document.getElementById('tech-summary').value = '';
+    document.getElementById('tech-source').value = '';
+    loadTechData();
+  } catch (err) {
+    console.error('保存失败:', err);
+    alert('保存失败');
+  }
+}
+
+// --- 吉他 ---
+async function saveGuitar() {
+  const title = document.getElementById('guitar-title').value.trim();
+  const file = document.getElementById('guitar-video').files[0];
+  const notes = document.getElementById('guitar-notes').value.trim();
+  
+  if (!title) return alert('请输入曲目名称');
+  if (!file) return alert('请选择视频文件');
+  
+  const formData = new FormData();
+  formData.append('title', title);
+  formData.append('video', file);
+  formData.append('notes', notes);
+  formData.append('date', new Date().toISOString().slice(0,10));
+  
+  try {
+    const res = await fetch(API + '/api/guitar', {
+      method: 'POST',
+      body: formData
+    });
+    if (!res.ok) throw new Error('上传失败');
+    closeModal('modal-guitar');
+    document.getElementById('guitar-title').value = '';
+    document.getElementById('guitar-video').value = '';
+    document.getElementById('guitar-notes').value = '';
+    loadGuitarData();
+  } catch (err) {
+    console.error('上传失败:', err);
+    alert('上传失败');
+  }
+}
+
+// --- 奥数 ---
+async function toggleTopic(unit, isDone) {
+  try {
+    if (isDone) {
+      await api('DELETE', `/progress/olympiad/${unit}`);
+    } else {
+      await api('POST', `/progress/olympiad/${unit}`);
+    }
+    loadOlympiadData();
+    // 同时刷新首页统计
+    if (getRoute() === 'home') loadHomeData();
+  } catch (err) {
+    console.error('标记失败:', err);
+  }
+}
+
+// --- 日记 ---
+async function saveDiary() {
+  const title = document.getElementById('diary-title').value.trim();
+  const content = document.getElementById('diary-content').value.trim();
+  
+  if (!title || !content) return alert('请填写标题和内容');
+  
+  try {
+    await api('POST', '/diary', {
+      mood: selectedMood,
+      title,
+      content,
+      date: new Date().toISOString().slice(0,10)
+    });
+    closeModal('modal-diary');
+    document.getElementById('diary-title').value = '';
+    document.getElementById('diary-content').value = '';
+    selectMood('😄');
+    
+    // 刷新当前页
+    const page = getRoute();
+    if (page === 'diary') loadDiaryData();
+    if (page === 'home') loadHomeData();
+  } catch (err) {
+    console.error('保存日记失败:', err);
+    alert('保存失败');
+  }
+}
+
+function selectMood(mood) {
+  selectedMood = mood;
+  document.querySelectorAll('.mood-item').forEach(el => {
+    el.classList.toggle('selected', el.dataset.mood === mood);
+  });
+}
+
+// --- 闪光时刻 ---
+async function saveShine() {
+  const title = document.getElementById('shine-title').value.trim();
+  const type = document.getElementById('shine-type').value;
+  const description = document.getElementById('shine-desc').value.trim();
+  
+  if (!title) return alert('请输入标题');
+  
+  try {
+    await api('POST', '/shines', {
+      title,
+      type,
+      description,
+      date: new Date().toISOString().slice(0,10)
+    });
+    closeModal('modal-shine');
+    document.getElementById('shine-title').value = '';
+    document.getElementById('shine-desc').value = '';
+    
+    const page = getRoute();
+    if (page === 'shine') loadShineData();
+    if (page === 'home') loadHomeData();
+  } catch (err) {
+    console.error('保存失败:', err);
+    alert('保存失败');
+  }
 }
 
 // ============================================================
@@ -305,6 +654,9 @@ function closeModal(id) {
 // ============================================================
 
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOM 已加载');
+  console.log('main-content 元素:', document.getElementById('main-content'));
+  
   // 拦截导航链接
   document.addEventListener('click', (e) => {
     const link = e.target.closest('a');
@@ -321,5 +673,6 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('popstate', renderRoute);
   
   // 初始渲染
+  console.log('开始初始渲染');
   renderRoute();
 });

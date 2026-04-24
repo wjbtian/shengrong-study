@@ -3814,6 +3814,310 @@ body::before {
   }
 }
 
+/* === 吉他页面 === */
+.guitar-latest-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.guitar-video {
+  width: 100%;
+  max-height: 400px;
+  background: #000;
+  display: block;
+}
+
+.guitar-video-info {
+  padding: 20px;
+}
+
+.guitar-video-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.guitar-video-meta {
+  display: flex;
+  gap: 16px;
+  color: var(--text2);
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.guitar-video-notes {
+  color: var(--text2);
+  font-size: 14px;
+  line-height: 1.6;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.guitar-item {
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  border: 1px solid var(--border);
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all var(--duration-normal) ease;
+}
+
+.guitar-item:hover {
+  border-color: var(--border2);
+  transform: translateX(4px);
+}
+
+.guitar-item-title {
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.guitar-item-meta {
+  display: flex;
+  gap: 12px;
+  color: var(--text3);
+  font-size: 13px;
+}
+
+/* === 科技页面 === */
+.tech-filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.tech-filter {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text2);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all var(--duration-normal) ease;
+}
+
+.tech-filter:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.tech-filter.active {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.tech-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 24px;
+  border: 1px solid var(--border);
+  margin-bottom: 16px;
+  transition: all var(--duration-normal) ease;
+  position: relative;
+}
+
+.tech-card:hover {
+  border-color: var(--border2);
+  transform: translateY(-2px);
+}
+
+.tech-card.fav {
+  border-color: var(--yellow);
+  background: linear-gradient(135deg, var(--surface), rgba(251,191,36,0.05));
+}
+
+.tech-category {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  background: var(--accent2-dim);
+  color: var(--accent2);
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.tech-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.tech-summary {
+  color: var(--text2);
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.tech-meta {
+  display: flex;
+  gap: 16px;
+  color: var(--text3);
+  font-size: 13px;
+}
+
+.tech-actions {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 8px;
+}
+
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--duration-normal) ease;
+}
+
+.btn-icon:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: scale(1.1);
+}
+
+/* === 奥数页面 === */
+.progress-overview {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 32px;
+  border: 1px solid var(--border);
+  margin-bottom: 32px;
+}
+
+.progress-ring-wrap {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
+}
+
+.progress-ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.progress-ring-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-percent {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.progress-label {
+  font-size: 12px;
+  color: var(--text3);
+}
+
+.progress-info {
+  flex: 1;
+}
+
+.progress-stat {
+  margin-bottom: 8px;
+}
+
+.progress-num {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.progress-desc {
+  font-size: 16px;
+  color: var(--text2);
+}
+
+.progress-detail {
+  color: var(--text3);
+  font-size: 14px;
+}
+
+.topic-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  border: 1px solid var(--border);
+  margin-bottom: 12px;
+  transition: all var(--duration-normal) ease;
+}
+
+.topic-card:hover {
+  border-color: var(--border2);
+}
+
+.topic-card.done {
+  border-color: var(--accent);
+  background: linear-gradient(135deg, var(--surface), var(--accent-dim));
+}
+
+.topic-status {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.topic-info {
+  flex: 1;
+}
+
+.topic-name {
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.topic-desc {
+  color: var(--text2);
+  font-size: 14px;
+}
+
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 13px;
+  border-radius: var(--radius-xs);
+}
+
+.btn-done {
+  background: var(--accent-dim);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+
 /* === 移动端优化 === */
 @media (max-width: 480px) {
   .stats-grid { grid-template-columns: 1fr; }

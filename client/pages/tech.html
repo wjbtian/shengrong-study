@@ -1,5 +1,45 @@
 <!-- 科技探索页 -->
 <div class="page-header">
   <h1 class="page-title">🚀 科技探索</h1>
+  <button class="btn btn-primary" id="btn-add-tech">🔬 添加新闻</button>
 </div>
+
+<!-- 分类标签 -->
+<div class="tech-filters" id="tech-filters">
+  <button class="tech-filter active" data-filter="all">全部</button>
+  <button class="tech-filter" data-filter="🔬 科学">科学</button>
+  <button class="tech-filter" data-filter="🤖 AI">AI</button>
+  <button class="tech-filter" data-filter="🚀 航天">航天</button>
+  <button class="tech-filter" data-filter="💻 编程">编程</button>
+  <button class="tech-filter" data-filter="🔋 能源">能源</button>
+</div>
+
+<!-- 科技新闻列表 -->
 <div id="tech-content"></div>
+
+<!-- 添加新闻弹窗 -->
+<div class="modal" id="modal-tech">
+  <div class="modal-overlay" onclick="closeModal('modal-tech')"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">🔬 添加科技新闻</h3>
+      <button class="modal-close" onclick="closeModal('modal-tech')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="text" class="input" id="tech-title" placeholder="新闻标题">
+      <select class="input" id="tech-category">
+        <option value="🔬 科学">🔬 科学</option>
+        <option value="🤖 AI">🤖 AI</option>
+        <option value="🚀 航天">🚀 航天</option>
+        <option value="💻 编程">💻 编程</option>
+        <option value="🔋 能源">🔋 能源</option>
+      </select>
+      <textarea class="textarea" id="tech-summary" placeholder="新闻摘要"></textarea>
+      <input type="text" class="input" id="tech-source" placeholder="来源（可选）">
+    </div>
+    <div class="form-actions">
+      <button class="btn" onclick="closeModal('modal-tech')">取消</button>
+      <button class="btn btn-primary" onclick="saveTech()">保存</button>
+    </div>
+  </div>
+</div>
