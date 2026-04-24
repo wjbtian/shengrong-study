@@ -36,15 +36,21 @@ function navigate(path) {
 // 加载页面 HTML 并渲染
 async function renderRoute() {
   const page = getRoute();
+  console.log('渲染页面:', page);
   updateNavActive(page);
   
   const main = document.getElementById('main-content');
-  if (!main) return;
+  if (!main) {
+    console.error('找不到 main-content 元素');
+    return;
+  }
   
   // 加载对应页面 HTML
   try {
     const response = await fetch(`/pages/${page}.html`);
+    console.log('页面加载状态:', response.status);
     const html = await response.text();
+    console.log('页面内容长度:', html.length);
     main.innerHTML = html;
     
     // 绑定页面内的事件
