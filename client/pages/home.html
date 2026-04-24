@@ -1,0 +1,75 @@
+<!-- 首页内容 -->
+<div class="home-hero">
+  <div class="greeting" id="greeting">你好，永远的神！</div>
+  <div class="level-badge">
+    <svg class="level-ring" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="6"/>
+      <circle cx="50" cy="50" r="45" fill="none" stroke="var(--accent)" stroke-width="6" 
+        stroke-dasharray="283" stroke-dashoffset="70" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+    </svg>
+    <div class="level-info">
+      <div class="level-num">Lv.3</div>
+      <div class="level-name">探索者</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-header">
+  <h2 class="section-title">快速入口</h2>
+</div>
+<div class="stats-grid" id="quick-links">
+  <div class="stat-card green" data-link="/diary">
+    <div class="stat-icon">📝</div>
+    <div class="stat-label">成长日记</div>
+    <div class="stat-count" id="diary-count">加载中...</div>
+  </div>
+  <div class="stat-card pink" data-link="/shine">
+    <div class="stat-icon">✨</div>
+    <div class="stat-label">闪光时刻</div>
+    <div class="stat-count" id="shine-count">加载中...</div>
+  </div>
+  <div class="stat-card blue" data-link="/guitar">
+    <div class="stat-icon">🎸</div>
+    <div class="stat-label">吉他练习</div>
+    <div class="stat-count" id="guitar-count">加载中...</div>
+  </div>
+  <div class="stat-card orange" data-link="/tech">
+    <div class="stat-icon">🚀</div>
+    <div class="stat-label">科技探索</div>
+    <div class="stat-count" id="tech-count">加载中...</div>
+  </div>
+</div>
+
+<div class="section-header">
+  <h2 class="section-title">今日任务</h2>
+</div>
+<div class="task-list" id="today-tasks">
+  <div class="task-item" data-task="diary">
+    <div class="task-checkbox"></div>
+    <span class="task-text">写一篇日记</span>
+  </div>
+  <div class="task-item" data-task="guitar">
+    <div class="task-checkbox"></div>
+    <span class="task-text">练习吉他15分钟</span>
+  </div>
+  <div class="task-item" data-task="olympiad">
+    <div class="task-checkbox"></div>
+    <span class="task-text">做一道奥数题</span>
+  </div>
+  <div class="task-item" data-task="read">
+    <div class="task-checkbox"></div>
+    <span class="task-text">阅读30分钟</span>
+  </div>
+</div>
+
+<div class="section-header">
+  <h2 class="section-title">最近日记</h2>
+  <button class="btn btn-text" data-link="/diary">查看全部 →</button>
+</div>
+<div id="recent-diary"></div>
+
+<div class="section-header">
+  <h2 class="section-title">最近闪光</h2>
+  <button class="btn btn-text" data-link="/shine">查看全部 →</button>
+</div>
+<div id="recent-shine"></div>
