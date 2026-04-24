@@ -78,69 +78,77 @@
     <div class="shine-hero">
       <div class="shine-hero-content">
         <h1 class="shine-hero-title">✨ 闪光时刻</h1>
-        <p class="shine-hero-subtitle">每一个精彩瞬间都值得被记住</p>
-        <div class="shine-stats-row">
-          <div class="shine-stat">
-            <div class="shine-stat-num" id="shine-total">0</div>
-            <div class="shine-stat-label">个闪光</div>
-          </div>
-          <div class="shine-stat">
-            <div class="shine-stat-num" id="shine-this-month">0</div>
-            <div class="shine-stat-label">本月新增</div>
-          </div>
-          <div class="shine-stat">
-            <div class="shine-stat-num" id="shine-streak">0</div>
-            <div class="shine-stat-label">连续记录</div>
-          </div>
-        </div>
+        <p class="shine-hero-subtitle">记录成长路上的每一个精彩瞬间</p>
         <button class="btn btn-primary btn-large" onclick="openModal('modal-shine')">
           <span>📸 记录新闪光</span>
         </button>
       </div>
-      <div class="shine-hero-decoration">
-        <div class="shine-orb shine-orb-1">🏆</div>
-        <div class="shine-orb shine-orb-2">🎨</div>
-        <div class="shine-orb shine-orb-3">🎭</div>
-        <div class="shine-orb shine-orb-4">💡</div>
-        <div class="shine-orb shine-orb-5">🌟</div>
+    </div>
+
+    <!-- 精选照片墙 -->
+    <section class="shine-section">
+      <div class="section-header">
+        <h2 class="section-title">📸 精选高光</h2>
+        <p class="section-subtitle">最近最精彩的瞬间</p>
       </div>
-    </div>
+      <div id="shine-featured" class="shine-featured-wall"></div>
+    </section>
 
-    <!-- 分类筛选 -->
-    <div class="shine-filters">
-      <button class="shine-filter active" data-filter="all" onclick="filterShines('all')">
-        <span>✨</span> 全部
-      </button>
-      <button class="shine-filter" data-filter="获奖" onclick="filterShines('获奖')">
-        <span>🏆</span> 获奖
-      </button>
-      <button class="shine-filter" data-filter="创作" onclick="filterShines('创作')">
-        <span>🎨</span> 创作
-      </button>
-      <button class="shine-filter" data-filter="表演" onclick="filterShines('表演')">
-        <span>🎭</span> 表演
-      </button>
-      <button class="shine-filter" data-filter="进步" onclick="filterShines('进步')">
-        <span>🌟</span> 进步
-      </button>
-      <button class="shine-filter" data-filter="好人好事" onclick="filterShines('好人好事')">
-        <span>❤️</span> 好人好事
-      </button>
-    </div>
+    <!-- 分类快速入口 -->
+    <section class="shine-section">
+      <div class="section-header">
+        <h2 class="section-title">🏷️ 分类浏览</h2>
+        <p class="section-subtitle">按类别查看所有闪光时刻</p>
+      </div>
+      <div class="shine-categories">
+        <div class="shine-category-card" onclick="showCategory('获奖')">
+          <div class="shine-category-icon">🏆</div>
+          <div class="shine-category-name">获奖荣誉</div>
+          <div class="shine-category-count" id="count-获奖">0 个闪光</div>
+          <div class="shine-category-preview" id="preview-获奖"></div>
+        </div>
+        <div class="shine-category-card" onclick="showCategory('创作')">
+          <div class="shine-category-icon">🎨</div>
+          <div class="shine-category-name">创意作品</div>
+          <div class="shine-category-count" id="count-创作">0 个闪光</div>
+          <div class="shine-category-preview" id="preview-创作"></div>
+        </div>
+        <div class="shine-category-card" onclick="showCategory('表演')">
+          <div class="shine-category-icon">🎭</div>
+          <div class="shine-category-name">舞台表演</div>
+          <div class="shine-category-count" id="count-表演">0 个闪光</div>
+          <div class="shine-category-preview" id="preview-表演"></div>
+        </div>
+        <div class="shine-category-card" onclick="showCategory('进步')">
+          <div class="shine-category-icon">🌟</div>
+          <div class="shine-category-name">进步突破</div>
+          <div class="shine-category-count" id="count-进步">0 个闪光</div>
+          <div class="shine-category-preview" id="preview-进步"></div>
+        </div>
+        <div class="shine-category-card" onclick="showCategory('好人好事')">
+          <div class="shine-category-icon">❤️</div>
+          <div class="shine-category-name">好人好事</div>
+          <div class="shine-category-count" id="count-好人好事">0 个闪光</div>
+          <div class="shine-category-preview" id="preview-好人好事"></div>
+        </div>
+        <div class="shine-category-card" onclick="showCategory('其他')">
+          <div class="shine-category-icon">💡</div>
+          <div class="shine-category-name">其他精彩</div>
+          <div class="shine-category-count" id="count-其他">0 个闪光</div>
+          <div class="shine-category-preview" id="preview-其他"></div>
+        </div>
+      </div>
+    </section>
 
-    <!-- 时间轴视图切换 -->
-    <div class="shine-view-toggle">
-      <button class="view-btn active" onclick="switchShineView('grid')" id="view-grid">
-        <span>⊞</span> 网格
-      </button>
-      <button class="view-btn" onclick="switchShineView('timeline')" id="view-timeline">
-        <span>☰</span> 时间轴
-      </button>
-    </div>
-
-    <!-- 内容区 -->
-    <div id="shine-wall" class="shine-wall"></div>
-    <div id="shine-timeline-view" class="shine-timeline-view" style="display:none;"></div>
+    <!-- 分类时间线（默认隐藏，点击分类后显示） -->
+    <section class="shine-section" id="category-timeline-section" style="display:none;">
+      <div class="section-header">
+        <button class="btn-back" onclick="hideCategory()">← 返回分类</button>
+        <h2 class="section-title" id="category-title">🏆 获奖荣誉</h2>
+        <p class="section-subtitle" id="category-subtitle">按时间顺序查看所有记录</p>
+      </div>
+      <div id="category-timeline" class="category-timeline"></div>
+    </section>
   </main>
 </div>
 
@@ -181,110 +189,51 @@
   });
   renderShine();
   
-  // 初始化视图
-  let currentShineView = 'grid';
-  let currentShineFilter = 'all';
+  // 数据存储
   let allShinesData = [];
+  let currentCategory = null;
   
-  function switchShineView(view) {
-    currentShineView = view;
-    document.getElementById('view-grid').classList.toggle('active', view === 'grid');
-    document.getElementById('view-timeline').classList.toggle('active', view === 'timeline');
-    document.getElementById('shine-wall').style.display = view === 'grid' ? 'grid' : 'none';
-    document.getElementById('shine-timeline-view').style.display = view === 'timeline' ? 'block' : 'none';
-    renderShineView();
-  }
-  
-  function filterShines(filter) {
-    currentShineFilter = filter;
-    document.querySelectorAll('.shine-filter').forEach(f => {
-      f.classList.toggle('active', f.dataset.filter === filter);
-    });
-    renderShineView();
-  }
-  
-  function renderShineView() {
-    let filtered = allShinesData;
-    if (currentShineFilter !== 'all') {
-      filtered = allShinesData.filter(s => s.type && s.type.includes(currentShineFilter));
-    }
+  // 显示分类时间线
+  function showCategory(category) {
+    currentCategory = category;
+    const filtered = allShinesData.filter(s => s.type && s.type.includes(category));
     
-    if (currentShineView === 'grid') {
-      renderShineGrid(filtered);
-    } else {
-      renderShineTimeline(filtered);
-    }
+    // 隐藏分类入口，显示时间线
+    document.querySelector('.shine-categories').style.display = 'none';
+    document.getElementById('category-timeline-section').style.display = 'block';
+    document.getElementById('category-title').textContent = getCategoryEmoji(category) + ' ' + getCategoryName(category);
+    document.getElementById('category-subtitle').textContent = `共 ${filtered.length} 个闪光时刻，按时间顺序查看`;
+    
+    renderCategoryTimeline(filtered);
+    
+    // 滚动到时间线区域
+    document.getElementById('category-timeline-section').scrollIntoView({ behavior: 'smooth' });
   }
   
-  function renderShineGrid(shines) {
-    const container = document.getElementById('shine-wall');
-    if (shines.length === 0) {
-      container.innerHTML = `
-        <div class="empty-state" style="grid-column: 1/-1;">
-          <span class="emoji">✨</span>
-          <p>还没有这类闪光时刻<br>点击右上角添加第一个吧</p>
-        </div>
-      `;
-      return;
-    }
-    
-    container.innerHTML = shines.map((s, i) => {
-      const typeColors = {
-        '获奖': 'yellow',
-        '创作': 'purple',
-        '表演': 'pink',
-        '进步': 'green',
-        '好人好事': 'red',
-        '发现': 'cyan'
-      };
-      const typeClass = s.type ? (typeColors[s.type.split(' ')[1]] || '') : '';
-      const delay = i * 0.05;
-      
-      return `
-        <div class="shine-card reveal" style="animation-delay: ${delay}s">
-          <div class="shine-card-inner">
-            ${s.photoUrl ? `
-              <div class="shine-image-wrap">
-                <img src="${s.photoUrl}" class="shine-photo" onclick="openLightbox('${s.photoUrl}')" loading="lazy">
-                <div class="shine-image-overlay"></div>
-              </div>
-            ` : `
-              <div class="shine-placeholder" style="background: linear-gradient(135deg, var(--surface2), var(--surface3));">
-                <span class="shine-placeholder-emoji">${s.icon || '✨'}</span>
-              </div>
-            `}
-            <div class="shine-info">
-              <div class="shine-tags">
-                <span class="shine-tag ${typeClass}">${s.type || '💡 其他'}</span>
-              </div>
-              <h3 class="shine-title">${s.title}</h3>
-              <p class="shine-desc">${s.description || ''}</p>
-              <div class="shine-footer">
-                <span class="shine-date">${formatDate(s.date)}</span>
-                <button class="shine-like" onclick="event.stopPropagation();likeShine(${s.id})" title="点赞">
-                  <span>❤️</span> <span class="like-count">${s.likes || 0}</span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <button class="shine-delete" onclick="event.stopPropagation();deleteShine(${s.id})">🗑️</button>
-        </div>
-      `;
-    }).join('');
-    
-    // 触发滚动动画
-    setTimeout(() => {
-      document.querySelectorAll('.shine-card.reveal').forEach(el => el.classList.add('active'));
-    }, 100);
+  function hideCategory() {
+    currentCategory = null;
+    document.querySelector('.shine-categories').style.display = 'grid';
+    document.getElementById('category-timeline-section').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   
-  function renderShineTimeline(shines) {
-    const container = document.getElementById('shine-timeline-view');
+  function getCategoryEmoji(cat) {
+    const map = { '获奖': '🏆', '创作': '🎨', '表演': '🎭', '进步': '🌟', '好人好事': '❤️', '其他': '💡' };
+    return map[cat] || '✨';
+  }
+  
+  function getCategoryName(cat) {
+    const map = { '获奖': '获奖荣誉', '创作': '创意作品', '表演': '舞台表演', '进步': '进步突破', '好人好事': '好人好事', '其他': '其他精彩' };
+    return map[cat] || cat;
+  }
+  
+  function renderCategoryTimeline(shines) {
+    const container = document.getElementById('category-timeline');
     if (shines.length === 0) {
       container.innerHTML = `
         <div class="empty-state">
           <span class="emoji">✨</span>
-          <p>还没有这类闪光时刻</p>
+          <p>这个分类还没有闪光时刻<br>快去添加第一个吧！</p>
         </div>
       `;
       return;
@@ -306,16 +255,19 @@
           <h3 class="timeline-month-title">${month}</h3>
           <span class="timeline-month-count">${items.length} 个闪光</span>
         </div>
-        <div class="timeline-month-items">
+        <div class="timeline-month-photos">
           ${items.map(s => `
-            <div class="timeline-item-shine">
-              <div class="timeline-item-date">${new Date(s.date).getDate()}日</div>
-              <div class="timeline-item-content">
-                <span class="timeline-item-icon">${s.icon || '✨'}</span>
-                <div class="timeline-item-info">
-                  <div class="timeline-item-title">${s.title}</div>
-                  <div class="timeline-item-type">${s.type || ''}</div>
+            <div class="timeline-photo-card" onclick="openLightbox('${s.photoUrl || ''}', '${s.title}')">
+              ${s.photoUrl ? `
+                <img src="${s.photoUrl}" loading="lazy">
+              ` : `
+                <div class="timeline-photo-placeholder">
+                  <span>${s.icon || '✨'}</span>
                 </div>
+              `}
+              <div class="timeline-photo-info">
+                <div class="timeline-photo-title">${s.title}</div>
+                <div class="timeline-photo-date">${new Date(s.date).getDate()}日</div>
               </div>
             </div>
           `).join('')}
@@ -324,42 +276,102 @@
     `).join('');
   }
   
+  // 渲染精选照片墙（最近6张有图片的）
+  function renderFeaturedWall() {
+    const container = document.getElementById('shine-featured');
+    const withPhotos = allShinesData.filter(s => s.photoUrl).slice(0, 6);
+    
+    if (withPhotos.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state" style="grid-column: 1/-1;">
+          <span class="emoji">📸</span>
+          <p>还没有照片<br>点击"记录新闪光"添加第一张吧</p>
+        </div>
+      `;
+      return;
+    }
+    
+    // 瀑布流布局：不同大小
+    container.innerHTML = withPhotos.map((s, i) => {
+      const sizes = ['large', 'medium', 'small', 'small', 'medium', 'large'];
+      const size = sizes[i] || 'medium';
+      return `
+        <div class="featured-photo ${size}" onclick="openLightbox('${s.photoUrl}', '${s.title}')">
+          <img src="${s.photoUrl}" loading="lazy">
+          <div class="featured-photo-overlay">
+            <div class="featured-photo-title">${s.title}</div>
+            <div class="featured-photo-type">${s.type || ''}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+  
+  // 更新分类卡片
+  function updateCategoryCards() {
+    const categories = ['获奖', '创作', '表演', '进步', '好人好事', '其他'];
+    
+    categories.forEach(cat => {
+      const filtered = allShinesData.filter(s => s.type && s.type.includes(cat));
+      const countEl = document.getElementById(`count-${cat}`);
+      const previewEl = document.getElementById(`preview-${cat}`);
+      
+      if (countEl) countEl.textContent = `${filtered.length} 个闪光`;
+      
+      // 显示最近3张预览图
+      if (previewEl) {
+        const recent = filtered.filter(s => s.photoUrl).slice(0, 3);
+        if (recent.length > 0) {
+          previewEl.innerHTML = recent.map(s => `
+            <img src="${s.photoUrl}" class="category-preview-img" loading="lazy">
+          `).join('');
+        } else {
+          previewEl.innerHTML = `<div class="category-preview-empty">暂无照片</div>`;
+        }
+      }
+    });
+  }
+  
   async function likeShine(id) {
     await api('POST', `/shines/${id}/like`);
     renderShine();
   }
   
-  // 覆盖原renderShine以保存数据
-  const originalRenderShine = renderShine;
+  // 灯箱查看
+  function openLightbox(url, title) {
+    if (!url) return;
+    const lightbox = document.createElement('div');
+    lightbox.className = 'lightbox';
+    lightbox.innerHTML = `
+      <div class="lightbox-backdrop" onclick="this.parentElement.remove()"></div>
+      <div class="lightbox-content">
+        <img src="${url}" class="lightbox-img">
+        ${title ? `<div class="lightbox-title">${title}</div>` : ''}
+        <button class="lightbox-close" onclick="this.parentElement.parentElement.remove()">✕</button>
+      </div>
+    `;
+    document.body.appendChild(lightbox);
+    document.body.style.overflow = 'hidden';
+    lightbox.addEventListener('remove', () => {
+      document.body.style.overflow = '';
+    });
+  }
+  
+  // 覆盖原renderShine
   renderShine = async function() {
     allShinesData = await api('GET', '/shines');
     
-    // 更新统计
-    document.getElementById('shine-total').textContent = allShinesData.length;
+    // 渲染精选墙
+    renderFeaturedWall();
     
-    const now = new Date();
-    const thisMonth = allShinesData.filter(s => {
-      const d = new Date(s.date);
-      return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-    }).length;
-    document.getElementById('shine-this-month').textContent = thisMonth;
+    // 更新分类卡片
+    updateCategoryCards();
     
-    // 计算连续记录天数
-    const dates = [...new Set(allShinesData.map(s => s.date))].sort();
-    let streak = 0;
-    const today = new Date().toISOString().split('T')[0];
-    for (let i = dates.length - 1; i >= 0; i--) {
-      const expected = new Date();
-      expected.setDate(expected.getDate() - (dates.length - 1 - i));
-      if (dates[i] === expected.toISOString().split('T')[0]) {
-        streak++;
-      } else {
-        break;
-      }
+    // 如果正在查看分类，更新时间线
+    if (currentCategory) {
+      const filtered = allShinesData.filter(s => s.type && s.type.includes(currentCategory));
+      renderCategoryTimeline(filtered);
     }
-    document.getElementById('shine-streak').textContent = streak;
-    
-    renderShineView();
   };
 </script>
 </body>
