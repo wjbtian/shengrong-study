@@ -32,9 +32,22 @@
         <span class="nav-icon">📝</span>
         <span class="nav-text">日记</span>
       </a>
-      <a class="nav-item" data-page="learn" onclick="switchPage('learn')">
-        <span class="nav-icon">📚</span>
-        <span class="nav-text">学习</span>
+      <div class="nav-label">学习</div>
+      <a class="nav-item" data-page="chinese" onclick="switchPage('chinese')">
+        <span class="nav-icon">📖</span>
+        <span class="nav-text">语文</span>
+      </a>
+      <a class="nav-item" data-page="math" onclick="switchPage('math')">
+        <span class="nav-icon">🔢</span>
+        <span class="nav-text">数学</span>
+      </a>
+      <a class="nav-item" data-page="english" onclick="switchPage('english')">
+        <span class="nav-icon">🔤</span>
+        <span class="nav-text">英语</span>
+      </a>
+      <a class="nav-item" data-page="olympiad" onclick="switchPage('olympiad')">
+        <span class="nav-icon">🧮</span>
+        <span class="nav-text">奥数</span>
       </a>
       <a class="nav-item" data-page="guitar" onclick="switchPage('guitar')">
         <span class="nav-icon">🎸</span>
@@ -218,12 +231,40 @@
     </div>
 
     <!-- 学习页 -->
-    <div id="page-learn" class="page">
+    <!-- 语文页 -->
+    <div id="page-chinese" class="page">
       <div class="page-header">
-        <h2 class="page-title">📚 学习进度</h2>
-        <p class="page-subtitle">追踪每一天的成长</p>
+        <h2 class="page-title">📖 语文学习</h2>
+        <p class="page-subtitle">字词句段，积累沉淀</p>
       </div>
-      <div id="learn-content"></div>
+      <div id="chinese-content"></div>
+    </div>
+
+    <!-- 数学页 -->
+    <div id="page-math" class="page">
+      <div class="page-header">
+        <h2 class="page-title">🔢 数学探索</h2>
+        <p class="page-subtitle">逻辑推理，思维训练</p>
+      </div>
+      <div id="math-content"></div>
+    </div>
+
+    <!-- 英语页 -->
+    <div id="page-english" class="page">
+      <div class="page-header">
+        <h2 class="page-title">🔤 英语天地</h2>
+        <p class="page-subtitle">听说读写，日积月累</p>
+      </div>
+      <div id="english-content"></div>
+    </div>
+
+    <!-- 奥数页 -->
+    <div id="page-olympiad" class="page">
+      <div class="page-header">
+        <h2 class="page-title">🧮 奥数挑战</h2>
+        <p class="page-subtitle">拓展思维，挑战极限</p>
+      </div>
+      <div id="olympiad-content"></div>
     </div>
 
     <!-- 吉他页 -->
