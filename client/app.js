@@ -85,8 +85,12 @@ function bindPageEvents(page) {
   
   // 首页事件
   if (page === 'home') {
-    document.querySelectorAll('.task-item').forEach(t => {
-      t.addEventListener('click', () => t.classList.toggle('done'));
+    document.querySelectorAll('.today-task').forEach(t => {
+      t.addEventListener('click', () => {
+        t.classList.toggle('done');
+        const check = t.querySelector('.task-check');
+        if (check) check.textContent = t.classList.contains('done') ? '✅' : '⭕';
+      });
     });
   }
   
