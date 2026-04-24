@@ -74,12 +74,73 @@
 
   
   <main class="main">
-    <div class="page-header">
-      <h2 class="page-title">✨ 闪光时刻</h2>
-      <p class="page-subtitle">每一个精彩瞬间都值得被记住</p>
-      <button class="btn btn-primary" onclick="openModal('modal-shine')">📸 记录闪光</button>
+    <!-- 英雄区 -->
+    <div class="shine-hero">
+      <div class="shine-hero-content">
+        <h1 class="shine-hero-title">✨ 闪光时刻</h1>
+        <p class="shine-hero-subtitle">每一个精彩瞬间都值得被记住</p>
+        <div class="shine-stats-row">
+          <div class="shine-stat">
+            <div class="shine-stat-num" id="shine-total">0</div>
+            <div class="shine-stat-label">个闪光</div>
+          </div>
+          <div class="shine-stat">
+            <div class="shine-stat-num" id="shine-this-month">0</div>
+            <div class="shine-stat-label">本月新增</div>
+          </div>
+          <div class="shine-stat">
+            <div class="shine-stat-num" id="shine-streak">0</div>
+            <div class="shine-stat-label">连续记录</div>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-large" onclick="openModal('modal-shine')">
+          <span>📸 记录新闪光</span>
+        </button>
+      </div>
+      <div class="shine-hero-decoration">
+        <div class="shine-orb shine-orb-1">🏆</div>
+        <div class="shine-orb shine-orb-2">🎨</div>
+        <div class="shine-orb shine-orb-3">🎭</div>
+        <div class="shine-orb shine-orb-4">💡</div>
+        <div class="shine-orb shine-orb-5">🌟</div>
+      </div>
     </div>
-    <div id="shine-content"></div>
+
+    <!-- 分类筛选 -->
+    <div class="shine-filters">
+      <button class="shine-filter active" data-filter="all" onclick="filterShines('all')">
+        <span>✨</span> 全部
+      </button>
+      <button class="shine-filter" data-filter="获奖" onclick="filterShines('获奖')">
+        <span>🏆</span> 获奖
+      </button>
+      <button class="shine-filter" data-filter="创作" onclick="filterShines('创作')">
+        <span>🎨</span> 创作
+      </button>
+      <button class="shine-filter" data-filter="表演" onclick="filterShines('表演')">
+        <span>🎭</span> 表演
+      </button>
+      <button class="shine-filter" data-filter="进步" onclick="filterShines('进步')">
+        <span>🌟</span> 进步
+      </button>
+      <button class="shine-filter" data-filter="好人好事" onclick="filterShines('好人好事')">
+        <span>❤️</span> 好人好事
+      </button>
+    </div>
+
+    <!-- 时间轴视图切换 -->
+    <div class="shine-view-toggle">
+      <button class="view-btn active" onclick="switchShineView('grid')" id="view-grid">
+        <span>⊞</span> 网格
+      </button>
+      <button class="view-btn" onclick="switchShineView('timeline')" id="view-timeline">
+        <span>☰</span> 时间轴
+      </button>
+    </div>
+
+    <!-- 内容区 -->
+    <div id="shine-wall" class="shine-wall"></div>
+    <div id="shine-timeline-view" class="shine-timeline-view" style="display:none;"></div>
   </main>
 </div>
 
@@ -119,6 +180,187 @@
     if (n.getAttribute('href') === 'shine.html') n.classList.add('active');
   });
   renderShine();
+  
+  // 初始化视图
+  let currentShineView = 'grid';
+  let currentShineFilter = 'all';
+  let allShinesData = [];
+  
+  function switchShineView(view) {
+    currentShineView = view;
+    document.getElementById('view-grid').classList.toggle('active', view === 'grid');
+    document.getElementById('view-timeline').classList.toggle('active', view === 'timeline');
+    document.getElementById('shine-wall').style.display = view === 'grid' ? 'grid' : 'none';
+    document.getElementById('shine-timeline-view').style.display = view === 'timeline' ? 'block' : 'none';
+    renderShineView();
+  }
+  
+  function filterShines(filter) {
+    currentShineFilter = filter;
+    document.querySelectorAll('.shine-filter').forEach(f => {
+      f.classList.toggle('active', f.dataset.filter === filter);
+    });
+    renderShineView();
+  }
+  
+  function renderShineView() {
+    let filtered = allShinesData;
+    if (currentShineFilter !== 'all') {
+      filtered = allShinesData.filter(s => s.type && s.type.includes(currentShineFilter));
+    }
+    
+    if (currentShineView === 'grid') {
+      renderShineGrid(filtered);
+    } else {
+      renderShineTimeline(filtered);
+    }
+  }
+  
+  function renderShineGrid(shines) {
+    const container = document.getElementById('shine-wall');
+    if (shines.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state" style="grid-column: 1/-1;">
+          <span class="emoji">✨</span>
+          <p>还没有这类闪光时刻<br>点击右上角添加第一个吧</p>
+        </div>
+      `;
+      return;
+    }
+    
+    container.innerHTML = shines.map((s, i) => {
+      const typeColors = {
+        '获奖': 'yellow',
+        '创作': 'purple',
+        '表演': 'pink',
+        '进步': 'green',
+        '好人好事': 'red',
+        '发现': 'cyan'
+      };
+      const typeClass = s.type ? (typeColors[s.type.split(' ')[1]] || '') : '';
+      const delay = i * 0.05;
+      
+      return `
+        <div class="shine-card reveal" style="animation-delay: ${delay}s">
+          <div class="shine-card-inner">
+            ${s.photoUrl ? `
+              <div class="shine-image-wrap">
+                <img src="${s.photoUrl}" class="shine-photo" onclick="openLightbox('${s.photoUrl}')" loading="lazy">
+                <div class="shine-image-overlay"></div>
+              </div>
+            ` : `
+              <div class="shine-placeholder" style="background: linear-gradient(135deg, var(--surface2), var(--surface3));">
+                <span class="shine-placeholder-emoji">${s.icon || '✨'}</span>
+              </div>
+            `}
+            <div class="shine-info">
+              <div class="shine-tags">
+                <span class="shine-tag ${typeClass}">${s.type || '💡 其他'}</span>
+              </div>
+              <h3 class="shine-title">${s.title}</h3>
+              <p class="shine-desc">${s.description || ''}</p>
+              <div class="shine-footer">
+                <span class="shine-date">${formatDate(s.date)}</span>
+                <button class="shine-like" onclick="event.stopPropagation();likeShine(${s.id})" title="点赞">
+                  <span>❤️</span> <span class="like-count">${s.likes || 0}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <button class="shine-delete" onclick="event.stopPropagation();deleteShine(${s.id})">🗑️</button>
+        </div>
+      `;
+    }).join('');
+    
+    // 触发滚动动画
+    setTimeout(() => {
+      document.querySelectorAll('.shine-card.reveal').forEach(el => el.classList.add('active'));
+    }, 100);
+  }
+  
+  function renderShineTimeline(shines) {
+    const container = document.getElementById('shine-timeline-view');
+    if (shines.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <span class="emoji">✨</span>
+          <p>还没有这类闪光时刻</p>
+        </div>
+      `;
+      return;
+    }
+    
+    // 按月份分组
+    const grouped = {};
+    shines.forEach(s => {
+      const d = new Date(s.date);
+      const key = `${d.getFullYear()}年${d.getMonth()+1}月`;
+      if (!grouped[key]) grouped[key] = [];
+      grouped[key].push(s);
+    });
+    
+    container.innerHTML = Object.entries(grouped).map(([month, items]) => `
+      <div class="timeline-month">
+        <div class="timeline-month-header">
+          <span class="timeline-month-dot"></span>
+          <h3 class="timeline-month-title">${month}</h3>
+          <span class="timeline-month-count">${items.length} 个闪光</span>
+        </div>
+        <div class="timeline-month-items">
+          ${items.map(s => `
+            <div class="timeline-item-shine">
+              <div class="timeline-item-date">${new Date(s.date).getDate()}日</div>
+              <div class="timeline-item-content">
+                <span class="timeline-item-icon">${s.icon || '✨'}</span>
+                <div class="timeline-item-info">
+                  <div class="timeline-item-title">${s.title}</div>
+                  <div class="timeline-item-type">${s.type || ''}</div>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `).join('');
+  }
+  
+  async function likeShine(id) {
+    await api('POST', `/shines/${id}/like`);
+    renderShine();
+  }
+  
+  // 覆盖原renderShine以保存数据
+  const originalRenderShine = renderShine;
+  renderShine = async function() {
+    allShinesData = await api('GET', '/shines');
+    
+    // 更新统计
+    document.getElementById('shine-total').textContent = allShinesData.length;
+    
+    const now = new Date();
+    const thisMonth = allShinesData.filter(s => {
+      const d = new Date(s.date);
+      return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+    }).length;
+    document.getElementById('shine-this-month').textContent = thisMonth;
+    
+    // 计算连续记录天数
+    const dates = [...new Set(allShinesData.map(s => s.date))].sort();
+    let streak = 0;
+    const today = new Date().toISOString().split('T')[0];
+    for (let i = dates.length - 1; i >= 0; i--) {
+      const expected = new Date();
+      expected.setDate(expected.getDate() - (dates.length - 1 - i));
+      if (dates[i] === expected.toISOString().split('T')[0]) {
+        streak++;
+      } else {
+        break;
+      }
+    }
+    document.getElementById('shine-streak').textContent = streak;
+    
+    renderShineView();
+  };
 </script>
 </body>
 </html>

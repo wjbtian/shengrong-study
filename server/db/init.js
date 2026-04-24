@@ -43,6 +43,7 @@ async function initDB() {
       description TEXT NOT NULL DEFAULT '',
       date TEXT NOT NULL,
       photo TEXT,
+      likes INTEGER DEFAULT 0,
       created_at TEXT DEFAULT (datetime('now', 'localtime'))
     );
 

@@ -74,6 +74,15 @@ async function startServer() {
     res.json({ ok: true });
   });
 
+  // 闪光时刻点赞
+  app.post('/api/shines/:id/like', (req, res) => {
+    const row = get('SELECT likes FROM shines WHERE id = ?', [req.params.id]);
+    if (!row) return res.status(404).json({ ok: false });
+    const newLikes = (row.likes || 0) + 1;
+    run('UPDATE shines SET likes = ? WHERE id = ?', [newLikes, req.params.id]);
+    res.json({ ok: true, likes: newLikes });
+  });
+
   // ===== 学习进度 API =====
   app.get('/api/progress', (req, res) => {
     const rows = all('SELECT * FROM progress');
