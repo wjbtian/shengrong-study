@@ -266,6 +266,9 @@ async function loadHomeData() {
     // 每日一句
     renderDailyQuote();
     
+    // 艾宾浩斯复习提醒
+    renderReviewReminders(progress);
+    
     // 最近日记
     const recentDiaryEl = document.getElementById('recent-diary');
     if (recentDiaryEl) {
@@ -506,6 +509,208 @@ function refreshQuote() {
     textEl.style.opacity = '1';
   }, 200);
 }
+
+// --- 艾宾浩斯复习提醒 ---
+// 复习间隔：1天、2天、4天、7天、15天、30天
+const REVIEW_INTERVALS = [1, 2, 4, 7, 15, 30];
+const STAGE_NAMES = ['第1次复习', '第2次复习', '第3次复习', '第4次复习', '第5次复习', '第6次复习'];
+const STAGE_EMOJIS = ['🌱', '🌿', '🌲', '🌳', '🏆', '👑'];
+
+// 示例知识点数据（后续可从后端获取）
+let reviewItems = JSON.parse(localStorage.getItem('reviewItems') || '[]');
+
+function getTodayReviews() {
+  const today = new Date().toISOString().split('T')[0];
+  const reviews = [];
+  
+  reviewItems.forEach(item => {
+    const learnDate = new Date(item.learnDate);
+    item.stages.forEach((stageDate, idx) => {
+      if (stageDate === today && !item.completedStages.includes(idx)) {
+        reviews.push({
+          id: item.id + '_' + idx,
+          itemId: item.id,
+          stageIndex: idx,
+          title: item.title,
+          subject: item.subject,
+          learnDate: item.learnDate,
+          stage: STAGE_NAMES[idx],
+          emoji: STAGE_EMOJIS[idx]
+        });
+      }
+    });
+  });
+  
+  return reviews;
+}
+
+function addReviewItem(title, subject, learnDate) {
+  const item = {
+    id: Date.now().toString(),
+    title,
+    subject,
+    learnDate,
+    stages: REVIEW_INTERVALS.map(days => {
+      const d = new Date(learnDate);
+      d.setDate(d.getDate() + days);
+      return d.toISOString().split('T')[0];
+    }),
+    completedStages: []
+  };
+  reviewItems.push(item);
+  saveReviewItems();
+  return item;
+}
+
+function completeReview(itemId, stageIndex) {
+  const item = reviewItems.find(i => i.id === itemId);
+  if (item && !item.completedStages.includes(stageIndex)) {
+    item.completedStages.push(stageIndex);
+    saveReviewItems();
+    renderReviewReminders();
+    showToast('✅ 复习完成！继续保持！');
+  }
+}
+
+function saveReviewItems() {
+  localStorage.setItem('reviewItems', JSON.stringify(reviewItems));
+}
+
+function renderReviewReminders() {
+  const list = document.getElementById('review-list');
+  const countEl = document.getElementById('review-count');
+  if (!list) return;
+  
+  const reviews = getTodayReviews();
+  
+  if (countEl) {
+    countEl.textContent = reviews.length > 0 
+      ? `${reviews.length} 个知识点待复习` 
+      : '今日复习已完成 🎉';
+  }
+  
+  if (reviews.length === 0) {
+    list.innerHTML = `
+      <div class="review-empty">
+        <span class="emoji">🎉</span>
+        <p>太棒了！今天没有待复习的知识点</p>
+        <p style="font-size:12px;margin-top:4px;">新知识会自动出现在这里</p>
+      </div>
+    `;
+    return;
+  }
+  
+  list.innerHTML = reviews.map(r => `
+    <div class="review-item" data-id="${r.itemId}" data-stage="${r.stageIndex}">
+      <div class="review-check" onclick="completeReview('${r.itemId}', ${r.stageIndex})"></div>
+      <div class="review-info">
+        <div class="review-title">${r.title}</div>
+        <div class="review-meta">
+          <span>📚 ${r.subject}</span>
+          <span>📅 ${r.learnDate} 学习</span>
+        </div>
+      </div>
+      <div class="review-stage stage-${r.stageIndex + 1}">
+        ${r.emoji} ${r.stage}
+      </div>
+    </div>
+  `).join('') + `
+    <button class="add-review-btn" onclick="showAddReviewModal()">
+      <span>+</span> 添加新知识点
+    </button>
+  `;
+}
+
+function showAddReviewModal() {
+  const title = prompt('请输入知识点名称：');
+  if (!title) return;
+  
+  const subjects = ['语文', '数学', '英语', '奥数', '科学', '其他'];
+  const subject = prompt('请选择科目（' + subjects.join('/') + '）：');
+  if (!subject || !subjects.includes(subject)) {
+    alert('请输入正确的科目名称');
+    return;
+  }
+  
+  addReviewItem(title, subject, new Date().toISOString().split('T')[0]);
+  renderReviewReminders();
+  showToast('✅ 知识点已添加，将按照艾宾浩斯曲线提醒复习');
+}
+
+// 初始化一些示例数据
+function initReviewData() {
+  if (reviewItems.length === 0) {
+    // 添加示例数据（过去学习的知识点）
+    const today = new Date();
+    
+    // 1天前学习的（今天第1次复习）
+    const d1 = new Date(today);
+    d1.setDate(d1.getDate() - 1);
+    addReviewItem('古诗词《静夜思》', '语文', d1.toISOString().split('T')[0]);
+    
+    // 2天前学习的（今天第2次复习）
+    const d2 = new Date(today);
+    d2.setDate(d2.getDate() - 2);
+    addReviewItem('和差问题公式', '奥数', d2.toISOString().split('T')[0]);
+    
+    // 4天前学习的（今天第3次复习）
+    const d4 = new Date(today);
+    d4.setDate(d4.getDate() - 4);
+    addReviewItem('英语Unit 3单词', '英语', d4.toISOString().split('T')[0]);
+    
+    // 7天前学习的（今天第4次复习）
+    const d7 = new Date(today);
+    d7.setDate(d7.getDate() - 7);
+    addReviewItem('角的分类与度量', '数学', d7.toISOString().split('T')[0]);
+    
+    console.log('艾宾浩斯复习数据已初始化');
+  }
+}
+
+// 页面加载时初始化
+initReviewData();
+
+// Toast提示
+function showToast(message) {
+  const toast = document.createElement('div');
+  toast.style.cssText = `
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--surface2);
+    color: var(--accent);
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: 1px solid var(--accent);
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 9999;
+    animation: toastIn 0.3s var(--ease-spring);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  `;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  
+  setTimeout(() => {
+    toast.style.animation = 'toastOut 0.3s ease forwards';
+    setTimeout(() => toast.remove(), 300);
+  }, 2500);
+}
+
+// Toast动画
+const toastStyle = document.createElement('style');
+toastStyle.textContent = `
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+  @keyframes toastOut {
+    from { opacity: 1; transform: translateX(-50%) translateY(0); }
+    to { opacity: 0; transform: translateX(-50%) translateY(20px); }
+  }
+`;
+document.head.appendChild(toastStyle);
 
 // --- 日记数据 ---
 async function loadDiaryData() {
