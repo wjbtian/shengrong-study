@@ -861,55 +861,59 @@ const SUBJECT_CONFIG = {
     color: 'var(--accent)',
     total: 8,
     units: [
-      { id: 'ch_1', name: '第一单元：古诗词', desc: '背诵并理解古诗词的意境', keyPoints: ['古诗词的节奏与韵律', '理解诗词中的意象', '背诵《望庐山瀑布》等经典', '体会诗人情感'] },
-      { id: 'ch_2', name: '第二单元：现代文阅读', desc: '提高阅读理解能力', keyPoints: ['找出文章中心句', '理解段落大意', '分析人物形象', '概括文章主旨'] },
-      { id: 'ch_3', name: '第三单元：写作基础', desc: '学习写作的基本技巧', keyPoints: ['审题与立意', '开头与结尾的写法', '细节描写', '段落之间的过渡'] },
-      { id: 'ch_4', name: '第四单元：成语故事', desc: '积累常用成语', keyPoints: ['成语的来源与典故', '近义成语辨析', '成语的正确使用', '积累50个常用成语'] },
-      { id: 'ch_5', name: '第五单元：名著导读', desc: '阅读经典名著片段', keyPoints: ['《西游记》主要人物', '《三国演义》经典故事', '名著中的好词好句', '写读后感'] },
-      { id: 'ch_6', name: '第六单元：口语交际', desc: '练习表达能力', keyPoints: ['清晰表达观点', '倾听与回应', '演讲的基本技巧', '小组讨论'] },
-      { id: 'ch_7', name: '第七单元：综合复习', desc: '巩固所学知识', keyPoints: ['系统梳理知识点', '错题整理', '模拟测试', '查漏补缺'] },
-      { id: 'ch_8', name: '第八单元：期末检测', desc: '检验学习成果', keyPoints: ['全面复习', '调整心态', '考试技巧', '总结反思'] }
+      { id: 'ch_1', name: '第一单元：自然之美', desc: '边读边想象画面', keyPoints: ['《观潮》天下奇观', '《走月亮》温馨亲情', '《秋晚的江上》《花牛歌》现代诗', '口语交际：我们与环境', '习作：推荐一个好地方'] },
+      { id: 'ch_2', name: '第二单元：提问策略', desc: '阅读时尝试从不同角度思考', keyPoints: ['《一个豆荚里的五粒豆》生命力量', '《夜间飞行的秘密》科学原理', '《呼风唤雨的世纪》科技改变生活', '《蝴蝶的家》观察与思考', '习作：小小"动物园"'] },
+      { id: 'ch_3', name: '第三单元：连续观察', desc: '体会文章准确生动的表达', keyPoints: ['《古诗三首》暮江吟/题西林壁/雪梅', '《爬山虎的脚》细致观察', '《蟋蟀的住宅》昆虫建筑师', '口语交际：爱护眼睛保护视力', '习作：写观察日记'] },
+      { id: 'ch_4', name: '第四单元：神话故事', desc: '了解故事的起因、经过、结果', keyPoints: ['《盘古开天地》创世神话', '《精卫填海》坚持不懈', '《普罗米修斯》希腊英雄', '《女娲补天》中华神话', '习作：我和____过一天'] },
+      { id: 'ch_5', name: '第五单元：写清楚一件事', desc: '了解作者是怎样把事情写清楚的', keyPoints: ['《麻雀》母爱伟大', '《爬天都峰》战胜困难', '交流平台：按顺序写事', '初试身手：把经过写清楚', '习作：生活万花筒'] },
+      { id: 'ch_6', name: '第六单元：童年生活', desc: '学习用批注的方法阅读', keyPoints: ['《牛和鹅》换个角度看问题', '《一只窝囊的大老虎》童年趣事', '《陀螺》童年玩具与感悟', '口语交际：安慰', '习作：记一次游戏'] },
+      { id: 'ch_7', name: '第七单元：家国情怀', desc: '关注主要人物和事件', keyPoints: ['《古诗三首》出塞/凉州词/夏日绝句', '《为中华之崛起而读书》少年志向', '《梅兰芳蓄须》民族气节', '《延安，我把你追寻》革命精神', '习作：写信'] },
+      { id: 'ch_8', name: '第八单元：历史传说', desc: '了解故事情节，简要复述', keyPoints: ['《王戎不取道旁李》善于观察', '《西门豹治邺》破除迷信', '《故事二则》扁鹊治病/纪昌学射', '口语交际：讲历史人物故事', '习作：我的心儿怦怦跳'] }
     ]
   },
   math: {
     title: '数学',
     color: 'var(--accent2)',
-    total: 6,
+    total: 8,
     units: [
-      { id: 'math_1', name: '大数的认识', desc: '认识亿以内的数', keyPoints: ['数位顺序表', '亿以内数的读写', '数的大小比较', '近似数与四舍五入'] },
-      { id: 'math_2', name: '角的度量', desc: '学习角的分类和度量', keyPoints: ['直线、射线、线段', '角的分类（锐角、直角、钝角）', '用量角器量角', '画指定度数的角'] },
-      { id: 'math_3', name: '三位数乘法', desc: '掌握乘法运算', keyPoints: ['口算乘法', '笔算三位数乘两位数', '因数中间有0的乘法', '速度、时间、路程关系'] },
-      { id: 'math_4', name: '平行四边形', desc: '认识平行四边形和梯形', keyPoints: ['平行与垂直', '画垂线和平行线', '平行四边形的特征', '梯形的特征'] },
-      { id: 'math_5', name: '除数是两位数的除法', desc: '学习除法运算', keyPoints: ['口算除法', '笔算除法', '商的变化规律', '用除法解决实际问题'] },
-      { id: 'math_6', name: '统计', desc: '学习条形统计图', keyPoints: ['条形统计图的认识', '绘制条形统计图', '分析统计图数据', '平均数的意义'] }
+      { id: 'math_1', name: '第一单元：升和毫升', desc: '认识容量单位', keyPoints: ['认识升和毫升', '升与毫升的进率(1升=1000毫升)', '测量液体的多少', '解决实际问题'] },
+      { id: 'math_2', name: '第二单元：两、三位数除以两位数', desc: '掌握除法运算', keyPoints: ['除数是整十数的口算和笔算', '用"四舍"法试商', '用"五入"法试商', '商不变的规律', '被除数和除数末尾有0的除法'] },
+      { id: 'math_3', name: '第三单元：观察物体', desc: '从不同方向观察物体', keyPoints: ['从前面、右面、上面观察', '辨认不同方向的视图', '用小正方体摆物体', '根据视图还原物体'] },
+      { id: 'math_4', name: '第四单元：统计表和条形统计图', desc: '学习数据整理与表示', keyPoints: ['简单的统计表', '条形统计图的认识', '绘制条形统计图', '平均数的意义和求法', '分段整理数据'] },
+      { id: 'math_5', name: '第五单元：解决问题的策略', desc: '学习列表和画图策略', keyPoints: ['用列表法整理信息', '用画图法分析数量关系', '从条件想起', '从问题想起'] },
+      { id: 'math_6', name: '第六单元：可能性', desc: '认识可能性大小', keyPoints: ['认识可能性', '可能性的大小', '用"一定""可能""不可能"描述', '游戏规则的公平性'] },
+      { id: 'math_7', name: '第七单元：整数四则混合运算', desc: '掌握运算顺序', keyPoints: ['不含括号的三步混合运算', '含有小括号的三步混合运算', '含有中括号的三步混合运算', '运算顺序规则'] },
+      { id: 'math_8', name: '第八单元：垂线与平行线', desc: '认识线与角', keyPoints: ['射线、直线和角', '角的度量', '角的分类和画角', '认识垂线', '认识平行线', '画垂线和平行线'] }
     ]
   },
   english: {
     title: '英语',
     color: '#f472b6',
-    total: 6,
+    total: 8,
     units: [
-      { id: 'en_1', name: 'My Classroom', desc: '教室里的物品', keyPoints: ['classroom, window, door等词汇', 'Where is...? 句型', '介词 in, on, under', '祈使句'] },
-      { id: 'en_2', name: 'My Schoolbag', desc: '书包里的文具', keyPoints: ['schoolbag, book, pencil等词汇', 'What\'s in your...?', '颜色词汇', '名词复数'] },
-      { id: 'en_3', name: 'My Friends', desc: '描述朋友的外貌', keyPoints: ['tall, short, strong等形容词', 'He/She has...', '描述人物外貌', '一般疑问句'] },
-      { id: 'en_4', name: 'My Home', desc: '家里的房间', keyPoints: ['bedroom, kitchen, living room', 'Where are...?', '介词用法', 'There is/are...'] },
-      { id: 'en_5', name: 'Dinner\'s Ready', desc: '食物和餐具', keyPoints: ['beef, chicken, noodles等食物', 'What would you like?', '餐具词汇', '用餐礼仪表达'] },
-      { id: 'en_6', name: 'Meet My Family', desc: '家庭成员', keyPoints: ['parents, uncle, aunt等', 'How many people...?', '职业词汇', '介绍家人'] }
+      { id: 'en_1', name: 'Unit 1: I like dogs', desc: '谈论喜欢的动物', keyPoints: ['动物类词汇: dog, cat, panda, horse', 'like的用法: I like... / Do you like...?', '复数形式', 'Sound time: 字母g的发音'] },
+      { id: 'en_2', name: 'Unit 2: Let\'s make a fruit salad', desc: '制作水果沙拉', keyPoints: ['水果词汇: mango, pineapple, banana', 'have的用法: I have... / Do you have...?', 'some和any的用法', 'Sound time: 字母h的发音'] },
+      { id: 'en_3', name: 'Unit 3: How many?', desc: '询问数量', keyPoints: ['数字13-19和整十数', 'How many...? 句型', '玩具类词汇: sticker, ball, doll', 'Sound time: 字母l的发音'] },
+      { id: 'en_4', name: 'Unit 4: I can play basketball', desc: '谈论运动能力', keyPoints: ['运动词汇: basketball, football, skate', 'can的用法: I can... / Can you...?', 'play + 球类运动', 'Sound time: 字母f的发音'] },
+      { id: 'en_5', name: 'Unit 5: Our new home', desc: '介绍家居物品', keyPoints: ['家居词汇: sofa, table, fridge, clock', 'Where\'s/Where are...? 句型', '介词: in, on, under, behind', 'Sound time: 字母k的发音'] },
+      { id: 'en_6', name: 'Unit 6: At the snack bar', desc: '点餐用语', keyPoints: ['食物饮料: hamburger, sandwich, rice, milk', 'What would you like? 点餐', 'Anything else?', 'Sound time: 字母x的发音'] },
+      { id: 'en_7', name: 'Unit 7: How much?', desc: '询问价格', keyPoints: ['衣物词汇: shoe, sock, umbrella, fan', 'How much is/are...? 问价格', '购物用语', 'Sound time: 字母v的发音'] },
+      { id: 'en_8', name: 'Unit 8: Dolls', desc: '描述玩具特征', keyPoints: ['形容词: big, small, long, short, fat, thin', '描述外貌特征', 'Her/His... 句型', 'Sound time: 字母s的发音', 'Review: 综合复习'] }
     ]
   }
 };
 
-// --- 语文详细数据（横向鱼骨图用）---
+// --- 语文详细数据（部编版四年级上册）---
 const CHINESE_DETAIL = {
   'ch_1': {
     lessons: [
       { num: 1, title: '观潮', author: '赵宗成、朱明元', desc: '描写钱塘江大潮的壮观景象' },
       { num: 2, title: '走月亮', author: '吴然', desc: '描绘月夜漫步的温馨画面' },
-      { num: 3, title: '现代诗二首', author: '刘大白、徐志摩', desc: '《秋晚的江上》《花牛歌》' }
+      { num: 3, title: '现代诗二首', author: '刘大白、徐志摩', desc: '《秋晚的江上》《花牛歌》' },
+      { num: 4, title: '繁星', author: '巴金', desc: '对星空的深情描写' }
     ],
     poems: [
-      { title: '暮江吟', author: '白居易', content: '一道残阳铺水中，半江瑟瑟半江红。\n可怜九月初三夜，露似真珠月似弓。' },
-      { title: '题西林壁', author: '苏轼', content: '横看成岭侧成峰，远近高低各不同。\n不识庐山真面目，只缘身在此山中。' }
+      { title: '鹿柴', author: '王维', content: '空山不见人，但闻人语响。\n返景入深林，复照青苔上。' }
     ],
     knowledge: ['边读边想象画面', '调动多种感官', '体会优美生动的语句'],
     writing: '推荐一个好地方：写清楚推荐理由'
@@ -918,10 +922,11 @@ const CHINESE_DETAIL = {
     lessons: [
       { num: 5, title: '一个豆荚里的五粒豆', author: '安徒生', desc: '生命的力量与希望' },
       { num: 6, title: '夜间飞行的秘密', author: '', desc: '蝙蝠与雷达的科学原理' },
-      { num: 7, title: '呼风唤雨的世纪', author: '', desc: '科技改变生活' }
+      { num: 7, title: '呼风唤雨的世纪', author: '', desc: '科技改变生活' },
+      { num: 8, title: '蝴蝶的家', author: '', desc: '观察与思考' }
     ],
     poems: [
-      { title: '雪梅', author: '卢钺', content: '梅雪争春未肯降，骚人阁笔费评章。\n梅须逊雪三分白，雪却输梅一段香。' }
+      { title: '暮江吟', author: '白居易', content: '一道残阳铺水中，半江瑟瑟半江红。\n可怜九月初三夜，露似真珠月似弓。' }
     ],
     knowledge: ['阅读时尝试从不同角度思考', '提出问题并解决', '理解课文内容'],
     writing: '小小"动物园"：把家人比作动物'
@@ -933,7 +938,7 @@ const CHINESE_DETAIL = {
       { num: 11, title: '蟋蟀的住宅', author: '法布尔', desc: '昆虫的建筑艺术' }
     ],
     poems: [
-      { title: '嫦娥', author: '李商隐', content: '云母屏风烛影深，长河渐落晓星沉。\n嫦娥应悔偷灵药，碧海青天夜夜心。' }
+      { title: '题西林壁', author: '苏轼', content: '横看成岭侧成峰，远近高低各不同。\n不识庐山真面目，只缘身在此山中。' }
     ],
     knowledge: ['体会文章准确生动的表达', '连续细致的观察', '写观察日记'],
     writing: '写观察日记：记录连续观察'
@@ -942,9 +947,12 @@ const CHINESE_DETAIL = {
     lessons: [
       { num: 12, title: '盘古开天地', author: '', desc: '中国古代神话故事' },
       { num: 13, title: '精卫填海', author: '', desc: '坚持不懈的精神' },
-      { num: 14, title: '普罗米修斯', author: '', desc: '希腊神话中的英雄' }
+      { num: 14, title: '普罗米修斯', author: '', desc: '希腊神话中的英雄' },
+      { num: 15, title: '女娲补天', author: '', desc: '中华神话' }
     ],
-    poems: [],
+    poems: [
+      { title: '嫦娥', author: '李商隐', content: '云母屏风烛影深，长河渐落晓星沉。\n嫦娥应悔偷灵药，碧海青天夜夜心。' }
+    ],
     knowledge: ['了解故事的起因、经过、结果', '感受神话中神奇的想象', '复述故事'],
     writing: '我和____过一天：想象作文'
   },
@@ -954,8 +962,7 @@ const CHINESE_DETAIL = {
       { num: 17, title: '爬天都峰', author: '黄亦波', desc: '战胜困难的勇气' }
     ],
     poems: [
-      { title: '出塞', author: '王昌龄', content: '秦时明月汉时关，万里长征人未还。\n但使龙城飞将在，不教胡马度阴山。' },
-      { title: '凉州词', author: '王翰', content: '葡萄美酒夜光杯，欲饮琵琶马上催。\n醉卧沙场君莫笑，古来征战几人回。' }
+      { title: '雪梅', author: '卢钺', content: '梅雪争春未肯降，骚人阁笔费评章。\n梅须逊雪三分白，雪却输梅一段香。' }
     ],
     knowledge: ['了解作者是怎样把事情写清楚的', '按顺序写一件事', '把事情的经过写清楚'],
     writing: '生活万花筒：写一件印象深刻的事'
@@ -967,7 +974,7 @@ const CHINESE_DETAIL = {
       { num: 20, title: '陀螺', author: '高洪波', desc: '童年的玩具与感悟' }
     ],
     poems: [
-      { title: '别董大', author: '高适', content: '千里黄云白日曛，北风吹雁雪纷纷。\n莫愁前路无知己，天下谁人不识君。' }
+      { title: '出塞', author: '王昌龄', content: '秦时明月汉时关，万里长征人未还。\n但使龙城飞将在，不教胡马度阴山。' }
     ],
     knowledge: ['学习用批注的方法阅读', '通过人物的动作、语言、神态体会心情', '记一次游戏'],
     writing: '记一次游戏：把游戏过程写清楚'
@@ -976,10 +983,11 @@ const CHINESE_DETAIL = {
     lessons: [
       { num: 21, title: '古诗三首', author: '', desc: '《出塞》《凉州词》《夏日绝句》' },
       { num: 22, title: '为中华之崛起而读书', author: '', desc: '周恩来的少年志向' },
-      { num: 23, title: '梅兰芳蓄须', author: '', desc: '艺术家的民族气节' }
+      { num: 23, title: '梅兰芳蓄须', author: '', desc: '艺术家的民族气节' },
+      { num: 24, title: '延安，我把你追寻', author: '', desc: '革命精神' }
     ],
     poems: [
-      { title: '夏日绝句', author: '李清照', content: '生当作人杰，死亦为鬼雄。\n至今思项羽，不肯过江东。' }
+      { title: '凉州词', author: '王翰', content: '葡萄美酒夜光杯，欲饮琵琶马上催。\n醉卧沙场君莫笑，古来征战几人回。' }
     ],
     knowledge: ['关注主要人物和事件', '学习把握文章的主要内容', '写信'],
     writing: '写信：注意书信格式'
@@ -990,7 +998,9 @@ const CHINESE_DETAIL = {
       { num: 26, title: '西门豹治邺', author: '', desc: '破除迷信、兴修水利' },
       { num: 27, title: '故事二则', author: '', desc: '《扁鹊治病》《纪昌学射》' }
     ],
-    poems: [],
+    poems: [
+      { title: '夏日绝句', author: '李清照', content: '生当作人杰，死亦为鬼雄。\n至今思项羽，不肯过江东。' }
+    ],
     knowledge: ['了解故事情节', '简要复述课文', '写心得体会'],
     writing: '我的心儿怦怦跳：写一件让自己心跳的事'
   }
@@ -1140,31 +1150,39 @@ const KEY_WORDS = {
   }
 };
 
-// --- 数学思维导图数据 ---
+// --- 数学思维导图数据 (苏教版四年级上册) ---
 const MATH_FORMULAS = {
   'math_1': [
-    { name: '数位顺序', formula: '个位 → 十位 → 百位 → 千位 → 万位', type: '概念' },
-    { name: '大数读法', formula: '从高位读起，每级末尾的0不读', type: '规则' }
+    { name: '升与毫升', formula: '1升 = 1000毫升', type: '换算' },
+    { name: '容量比较', formula: '升 > 毫升 (1升=1000毫升)', type: '概念' }
   ],
   'math_2': [
-    { name: '公顷与平方米', formula: '1公顷 = 10,000平方米', type: '换算' },
-    { name: '平方千米', formula: '1平方千米 = 100公顷', type: '换算' }
+    { name: '除法试商', formula: '四舍五入法试商', type: '方法' },
+    { name: '商不变规律', formula: '被除数和除数同时×或÷相同数(0除外)，商不变', type: '规律' }
   ],
   'math_3': [
-    { name: '角的分类', formula: '锐角 < 90° < 直角 < 钝角 < 180° < 平角 < 360°', type: '分类' },
-    { name: '量角器使用', formula: '中心对顶点，0线对一边，看另一边度数', type: '方法' }
+    { name: '观察物体', formula: '前面、右面、上面三个方向', type: '概念' },
+    { name: '视图还原', formula: '根据视图摆小正方体', type: '方法' }
   ],
   'math_4': [
-    { name: '三位数乘两位数', formula: '先用个位乘，再用十位乘，最后相加', type: '算法' },
-    { name: '积的变化规律', formula: '一个因数不变，另一个乘几，积也乘几', type: '规律' }
+    { name: '平均数', formula: '平均数 = 总数 ÷ 份数', type: '公式' },
+    { name: '条形统计图', formula: '一格可以表示多个单位', type: '概念' }
   ],
   'math_5': [
-    { name: '平行四边形', formula: '对边平行且相等', type: '性质' },
-    { name: '梯形', formula: '只有一组对边平行', type: '性质' }
+    { name: '列表法', formula: '整理已知条件和问题', type: '策略' },
+    { name: '画图法', formula: '用线段图分析数量关系', type: '策略' }
   ],
   'math_6': [
-    { name: '除数是两位数的除法', formula: '先看被除数前两位，不够除看前三位', type: '算法' },
-    { name: '商的变化规律', formula: '被除数和除数同时乘或除以相同数，商不变', type: '规律' }
+    { name: '可能性', formula: '一定、可能、不可能', type: '概念' },
+    { name: '游戏公平', formula: '各方可能性相等才公平', type: '规则' }
+  ],
+  'math_7': [
+    { name: '运算顺序', formula: '先乘除后加减，有括号先算括号内', type: '规则' },
+    { name: '中括号', formula: '先算小括号，再算中括号', type: '规则' }
+  ],
+  'math_8': [
+    { name: '角的度量', formula: '1°的角 → 量角器', type: '方法' },
+    { name: '平行与垂直', formula: '平行:不相交 垂直:相交成直角', type: '概念' }
   ]
 };
 
@@ -1173,83 +1191,107 @@ const MATH_MISTAKES = [];
 // --- 英语单词与对话数据 ---
 const ENGLISH_VOCAB = {
   'en_1': [
-    { word: 'classroom', phonetic: '/ˈklɑːsruːm/', meaning: '教室', example: 'This is my classroom.' },
-    { word: 'window', phonetic: '/ˈwɪndəʊ/', meaning: '窗户', example: 'Open the window, please.' },
-    { word: 'blackboard', phonetic: '/ˈblækbɔːd/', meaning: '黑板', example: 'Look at the blackboard.' },
-    { word: 'light', phonetic: '/laɪt/', meaning: '灯', example: 'Turn on the light.' },
-    { word: 'picture', phonetic: '/ˈpɪktʃə/', meaning: '图画', example: 'There is a picture on the wall.' }
+    { word: 'dog', phonetic: '/dɒɡ/', meaning: '狗', example: 'I like dogs.' },
+    { word: 'cat', phonetic: '/kæt/', meaning: '猫', example: 'Do you like cats?' },
+    { word: 'panda', phonetic: '/ˈpændə/', meaning: '熊猫', example: 'Look at that panda!' },
+    { word: 'horse', phonetic: '/hɔːs/', meaning: '马', example: 'I have a toy horse.' },
+    { word: 'cute', phonetic: '/kjuːt/', meaning: '可爱的', example: 'It\'s cute.' }
   ],
   'en_2': [
-    { word: 'schoolbag', phonetic: '/ˈskuːlbæɡ/', meaning: '书包', example: 'My schoolbag is heavy.' },
-    { word: 'maths', phonetic: '/mæθs/', meaning: '数学', example: 'I like maths.' },
-    { word: 'English', phonetic: '/ˈɪŋɡlɪʃ/', meaning: '英语', example: 'We have English today.' },
-    { word: 'Chinese', phonetic: '/ˌtʃaɪˈniːz/', meaning: '语文', example: 'Chinese is interesting.' },
-    { word: 'storybook', phonetic: '/ˈstɔːribʊk/', meaning: '故事书', example: 'I have a storybook.' }
+    { word: 'mango', phonetic: '/ˈmæŋɡəʊ/', meaning: '芒果', example: 'Do you have a mango?' },
+    { word: 'pineapple', phonetic: '/ˈpaɪnæpl/', meaning: '菠萝', example: 'I have a pineapple.' },
+    { word: 'banana', phonetic: '/bəˈnɑːnə/', meaning: '香蕉', example: 'Let\'s make a fruit salad.' },
+    { word: 'grape', phonetic: '/ɡreɪp/', meaning: '葡萄', example: 'Have some grapes.' },
+    { word: 'salad', phonetic: '/ˈsæləd/', meaning: '沙拉', example: 'Let\'s make a fruit salad.' }
   ],
   'en_3': [
-    { word: 'strong', phonetic: '/strɒŋ/', meaning: '强壮的', example: 'He is strong.' },
-    { word: 'friendly', phonetic: '/ˈfrendli/', meaning: '友好的', example: 'She is friendly.' },
-    { word: 'quiet', phonetic: '/ˈkwaɪət/', meaning: '安静的', example: 'Be quiet, please.' },
-    { word: 'hair', phonetic: '/heə/', meaning: '头发', example: 'She has long hair.' },
-    { word: 'glasses', phonetic: '/ˈɡlɑːsɪz/', meaning: '眼镜', example: 'He wears glasses.' }
+    { word: 'thirteen', phonetic: '/ˌθɜːˈtiːn/', meaning: '十三', example: 'I have thirteen stickers.' },
+    { word: 'fifteen', phonetic: '/ˌfɪfˈtiːn/', meaning: '十五', example: 'How many balls? Fifteen.' },
+    { word: 'sticker', phonetic: '/ˈstɪkə/', meaning: '贴纸', example: 'I have many stickers.' },
+    { word: 'can', phonetic: '/kæn/', meaning: '罐子', example: 'How many cans?' },
+    { word: 'many', phonetic: '/ˈmeni/', meaning: '许多', example: 'How many do you have?' }
   ],
   'en_4': [
-    { word: 'bedroom', phonetic: '/ˈbedruːm/', meaning: '卧室', example: 'This is my bedroom.' },
-    { word: 'living room', phonetic: '/ˈlɪvɪŋ ruːm/', meaning: '客厅', example: 'Watch TV in the living room.' },
-    { word: 'kitchen', phonetic: '/ˈkɪtʃɪn/', meaning: '厨房', example: 'Mom is in the kitchen.' },
-    { word: 'bathroom', phonetic: '/ˈbɑːθruːm/', meaning: '浴室', example: 'The bathroom is clean.' },
-    { word: 'study', phonetic: '/ˈstʌdi/', meaning: '书房', example: 'Dad is in the study.' }
+    { word: 'basketball', phonetic: '/ˈbɑːskɪtbɔːl/', meaning: '篮球', example: 'I can play basketball.' },
+    { word: 'football', phonetic: '/ˈfʊtbɔːl/', meaning: '足球', example: 'Can you play football?' },
+    { word: 'skate', phonetic: '/skeɪt/', meaning: '滑冰', example: 'I can skate.' },
+    { word: 'swim', phonetic: '/swɪm/', meaning: '游泳', example: 'Can you swim?' },
+    { word: 'jump', phonetic: '/dʒʌmp/', meaning: '跳', example: 'I can jump.' }
   ],
   'en_5': [
-    { word: 'beef', phonetic: '/biːf/', meaning: '牛肉', example: 'I like beef.' },
-    { word: 'chicken', phonetic: '/ˈtʃɪkɪn/', meaning: '鸡肉', example: 'Have some chicken.' },
-    { word: 'noodles', phonetic: '/ˈnuːdlz/', meaning: '面条', example: 'I love noodles.' },
-    { word: 'soup', phonetic: '/suːp/', meaning: '汤', example: 'The soup is hot.' },
-    { word: 'vegetable', phonetic: '/ˈvedʒtəbl/', meaning: '蔬菜', example: 'Eat more vegetables.' }
+    { word: 'sofa', phonetic: '/ˈsəʊfə/', meaning: '沙发', example: 'The sofa is in the living room.' },
+    { word: 'fridge', phonetic: '/frɪdʒ/', meaning: '冰箱', example: 'It\'s in the fridge.' },
+    { word: 'clock', phonetic: '/klɒk/', meaning: '钟', example: 'Where\'s the clock?' },
+    { word: 'table', phonetic: '/ˈteɪbl/', meaning: '桌子', example: 'It\'s on the table.' },
+    { word: 'bathroom', phonetic: '/ˈbɑːθruːm/', meaning: '浴室', example: 'It\'s in the bathroom.' }
   ],
   'en_6': [
-    { word: 'parents', phonetic: '/ˈpeərənts/', meaning: '父母', example: 'My parents are kind.' },
-    { word: 'cousin', phonetic: '/ˈkʌzn/', meaning: '堂/表兄弟姐妹', example: 'He is my cousin.' },
-    { word: 'uncle', phonetic: '/ˈʌŋkl/', meaning: '叔叔', example: 'My uncle is a doctor.' },
-    { word: 'aunt', phonetic: '/ɑːnt/', meaning: '阿姨', example: 'My aunt is a teacher.' },
-    { word: 'baby', phonetic: '/ˈbeɪbi/', meaning: '婴儿', example: 'The baby is cute.' }
+    { word: 'hamburger', phonetic: '/ˈhæmbɜːɡə/', meaning: '汉堡', example: 'I\'d like a hamburger.' },
+    { word: 'sandwich', phonetic: '/ˈsænwɪdʒ/', meaning: '三明治', example: 'A sandwich, please.' },
+    { word: 'rice', phonetic: '/raɪs/', meaning: '米饭', example: 'Some rice, please.' },
+    { word: 'milk', phonetic: '/mɪlk/', meaning: '牛奶', example: 'I\'d like some milk.' },
+    { word: 'noodles', phonetic: '/ˈnuːdlz/', meaning: '面条', example: 'Noodles, please.' }
+  ],
+  'en_7': [
+    { word: 'shoe', phonetic: '/ʃuː/', meaning: '鞋', example: 'How much are the shoes?' },
+    { word: 'sock', phonetic: '/sɒk/', meaning: '袜子', example: 'I\'d like these socks.' },
+    { word: 'umbrella', phonetic: '/ʌmˈbrelə/', meaning: '伞', example: 'It\'s only nineteen yuan.' },
+    { word: 'fan', phonetic: '/fæn/', meaning: '扇子', example: 'I\'d like that fan.' },
+    { word: 'twenty', phonetic: '/ˈtwenti/', meaning: '二十', example: 'It\'s twenty yuan.' }
+  ],
+  'en_8': [
+    { word: 'doll', phonetic: '/dɒl/', meaning: '洋娃娃', example: 'Look at my doll.' },
+    { word: 'big', phonetic: '/bɪɡ/', meaning: '大的', example: 'Her eyes are big.' },
+    { word: 'small', phonetic: '/smɔːl/', meaning: '小的', example: 'His mouth is small.' },
+    { word: 'long', phonetic: '/lɒŋ/', meaning: '长的', example: 'Her hair is long.' },
+    { word: 'short', phonetic: '/ʃɔːt/', meaning: '短的/矮的', example: 'His nose is small.' }
   ]
 };
 
 const ENGLISH_DIALOGUES = {
   'en_1': [
-    { title: '介绍教室', a: 'We have a new classroom.', b: 'Really? Let\'s go and see!' },
-    { title: '询问位置', a: 'Where is it?', b: 'It\'s near the window.' }
+    { title: '谈论动物', a: 'Do you like dogs?', b: 'Yes, I do. They\'re cute.' },
+    { title: '询问喜好', a: 'What animals do you like?', b: 'I like pandas. They\'re cute and fat.' }
   ],
   'en_2': [
-    { title: '谈论书包', a: 'What\'s in your schoolbag?', b: 'An English book, a maths book...' },
-    { title: '颜色询问', a: 'What colour is it?', b: 'It\'s black and white.' }
+    { title: '制作沙拉', a: 'Let\'s make a fruit salad.', b: 'Great! Do you have any bananas?' },
+    { title: '询问物品', a: 'Do you have any pineapples?', b: 'Yes, I do. / No, I don\'t.' }
   ],
   'en_3': [
-    { title: '描述朋友', a: 'Who\'s he?', b: 'He is Zhang Peng. He is tall and strong.' },
-    { title: '外貌询问', a: 'What\'s her name?', b: 'Her name is Amy. She has long hair.' }
+    { title: '询问数量', a: 'How many stickers do you have?', b: 'I have fifteen stickers.' },
+    { title: '谈论玩具', a: 'What do you have?', b: 'I have some balls.' }
   ],
   'en_4': [
-    { title: '介绍房间', a: 'Is this your bedroom?', b: 'Yes, it is. It\'s nice.' },
-    { title: '物品位置', a: 'Where are the keys?', b: 'They are in the door.' }
+    { title: '谈论能力', a: 'Can you play basketball?', b: 'Yes, I can. / No, I can\'t.' },
+    { title: '邀请运动', a: 'Let\'s go and play football.', b: 'Sorry, I can\'t. I have a swimming lesson.' }
   ],
   'en_5': [
-    { title: '点餐', a: 'What would you like?', b: 'I\'d like some beef, please.' },
-    { title: '用餐', a: 'Dinner\'s ready!', b: 'Thanks! Everything looks good.' }
+    { title: '寻找物品', a: 'Where\'s the bag?', b: 'It\'s in the bedroom.' },
+    { title: '介绍家居', a: 'Look at our new home.', b: 'It\'s nice! I like the living room.' }
   ],
   'en_6': [
-    { title: '介绍家人', a: 'How many people are there in your family?', b: 'Six. My parents, my...' },
-    { title: '职业询问', a: 'What\'s your father\'s job?', b: 'He is a doctor.' }
+    { title: '点餐用语', a: 'What would you like?', b: 'I\'d like a hamburger and a glass of milk.' },
+    { title: '用餐对话', a: 'Anything else?', b: 'Yes, I\'d like some noodles, please.' }
+  ],
+  'en_7': [
+    { title: '询问价格', a: 'Can I help you?', b: 'I\'d like these shoes. How much are they?' },
+    { title: '购物对话', a: 'They\'re thirty yuan.', b: 'OK. I\'ll take them.' }
+  ],
+  'en_8': [
+    { title: '描述玩具', a: 'Look at my doll.', b: 'She\'s beautiful! Her eyes are big.' },
+    { title: '介绍特征', a: 'His mouth is small.', b: 'Yes, and his nose is small too.' }
   ]
 };
 
 const ENGLISH_SCENES = [
-  { id: 'en_1', name: 'My Classroom', icon: '🏫', color: '#818cf8', desc: '教室物品与位置' },
-  { id: 'en_2', name: 'My Schoolbag', icon: '🎒', color: '#f472b6', desc: '学习用品' },
-  { id: 'en_3', name: 'My Friends', icon: '👫', color: '#4ade80', desc: '人物描述' },
-  { id: 'en_4', name: 'My Home', icon: '🏠', color: '#fbbf24', desc: '房间与家具' },
-  { id: 'en_5', name: 'Dinner\'s Ready', icon: '🍽️', color: '#f87171', desc: '食物与用餐' },
-  { id: 'en_6', name: 'Meet My Family', icon: '👨‍👩‍👧‍👦', color: '#a78bfa', desc: '家庭成员' }
+  { id: 'en_1', name: 'I like dogs', icon: '🐕', color: '#818cf8', desc: '谈论喜欢的动物' },
+  { id: 'en_2', name: 'Let\'s make a fruit salad', icon: '🥗', color: '#f472b6', desc: '制作水果沙拉' },
+  { id: 'en_3', name: 'How many?', icon: '🔢', color: '#4ade80', desc: '询问数量' },
+  { id: 'en_4', name: 'I can play basketball', icon: '🏀', color: '#fbbf24', desc: '谈论运动能力' },
+  { id: 'en_5', name: 'Our new home', icon: '🏠', color: '#f87171', desc: '介绍家居物品' },
+  { id: 'en_6', name: 'At the snack bar', icon: '🍔', color: '#a78bfa', desc: '点餐用语' },
+  { id: 'en_7', name: 'How much?', icon: '💰', color: '#38bdf8', desc: '询问价格' },
+  { id: 'en_8', name: 'Dolls', icon: '🎎', color: '#fb923c', desc: '描述玩具特征' }
 ];
 
 // --- 科目数据加载 ---
