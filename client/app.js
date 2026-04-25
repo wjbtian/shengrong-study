@@ -4,6 +4,29 @@
 // HTML 内容在 pages/*.html，样式在 style.css
 // ============================================================
 
+// 科技感粒子初始化
+function initTechParticles() {
+  const container = document.getElementById('tech-particles');
+  if (!container) return;
+  
+  const particleCount = 30;
+  for (let i = 0; i < particleCount; i++) {
+    const p = document.createElement('div');
+    p.className = 'tech-particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (8 + Math.random() * 12) + 's';
+    p.style.animationDelay = Math.random() * 10 + 's';
+    p.style.opacity = Math.random() * 0.5 + 0.2;
+    
+    // 随机颜色：绿、紫、青
+    const colors = ['var(--accent)', 'var(--accent2)', 'var(--cyan)'];
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    p.style.boxShadow = `0 0 6px ${p.style.background}`;
+    
+    container.appendChild(p);
+  }
+}
+
 const API = window.location.origin;
 let selectedMood = '😄';
 const MOODS = ['😄','🤩','😊','🙂','😐','😔','😤','😢'];
@@ -167,6 +190,9 @@ async function loadPageData(page) {
 
 // --- 首页数据 ---
 async function loadHomeData() {
+  // 初始化科技感粒子
+  initTechParticles();
+  
   updateGreeting();
   updateTodayDate();
   
