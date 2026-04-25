@@ -511,8 +511,8 @@ function refreshQuote() {
 }
 
 // --- 艾宾浩斯复习提醒 ---
-// 复习间隔：1天、2天、4天、7天、15天、30天
-const REVIEW_INTERVALS = [1, 2, 4, 7, 15, 30];
+// 艾宾浩斯复习间隔：3天、7天、15天、30天、60天、90天（去掉太频繁的1/2天）
+const REVIEW_INTERVALS = [3, 7, 15, 30, 60, 90];
 const STAGE_NAMES = ['第1次复习', '第2次复习', '第3次复习', '第4次复习', '第5次复习', '第6次复习'];
 const STAGE_EMOJIS = ['🌱', '🌿', '🌲', '🌳', '🏆', '👑'];
 
@@ -643,25 +643,25 @@ function initReviewData() {
     // 添加示例数据（过去学习的知识点）
     const today = new Date();
     
-    // 1天前学习的（今天第1次复习）
-    const d1 = new Date(today);
-    d1.setDate(d1.getDate() - 1);
-    addReviewItem('古诗词《静夜思》', '语文', d1.toISOString().split('T')[0]);
+    // 3天前学习的（今天第1次复习）
+    const d3 = new Date(today);
+    d3.setDate(d3.getDate() - 3);
+    addReviewItem('古诗词《静夜思》', '语文', d3.toISOString().split('T')[0]);
     
-    // 2天前学习的（今天第2次复习）
-    const d2 = new Date(today);
-    d2.setDate(d2.getDate() - 2);
-    addReviewItem('和差问题公式', '奥数', d2.toISOString().split('T')[0]);
-    
-    // 4天前学习的（今天第3次复习）
-    const d4 = new Date(today);
-    d4.setDate(d4.getDate() - 4);
-    addReviewItem('英语Unit 3单词', '英语', d4.toISOString().split('T')[0]);
-    
-    // 7天前学习的（今天第4次复习）
+    // 7天前学习的（今天第2次复习）
     const d7 = new Date(today);
     d7.setDate(d7.getDate() - 7);
-    addReviewItem('角的分类与度量', '数学', d7.toISOString().split('T')[0]);
+    addReviewItem('和差问题公式', '奥数', d7.toISOString().split('T')[0]);
+    
+    // 15天前学习的（今天第3次复习）
+    const d15 = new Date(today);
+    d15.setDate(d15.getDate() - 15);
+    addReviewItem('英语Unit 3单词', '英语', d15.toISOString().split('T')[0]);
+    
+    // 30天前学习的（今天第4次复习）
+    const d30 = new Date(today);
+    d30.setDate(d30.getDate() - 30);
+    addReviewItem('角的分类与度量', '数学', d30.toISOString().split('T')[0]);
     
     console.log('艾宾浩斯复习数据已初始化');
   }
