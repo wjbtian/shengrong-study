@@ -6298,6 +6298,279 @@ body::before {
   font-weight: 600;
 }
 
+/* 吉他页面样式 */
+.guitar-latest-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.guitar-video {
+  width: 100%;
+  max-height: 400px;
+  background: #000;
+}
+
+.guitar-video-info {
+  padding: 20px;
+}
+
+.guitar-video-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.guitar-video-meta {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.guitar-video-meta span {
+  font-size: 14px;
+  color: var(--text2);
+}
+
+.guitar-video-notes {
+  padding: 12px;
+  background: var(--surface2);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.6;
+}
+
+.guitar-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.guitar-item:hover {
+  background: var(--surface2);
+  transform: translateX(4px);
+}
+
+.guitar-item-latest {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.guitar-item-index {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface2);
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text2);
+  flex-shrink: 0;
+}
+
+.guitar-item-latest .guitar-item-index {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.guitar-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.guitar-item-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+
+.guitar-item-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--text2);
+}
+
+.guitar-item-arrow {
+  font-size: 20px;
+  color: var(--text3);
+  transition: transform 0.3s ease;
+}
+
+.guitar-item:hover .guitar-item-arrow {
+  transform: translateX(4px);
+  color: var(--accent);
+}
+
+/* 目标区域 */
+.goal-section {
+  margin-bottom: 24px;
+}
+
+.goal-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.goal-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.goal-progress {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.goal-bar {
+  width: 200px;
+  height: 8px;
+  background: var(--surface2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.goal-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--cyan));
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.goal-text {
+  font-size: 14px;
+  color: var(--text2);
+  font-weight: 600;
+}
+
+/* 音乐分析 */
+.analysis-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.analysis-card {
+  text-align: center;
+  padding: 24px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.analysis-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.analysis-label {
+  font-size: 13px;
+  color: var(--text2);
+  margin-bottom: 8px;
+}
+
+.analysis-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* 曲目库 */
+.song-library {
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.song-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.3s ease;
+}
+
+.song-item:last-child {
+  border-bottom: none;
+}
+
+.song-item:hover {
+  background: var(--surface2);
+}
+
+.song-icon {
+  font-size: 24px;
+}
+
+.song-info {
+  flex: 1;
+}
+
+.song-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+
+.song-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--text2);
+}
+
+.song-status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.song-status.mastered {
+  background: rgba(74, 222, 128, 0.15);
+  color: var(--accent);
+}
+
+.song-status.learning {
+  background: rgba(251, 191, 36, 0.15);
+  color: var(--yellow);
+}
+
+/* 输入提示 */
+.input-hint {
+  font-size: 13px;
+  color: var(--text2);
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: var(--surface2);
+  border-radius: var(--radius-xs);
+}
+
 /* 移动端适配 */
 @media (max-width: 768px) {
   .char-list {
@@ -6326,5 +6599,19 @@ body::before {
   
   .formula-cards {
     grid-template-columns: 1fr;
+  }
+  
+  .analysis-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .goal-card {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  
+  .goal-bar {
+    width: 100%;
   }
 }

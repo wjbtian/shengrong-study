@@ -21,19 +21,59 @@
     <div class="stat-value" id="guitar-songs">0</div>
     <div class="stat-label">学会曲目</div>
   </div>
+  <div class="stat-card">
+    <div class="stat-icon">📅</div>
+    <div class="stat-value" id="guitar-streak">0</div>
+    <div class="stat-label">连续练习(天)</div>
+  </div>
+</div>
+
+<!-- 本周目标 -->
+<div class="section-header">
+  <h2 class="section-title">🎯 本周目标</h2>
+</div>
+<div class="goal-section" id="guitar-goal">
+  <div class="goal-card">
+    <div class="goal-info">
+      <div class="goal-title">每周练习目标</div>
+      <div class="goal-progress">
+        <div class="goal-bar">
+          <div class="goal-fill" id="goal-fill" style="width: 0%"></div>
+        </div>
+        <div class="goal-text">
+          <span id="goal-current">0</span> / <span id="goal-target">3</span> 次
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-sm" onclick="editGoal()">修改目标</button>
+  </div>
 </div>
 
 <!-- 最新视频 -->
 <div class="section-header">
-  <h2 class="section-title">最新练习</h2>
+  <h2 class="section-title">🎬 最新练习</h2>
 </div>
 <div id="guitar-latest"></div>
 
-<!-- 历史记录 -->
+<!-- 音乐分析 -->
 <div class="section-header">
-  <h2 class="section-title">练习历史</h2>
+  <h2 class="section-title">📊 音乐分析</h2>
+</div>
+<div id="guitar-analysis"></div>
+
+<!-- 练习历史 -->
+<div class="section-header">
+  <h2 class="section-title">📚 练习历史</h2>
 </div>
 <div id="guitar-list"></div>
+
+<!-- 曲目库 -->
+<div class="section-header">
+  <h2 class="section-title">🎵 曲目库</h2>
+</div>
+<div class="song-library" id="guitar-songs-library">
+  <div class="song-list" id="song-list"></div>
+</div>
 
 <!-- 上传弹窗 -->
 <div class="modal" id="modal-guitar">
@@ -47,10 +87,32 @@
       <input type="text" class="input" id="guitar-title" placeholder="曲目名称">
       <input type="file" class="input" id="guitar-video" accept="video/*">
       <textarea class="textarea" id="guitar-notes" placeholder="练习笔记（可选）"></textarea>
+      <div class="input-hint">💡 提示：上传后系统会自动分析BPM和调性</div>
     </div>
     <div class="form-actions">
       <button class="btn" onclick="closeModal('modal-guitar')">取消</button>
       <button class="btn btn-primary" onclick="saveGuitar()">上传</button>
+    </div>
+  </div>
+</div>
+
+<!-- 目标设置弹窗 -->
+<div class="modal" id="modal-goal">
+  <div class="modal-overlay" onclick="closeModal('modal-goal')"></div>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">🎯 设置练习目标</h3>
+      <button class="modal-close" onclick="closeModal('modal-goal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <label class="input-label">每周练习次数</label>
+      <input type="number" class="input" id="goal-input" min="1" max="7" value="3">
+      <label class="input-label">每次练习时长（分钟）</label>
+      <input type="number" class="input" id="goal-duration" min="10" max="120" value="30">
+    </div>
+    <div class="form-actions">
+      <button class="btn" onclick="closeModal('modal-goal')">取消</button>
+      <button class="btn btn-primary" onclick="saveGoal()">保存</button>
     </div>
   </div>
 </div>

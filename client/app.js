@@ -1511,18 +1511,25 @@ async function loadGuitarData() {
     const totalEl = document.getElementById('guitar-total');
     const durationEl = document.getElementById('guitar-duration');
     const songsEl = document.getElementById('guitar-songs');
+    const streakEl = document.getElementById('guitar-streak');
     
     if (totalEl) totalEl.textContent = videos?.length || 0;
     
     let totalDuration = 0;
     const songs = new Set();
+    const dates = new Set();
     (videos || []).forEach(v => {
       if (v.duration) totalDuration += parseInt(v.duration);
       if (v.title) songs.add(v.title);
+      if (v.date) dates.add(v.date.split('T')[0]);
     });
     
     if (durationEl) durationEl.textContent = Math.round(totalDuration / 60);
     if (songsEl) songsEl.textContent = songs.size;
+    if (streakEl) streakEl.textContent = calcStreakDays(dates);
+    
+    // 更新目标进度
+    updateGoalProgress(videos?.length || 0);
     
     // 最新视频
     const latestEl = document.getElementById('guitar-latest');
@@ -1540,35 +1547,184 @@ async function loadGuitarData() {
                 <span>📅 ${formatDate(latest.date)}</span>
                 ${latest.bpm ? `<span>🎵 ${latest.bpm} BPM</span>` : ''}
                 ${latest.key_sig ? `<span>🎼 ${latest.key_sig}</span>` : ''}
+                ${latest.duration ? `<span>⏱️ ${Math.round(latest.duration/60)}分钟</span>` : ''}
               </div>
               ${latest.notes ? `<div class="guitar-video-notes">${latest.notes}</div>` : ''}
             </div>
           </div>`;
       } else {
-        latestEl.innerHTML = '<p style="color:var(--text-3)">还没有练习视频</p>';
+        latestEl.innerHTML = `
+          <div class="empty-state">
+            <span class="emoji">🎸</span>
+            <p>还没有练习视频</p>
+            <span class="hint">点击右上角上传你的第一次练习</span>
+          </div>`;
+      }
+    }
+    
+    // 音乐分析
+    const analysisEl = document.getElementById('guitar-analysis');
+    if (analysisEl) {
+      if (videos && videos.length > 0) {
+        const latest = videos[0];
+        analysisEl.innerHTML = `
+          <div class="analysis-grid">
+            <div class="analysis-card">
+              <div class="analysis-icon">🎵</div>
+              <div class="analysis-label">速度</div>
+              <div class="analysis-value">${latest.bpm || '--'} BPM</div>
+            </div>
+            <div class="analysis-card">
+              <div class="analysis-icon">🎼</div>
+              <div class="analysis-label">调性</div>
+              <div class="analysis-value">${latest.key_sig || '--'}</div>
+            </div>
+            <div class="analysis-card">
+              <div class="analysis-icon">⏱️</div>
+              <div class="analysis-label">时长</div>
+              <div class="analysis-value">${latest.duration ? Math.round(latest.duration/60) + '分钟' : '--'}</div>
+            </div>
+            <div class="analysis-card">
+              <div class="analysis-icon">📈</div>
+              <div class="analysis-label">练习次数</div>
+              <div class="analysis-value">${videos.length}次</div>
+            </div>
+          </div>`;
+      } else {
+        analysisEl.innerHTML = `
+          <div class="empty-state">
+            <span class="emoji">📊</span>
+            <p>上传视频后将显示音乐分析</p>
+          </div>`;
       }
     }
     
     // 历史列表
     const listEl = document.getElementById('guitar-list');
     if (listEl) {
-      if (videos && videos.length > 1) {
-        listEl.innerHTML = videos.slice(1).map(v => `
-          <div class="guitar-item" data-id="${v.id}">
-            <div class="guitar-item-title">${v.title}</div>
-            <div class="guitar-item-meta">
-              <span>${formatDate(v.date)}</span>
-              ${v.duration ? `<span>${Math.round(v.duration/60)}分钟</span>` : ''}
+      if (videos && videos.length > 0) {
+        listEl.innerHTML = videos.map((v, idx) => `
+          <div class="guitar-item ${idx === 0 ? 'guitar-item-latest' : ''}" data-id="${v.id}">
+            <div class="guitar-item-index">${idx + 1}</div>
+            <div class="guitar-item-info">
+              <div class="guitar-item-title">${v.title}</div>
+              <div class="guitar-item-meta">
+                <span>📅 ${formatDate(v.date)}</span>
+                ${v.duration ? `<span>⏱️ ${Math.round(v.duration/60)}分钟</span>` : ''}
+                ${v.bpm ? `<span>🎵 ${v.bpm}BPM</span>` : ''}
+              </div>
             </div>
+            <div class="guitar-item-arrow">→</div>
           </div>`).join('');
       } else {
-        listEl.innerHTML = '<p style="color:var(--text-3)">暂无更多历史记录</p>';
+        listEl.innerHTML = `
+          <div class="empty-state">
+            <span class="emoji">📚</span>
+            <p>暂无历史记录</p>
+          </div>`;
+      }
+    }
+    
+    // 曲目库
+    const songsLibraryEl = document.getElementById('song-list');
+    if (songsLibraryEl) {
+      if (songs.size > 0) {
+        const songArray = Array.from(songs);
+        songsLibraryEl.innerHTML = songArray.map(song => {
+          const songVideos = videos.filter(v => v.title === song);
+          const latestPractice = songVideos[0];
+          const practiceCount = songVideos.length;
+          return `
+            <div class="song-item">
+              <div class="song-icon">🎵</div>
+              <div class="song-info">
+                <div class="song-name">${song}</div>
+                <div class="song-meta">
+                  <span>练习 ${practiceCount} 次</span>
+                  <span>最近 ${formatDate(latestPractice.date)}</span>
+                </div>
+              </div>
+              <div class="song-status ${practiceCount >= 5 ? 'mastered' : 'learning'}">
+                ${practiceCount >= 5 ? '✅ 已掌握' : '📖 练习中'}
+              </div>
+            </div>`;
+        }).join('');
+      } else {
+        songsLibraryEl.innerHTML = `
+          <div class="empty-state">
+            <span class="emoji">🎵</span>
+            <p>曲目库为空</p>
+            <span class="hint">开始练习后自动收录</span>
+          </div>`;
       }
     }
     
   } catch (err) {
     console.error('加载吉他数据失败:', err);
   }
+}
+
+// 计算连续练习天数
+function calcStreakDays(dates) {
+  if (!dates || dates.size === 0) return 0;
+  const sorted = Array.from(dates).sort().reverse();
+  let streak = 0;
+  const today = new Date().toISOString().split('T')[0];
+  const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+  
+  // 检查今天或昨天是否有练习
+  if (!sorted.includes(today) && !sorted.includes(yesterday)) return 0;
+  
+  let checkDate = sorted.includes(today) ? today : yesterday;
+  for (const date of sorted) {
+    if (date === checkDate) {
+      streak++;
+      const nextDate = new Date(new Date(checkDate).getTime() - 86400000).toISOString().split('T')[0];
+      checkDate = nextDate;
+    } else if (new Date(date) < new Date(checkDate)) {
+      break;
+    }
+  }
+  return streak;
+}
+
+// 更新目标进度
+function updateGoalProgress(current) {
+  const goalCurrent = document.getElementById('goal-current');
+  const goalFill = document.getElementById('goal-fill');
+  const goalTarget = document.getElementById('goal-target');
+  
+  if (!goalCurrent || !goalFill) return;
+  
+  const target = parseInt(localStorage.getItem('guitar-goal-target') || '3');
+  if (goalTarget) goalTarget.textContent = target;
+  goalCurrent.textContent = Math.min(current, target);
+  
+  const percent = Math.min((current / target) * 100, 100);
+  goalFill.style.width = percent + '%';
+  
+  if (percent >= 100) {
+    goalFill.style.background = 'linear-gradient(90deg, var(--accent), var(--yellow))';
+  }
+}
+
+// 编辑目标
+function editGoal() {
+  const modal = document.getElementById('modal-goal');
+  if (modal) modal.classList.add('active');
+}
+
+// 保存目标
+function saveGoal() {
+  const target = document.getElementById('goal-input')?.value || '3';
+  const duration = document.getElementById('goal-duration')?.value || '30';
+  localStorage.setItem('guitar-goal-target', target);
+  localStorage.setItem('guitar-goal-duration', duration);
+  closeModal('modal-goal');
+  
+  // 刷新显示
+  const videos = document.querySelectorAll('.guitar-item');
+  updateGoalProgress(videos.length);
 }
 
 // --- 闪光时刻数据 ---
