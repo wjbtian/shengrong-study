@@ -595,6 +595,214 @@ body::before {
 }
 
 /* ============================================================
+   成就徽章系统
+   ============================================================ */
+
+.achievements-section {
+  margin-bottom: 24px;
+}
+
+.badge-progress {
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 700;
+  background: var(--accent-dim);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 1200px) {
+  .badges-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .badges-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .daily-quote-section {
+    flex-direction: column;
+    text-align: center;
+    padding: 16px;
+  }
+  
+  .quote-refresh {
+    align-self: center;
+  }
+  margin-top: 16px;
+}
+
+.badge-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: all 0.3s var(--ease-spring);
+  position: relative;
+  overflow: hidden;
+}
+
+.badge-item:hover {
+  transform: translateY(-4px);
+  border-color: var(--border2);
+}
+
+.badge-item.unlocked {
+  border-color: rgba(74,222,128,0.3);
+  background: linear-gradient(180deg, rgba(74,222,128,0.08) 0%, var(--surface) 100%);
+}
+
+.badge-item.unlocked:hover {
+  border-color: var(--accent);
+  box-shadow: 0 8px 24px rgba(74,222,128,0.15);
+}
+
+.badge-item.locked {
+  opacity: 0.5;
+  filter: grayscale(0.8);
+}
+
+.badge-item.locked .badge-icon {
+  filter: blur(1px);
+}
+
+.badge-icon {
+  font-size: 32px;
+  line-height: 1;
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.badge-item:hover .badge-icon {
+  transform: scale(1.2);
+}
+
+.badge-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text2);
+  text-align: center;
+  line-height: 1.3;
+}
+
+.badge-item.unlocked .badge-name {
+  color: var(--accent);
+}
+
+.badge-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, rgba(74,222,128,0.2) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.badge-item.unlocked:hover .badge-glow {
+  opacity: 1;
+}
+
+/* 新解锁动画 */
+@keyframes badgeUnlock {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.badge-item.new-unlock {
+  animation: badgeUnlock 0.6s var(--ease-spring);
+}
+
+/* ============================================================
+   每日一句
+   ============================================================ */
+
+.daily-quote-section {
+  background: linear-gradient(135deg, rgba(74,222,128,0.08) 0%, rgba(129,140,248,0.06) 100%);
+  border: 1px solid rgba(74,222,128,0.15);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.daily-quote-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--accent), var(--accent2));
+}
+
+.quote-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  animation: float 3s ease-in-out infinite;
+}
+
+.quote-content {
+  flex: 1;
+}
+
+.quote-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.6;
+  margin-bottom: 4px;
+  font-family: var(--font-display);
+}
+
+.quote-author {
+  font-size: 12px;
+  color: var(--text3);
+}
+
+.quote-refresh {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+  color: var(--text2);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.quote-refresh:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: rotate(180deg);
+}
+
+/* ============================================================
    科技感背景
    ============================================================ */
 

@@ -260,6 +260,12 @@ async function loadHomeData() {
     // 心情趋势
     renderMoodTimeline(diary);
     
+    // 成就徽章
+    renderBadges(diary, shines, guitar, tech, progress);
+    
+    // 每日一句
+    renderDailyQuote();
+    
     // 最近日记
     const recentDiaryEl = document.getElementById('recent-diary');
     if (recentDiaryEl) {
@@ -382,6 +388,123 @@ function updateGreeting() {
   else text = '晚上好 🌙';
   const el = document.getElementById('greeting');
   if (el) el.textContent = text + '，永远的神！';
+}
+
+// --- 成就徽章系统 ---
+const BADGES = [
+  { id: 'first_diary', icon: '📝', name: '初识笔墨', desc: '写下第一篇日记', check: (d) => d?.length >= 1 },
+  { id: 'diary_10', icon: '📚', name: '笔耕不辍', desc: '累计10篇日记', check: (d) => d?.length >= 10 },
+  { id: 'diary_30', icon: '📖', name: '日记达人', desc: '累计30篇日记', check: (d) => d?.length >= 30 },
+  { id: 'first_shine', icon: '✨', name: '闪光初现', desc: '记录第一个闪光时刻', check: (s) => s?.length >= 1 },
+  { id: 'shine_10', icon: '🌟', name: '星光璀璨', desc: '累计10个闪光时刻', check: (s) => s?.length >= 10 },
+  { id: 'first_guitar', icon: '🎸', name: '弦音初鸣', desc: '完成第一次吉他练习', check: (g) => g?.length >= 1 },
+  { id: 'guitar_10', icon: '🎵', name: '音乐之路', desc: '累计10次吉他练习', check: (g) => g?.length >= 10 },
+  { id: 'first_tech', icon: '🔬', name: '科技先锋', desc: '收藏第一条科技新闻', check: (t) => t?.length >= 1 },
+  { id: 'tech_10', icon: '🚀', name: '未来探索者', desc: '累计10条科技新闻', check: (t) => t?.length >= 10 },
+  { id: 'week_streak', icon: '🔥', name: '持之以恒', desc: '连续7天有记录', check: (d, s, g) => {
+    const allDates = new Set();
+    [...(d||[]), ...(s||[]), ...(g||[])].forEach(i => { if(i.date) allDates.add(i.date); });
+    const sorted = [...allDates].sort();
+    if (sorted.length < 7) return false;
+    let streak = 1;
+    for (let i = 1; i < sorted.length; i++) {
+      const diff = (new Date(sorted[i]) - new Date(sorted[i-1])) / 86400000;
+      if (diff === 1) { streak++; if (streak >= 7) return true; }
+      else streak = 1;
+    }
+    return false;
+  }},
+  { id: 'all_subjects', icon: '📊', name: '全面发展', desc: '所有科目都有进度', check: (d, s, g, t, progress) => {
+    const p = progress || {};
+    const hasChinese = (p.doneUnits || []).some(u => u.startsWith('chinese_'));
+    const hasMath = (p.doneUnits || []).some(u => u.startsWith('math_'));
+    const hasEnglish = (p.doneUnits || []).some(u => u.startsWith('english_'));
+    const hasOlympiad = (p.doneOM || []).length > 0;
+    return hasChinese && hasMath && hasEnglish && hasOlympiad;
+  }},
+  { id: 'early_bird', icon: '🌅', name: '早起的鸟', desc: '早上8点前写日记', check: (d) => {
+    return (d || []).some(i => {
+      const h = new Date(i.created || i.date).getHours();
+      return h < 8;
+    });
+  }}
+];
+
+function renderBadges(diary, shines, guitar, tech, progress) {
+  const grid = document.getElementById('badges-grid');
+  const progressEl = document.getElementById('badge-progress');
+  if (!grid) return;
+  
+  let unlocked = 0;
+  const html = BADGES.map(badge => {
+    const isUnlocked = badge.check(diary, shines, guitar, tech, progress);
+    if (isUnlocked) unlocked++;
+    
+    return `
+      <div class="badge-item ${isUnlocked ? 'unlocked' : 'locked'}" title="${badge.desc}">
+        <div class="badge-glow"></div>
+        <div class="badge-icon">${badge.icon}</div>
+        <div class="badge-name">${badge.name}</div>
+      </div>
+    `;
+  }).join('');
+  
+  grid.innerHTML = html;
+  if (progressEl) progressEl.textContent = `${unlocked}/${BADGES.length}`;
+}
+
+// --- 每日一句 ---
+const QUOTES = [
+  { text: '千里之行，始于足下。', author: '老子' },
+  { text: '学而时习之，不亦说乎？', author: '孔子' },
+  { text: '天才就是百分之一的灵感加上百分之九十九的汗水。', author: '爱迪生' },
+  { text: '书山有路勤为径，学海无涯苦作舟。', author: '韩愈' },
+  { text: '不积跬步，无以至千里；不积小流，无以成江海。', author: '荀子' },
+  { text: '知之者不如好之者，好之者不如乐之者。', author: '孔子' },
+  { text: '业精于勤，荒于嬉；行成于思，毁于随。', author: '韩愈' },
+  { text: '路漫漫其修远兮，吾将上下而求索。', author: '屈原' },
+  { text: '宝剑锋从磨砺出，梅花香自苦寒来。', author: '古诗' },
+  { text: '少年易老学难成，一寸光阴不可轻。', author: '朱熹' },
+  { text: '纸上得来终觉浅，绝知此事要躬行。', author: '陆游' },
+  { text: '问渠那得清如许？为有源头活水来。', author: '朱熹' },
+  { text: '欲穷千里目，更上一层楼。', author: '王之涣' },
+  { text: '海内存知己，天涯若比邻。', author: '王勃' },
+  { text: '天生我材必有用，千金散尽还复来。', author: '李白' },
+  { text: 'The only way to do great work is to love what you do.', author: 'Steve Jobs' },
+  { text: 'Stay hungry, stay foolish.', author: 'Steve Jobs' },
+  { text: 'Success is not final, failure is not fatal.', author: 'Winston Churchill' },
+  { text: 'The future belongs to those who believe in the beauty of their dreams.', author: 'Eleanor Roosevelt' },
+  { text: 'It always seems impossible until it is done.', author: 'Nelson Mandela' }
+];
+
+function renderDailyQuote() {
+  const textEl = document.getElementById('daily-quote');
+  const authorEl = document.getElementById('quote-author');
+  if (!textEl) return;
+  
+  // 根据日期选择固定的句子（每天不同）
+  const dayIndex = Math.floor(Date.now() / 86400000) % QUOTES.length;
+  const quote = QUOTES[dayIndex];
+  
+  textEl.textContent = quote.text;
+  if (authorEl) authorEl.textContent = '—— ' + quote.author;
+}
+
+function refreshQuote() {
+  const textEl = document.getElementById('daily-quote');
+  const authorEl = document.getElementById('quote-author');
+  if (!textEl) return;
+  
+  // 随机选择
+  const quote = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+  
+  // 淡出淡入效果
+  textEl.style.opacity = '0';
+  setTimeout(() => {
+    textEl.textContent = quote.text;
+    if (authorEl) authorEl.textContent = '—— ' + quote.author;
+    textEl.style.opacity = '1';
+  }, 200);
 }
 
 // --- 日记数据 ---
