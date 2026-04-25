@@ -161,7 +161,7 @@ body::before {
   width: 240px;
   min-width: 240px;
   height: 100vh;
-  background: linear-gradient(180deg, #0a0a14 0%, var(--surface) 100%);
+  background: linear-gradient(180deg, rgba(10,10,20,0.95) 0%, rgba(15,15,26,0.98) 50%, var(--surface) 100%);
   border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
@@ -169,6 +169,19 @@ body::before {
   overflow: hidden;
   transition: width 0.35s var(--ease-smooth), min-width 0.35s var(--ease-smooth);
   z-index: 10;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(180deg, rgba(74,222,128,0.04) 0%, transparent 100%);
+  pointer-events: none;
 }
 
 .sidebar.collapsed {
@@ -186,30 +199,47 @@ body::before {
 }
 
 .avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
   background: linear-gradient(135deg, var(--accent), var(--accent2));
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 22px;
   flex-shrink: 0;
-  box-shadow: 0 0 20px rgba(74,222,128,0.3), 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 0 24px rgba(74,222,128,0.35), 0 4px 16px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
   position: relative;
   overflow: hidden;
-  transition: transform 0.3s var(--ease-spring);
+  transition: transform 0.4s var(--ease-spring), box-shadow 0.4s;
+  cursor: pointer;
 }
 
 .avatar:hover {
-  transform: scale(1.1) rotate(-5deg);
+  transform: scale(1.12) rotate(-8deg);
+  box-shadow: 0 0 32px rgba(74,222,128,0.5), 0 8px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
 }
 
 .avatar::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.15) 100%);
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.2) 100%);
+}
+
+.avatar::before {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--surface);
+  z-index: 2;
+  box-shadow: 0 0 8px var(--accent);
+  animation: pulse 2s ease-in-out infinite;
 }
 
 .sidebar-info {
@@ -272,20 +302,33 @@ body::before {
   color: var(--text3);
   text-transform: uppercase;
   letter-spacing: 2px;
-  padding: 8px 12px 4px;
-  margin-bottom: 8px;
+  padding: 10px 14px 6px;
+  margin-bottom: 6px;
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-label::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.5;
 }
 
 .nav-label::after {
   content: '';
   position: absolute;
   bottom: 0;
-  left: 12px;
-  right: 12px;
+  left: 14px;
+  right: 14px;
   height: 1px;
   background: linear-gradient(90deg, var(--accent), transparent);
-  opacity: 0.3;
+  opacity: 0.25;
 }
 
 .sidebar.collapsed .nav-label { display: none; }
@@ -299,7 +342,7 @@ body::before {
   cursor: pointer;
   font-size: 14px;
   color: var(--text2);
-  transition: all 0.25s var(--ease-smooth);
+  transition: all 0.3s var(--ease-smooth);
   border-left: 3px solid transparent;
   white-space: nowrap;
   overflow: hidden;
@@ -312,18 +355,34 @@ body::before {
   position: absolute;
   inset: 0;
   border-radius: var(--radius-sm);
-  background: linear-gradient(90deg, var(--accent-dim), transparent);
+  background: linear-gradient(90deg, var(--accent-dim), transparent 70%);
   opacity: 0;
-  transition: opacity 0.25s;
+  transition: opacity 0.3s;
+}
+
+.nav-item::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+  transition: left 0.6s var(--ease-smooth);
+  pointer-events: none;
 }
 
 .nav-item:hover {
   color: var(--text);
-  transform: translateX(4px);
+  transform: translateX(5px);
 }
 
 .nav-item:hover::before {
   opacity: 1;
+}
+
+.nav-item:hover::after {
+  left: 150%;
 }
 
 .nav-item.active {
@@ -331,10 +390,15 @@ body::before {
   color: var(--accent);
   border-left-color: var(--accent);
   font-weight: 600;
+  box-shadow: 0 0 20px rgba(74,222,128,0.08), inset 0 1px 0 rgba(255,255,255,0.05);
 }
 
 .nav-item.active::before {
   opacity: 1;
+}
+
+.nav-item.active .nav-text {
+  text-shadow: 0 0 20px rgba(74,222,128,0.3);
 }
 
 .nav-icon {
