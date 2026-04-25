@@ -1451,68 +1451,70 @@ function showChineseDetail(unitId, color) {
     html += '</div>';
   }
   
-  // 古诗词
+  // 古诗词 - 使用新样式
   if (data.poems.length > 0) {
     html += '<div class="poem-section">';
     html += '<h4>🌸 古诗词</h4>';
     data.poems.forEach(p => {
       html += `
-        <div class="poem-item">
-          <div class="poem-title">${p.title}</div>
-          <div class="poem-author">[${p.author}]</div>
-          <div class="poem-content">${p.content.replace(/\n/g, '<br>')}</div>
+        <div class="chinese-poem-card">
+          <div class="poem-title-large">${p.title}</div>
+          <div class="poem-author-large">[${p.author}]</div>
+          <div class="poem-content-large">${p.content.replace(/\n/g, '<br>')}</div>
         </div>`;
     });
     html += '</div>';
   }
   
-  // 好词好句
+  // 好词好句 - 使用新样式
   const goodWords = GOOD_WORDS[unitId];
   if (goodWords) {
     html += '<div class="good-words-section">';
     html += '<h4>🌟 好词好句积累</h4>';
     
-    // 好词
+    // 好词 - 使用气泡样式
     if (goodWords.words.length > 0) {
       html += '<div class="word-tags">';
       html += '<h5>✨ 好词</h5>';
       html += '<div class="tags">';
       goodWords.words.forEach(w => {
-        html += `<span class="word-tag">${w}</span>`;
+        html += `<span class="good-word-bubble">${w}</span>`;
       });
       html += '</div></div>';
     }
     
-    // 好句
+    // 好句 - 使用高亮样式
     if (goodWords.sentences.length > 0) {
       html += '<div class="sentence-list">';
       html += '<h5>📝 好句</h5>';
       goodWords.sentences.forEach(s => {
-        html += `<div class="sentence-item">"${s}"</div>`;
+        html += `<div class="sentence-highlight">${s}</div>`;
       });
       html += '</div>';
     }
     html += '</div>';
   }
   
-  // 重点字词
+  // 重点字词 - 使用新样式
   const keyWords = KEY_WORDS[unitId];
   if (keyWords) {
     html += '<div class="key-words-section">';
     html += '<h4>📖 重点字词</h4>';
     
-    // 生字
+    // 生字 - 使用增强卡片样式
     if (keyWords.characters.length > 0) {
       html += '<div class="char-grid">';
       html += '<h5>🎯 生字表</h5>';
       html += '<div class="char-list">';
       keyWords.characters.forEach(c => {
         html += `
-          <div class="char-card">
-            <div class="char-big">${c.char}</div>
-            <div class="char-pinyin">${c.pinyin}</div>
-            <div class="char-meaning">${c.meaning}</div>
-            <div class="char-example">${c.example}</div>
+          <div class="char-card-enhanced">
+            <div class="char-stroke">${c.char}</div>
+            <div class="char-detail">
+              <div style="color:var(--accent);font-weight:600;">${c.pinyin}</div>
+              <div style="color:var(--text2);">${c.meaning}</div>
+              <div style="color:var(--text3);font-size:11px;">${c.example}</div>
+            </div>
           </div>`;
       });
       html += '</div></div>';
@@ -1622,12 +1624,10 @@ function showMathDetail(unitId) {
     </div>
     <div class="formula-cards">
       ${formulas.map(f => `
-        <div class="formula-card">
-          <div class="formula-header">
-            <span class="formula-type">${f.type}</span>
-            <h4>${f.name}</h4>
-          </div>
-          <div class="formula-body">${f.formula}</div>
+        <div class="math-formula-card">
+          <div class="formula-name">${f.name}</div>
+          <div class="formula-math">${f.formula}</div>
+          <div class="formula-desc">${f.type} · 点击收藏到错题本</div>
         </div>
       `).join('')}
     </div>
@@ -1655,13 +1655,10 @@ function renderMathFormulas() {
   container.innerHTML = `
     <div class="formula-cards">
       ${allFormulas.map(f => `
-        <div class="formula-card">
-          <div class="formula-header">
-            <span class="formula-type">${f.type}</span>
-            <span class="formula-unit">${f.unitName}</span>
-          </div>
-          <h4>${f.name}</h4>
-          <div class="formula-body">${f.formula}</div>
+        <div class="math-formula-card">
+          <div class="formula-name">${f.name}</div>
+          <div class="formula-math">${f.formula}</div>
+          <div class="formula-desc">${f.type} · ${f.unitName}</div>
         </div>
       `).join('')}
     </div>
@@ -1677,7 +1674,7 @@ function showEnglishDetail(unitId) {
   const dialogues = ENGLISH_DIALOGUES[unitId] || [];
   const scene = ENGLISH_SCENES.find(s => s.id === unitId);
   
-  // 渲染单词卡片
+  // 渲染单词卡片 - 使用新样式
   if (vocabContainer) {
     vocabContainer.innerHTML = `
       <div class="vocab-scene-header" style="--scene-color: ${scene?.color || '#f472b6'}">
@@ -1686,15 +1683,16 @@ function showEnglishDetail(unitId) {
       </div>
       <div class="vocab-flip-grid">
         ${vocabs.map((v, idx) => `
-          <div class="vocab-flip-card" onclick="this.classList.toggle('flipped')">
-            <div class="vocab-flip-inner">
-              <div class="vocab-flip-front">
-                <span class="vocab-word">${v.word}</span>
-                <span class="vocab-phonetic">${v.phonetic}</span>
+          <div class="english-word-card" onclick="this.classList.toggle('flipped')">
+            <div class="word-card-inner">
+              <div class="word-card-front">
+                <span class="word-text">${v.word}</span>
+                <span class="word-phonetic">${v.phonetic}</span>
+                <span class="word-hint">点击翻转</span>
               </div>
-              <div class="vocab-flip-back">
-                <span class="vocab-meaning">${v.meaning}</span>
-                <span class="vocab-example">${v.example}</span>
+              <div class="word-card-back">
+                <span class="word-meaning">${v.meaning}</span>
+                <span class="word-example">${v.example}</span>
               </div>
             </div>
           </div>
@@ -1703,19 +1701,19 @@ function showEnglishDetail(unitId) {
     `;
   }
   
-  // 渲染情景对话
+  // 渲染情景对话 - 使用新样式
   if (dialogueContainer) {
     dialogueContainer.innerHTML = dialogues.map((d, idx) => `
-      <div class="dialogue-card">
-        <div class="dialogue-title">${d.title}</div>
-        <div class="dialogue-content">
-          <div class="dialogue-line dialogue-a">
-            <span class="dialogue-speaker">A</span>
-            <span class="dialogue-text">${d.a}</span>
+      <div class="english-dialogue-scene">
+        <div class="dialogue-scene-title">${d.title}</div>
+        <div class="dialogue-bubbles">
+          <div class="dialogue-bubble bubble-left">
+            <div class="dialogue-avatar">👦</div>
+            <div class="dialogue-text">${d.a}</div>
           </div>
-          <div class="dialogue-line dialogue-b">
-            <span class="dialogue-speaker">B</span>
-            <span class="dialogue-text">${d.b}</span>
+          <div class="dialogue-bubble bubble-right">
+            <div class="dialogue-avatar">👧</div>
+            <div class="dialogue-text">${d.b}</div>
           </div>
         </div>
       </div>
