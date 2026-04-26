@@ -36,7 +36,16 @@ async function startServer() {
   // 中间件
   app.use(cors());
   app.use(express.json());
-  app.use(express.static(path.join(__dirname, '..', 'client')));
+  // 优先使用 Vue 构建的 dist 目录，回退到旧版 client
+const distPath = path.join(__dirname, '..', 'client', 'dist');
+const clientPath = path.join(__dirname, '..', 'client');
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
+  console.log('✅ 使用 Vue 构建版本:', distPath);
+} else {
+  app.use(express.static(clientPath));
+  console.log('⚠️ 使用旧版客户端:', clientPath);
+}
   app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
   // ===== 日记 API =====
