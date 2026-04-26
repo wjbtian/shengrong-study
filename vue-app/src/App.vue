@@ -121,7 +121,7 @@ onUnmounted(() => {
 .app-container::before {
   content: '';
   position: fixed;
-  top: 64px;
+  top: 56px;
   left: 0;
   right: 0;
   bottom: 0;
@@ -133,7 +133,7 @@ onUnmounted(() => {
 }
 
 .main-content {
-  padding: 88px 40px 40px;
+  padding: 72px 40px 40px;
   position: relative;
   z-index: 2;
   min-height: 100vh;

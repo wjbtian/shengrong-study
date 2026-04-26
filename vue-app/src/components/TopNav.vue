@@ -64,7 +64,7 @@ const navItems = [
   { path: '/olympiad', icon: '🧮', label: '奥数' },
   { path: '/tech', icon: '🔬', label: '科技' },
   { path: '/guitar', icon: '🎸', label: '吉他' },
-  { path: '/shines', icon: '✨', label: '闪光' }
+  { path: '/shines', icon: '✨', label: '时刻' }
 ]
 </script>
 
@@ -74,14 +74,14 @@ const navItems = [
   top: 0;
   left: 0;
   right: 0;
-  height: 64px;
+  height: 56px;
   background: rgba(8, 8, 16, 0.8);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 32px;
+  padding: 0 24px;
   z-index: 100;
   transition: all 0.3s;
 }
@@ -98,14 +98,14 @@ const navItems = [
 }
 
 .avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
   background: linear-gradient(135deg, var(--accent), var(--accent2));
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 18px;
   box-shadow: 0 0 20px rgba(74,222,128,0.3);
 }
 
@@ -135,7 +135,7 @@ const navItems = [
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 16px;
+  padding: 6px 14px;
   border-radius: var(--radius-sm);
   color: var(--text2);
   font-size: 14px;
@@ -176,9 +176,9 @@ const navItems = [
 }
 
 .action-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   border: 1px solid var(--border2);
   background: transparent;
   color: var(--text2);
