@@ -193,8 +193,19 @@ function getRoute() {
 }
 
 function navigate(path) {
-  window.history.pushState({}, '', path);
-  renderRoute();
+  const main = document.getElementById('main-content');
+  if (main) {
+    // 添加退出动画
+    main.classList.add('page-exit');
+    
+    setTimeout(() => {
+      window.history.pushState({}, '', path);
+      renderRoute();
+    }, 200);
+  } else {
+    window.history.pushState({}, '', path);
+    renderRoute();
+  }
 }
 
 // 显示/隐藏加载动画
@@ -236,9 +247,18 @@ async function renderRoute() {
     console.log('页面内容长度:', html.length);
     
     // 模拟加载延迟，让动画更明显
-    await new Promise(r => setTimeout(r, 400));
+    await new Promise(r => setTimeout(r, 300));
     
     main.innerHTML = html;
+    
+    // 移除退出动画，添加入场动画
+    main.classList.remove('page-exit');
+    main.classList.add('page-enter');
+    
+    // 动画结束后清理类
+    setTimeout(() => {
+      main.classList.remove('page-enter');
+    }, 500);
     
     // 绑定页面内的事件
     bindPageEvents(page);
@@ -3450,6 +3470,27 @@ function closeModal(id) {
 }
 
 // ============================================================
+// 导航涟漪效果
+// ============================================================
+function createRipple(e, element) {
+  const ripple = document.createElement('span');
+  ripple.className = 'ripple';
+  
+  const rect = element.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height);
+  const x = e.clientX - rect.left - size / 2;
+  const y = e.clientY - rect.top - size / 2;
+  
+  ripple.style.width = ripple.style.height = size + 'px';
+  ripple.style.left = x + 'px';
+  ripple.style.top = y + 'px';
+  
+  element.appendChild(ripple);
+  
+  setTimeout(() => ripple.remove(), 600);
+}
+
+// ============================================================
 // 初始化
 // ============================================================
 
@@ -3464,6 +3505,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const href = link.getAttribute('href');
       if (href && !href.startsWith('http') && !href.startsWith('#')) {
         e.preventDefault();
+        // 添加涟漪效果
+        if (link.classList.contains('nav-item')) {
+          createRipple(e, link);
+        }
         navigate(href);
       }
     }
