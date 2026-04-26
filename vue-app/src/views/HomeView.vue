@@ -1,298 +1,234 @@
 <template>
   <div class="home-view">
-    <!-- 欢迎区域 -->
-    <div class="welcome-section">
-      <h1 class="greeting">{{ greeting }}，永远的神！</h1>
-      <p class="today-date">{{ todayDate }}</p>
-      <p class="daily-quote" v-if="dailyQuote">
-        <span class="quote-text">"{{ dailyQuote.text }}"</span>
-        <span class="quote-author">—— {{ dailyQuote.author }}</span>
-      </p>
+    <!-- 顶部欢迎区 -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <h1 class="greeting">{{ greeting }}，永远的神！</h1>
+        <p class="today-date">{{ todayDate }}</p>
+        <div class="daily-quote" v-if="dailyQuote">
+          <span class="quote-mark">"</span>
+          <span class="quote-text">{{ dailyQuote.text }}</span>
+          <span class="quote-author">—— {{ dailyQuote.author }}</span>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="hero-stat-value">{{ stats.diary }}</span>
+          <span class="hero-stat-label">日记</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-value">{{ stats.shines }}</span>
+          <span class="hero-stat-label">闪光</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-value">{{ stats.guitar }}</span>
+          <span class="hero-stat-label">吉他</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-value">{{ unlockedBadges }}</span>
+          <span class="hero-stat-label">徽章</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 今日任务 + 学习进度 -->
+    <div class="two-column">
+      <!-- 左：今日任务 -->
+      <section class="tasks-section">
+        <div class="section-header">
+          <h2>📋 今日任务</h2>
+          <span class="task-progress">{{ completedTasks }}/{{ tasks.length }}</span>
+        </div>
+        <div class="task-list">
+          <div
+            v-for="task in tasks"
+            :key="task.id"
+            class="task-item"
+            :class="{ completed: task.completed }"
+            @click="toggleTask(task.id)"
+          >
+            <div class="task-checkbox" :class="{ checked: task.completed }">
+              <svg v-if="task.completed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <span class="task-text">{{ task.text }}</span>
+            <span class="task-tag" :class="task.category">{{ task.category }}</span>
+          </div>
+        </div>
+        <div v-if="allTasksDone" class="tasks-celebrate">
+          🎉 太棒了！今日任务全部完成！
+        </div>
+      </section>
+
+      <!-- 右：学习进度 -->
+      <section class="progress-section">
+        <div class="section-header">
+          <h2>📚 学习进度</h2>
+        </div>
+        <div class="progress-list">
+          <div v-for="subject in subjects" :key="subject.key" class="progress-item">
+            <div class="progress-info">
+              <span class="progress-icon">{{ subject.icon }}</span>
+              <span class="progress-name">{{ subject.name }}</span>
+              <span class="progress-fraction">{{ subject.completed }}/{{ subject.total }}</span>
+            </div>
+            <div class="progress-bar-bg">
+              <div
+                class="progress-bar-fill"
+                :style="{ width: subject.percent + '%', background: subject.color }"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
 
-    <!-- 统计卡片 -->
-    <el-row :gutter="16" class="stats-row">
-      <el-col :xs="12" :sm="6">
-        <el-card class="stat-card" shadow="hover">
-          <div class="stat-icon">📔</div>
-          <div class="stat-value">{{ stats.diary }}</div>
-          <div class="stat-label">日记篇数</div>
-          <div class="stat-trend">+{{ stats.diaryWeek }} 本周</div>
-        </el-card>
-      </el-col>
-      <el-col :xs="12" :sm="6">
-        <el-card class="stat-card" shadow="hover">
-          <div class="stat-icon">✨</div>
-          <div class="stat-value">{{ stats.shines }}</div>
-          <div class="stat-label">闪光时刻</div>
-          <div class="stat-trend">+{{ stats.shinesWeek }} 本周</div>
-        </el-card>
-      </el-col>
-      <el-col :xs="12" :sm="6">
-        <el-card class="stat-card" shadow="hover">
-          <div class="stat-icon">🎸</div>
-          <div class="stat-value">{{ stats.guitar }}</div>
-          <div class="stat-label">吉他练习</div>
-          <div class="stat-trend">+{{ stats.guitarWeek }} 本周</div>
-        </el-card>
-      </el-col>
-      <el-col :xs="12" :sm="6">
-        <el-card class="stat-card" shadow="hover">
-          <div class="stat-icon">🔬</div>
-          <div class="stat-value">{{ stats.tech }}</div>
-          <div class="stat-label">科技探索</div>
-          <div class="stat-trend">+{{ stats.techWeek }} 本周</div>
-        </el-card>
-      </el-col>
-    </el-row>
-
-    <!-- 今日任务 -->
-    <el-card class="tasks-card" shadow="never">
-      <template #header>
-        <div class="card-header">
-          <span>📋 今日任务</span>
-          <el-tag :type="allTasksDone ? 'success' : 'warning'" effect="dark">
-            {{ completedTasks }}/{{ tasks.length }}
-          </el-tag>
-        </div>
-      </template>
-      <div class="task-list">
+    <!-- 活跃度图表 -->
+    <section class="activity-section">
+      <div class="section-header">
+        <h2>📊 7天活跃度</h2>
+      </div>
+      <div class="activity-chart">
         <div
-          v-for="task in tasks"
-          :key="task.id"
-          class="task-item"
-          :class="{ completed: task.completed }"
-          @click="toggleTask(task.id)"
+          v-for="(day, idx) in activityData"
+          :key="idx"
+          class="activity-day"
         >
-          <div class="task-checkbox" :class="{ checked: task.completed }">
-            <el-icon v-if="task.completed"><Check /></el-icon>
+          <div class="activity-bars">
+            <div class="activity-bar diary" :style="{ height: day.diaryHeight + 'px' }"></div>
+            <div class="activity-bar shine" :style="{ height: day.shineHeight + 'px' }"></div>
+            <div class="activity-bar guitar" :style="{ height: day.guitarHeight + 'px' }"></div>
           </div>
-          <span class="task-text">{{ task.text }}</span>
-          <el-tag v-if="task.category" size="small" :type="taskType(task.category)">
-            {{ task.category }}
-          </el-tag>
+          <span class="day-label" :class="{ today: day.isToday }">{{ day.label }}</span>
         </div>
       </div>
-      <div v-if="allTasksDone" class="tasks-celebrate">
-        🎉 太棒了！今日任务全部完成！
+      <div class="chart-legend">
+        <span><span class="legend-dot diary"></span>日记</span>
+        <span><span class="legend-dot shine"></span>闪光</span>
+        <span><span class="legend-dot guitar"></span>吉他</span>
       </div>
-    </el-card>
+    </section>
 
-    <!-- 学习进度 -->
-    <el-row :gutter="16" class="progress-row">
-      <el-col :xs="24" :sm="12" :md="8" v-for="subject in subjects" :key="subject.key">
-        <el-card class="progress-card" shadow="hover">
-          <div class="progress-header">
-            <span class="progress-icon">{{ subject.icon }}</span>
-            <span class="progress-name">{{ subject.name }}</span>
-            <span class="progress-percent">{{ subject.percent }}%</span>
-          </div>
-          <el-progress
-            :percentage="subject.percent"
-            :color="subject.color"
-            :stroke-width="10"
-            :show-text="false"
-          />
-          <div class="progress-detail">{{ subject.completed }}/{{ subject.total }} {{ subject.unit }}</div>
-        </el-card>
-      </el-col>
-    </el-row>
-
-    <!-- 活跃度图表 + 心情趋势 -->
-    <el-row :gutter="16" class="charts-row">
-      <el-col :xs="24" :lg="14">
-        <el-card class="chart-card" shadow="never">
-          <template #header>
-            <div class="card-header">
-              <span>📊 7天活跃度</span>
+    <!-- 心情趋势 + 成就徽章 -->
+    <div class="two-column">
+      <!-- 左：心情 -->
+      <section class="mood-section">
+        <div class="section-header">
+          <h2>😊 心情趋势</h2>
+        </div>
+        <div v-if="moodData.length" class="mood-content">
+          <div class="mood-timeline">
+            <div v-for="(mood, idx) in recentMoods" :key="idx" class="mood-item">
+              <span class="mood-emoji">{{ mood.mood }}</span>
+              <span class="mood-date">{{ mood.date }}</span>
             </div>
-          </template>
-          <div class="activity-chart">
+          </div>
+          <div class="mood-distribution">
             <div
-              v-for="(day, idx) in activityData"
+              v-for="(item, idx) in moodDistribution"
               :key="idx"
-              class="activity-day"
+              class="mood-bar-item"
             >
-              <div class="activity-bars">
-                <div
-                  class="activity-bar diary"
-                  :style="{ height: day.diaryHeight + 'px' }"
-                  :title="'日记 ' + day.diary"
-                ></div>
-                <div
-                  class="activity-bar shine"
-                  :style="{ height: day.shineHeight + 'px' }"
-                  :title="'闪光 ' + day.shine"
-                ></div>
-                <div
-                  class="activity-bar guitar"
-                  :style="{ height: day.guitarHeight + 'px' }"
-                  :title="'吉他 ' + day.guitar"
-                ></div>
+              <span class="mood-label">{{ item.mood }}</span>
+              <div class="mood-bar-bg">
+                <div class="mood-bar-fill" :style="{ width: item.percent + '%', background: item.color }"></div>
               </div>
-              <span class="day-label" :class="{ today: day.isToday }">{{ day.label }}</span>
+              <span class="mood-count">{{ item.count }}</span>
             </div>
           </div>
-          <div class="chart-legend">
-            <span><span class="legend-dot diary"></span>日记</span>
-            <span><span class="legend-dot shine"></span>闪光</span>
-            <span><span class="legend-dot guitar"></span>吉他</span>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :xs="24" :lg="10">
-        <el-card class="chart-card" shadow="never">
-          <template #header>
-            <div class="card-header">
-              <span>😊 心情趋势</span>
-            </div>
-          </template>
-          <div v-if="moodData.length" class="mood-content">
-            <div class="mood-timeline">
-              <div
-                v-for="(mood, idx) in recentMoods"
-                :key="idx"
-                class="mood-item"
-              >
-                <span class="mood-emoji">{{ mood.mood }}</span>
-                <span class="mood-date">{{ mood.date }}</span>
-              </div>
-            </div>
-            <div class="mood-distribution">
-              <div
-                v-for="(item, idx) in moodDistribution"
-                :key="idx"
-                class="mood-bar-item"
-              >
-                <span class="mood-label">{{ item.mood }}</span>
-                <div class="mood-bar-bg">
-                  <div
-                    class="mood-bar-fill"
-                    :style="{ width: item.percent + '%', background: item.color }"
-                  ></div>
-                </div>
-                <span class="mood-count">{{ item.count }}</span>
-              </div>
-            </div>
-          </div>
-          <div v-else class="empty-state">暂无心情数据</div>
-        </el-card>
-      </el-col>
-    </el-row>
+        </div>
+        <div v-else class="empty-state">暂无心情数据</div>
+      </section>
 
-    <!-- 成就徽章 -->
-    <el-card class="badges-card" shadow="never">
-      <template #header>
-        <div class="card-header">
-          <span>🏅 成就徽章</span>
-          <span class="badge-progress">{{ unlockedBadges }}/{{ badges.length }}</span>
+      <!-- 右：徽章 -->
+      <section class="badges-section">
+        <div class="section-header">
+          <h2>🏅 成就徽章</h2>
+          <span class="badge-count">{{ unlockedBadges }}/{{ badges.length }}</span>
         </div>
-      </template>
-      <div class="badges-grid">
-        <div
-          v-for="badge in visibleBadges"
-          :key="badge.id"
-          class="badge-item"
-          :class="{ unlocked: badge.unlocked, locked: !badge.unlocked, mystery: badge.isMystery }"
-          :title="badge.desc"
-        >
-          <div class="badge-glow" v-if="badge.unlocked"></div>
-          <div class="badge-icon">{{ badge.icon }}</div>
-          <div class="badge-name">{{ badge.name }}</div>
+        <div class="badges-grid">
+          <div
+            v-for="badge in visibleBadges"
+            :key="badge.id"
+            class="badge-item"
+            :class="{ unlocked: badge.unlocked, mystery: badge.isMystery }"
+            :title="badge.desc"
+          >
+            <div class="badge-glow" v-if="badge.unlocked"></div>
+            <div class="badge-icon">{{ badge.icon }}</div>
+            <div class="badge-name">{{ badge.name }}</div>
+          </div>
         </div>
+      </section>
+    </div>
+
+    <!-- 艾宾浩斯复习 -->
+    <section v-if="reviews.length" class="reviews-section">
+      <div class="section-header">
+        <h2>🧠 今日复习</h2>
+        <span class="review-count">{{ reviews.length }} 项</span>
       </div>
-    </el-card>
-
-    <!-- 艾宾浩斯复习提醒 -->
-    <el-card v-if="reviews.length" class="reviews-card" shadow="never">
-      <template #header>
-        <div class="card-header">
-          <span>🧠 今日复习</span>
-          <el-tag type="info" effect="dark">{{ reviews.length }} 项</el-tag>
-        </div>
-      </template>
       <div class="review-list">
-        <div
-          v-for="review in reviews"
-          :key="review.id"
-          class="review-item"
-        >
+        <div v-for="review in reviews" :key="review.id" class="review-item">
           <span class="review-subject">{{ review.subject }}</span>
           <span class="review-title">{{ review.title }}</span>
-          <el-tag size="small" :type="review.stageType">{{ review.stage }}</el-tag>
+          <span class="review-stage" :class="review.stageType">{{ review.stage }}</span>
         </div>
       </div>
-    </el-card>
+    </section>
 
     <!-- 最近记录 -->
-    <el-row :gutter="16" class="recent-row">
-      <el-col :xs="24" :md="12">
-        <el-card class="recent-card" shadow="never">
-          <template #header>
-            <div class="card-header">
-              <span>📝 最近日记</span>
-              <el-button text type="primary" size="small" @click="$router.push('/diary')">查看全部</el-button>
-            </div>
-          </template>
-          <div v-if="recentDiary.length" class="recent-list">
-            <div
-              v-for="d in recentDiary"
-              :key="d.id"
-              class="recent-item"
-            >
-              <span class="recent-mood">{{ d.mood }}</span>
-              <div class="recent-content">
-                <div class="recent-title">{{ d.title || '无标题' }}</div>
-                <div class="recent-date">{{ d.date }}</div>
-              </div>
+    <div class="two-column">
+      <section class="recent-section">
+        <div class="section-header">
+          <h2>📝 最近日记</h2>
+          <button class="btn-text" @click="$router.push('/diary')">查看全部 →</button>
+        </div>
+        <div v-if="recentDiary.length" class="recent-list">
+          <div v-for="d in recentDiary" :key="d.id" class="recent-item">
+            <span class="recent-mood">{{ d.mood }}</span>
+            <div class="recent-content">
+              <div class="recent-title">{{ d.title || '无标题' }}</div>
+              <div class="recent-date">{{ d.date }}</div>
             </div>
           </div>
-          <div v-else class="empty-state">还没有日记</div>
-        </el-card>
-      </el-col>
-      <el-col :xs="24" :md="12">
-        <el-card class="recent-card" shadow="never">
-          <template #header>
-            <div class="card-header">
-              <span>✨ 最近闪光</span>
-              <el-button text type="primary" size="small" @click="$router.push('/shines')">查看全部</el-button>
-            </div>
-          </template>
-          <div v-if="recentShines.length" class="recent-list">
-            <div
-              v-for="s in recentShines"
-              :key="s.id"
-              class="recent-item"
-            >
-              <span class="recent-icon">{{ s.icon || '✨' }}</span>
-              <div class="recent-content">
-                <div class="recent-title">{{ s.title }}</div>
-                <div class="recent-date">{{ s.date }}</div>
-              </div>
+        </div>
+        <div v-else class="empty-state">还没有日记</div>
+      </section>
+
+      <section class="recent-section">
+        <div class="section-header">
+          <h2>✨ 最近闪光</h2>
+          <button class="btn-text" @click="$router.push('/shines')">查看全部 →</button>
+        </div>
+        <div v-if="recentShines.length" class="recent-list">
+          <div v-for="s in recentShines" :key="s.id" class="recent-item">
+            <span class="recent-icon">{{ s.icon || '✨' }}</span>
+            <div class="recent-content">
+              <div class="recent-title">{{ s.title }}</div>
+              <div class="recent-date">{{ s.date }}</div>
             </div>
           </div>
-          <div v-else class="empty-state">还没有闪光时刻</div>
-        </el-card>
-      </el-col>
-    </el-row>
+        </div>
+        <div v-else class="empty-state">还没有闪光时刻</div>
+      </section>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { Check } from '@element-plus/icons-vue'
 import { getDiary, getShines, getGuitar, getTech, getProgress } from '../utils/api.js'
 
 const router = useRouter()
 
-// 数据
 const diary = ref([])
 const shines = ref([])
 const guitar = ref([])
 const tech = ref([])
 const progress = ref({})
-const loading = ref(true)
 
 // 今日任务
 const tasks = ref([
@@ -308,11 +244,6 @@ const allTasksDone = computed(() => completedTasks.value === tasks.value.length)
 function toggleTask(id) {
   const task = tasks.value.find(t => t.id === id)
   if (task) task.completed = !task.completed
-}
-
-function taskType(category) {
-  const map = { '日记': 'success', '吉他': 'warning', '学习': 'primary', '科技': 'info' }
-  return map[category] || 'info'
 }
 
 // 问候语
@@ -363,24 +294,19 @@ const stats = computed(() => ({
   shines: shines.value.length,
   guitar: guitar.value.length,
   tech: tech.value.length,
-  diaryWeek: countThisWeek(diary.value),
-  shinesWeek: countThisWeek(shines.value),
-  guitarWeek: countThisWeek(guitar.value),
-  techWeek: countThisWeek(tech.value),
 }))
 
 // 学习进度
 const subjects = computed(() => {
   const doneUnits = progress.value?.doneUnits || []
   const doneOM = progress.value?.doneOM || []
-
   const getDone = (prefix, total) => doneUnits.filter(u => u.startsWith(prefix)).length
 
   return [
-    { key: 'chinese', name: '语文', icon: '📖', color: '#4ade80', unit: '单元', completed: getDone('chinese_', 8), total: 8 },
-    { key: 'math', name: '数学', icon: '🔢', color: '#60a5fa', unit: '知识点', completed: getDone('math_', 6), total: 6 },
-    { key: 'english', name: '英语', icon: '🔤', color: '#f472b6', unit: '主题', completed: getDone('english_', 6), total: 6 },
-    { key: 'olympiad', name: '奥数', icon: '🧩', color: '#fbbf24', unit: '专题', completed: doneOM.length, total: 20 },
+    { key: 'chinese', name: '语文', icon: '📖', color: '#4ade80', completed: getDone('chinese_', 8), total: 8 },
+    { key: 'math', name: '数学', icon: '🔢', color: '#60a5fa', completed: getDone('math_', 6), total: 6 },
+    { key: 'english', name: '英语', icon: '🔤', color: '#f472b6', completed: getDone('english_', 6), total: 6 },
+    { key: 'olympiad', name: '奥数', icon: '🧩', color: '#fbbf24', completed: doneOM.length, total: 20 },
   ].map(s => ({ ...s, percent: Math.round((s.completed / s.total) * 100) }))
 })
 
@@ -399,16 +325,12 @@ const activityData = computed(() => {
     const sCount = shines.value.filter(s => s.date === date).length
     const gCount = guitar.value.filter(g => g.date === date).length
     const maxH = 100
-
     const dayIndex = (today - 6 + idx + 7) % 7
     const label = dayLabels[dayIndex === 0 ? 6 : dayIndex - 1]
 
     return {
       label,
       isToday: idx === 6,
-      diary: dCount,
-      shine: sCount,
-      guitar: gCount,
       diaryHeight: dCount ? Math.max(4, Math.min(maxH, (dCount / 3) * maxH)) : 0,
       shineHeight: sCount ? Math.max(4, Math.min(maxH, (sCount / 3) * maxH)) : 0,
       guitarHeight: gCount ? Math.max(4, Math.min(maxH, (gCount / 3) * maxH)) : 0,
@@ -428,9 +350,7 @@ const recentMoods = computed(() => {
 
 const moodDistribution = computed(() => {
   const stats = {}
-  moodData.value.forEach(d => {
-    stats[d.mood] = (stats[d.mood] || 0) + 1
-  })
+  moodData.value.forEach(d => { stats[d.mood] = (stats[d.mood] || 0) + 1 })
   const total = moodData.value.length
   const colors = {
     '😊': '#4ade80', '😄': '#22c55e', '🤩': '#16a34a', '😎': '#15803d',
@@ -438,53 +358,37 @@ const moodDistribution = computed(() => {
     '😭': '#334155', '😤': '#f87171', '😴': '#cbd5e1'
   }
   return Object.entries(stats)
-    .map(([mood, count]) => ({
-      mood,
-      count,
-      percent: Math.round((count / total) * 100),
-      color: colors[mood] || '#94a3b8'
-    }))
+    .map(([mood, count]) => ({ mood, count, percent: Math.round((count / total) * 100), color: colors[mood] || '#94a3b8' }))
     .sort((a, b) => b.count - a.count)
 })
 
-// 成就徽章（35个）
+// 成就徽章
 const ALL_BADGES = [
-  // === 日记系列 ===
   { id: 'first_diary', icon: '📝', name: '初识笔墨', desc: '写下第一篇日记', check: (d) => d?.length >= 1 },
   { id: 'diary_10', icon: '📄', name: '日积月累', desc: '累计10篇日记', check: (d) => d?.length >= 10 },
   { id: 'diary_30', icon: '📚', name: '笔耕不辍', desc: '累计30篇日记', check: (d) => d?.length >= 30 },
   { id: 'diary_60', icon: '📖', name: '日记达人', desc: '累计60篇日记', check: (d) => d?.length >= 60 },
   { id: 'diary_100', icon: '🏆', name: '文思泉涌', desc: '累计100篇日记', check: (d) => d?.length >= 100 },
   { id: 'diary_365', icon: '👑', name: '年度记录者', desc: '累计365篇日记', check: (d) => d?.length >= 365 },
-
-  // === 闪光时刻系列 ===
   { id: 'first_shine', icon: '✨', name: '闪光初现', desc: '记录第一个闪光时刻', check: (s) => s?.length >= 1 },
   { id: 'shine_10', icon: '🌟', name: '星光点点', desc: '累计10个闪光时刻', check: (s) => s?.length >= 10 },
   { id: 'shine_30', icon: '🌠', name: '星光璀璨', desc: '累计30个闪光时刻', check: (s) => s?.length >= 30 },
   { id: 'shine_50', icon: '🎆', name: '闪耀全场', desc: '累计50个闪光时刻', check: (s) => s?.length >= 50 },
   { id: 'shine_100', icon: '💫', name: '传奇时刻', desc: '累计100个闪光时刻', check: (s) => s?.length >= 100 },
-
-  // === 吉他练习系列 ===
   { id: 'first_guitar', icon: '🎸', name: '弦音初鸣', desc: '完成第一次吉他练习', check: (g) => g?.length >= 1 },
   { id: 'guitar_10', icon: '🎵', name: '渐入佳境', desc: '累计10次吉他练习', check: (g) => g?.length >= 10 },
   { id: 'guitar_30', icon: '🎶', name: '音乐之路', desc: '累计30次吉他练习', check: (g) => g?.length >= 30 },
   { id: 'guitar_50', icon: '🎤', name: '吉他高手', desc: '累计50次吉他练习', check: (g) => g?.length >= 50 },
   { id: 'guitar_100', icon: '🎼', name: '音乐大师', desc: '累计100次吉他练习', check: (g) => g?.length >= 100 },
-
-  // === 科技探索系列 ===
   { id: 'first_tech', icon: '🔬', name: '科技先锋', desc: '收藏第一条科技新闻', check: (t) => t?.length >= 1 },
   { id: 'tech_10', icon: '🔭', name: '探索者', desc: '累计10条科技新闻', check: (t) => t?.length >= 10 },
   { id: 'tech_30', icon: '🚀', name: '未来探索者', desc: '累计30条科技新闻', check: (t) => t?.length >= 30 },
   { id: 'tech_50', icon: '🛸', name: '星际旅行者', desc: '累计50条科技新闻', check: (t) => t?.length >= 50 },
   { id: 'tech_100', icon: '🌌', name: '宇宙智者', desc: '累计100条科技新闻', check: (t) => t?.length >= 100 },
-
-  // === 连续打卡系列 ===
   { id: 'week_streak', icon: '🔥', name: '持之以恒', desc: '连续7天有记录', check: (d, s, g) => checkStreak(d, s, g, 7) },
   { id: 'month_streak', icon: '⚡', name: '坚持不懈', desc: '连续30天有记录', check: (d, s, g) => checkStreak(d, s, g, 30) },
   { id: 'quarter_streak', icon: '🌞', name: '日出而作', desc: '连续90天有记录', check: (d, s, g) => checkStreak(d, s, g, 90) },
   { id: 'year_streak', icon: '🌅', name: '全年无休', desc: '连续365天有记录', check: (d, s, g) => checkStreak(d, s, g, 365) },
-
-  // === 学习进度系列 ===
   { id: 'first_subject', icon: '📖', name: '学有所成', desc: '完成第一个学习单元', check: (d, s, g, t, p) => (p?.doneUnits || []).length >= 1 },
   { id: 'half_chinese', icon: '📜', name: '语文小能手', desc: '语文完成50%', check: (d, s, g, t, p) => checkSubjectProgress(p, 'chinese_', 4, 8) },
   { id: 'full_chinese', icon: '📿', name: '语文大师', desc: '语文全部完成', check: (d, s, g, t, p) => checkSubjectProgress(p, 'chinese_', 8, 8) },
@@ -499,8 +403,6 @@ const ALL_BADGES = [
     const done = p?.doneUnits || []
     return done.some(u => u.startsWith('chinese_')) && done.some(u => u.startsWith('math_')) && done.some(u => u.startsWith('english_')) && (p?.doneOM || []).length > 0
   }},
-
-  // === 特殊成就 ===
   { id: 'early_bird', icon: '🐦', name: '早起的鸟', desc: '早上8点前写日记', check: (d) => d?.some(i => new Date(i.created || i.date).getHours() < 8) },
   { id: 'night_owl', icon: '🦉', name: '夜猫子', desc: '晚上10点后写日记', check: (d) => d?.some(i => new Date(i.created || i.date).getHours() >= 22) },
   { id: 'weekend_warrior', icon: '🎉', name: '周末战士', desc: '周六日都有记录', check: (d, s, g) => {
@@ -514,58 +416,37 @@ const ALL_BADGES = [
     const goodMoods = ['😊','😄','🤩','😎','🥳']
     return d.slice(-10).every(i => goodMoods.includes(i.mood))
   }},
-
-  // === 依赖型徽章（最后计算）===
   { id: 'collector', icon: '🏆', name: '收藏家', desc: '解锁10个成就徽章', check: (d, s, g, t, p, unlocked) => unlocked >= 10 },
   { id: 'master', icon: '💎', name: '成就大师', desc: '解锁25个成就徽章', check: (d, s, g, t, p, unlocked) => unlocked >= 25 },
   { id: 'legend', icon: '👑', name: '传奇人物', desc: '解锁全部成就徽章', check: (d, s, g, t, p, unlocked, total) => unlocked >= total },
 ]
 
-// 计算徽章状态
 const badges = computed(() => {
   const d = diary.value, s = shines.value, g = guitar.value, t = tech.value, p = progress.value
-
-  // 第一轮：计算基础徽章
   let unlocked = 0
   const result = ALL_BADGES.map(badge => {
     const isUnlocked = badge.check(d, s, g, t, p, 0, ALL_BADGES.length)
     if (isUnlocked) unlocked++
     return { ...badge, unlocked: isUnlocked }
   })
-
-  // 第二轮：重新计算依赖型徽章
   result.forEach(badge => {
     if (['collector', 'master', 'legend'].includes(badge.id)) {
       badge.unlocked = badge.check(d, s, g, t, p, unlocked, ALL_BADGES.length)
     }
   })
-
   return result
 })
 
-// 只显示已解锁的徽章 + 3个问号占位
 const visibleBadges = computed(() => {
   const unlocked = badges.value.filter(b => b.unlocked)
   const locked = badges.value.filter(b => !b.unlocked)
-
-  // 已解锁的显示在前面
   const visible = [...unlocked]
-
-  // 添加3个神秘徽章占位（如果还有未解锁的）
   if (locked.length > 0) {
     const mysteryCount = Math.min(3, locked.length)
     for (let i = 0; i < mysteryCount; i++) {
-      visible.push({
-        id: `mystery_${i}`,
-        icon: '❓',
-        name: '???',
-        desc: '达成特定条件后解锁',
-        unlocked: false,
-        isMystery: true
-      })
+      visible.push({ id: `mystery_${i}`, icon: '❓', name: '???', desc: '达成特定条件后解锁', unlocked: false, isMystery: true })
     }
   }
-
   return visible
 })
 
@@ -586,28 +467,22 @@ function checkStreak(d, s, g, targetDays) {
 }
 
 function checkSubjectProgress(progress, prefix, target, total) {
-  const done = (progress?.doneUnits || []).filter(u => u.startsWith(prefix)).length
-  return done >= target
+  return (progress?.doneUnits || []).filter(u => u.startsWith(prefix)).length >= target
 }
 
 // 艾宾浩斯复习
 const reviews = computed(() => {
   const doneUnits = progress.value?.doneUnits || []
   if (!doneUnits.length) return []
-
   const today = new Date().toISOString().split('T')[0]
   const intervals = [1, 2, 4, 7, 15, 30]
   const reviews = []
-
   doneUnits.forEach(unitId => {
     const completedDate = progress.value?.unitDates?.[unitId] || today
     const daysSince = Math.floor((new Date(today) - new Date(completedDate)) / 86400000)
-
     intervals.forEach((interval, idx) => {
       if (daysSince === interval) {
-        const subject = unitId.startsWith('chinese_') ? '语文' :
-                       unitId.startsWith('math_') ? '数学' :
-                       unitId.startsWith('english_') ? '英语' : '其他'
+        const subject = unitId.startsWith('chinese_') ? '语文' : unitId.startsWith('math_') ? '数学' : unitId.startsWith('english_') ? '英语' : '其他'
         reviews.push({
           id: unitId + '_' + interval,
           subject,
@@ -618,15 +493,12 @@ const reviews = computed(() => {
       }
     })
   })
-
   return reviews
 })
 
-// 最近记录
 const recentDiary = computed(() => diary.value.slice(0, 3))
 const recentShines = computed(() => shines.value.slice(0, 3))
 
-// 加载数据
 onMounted(async () => {
   try {
     const [d, s, g, t, p] = await Promise.all([
@@ -643,8 +515,6 @@ onMounted(async () => {
     progress.value = p
   } catch (e) {
     console.error('加载首页数据失败:', e)
-  } finally {
-    loading.value = false
   }
 })
 </script>
@@ -652,11 +522,23 @@ onMounted(async () => {
 <style scoped>
 .home-view {
   max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* 欢迎区域 */
-.welcome-section {
-  margin-bottom: 24px;
+/* 顶部欢迎区 */
+.hero-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  padding: 24px;
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.08) 0%, rgba(129, 140, 248, 0.05) 100%);
+  border-radius: 16px;
+  border: 1px solid rgba(74, 222, 128, 0.15);
+}
+
+.hero-content {
+  flex: 1;
 }
 
 .greeting {
@@ -675,93 +557,104 @@ onMounted(async () => {
 }
 
 .daily-quote {
-  padding: 16px 20px;
-  background: var(--surface);
-  border-left: 4px solid var(--accent);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  font-style: italic;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.quote-mark {
+  font-size: 24px;
+  color: var(--accent);
+  opacity: 0.5;
+  line-height: 1;
 }
 
 .quote-text {
   color: var(--text);
   font-size: 15px;
+  font-style: italic;
 }
 
 .quote-author {
   color: var(--text2);
   font-size: 13px;
-  margin-left: 8px;
 }
 
-/* 统计卡片 */
-.stats-row {
-  margin-bottom: 24px;
+.hero-stats {
+  display: flex;
+  gap: 24px;
+  padding-left: 24px;
+  border-left: 1px solid var(--border);
 }
 
-.stat-card {
-  text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  transition: all 0.3s;
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
 }
 
-.stat-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--border2);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-}
-
-.stat-icon {
-  font-size: 32px;
-  margin-bottom: 8px;
-}
-
-.stat-value {
-  font-size: 32px;
+.hero-stat-value {
+  font-size: 28px;
   font-weight: 700;
   color: var(--accent);
 }
 
-.stat-label {
-  font-size: 13px;
-  color: var(--text2);
-  margin-top: 4px;
-}
-
-.stat-trend {
+.hero-stat-label {
   font-size: 12px;
-  color: var(--accent);
-  margin-top: 4px;
+  color: var(--text2);
 }
 
-/* 任务卡片 */
-.tasks-card {
+/* 通用 section */
+section {
   background: var(--surface);
   border: 1px solid var(--border);
-  margin-bottom: 24px;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
 }
 
-.card-header {
+.section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 16px;
-  font-weight: 600;
+  margin-bottom: 16px;
 }
 
+.section-header h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+/* 两列布局 */
+.two-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.two-column section {
+  margin-bottom: 0;
+}
+
+/* 任务 */
 .task-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .task-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 16px;
+  padding: 12px 14px;
   background: var(--surface2);
-  border-radius: var(--radius-sm);
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -771,7 +664,7 @@ onMounted(async () => {
 }
 
 .task-item.completed {
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 .task-item.completed .task-text {
@@ -780,8 +673,8 @@ onMounted(async () => {
 }
 
 .task-checkbox {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   border: 2px solid var(--border2);
   border-radius: 6px;
   display: flex;
@@ -797,17 +690,34 @@ onMounted(async () => {
   color: var(--bg);
 }
 
+.task-checkbox svg {
+  width: 12px;
+  height: 12px;
+}
+
 .task-text {
   flex: 1;
   color: var(--text);
   font-size: 14px;
 }
 
+.task-tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.task-tag.日记 { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+.task-tag.吉他 { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+.task-tag.学习 { background: rgba(96, 165, 250, 0.15); color: #60a5fa; }
+.task-tag.科技 { background: rgba(244, 114, 182, 0.15); color: #f472b6; }
+
 .tasks-celebrate {
   text-align: center;
   padding: 16px;
   color: var(--accent);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   animation: celebrate 0.5s ease;
 }
@@ -818,57 +728,55 @@ onMounted(async () => {
   100% { transform: scale(1); opacity: 1; }
 }
 
-/* 进度卡片 */
-.progress-row {
-  margin-bottom: 24px;
+/* 学习进度 */
+.progress-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.progress-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
+.progress-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.progress-header {
+.progress-info {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 12px;
 }
 
 .progress-icon {
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .progress-name {
   flex: 1;
   font-size: 14px;
-  font-weight: 600;
   color: var(--text);
 }
 
-.progress-percent {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--accent);
-}
-
-.progress-detail {
-  font-size: 12px;
+.progress-fraction {
+  font-size: 13px;
   color: var(--text2);
-  margin-top: 8px;
+  font-weight: 600;
 }
 
-/* 图表区域 */
-.charts-row {
-  margin-bottom: 24px;
+.progress-bar-bg {
+  height: 8px;
+  background: var(--surface3);
+  border-radius: 4px;
+  overflow: hidden;
 }
 
-.chart-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
+.progress-bar-fill {
   height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease;
 }
 
+/* 活跃度图表 */
 .activity-chart {
   display: flex;
   justify-content: space-between;
@@ -899,17 +807,9 @@ onMounted(async () => {
   min-height: 2px;
 }
 
-.activity-bar.diary {
-  background: var(--accent);
-}
-
-.activity-bar.shine {
-  background: var(--accent2);
-}
-
-.activity-bar.guitar {
-  background: var(--yellow);
-}
+.activity-bar.diary { background: var(--accent); }
+.activity-bar.shine { background: var(--accent2); }
+.activity-bar.guitar { background: var(--yellow); }
 
 .day-label {
   font-size: 12px;
@@ -938,17 +838,9 @@ onMounted(async () => {
   margin-right: 4px;
 }
 
-.legend-dot.diary {
-  background: var(--accent);
-}
-
-.legend-dot.shine {
-  background: var(--accent2);
-}
-
-.legend-dot.guitar {
-  background: var(--yellow);
-}
+.legend-dot.diary { background: var(--accent); }
+.legend-dot.shine { background: var(--accent2); }
+.legend-dot.guitar { background: var(--yellow); }
 
 /* 心情 */
 .mood-content {
@@ -994,15 +886,15 @@ onMounted(async () => {
 }
 
 .mood-label {
-  font-size: 18px;
-  min-width: 30px;
+  font-size: 16px;
+  width: 24px;
   text-align: center;
 }
 
 .mood-bar-bg {
   flex: 1;
   height: 8px;
-  background: var(--surface2);
+  background: var(--surface3);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -1016,26 +908,14 @@ onMounted(async () => {
 .mood-count {
   font-size: 12px;
   color: var(--text2);
-  min-width: 24px;
+  width: 20px;
   text-align: right;
 }
 
 /* 徽章 */
-.badges-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  margin-bottom: 24px;
-}
-
-.badge-progress {
-  font-size: 14px;
-  color: var(--accent);
-  font-weight: 600;
-}
-
 .badges-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
   gap: 12px;
 }
 
@@ -1045,45 +925,26 @@ onMounted(async () => {
   align-items: center;
   gap: 6px;
   padding: 12px 8px;
-  border-radius: var(--radius-sm);
+  border-radius: 10px;
+  background: var(--surface2);
   transition: all 0.3s;
   position: relative;
 }
 
 .badge-item.unlocked {
-  background: var(--surface2);
-}
-
-.badge-item.locked {
-  opacity: 0.4;
-  filter: grayscale(1);
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.15), rgba(129, 140, 248, 0.1));
+  border: 1px solid rgba(74, 222, 128, 0.3);
 }
 
 .badge-item.mystery {
-  opacity: 0.6;
-  background: var(--surface2);
-  border: 1px dashed var(--border2);
-}
-
-.badge-item.mystery .badge-icon {
-  filter: blur(0px);
-  animation: mystery-pulse 2s ease-in-out infinite;
-}
-
-@keyframes mystery-pulse {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
-}
-
-.badge-item:hover {
-  transform: translateY(-2px);
+  opacity: 0.4;
 }
 
 .badge-glow {
   position: absolute;
   inset: 0;
-  border-radius: var(--radius-sm);
-  background: radial-gradient(circle at center, rgba(74, 222, 128, 0.15), transparent 70%);
+  border-radius: 10px;
+  background: radial-gradient(circle at center, rgba(74, 222, 128, 0.2), transparent 70%);
   animation: pulse 2s ease-in-out infinite;
 }
 
@@ -1094,6 +955,7 @@ onMounted(async () => {
 
 .badge-icon {
   font-size: 28px;
+  position: relative;
   z-index: 1;
 }
 
@@ -1101,36 +963,33 @@ onMounted(async () => {
   font-size: 11px;
   color: var(--text2);
   text-align: center;
+  position: relative;
   z-index: 1;
 }
 
 /* 复习 */
-.reviews-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  margin-bottom: 24px;
-}
-
 .review-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .review-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 12px;
+  padding: 12px 14px;
   background: var(--surface2);
-  border-radius: var(--radius-xs);
+  border-radius: 10px;
 }
 
 .review-subject {
   font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--accent-dim);
   color: var(--accent);
   font-weight: 600;
-  min-width: 40px;
 }
 
 .review-title {
@@ -1139,16 +998,17 @@ onMounted(async () => {
   color: var(--text);
 }
 
+.review-stage {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.review-stage.success { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+.review-stage.warning { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+.review-stage.danger { background: rgba(248, 113, 113, 0.15); color: #f87171; }
+
 /* 最近记录 */
-.recent-row {
-  margin-bottom: 24px;
-}
-
-.recent-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-}
-
 .recent-list {
   display: flex;
   flex-direction: column;
@@ -1158,17 +1018,26 @@ onMounted(async () => {
 .recent-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px;
+  gap: 12px;
+  padding: 12px;
   background: var(--surface2);
-  border-radius: var(--radius-xs);
+  border-radius: 10px;
+  transition: all 0.2s;
 }
 
-.recent-mood,
-.recent-icon {
+.recent-item:hover {
+  background: var(--surface3);
+}
+
+.recent-mood, .recent-icon {
   font-size: 20px;
-  min-width: 30px;
-  text-align: center;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface3);
+  border-radius: 10px;
 }
 
 .recent-content {
@@ -1186,14 +1055,52 @@ onMounted(async () => {
 
 .recent-date {
   font-size: 12px;
-  color: var(--text3);
+  color: var(--text2);
   margin-top: 2px;
 }
 
+/* 通用 */
 .empty-state {
   text-align: center;
-  padding: 24px;
+  padding: 32px;
   color: var(--text3);
   font-size: 14px;
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.btn-text:hover {
+  background: var(--accent-dim);
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .two-column {
+    grid-template-columns: 1fr;
+  }
+  .hero-section {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .hero-stats {
+    padding-left: 0;
+    border-left: none;
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+    width: 100%;
+    justify-content: space-around;
+  }
+  .greeting {
+    font-size: 22px;
+  }
 }
 </style>
