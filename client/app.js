@@ -1258,165 +1258,195 @@ const SUBJECT_CONFIG = {
   }
 };
 
-// --- 语文详细数据（部编版四年级上册）---
+// --- 语文详细数据（部编版四年级下册）---
 const CHINESE_DETAIL = {
   'ch_1': {
     lessons: [
-      { num: 1, title: '观潮', author: '赵宗成、朱明元', desc: '描写钱塘江大潮的壮观景象' },
-      { num: 2, title: '走月亮', author: '吴然', desc: '描绘月夜漫步的温馨画面' },
-      { num: 3, title: '现代诗二首', author: '刘大白、徐志摩', desc: '《秋晚的江上》《花牛歌》' },
-      { num: 4, title: '繁星', author: '巴金', desc: '对星空的深情描写' }
+      { num: 1, title: '古诗词三首', author: '', desc: '《四时田园杂兴》《宿新市徐公店》《清平乐·村居》' },
+      { num: 2, title: '乡下人家', author: '陈醉云', desc: '描绘乡村生活的美好' },
+      { num: 3, title: '天窗', author: '茅盾', desc: '透过天窗看世界的想象' },
+      { num: 4, title: '三月桃花水', author: '刘湛秋', desc: '春水滋润万物的景象' }
     ],
     poems: [
-      { title: '鹿柴', author: '王维', content: '空山不见人，但闻人语响。\n返景入深林，复照青苔上。' }
+      { title: '四时田园杂兴（其二十五）', author: '范成大', content: '梅子金黄杏子肥，麦花雪白菜花稀。
+日长篱落无人过，惟有蜻蜓蛱蝶飞。' },
+      { title: '宿新市徐公店', author: '杨万里', content: '篱落疏疏一径深，树头新绿未成阴。
+儿童急走追黄蝶，飞入菜花无处寻。' },
+      { title: '清平乐·村居', author: '辛弃疾', content: '茅檐低小，溪上青青草。醉里吴音相媚好，白发谁家翁媪？
+大儿锄豆溪东，中儿正织鸡笼。最喜小儿亡赖，溪头卧剥莲蓬。' }
     ],
-    knowledge: ['边读边想象画面', '调动多种感官', '体会优美生动的语句'],
-    writing: '推荐一个好地方：写清楚推荐理由'
+    knowledge: ['抓住关键语句，初步体会课文表达的思想感情', '写自己喜爱的某个地方，表达出自己的感受'],
+    writing: '我的乐园：写自己喜爱的地方'
   },
   'ch_2': {
     lessons: [
-      { num: 5, title: '一个豆荚里的五粒豆', author: '安徒生', desc: '生命的力量与希望' },
-      { num: 6, title: '夜间飞行的秘密', author: '', desc: '蝙蝠与雷达的科学原理' },
-      { num: 7, title: '呼风唤雨的世纪', author: '', desc: '科技改变生活' },
-      { num: 8, title: '蝴蝶的家', author: '', desc: '观察与思考' }
+      { num: 5, title: '琥珀', author: '柏吉尔', desc: '琥珀形成的过程' },
+      { num: 6, title: '飞向蓝天的恐龙', author: '徐星', desc: '恐龙演化成鸟类的过程' },
+      { num: 7, title: '纳米技术就在我们身边', author: '刘忠范', desc: '纳米技术的应用' },
+      { num: 8, title: '千年梦圆在今朝', author: '', desc: '中国航天事业的发展' }
     ],
     poems: [
-      { title: '暮江吟', author: '白居易', content: '一道残阳铺水中，半江瑟瑟半江红。\n可怜九月初三夜，露似真珠月似弓。' }
+      { title: '江畔独步寻花', author: '杜甫', content: '黄师塔前江水东，春光懒困倚微风。
+桃花一簇开无主，可爱深红爱浅红？' }
     ],
-    knowledge: ['阅读时尝试从不同角度思考', '提出问题并解决', '理解课文内容'],
-    writing: '小小"动物园"：把家人比作动物'
+    knowledge: ['阅读时能提出不懂的问题，并试着解决', '展开奇思妙想，写一写自己想发明的东西'],
+    writing: '我的奇思妙想：发明一样东西'
   },
   'ch_3': {
     lessons: [
-      { num: 9, title: '古诗三首', author: '', desc: '《暮江吟》《题西林壁》《雪梅》' },
-      { num: 10, title: '爬山虎的脚', author: '叶圣陶', desc: '细致观察植物' },
-      { num: 11, title: '蟋蟀的住宅', author: '法布尔', desc: '昆虫的建筑艺术' }
+      { num: 9, title: '短诗三首', author: '冰心', desc: '《繁星》（七一、一三一、一五九）' },
+      { num: 10, title: '绿', author: '艾青', desc: '描绘春天到处是绿色' },
+      { num: 11, title: '白桦', author: '叶赛宁', desc: '赞美白桦树的美' },
+      { num: 12, title: '在天晴了的时候', author: '戴望舒', desc: '雨后初晴的景色' }
     ],
     poems: [
-      { title: '题西林壁', author: '苏轼', content: '横看成岭侧成峰，远近高低各不同。\n不识庐山真面目，只缘身在此山中。' }
+      { title: '繁星（七一）', author: '冰心', content: '这些事——
+是永不漫灭的回忆：
+月明的园中，
+藤萝的叶下，
+母亲的膝上。' },
+      { title: '繁星（一三一）', author: '冰心', content: '大海啊！
+哪一颗星没有光？
+哪一朵花没有香？
+哪一次我的思潮里
+没有你波涛的清响？' },
+      { title: '繁星（一五九）', author: '冰心', content: '母亲啊！
+天上的风雨来了，
+鸟儿躲到它的巢里；
+心中的风雨来了，
+我只躲到你的怀里。' }
     ],
-    knowledge: ['体会文章准确生动的表达', '连续细致的观察', '写观察日记'],
-    writing: '写观察日记：记录连续观察'
+    knowledge: ['初步了解现代诗的特点，体会诗歌的情感', '合作编小诗集，举办诗歌朗诵会'],
+    writing: '轻叩诗歌大门：学写诗歌'
   },
   'ch_4': {
     lessons: [
-      { num: 12, title: '盘古开天地', author: '', desc: '中国古代神话故事' },
-      { num: 13, title: '精卫填海', author: '', desc: '坚持不懈的精神' },
-      { num: 14, title: '普罗米修斯', author: '', desc: '希腊神话中的英雄' },
-      { num: 15, title: '女娲补天', author: '', desc: '中华神话' }
+      { num: 13, title: '猫', author: '老舍', desc: '猫的古怪性格和可爱' },
+      { num: 14, title: '母鸡', author: '老舍', desc: '母鸡的伟大母爱' },
+      { num: 15, title: '白鹅', author: '丰子恺', desc: '白鹅的高傲性格' }
     ],
     poems: [
-      { title: '嫦娥', author: '李商隐', content: '云母屏风烛影深，长河渐落晓星沉。\n嫦娥应悔偷灵药，碧海青天夜夜心。' }
+      { title: '蜂', author: '罗隐', content: '不论平地与山尖，无限风光尽被占。
+采得百花成蜜后，为谁辛苦为谁甜？' }
     ],
-    knowledge: ['了解故事的起因、经过、结果', '感受神话中神奇的想象', '复述故事'],
-    writing: '我和____过一天：想象作文'
+    knowledge: ['体会作家是如何表达对动物的感情的', '写自己喜欢的动物，试着写出特点'],
+    writing: '我的动物朋友：写熟悉的动物'
   },
   'ch_5': {
     lessons: [
-      { num: 16, title: '麻雀', author: '屠格涅夫', desc: '母爱的伟大力量' },
-      { num: 17, title: '爬天都峰', author: '黄亦波', desc: '战胜困难的勇气' }
+      { num: 16, title: '海上日出', author: '巴金', desc: '海上日出的壮观景象' },
+      { num: 17, title: '记金华的双龙洞', author: '叶圣陶', desc: '游览双龙洞的经过' }
     ],
     poems: [
-      { title: '雪梅', author: '卢钺', content: '梅雪争春未肯降，骚人阁笔费评章。\n梅须逊雪三分白，雪却输梅一段香。' }
+      { title: '独坐敬亭山', author: '李白', content: '众鸟高飞尽，孤云独去闲。
+相看两不厌，只有敬亭山。' }
     ],
-    knowledge: ['了解作者是怎样把事情写清楚的', '按顺序写一件事', '把事情的经过写清楚'],
-    writing: '生活万花筒：写一件印象深刻的事'
+    knowledge: ['了解课文按一定顺序写景物的方法', '学习按游览的顺序写景物'],
+    writing: '游____：按游览顺序写景物'
   },
   'ch_6': {
     lessons: [
-      { num: 18, title: '牛和鹅', author: '任大霖', desc: '换个角度看问题' },
-      { num: 19, title: '一只窝囊的大老虎', author: '叶至善', desc: '童年的趣事' },
-      { num: 20, title: '陀螺', author: '高洪波', desc: '童年的玩具与感悟' }
+      { num: 18, title: '小英雄雨来（节选）', author: '', desc: '雨来勇敢抗敌的故事' },
+      { num: 19, title: '我们家的男子汉', author: '王安忆', desc: '小男孩的成长' },
+      { num: 20, title: '芦花鞋', author: '曹文轩', desc: '青铜卖芦花鞋的故事' }
     ],
     poems: [
-      { title: '出塞', author: '王昌龄', content: '秦时明月汉时关，万里长征人未还。\n但使龙城飞将在，不教胡马度阴山。' }
+      { title: '芙蓉楼送辛渐', author: '王昌龄', content: '寒雨连江夜入吴，平明送客楚山孤。
+洛阳亲友如相问，一片冰心在玉壶。' }
     ],
-    knowledge: ['学习用批注的方法阅读', '通过人物的动作、语言、神态体会心情', '记一次游戏'],
-    writing: '记一次游戏：把游戏过程写清楚'
+    knowledge: ['学习把握长文章的主要内容', '按一定顺序把事情的过程写清楚'],
+    writing: '我学会了____：写学会做的一件事'
   },
   'ch_7': {
     lessons: [
-      { num: 21, title: '古诗三首', author: '', desc: '《出塞》《凉州词》《夏日绝句》' },
-      { num: 22, title: '为中华之崛起而读书', author: '', desc: '周恩来的少年志向' },
-      { num: 23, title: '梅兰芳蓄须', author: '', desc: '艺术家的民族气节' },
-      { num: 24, title: '延安，我把你追寻', author: '', desc: '革命精神' }
+      { num: 21, title: '古诗三首', author: '', desc: '《芙蓉楼送辛渐》《塞下曲》《墨梅》' },
+      { num: 22, title: '文言文二则', author: '', desc: '《囊萤夜读》《铁杵成针》' },
+      { num: 23, title: '"诺曼底号"遇难记', author: '雨果', desc: '哈尔威船长的英雄事迹' },
+      { num: 24, title: '黄继光', author: '', desc: '战斗英雄黄继光' },
+      { num: 25, title: '挑山工', author: '冯骥才', desc: '挑山工的坚韧不拔' }
     ],
     poems: [
-      { title: '凉州词', author: '王翰', content: '葡萄美酒夜光杯，欲饮琵琶马上催。\n醉卧沙场君莫笑，古来征战几人回。' }
+      { title: '塞下曲', author: '卢纶', content: '月黑雁飞高，单于夜遁逃。
+欲将轻骑逐，大雪满弓刀。' },
+      { title: '墨梅', author: '王冕', content: '我家洗砚池头树，朵朵花开淡墨痕。
+不要人夸好颜色，只留清气满乾坤。' }
     ],
-    knowledge: ['关注主要人物和事件', '学习把握文章的主要内容', '写信'],
-    writing: '写信：注意书信格式'
+    knowledge: ['从人物的语言、动作等描写中感受人物的品质', '学习从多个方面写出人物的特点'],
+    writing: '我的"自画像"：写自己的特点'
   },
   'ch_8': {
     lessons: [
-      { num: 25, title: '王戎不取道旁李', author: '', desc: '《世说新语》中的智慧' },
-      { num: 26, title: '西门豹治邺', author: '', desc: '破除迷信、兴修水利' },
-      { num: 27, title: '故事二则', author: '', desc: '《扁鹊治病》《纪昌学射》' }
+      { num: 26, title: '宝葫芦的秘密（节选）', author: '张天翼', desc: '王葆和宝葫芦的故事' },
+      { num: 27, title: '巨人的花园', author: '王尔德', desc: '巨人学会分享的故事' },
+      { num: 28, title: '海的女儿', author: '安徒生', desc: '小人鱼的爱情故事' }
     ],
     poems: [
-      { title: '夏日绝句', author: '李清照', content: '生当作人杰，死亦为鬼雄。\n至今思项羽，不肯过江东。' }
+      { title: '卜算子·咏梅', author: '毛泽东', content: '风雨送春归，飞雪迎春到。
+已是悬崖百丈冰，犹有花枝俏。
+俏也不争春，只把春来报。
+待到山花烂漫时，她在丛中笑。' }
     ],
-    knowledge: ['了解故事情节', '简要复述课文', '写心得体会'],
-    writing: '我的心儿怦怦跳：写一件让自己心跳的事'
+    knowledge: ['感受童话的奇妙，体会人物真善美的形象', '按自己的想法新编故事'],
+    writing: '故事新编：改编熟悉的故事'
   }
 };
 
 // --- 好词好句数据 ---
 const GOOD_WORDS = {
   'ch_1': {
-    words: ['浩浩荡荡', '山崩地裂', '人声鼎沸', '风号浪吼', '水天相接'],
+    words: ['天高地阔', '月明人静', '甜甜蜜蜜', '闪闪烁烁'],
     sentences: [
-      '浪潮越来越近，犹如千万匹白色战马齐头并进，浩浩荡荡地飞奔而来。',
-      '细细的溪水，流着山草和野花的香味，流着月光。'
+      '乡下人家，不论什么时候，不论什么季节，都有一道独特、迷人的风景。',
+      '从那小小的玻璃，你会看见雨脚在那里卜落卜落跳，你会看见带子似的闪电一瞥。'
     ]
   },
   'ch_2': {
-    words: ['横七竖八', '聚精会神', '百思不得其解', '出乎意料'],
+    words: ['前俯后仰', '五彩斑斓', '欣喜若狂', '点睛之笔'],
     sentences: [
-      '20世纪的成就，真可以用"忽如一夜春风来，千树万树梨花开"来形容。',
-      '蝙蝠就像没头苍蝇似的到处乱撞，挂在绳子上的铃铛响个不停。'
+      '数千万年后，它的后代繁衍成一个形态各异的庞大家族。',
+      '纳米技术就在我们身边，可以让人们更加健康。'
     ]
   },
   'ch_3': {
-    words: ['引人注意', '毫不可惜', '随遇而安', '慎重选择'],
+    words: ['墨绿', '浅绿', '嫩绿', '翠绿', '淡绿', '粉绿'],
     sentences: [
-      '爬山虎的脚触着墙的时候，六七根细丝的头上就变成小圆片，巴住墙。',
-      '当四周很安静的时候，蟋蟀就在这平台上弹琴。'
+      '好像绿色的墨水瓶倒翻了，到处是绿的……',
+      '白桦树在雪地里站着，披了一身雪花。'
     ]
   },
   'ch_4': {
-    words: ['精疲力竭', '奔流不息', '气急败坏', '愤愤不平'],
+    words: ['无忧无虑', '生气勃勃', '如怨如诉', '颤颤巍巍'],
     sentences: [
-      '盘古倒下以后，他的身体发生了巨大的变化。',
-      '女娲先从各地拣来赤、青、黄、白、黑五种颜色的石头，燃起神火熔炼。'
+      '说它老实吧，它的确有时候很乖。',
+      '鹅的高傲，更表现在它的叫声、步态和吃相中。'
     ]
   },
   'ch_5': {
-    words: ['无可奈何', '白发苍苍', '摇摇晃晃', '安然无恙'],
+    words: ['目不转睛', '灿烂', '夺目', '伟大'],
     sentences: [
-      '突然，一只老麻雀从一棵树上飞下来，像一块石头似的落在猎狗面前。',
-      '我奋力向峰顶爬去，一会儿攀着铁链上，一会儿手脚并用向上爬。'
+      '太阳好像负着重荷似的一步一步，慢慢地努力上升。',
+      '洞口像桥洞似的，很宽。走进去，仿佛到了个大会堂。'
     ]
   },
   'ch_6': {
-    words: ['通情达理', '哄堂大笑', '垂头丧气', '得心应手'],
+    words: ['飘飘悠悠', '歪歪斜斜', '光溜溜', '亮堂堂'],
     sentences: [
-      '金奎叔是个结实的汉子，他的胳膊比我的腿还粗。',
-      '这真应了一句古话：人不可貌相，海水不可斗量。'
+      '芦花开的时候，远远望去，黄绿的芦苇上好像盖了一层厚厚的白雪。',
+      '我们是中国人，我们爱自己的祖国。'
     ]
   },
   'ch_7': {
-    words: ['志存高远', '精忠报国', '大义凛然', '英勇无畏'],
+    words: ['临危不惧', '锲而不舍', '舍己为人', '视死如归'],
     sentences: [
-      '为中华之崛起而读书！',
-      '梅兰芳先生是闻名世界的京剧表演艺术家。'
+      '他张开双臂，向喷射着火舌的火力点猛扑上去，用自己的胸膛堵住了敌人的枪口。',
+      '不要人夸好颜色，只留清气满乾坤。'
     ]
   },
   'ch_8': {
-    words: ['眉清目秀', '亭亭玉立', '明眸皓齿', '文质彬彬'],
+    words: ['平平常常', '可怜巴巴', '自私自利', '冷酷无情'],
     sentences: [
-      '王戎七岁，尝与诸小儿游。看道边李树多子折枝，诸儿竞走取之，唯戎不动。',
-      '西门豹说："把新娘领来让我看看。"'
+      '春天来了，乡下到处开着小花，到处有小鸟唱歌。',
+      '小人鱼把紫金帐篷的帘子掀开，那位美丽的新娘把头枕在王子的怀里睡着了。'
     ]
   }
 };
@@ -1425,119 +1455,126 @@ const GOOD_WORDS = {
 const KEY_WORDS = {
   'ch_1': {
     characters: [
-      { char: '潮', pinyin: 'cháo', meaning: '潮水', example: '观潮' },
-      { char: '据', pinyin: 'jù', meaning: '根据', example: '据说' },
-      { char: '堤', pinyin: 'dī', meaning: '河堤', example: '大堤' },
-      { char: '阔', pinyin: 'kuò', meaning: '宽阔', example: '宽阔' },
-      { char: '盼', pinyin: 'pàn', meaning: '盼望', example: '盼望' }
+      { char: '杂', pinyin: 'zá', meaning: '杂乱', example: '杂草' },
+      { char: '稀', pinyin: 'xī', meaning: '稀少', example: '稀少' },
+      { char: '篱', pinyin: 'lí', meaning: '篱笆', example: '篱笆' },
+      { char: '蜻', pinyin: 'qīng', meaning: '蜻蜓', example: '蜻蜓' },
+      { char: '蜓', pinyin: 'tíng', meaning: '蜻蜓', example: '蜻蜓' }
     ],
-    words: ['潮水', '据说', '大堤', '宽阔', '盼望', '滚动', '顿时', '逐渐', '犹如', '山崩地裂']
+    words: ['杂草', '稀少', '篱笆', '蜻蜓', '蝴蝶', '住宿', '徐徐', '茅檐', '锄头', '剥莲蓬']
   },
   'ch_2': {
     characters: [
-      { char: '豌', pinyin: 'wān', meaning: '豌豆', example: '豌豆' },
-      { char: '按', pinyin: 'àn', meaning: '按照', example: '按照' },
-      { char: '舒', pinyin: 'shū', meaning: '舒服', example: '舒适' },
-      { char: '僵', pinyin: 'jiāng', meaning: '僵硬', example: '僵硬' },
-      { char: '硬', pinyin: 'yìng', meaning: '坚硬', example: '坚硬' }
+      { char: '琥', pinyin: 'hǔ', meaning: '琥珀', example: '琥珀' },
+      { char: '珀', pinyin: 'pò', meaning: '琥珀', example: '琥珀' },
+      { char: '嗡', pinyin: 'wēng', meaning: '嗡嗡', example: '嗡嗡' },
+      { char: '脂', pinyin: 'zhī', meaning: '松脂', example: '松脂' },
+      { char: '拭', pinyin: 'shì', meaning: '擦拭', example: '拂拭' }
     ],
-    words: ['豌豆', '按照', '舒适', '僵硬', '虚弱', '耐心', '恐怕', '曾经', '雷达', '证明']
+    words: ['琥珀', '松脂', '拂拭', '美餐', '划动', '晌午', '热辣辣', '挣扎', '冲刷', '详细']
   },
   'ch_3': {
     characters: [
-      { char: '操', pinyin: 'cāo', meaning: '操场', example: '操场' },
-      { char: '占', pinyin: 'zhàn', meaning: '占领', example: '占领' },
-      { char: '嫩', pinyin: 'nèn', meaning: '嫩绿', example: '嫩红' },
-      { char: '顺', pinyin: 'shùn', meaning: '顺利', example: '顺利' },
-      { char: '叠', pinyin: 'dié', meaning: '重叠', example: '重叠' }
+      { char: '繁', pinyin: 'fán', meaning: '繁多', example: '繁星' },
+      { char: '漫', pinyin: 'màn', meaning: '漫灭', example: '漫灭' },
+      { char: '藤', pinyin: 'téng', meaning: '藤萝', example: '藤萝' },
+      { char: '萝', pinyin: 'luó', meaning: '藤萝', example: '藤萝' },
+      { char: '膝', pinyin: 'xī', meaning: '膝盖', example: '膝盖' }
     ],
-    words: ['操场', '占领', '嫩红', '舒服', '均匀', '重叠', '空隙', '茎叶', '住宅', '隐蔽']
+    words: ['繁星', '藤萝', '膝盖', '波涛', '墨绿', '嫩绿', '集中', '交叉', '教练', '指挥']
   },
   'ch_4': {
     characters: [
-      { char: '睁', pinyin: 'zhēng', meaning: '睁眼', example: '睁眼' },
-      { char: '翻', pinyin: 'fān', meaning: '翻身', example: '翻身' },
-      { char: '斧', pinyin: 'fǔ', meaning: '斧头', example: '斧头' },
-      { char: '劈', pinyin: 'pī', meaning: '劈开', example: '劈开' },
-      { char: '缓', pinyin: 'huǎn', meaning: '缓慢', example: '缓缓' }
+      { char: '忧', pinyin: 'yōu', meaning: '忧虑', example: '忧虑' },
+      { char: '虑', pinyin: 'lǜ', meaning: '考虑', example: '忧虑' },
+      { char: '贪', pinyin: 'tān', meaning: '贪玩', example: '贪玩' },
+      { char: '职', pinyin: 'zhí', meaning: '职业', example: '尽职' },
+      { char: '屏', pinyin: 'bǐng', meaning: '屏息', example: '屏息' }
     ],
-    words: ['睁眼', '翻身', '斧头', '劈开', '缓缓', '浑浊', '支撑', '劳累', '血液', '奔流不息']
+    words: ['忧虑', '贪玩', '尽职', '屏息', '稿纸', '遭殃', '讨厌', '理由', '心事', '反抗']
   },
   'ch_5': {
     characters: [
-      { char: '嗅', pinyin: 'xiù', meaning: '嗅觉', example: '嗅到' },
-      { char: '呆', pinyin: 'dāi', meaning: '发呆', example: '发呆' },
-      { char: '奈', pinyin: 'nài', meaning: '无奈', example: '无奈' },
-      { char: '巢', pinyin: 'cháo', meaning: '鸟巢', example: '鸟巢' },
-      { char: '齿', pinyin: 'chǐ', meaning: '牙齿', example: '牙齿' }
+      { char: '扩', pinyin: 'kuò', meaning: '扩大', example: '扩大' },
+      { char: '荷', pinyin: 'hè', meaning: '重荷', example: '重荷' },
+      { char: '刹', pinyin: 'chà', meaning: '刹那', example: '刹那' },
+      { char: '镶', pinyin: 'xiāng', meaning: '镶嵌', example: '镶嵌' },
+      { char: '浙', pinyin: 'zhè', meaning: '浙江', example: '浙江' }
     ],
-    words: ['嗅觉', '发呆', '无奈', '鸟巢', '牙齿', '身躯', '掩护', '幼儿', '搏斗', '庞大']
+    words: ['扩大', '重荷', '刹那', '镶嵌', '浙江', '罗店', '杜鹃', '狭窄', '肩膀', '臀部']
   },
   'ch_6': {
     characters: [
-      { char: '段', pinyin: 'duàn', meaning: '段落', example: '段落' },
-      { char: '俩', pinyin: 'liǎ', meaning: '咱俩', example: '咱俩' },
-      { char: '练', pinyin: 'liàn', meaning: '练习', example: '练习' },
-      { char: '裤', pinyin: 'kù', meaning: '裤子', example: '裤子' },
-      { char: '逃', pinyin: 'táo', meaning: '逃跑', example: '逃跑' }
+      { char: '晋', pinyin: 'jìn', meaning: '晋级', example: '晋察冀' },
+      { char: '炕', pinyin: 'kàng', meaning: '土炕', example: '炕上' },
+      { char: '铅', pinyin: 'qiān', meaning: '铅笔', example: '铅笔' },
+      { char: '迈', pinyin: 'mài', meaning: '迈步', example: '迈步' },
+      { char: '呜', pinyin: 'wū', meaning: '呜咽', example: '呜呜' }
     ],
-    words: ['段落', '咱俩', '练习', '裤子', '逃跑', '亏得', '挖洞', '砸锅', '否则', '帅气']
+    words: ['晋级', '土炕', '铅笔', '迈步', '呜咽', '枪栓', '胳膊', '劫难', '敌人', '尸首']
   },
   'ch_7': {
     characters: [
-      { char: '肃', pinyin: 'sù', meaning: '严肃', example: '严肃' },
-      { char: '晰', pinyin: 'xī', meaning: '清晰', example: '清晰' },
-      { char: '振', pinyin: 'zhèn', meaning: '振动', example: '振兴' },
-      { char: '胸', pinyin: 'xiōng', meaning: '胸膛', example: '胸怀' },
-      { char: '怀', pinyin: 'huái', meaning: '怀抱', example: '怀抱' }
+      { char: '恭', pinyin: 'gōng', meaning: '恭敬', example: '恭敬' },
+      { char: '勤', pinyin: 'qín', meaning: '勤奋', example: '勤奋' },
+      { char: '焉', pinyin: 'yān', meaning: '焉知', example: '焉知' },
+      { char: '卒', pinyin: 'zú', meaning: '兵卒', example: '士卒' },
+      { char: '屡', pinyin: 'lǚ', meaning: '屡次', example: '屡次' }
     ],
-    words: ['严肃', '清晰', '振兴', '胸怀', '赞叹', '抱负', '屈辱', '租赁', '纠缠', '邀请']
+    words: ['恭敬', '勤奋', '贫困', '相逢', '士卒', '摧毁', '冰雹', '胸膛', '战役', '屡次']
   },
   'ch_8': {
     characters: [
-      { char: '戎', pinyin: 'róng', meaning: '戎装', example: '王戎' },
-      { char: '尝', pinyin: 'cháng', meaning: '尝试', example: '尝试' },
-      { char: '诸', pinyin: 'zhū', meaning: '诸位', example: '诸位' },
-      { char: '竞', pinyin: 'jìng', meaning: '竞争', example: '竞走' },
-      { char: '唯', pinyin: 'wéi', meaning: '唯一', example: '唯一' }
+      { char: '妖', pinyin: 'yāo', meaning: '妖怪', example: '妖怪' },
+      { char: '矩', pinyin: 'jǔ', meaning: '规矩', example: '规矩' },
+      { char: '乖', pinyin: 'guāi', meaning: '乖巧', example: '乖巧' },
+      { char: '撵', pinyin: 'niǎn', meaning: '撵走', example: '撵走' },
+      { char: '丫', pinyin: 'yā', meaning: '脚丫', example: '脚丫' }
     ],
-    words: ['王戎', '尝试', '诸位', '竞走', '唯一', '媳妇', '淹没', '干旱', '迎接', '灌溉']
+    words: ['妖怪', '规矩', '乖巧', '撵走', '脚丫', '拽住', '冲着', '幸福', '丰硕', '允许']
   }
 };
 
-// --- 数学思维导图数据 (苏教版四年级上册) ---
+// --- 数学思维导图数据 (苏教版四年级下册) ---
 const MATH_FORMULAS = {
   'math_1': [
-    { name: '升与毫升', formula: '1升 = 1000毫升', type: '换算' },
-    { name: '容量比较', formula: '升 > 毫升 (1升=1000毫升)', type: '概念' }
+    { name: '平移', formula: '图形沿直线移动，形状大小不变', type: '概念' },
+    { name: '旋转', formula: '图形绕定点转动，形状大小不变', type: '概念' },
+    { name: '轴对称', formula: '对折后两边完全重合', type: '概念' }
   ],
   'math_2': [
-    { name: '除法试商', formula: '四舍五入法试商', type: '方法' },
-    { name: '商不变规律', formula: '被除数和除数同时×或÷相同数(0除外)，商不变', type: '规律' }
+    { name: '数位顺序', formula: '个、十、百、千、万、十万、百万、千万、亿', type: '概念' },
+    { name: '数的读法', formula: '从高位读起，每级末尾0不读', type: '方法' },
+    { name: '数的写法', formula: '从高位写起，哪一位没有就写0', type: '方法' }
   ],
   'math_3': [
-    { name: '观察物体', formula: '前面、右面、上面三个方向', type: '概念' },
-    { name: '视图还原', formula: '根据视图摆小正方体', type: '方法' }
+    { name: '三位数乘两位数', formula: '先用个位乘，再用十位乘，最后相加', type: '方法' },
+    { name: '积的变化规律', formula: '一个因数不变，另一个因数×几，积也×几', type: '规律' }
   ],
   'math_4': [
-    { name: '平均数', formula: '平均数 = 总数 ÷ 份数', type: '公式' },
-    { name: '条形统计图', formula: '一格可以表示多个单位', type: '概念' }
+    { name: '计算器按键', formula: 'ON开机、OFF关机、CE清除', type: '概念' },
+    { name: '计算步骤', formula: '按算式顺序依次按键', type: '方法' }
   ],
   'math_5': [
-    { name: '列表法', formula: '整理已知条件和问题', type: '策略' },
-    { name: '画图法', formula: '用线段图分析数量关系', type: '策略' }
+    { name: '画线段图', formula: '用线段表示数量关系', type: '策略' },
+    { name: '列表整理', formula: '用表格整理条件和问题', type: '策略' }
   ],
   'math_6': [
-    { name: '可能性', formula: '一定、可能、不可能', type: '概念' },
-    { name: '游戏公平', formula: '各方可能性相等才公平', type: '规则' }
+    { name: '加法交换律', formula: 'a + b = b + a', type: '定律' },
+    { name: '加法结合律', formula: '(a + b) + c = a + (b + c)', type: '定律' },
+    { name: '乘法交换律', formula: 'a × b = b × a', type: '定律' },
+    { name: '乘法结合律', formula: '(a × b) × c = a × (b × c)', type: '定律' },
+    { name: '乘法分配律', formula: '(a + b) × c = a×c + b×c', type: '定律' }
   ],
   'math_7': [
-    { name: '运算顺序', formula: '先乘除后加减，有括号先算括号内', type: '规则' },
-    { name: '中括号', formula: '先算小括号，再算中括号', type: '规则' }
+    { name: '三角形内角和', formula: '三角形内角和 = 180°', type: '公式' },
+    { name: '三角形分类', formula: '按角：锐角、直角、钝角；按边：等腰、等边', type: '概念' },
+    { name: '平行四边形', formula: '两组对边分别平行', type: '概念' },
+    { name: '梯形', formula: '只有一组对边平行', type: '概念' }
   ],
   'math_8': [
-    { name: '角的度量', formula: '1°的角 → 量角器', type: '方法' },
-    { name: '平行与垂直', formula: '平行:不相交 垂直:相交成直角', type: '概念' }
+    { name: '数对表示', formula: '(列，行)', type: '概念' },
+    { name: '确定位置', formula: '先列后行，从左往右数列，从前往后数行', type: '方法' }
   ]
 };
 
@@ -1546,99 +1583,135 @@ const MATH_MISTAKES = [];
 // --- 英语单词与对话数据 ---
 const ENGLISH_VOCAB = {
   'en_1': [
-    { word: 'dog', phonetic: '/dɒɡ/', meaning: '狗', example: 'I like dogs.' },
-    { word: 'cat', phonetic: '/kæt/', meaning: '猫', example: 'Do you like cats?' },
-    { word: 'panda', phonetic: '/ˈpændə/', meaning: '熊猫', example: 'Look at that panda!' },
-    { word: 'horse', phonetic: '/hɔːs/', meaning: '马', example: 'I have a toy horse.' },
-    { word: 'cute', phonetic: '/kjuːt/', meaning: '可爱的', example: 'It\'s cute.' }
+    { word: 'school', phonetic: '/skuːl/', meaning: '学校', example: 'Welcome back to school.' },
+    { word: 'subject', phonetic: '/ˈsʌbdʒɪkt/', meaning: '课程', example: 'What subjects do you like?' },
+    { word: 'Chinese', phonetic: '/ˌtʃaɪˈniːz/', meaning: '语文', example: 'I like Chinese.' },
+    { word: 'Maths', phonetic: '/mæθs/', meaning: '数学', example: 'It\'s time for Maths.' },
+    { word: 'English', phonetic: '/ˈɪŋɡlɪʃ/', meaning: '英语', example: 'I like English.' },
+    { word: 'Science', phonetic: '/ˈsaɪəns/', meaning: '科学', example: 'Science is fun.' },
+    { word: 'PE', phonetic: '/ˌpiːˈiː/', meaning: '体育', example: 'Let\'s go to PE.' },
+    { word: 'Art', phonetic: '/ɑːt/', meaning: '美术', example: 'I like Art.' },
+    { word: 'Music', phonetic: '/ˈmjuːzɪk/', meaning: '音乐', example: 'Music is nice.' }
   ],
   'en_2': [
-    { word: 'mango', phonetic: '/ˈmæŋɡəʊ/', meaning: '芒果', example: 'Do you have a mango?' },
-    { word: 'pineapple', phonetic: '/ˈpaɪnæpl/', meaning: '菠萝', example: 'I have a pineapple.' },
-    { word: 'banana', phonetic: '/bəˈnɑːnə/', meaning: '香蕉', example: 'Let\'s make a fruit salad.' },
-    { word: 'grape', phonetic: '/ɡreɪp/', meaning: '葡萄', example: 'Have some grapes.' },
-    { word: 'salad', phonetic: '/ˈsæləd/', meaning: '沙拉', example: 'Let\'s make a fruit salad.' }
+    { word: 'Monday', phonetic: '/ˈmʌndeɪ/', meaning: '星期一', example: 'I have Chinese on Monday.' },
+    { word: 'Tuesday', phonetic: '/ˈtjuːzdeɪ/', meaning: '星期二', example: 'What day is it today?' },
+    { word: 'Wednesday', phonetic: '/ˈwenzdeɪ/', meaning: '星期三', example: 'It\'s Wednesday.' },
+    { word: 'Thursday', phonetic: '/ˈθɜːzdeɪ/', meaning: '星期四', example: 'I have PE on Thursday.' },
+    { word: 'Friday', phonetic: '/ˈfraɪdeɪ/', meaning: '星期五', example: 'Friday is great!' },
+    { word: 'Saturday', phonetic: '/ˈsætədeɪ/', meaning: '星期六', example: 'I play football on Saturday.' },
+    { word: 'Sunday', phonetic: '/ˈsʌndeɪ/', meaning: '星期日', example: 'Sunday is fun.' },
+    { word: 'after school', phonetic: '/ˈɑːftə skuːl/', meaning: '放学后', example: 'Let\'s play after school.' }
   ],
   'en_3': [
-    { word: 'thirteen', phonetic: '/ˌθɜːˈtiːn/', meaning: '十三', example: 'I have thirteen stickers.' },
-    { word: 'fifteen', phonetic: '/ˌfɪfˈtiːn/', meaning: '十五', example: 'How many balls? Fifteen.' },
-    { word: 'sticker', phonetic: '/ˈstɪkə/', meaning: '贴纸', example: 'I have many stickers.' },
-    { word: 'can', phonetic: '/kæn/', meaning: '罐子', example: 'How many cans?' },
-    { word: 'many', phonetic: '/ˈmeni/', meaning: '许多', example: 'How many do you have?' }
+    { word: 'get up', phonetic: '/ɡet ʌp/', meaning: '起床', example: 'I get up at six.' },
+    { word: 'go to school', phonetic: '/ɡəʊ tuː skuːl/', meaning: '去上学', example: 'I go to school at seven.' },
+    { word: 'have lunch', phonetic: '/hæv lʌntʃ/', meaning: '吃午饭', example: 'I have lunch at eleven.' },
+    { word: 'go home', phonetic: '/ɡəʊ həʊm/', meaning: '回家', example: 'I go home at four.' },
+    { word: 'have dinner', phonetic: '/hæv ˈdɪnə/', meaning: '吃晚饭', example: 'I have dinner at six.' },
+    { word: 'go to bed', phonetic: '/ɡəʊ tuː bed/', meaning: '睡觉', example: 'I go to bed at nine.' },
+    { word: 'usually', phonetic: '/ˈjuːʒuəli/', meaning: '通常', example: 'I usually get up early.' },
+    { word: 'o\'clock', phonetic: '/əˈklɒk/', meaning: '……点钟', example: 'It\'s seven o\'clock.' }
   ],
   'en_4': [
-    { word: 'basketball', phonetic: '/ˈbɑːskɪtbɔːl/', meaning: '篮球', example: 'I can play basketball.' },
-    { word: 'football', phonetic: '/ˈfʊtbɔːl/', meaning: '足球', example: 'Can you play football?' },
-    { word: 'skate', phonetic: '/skeɪt/', meaning: '滑冰', example: 'I can skate.' },
-    { word: 'swim', phonetic: '/swɪm/', meaning: '游泳', example: 'Can you swim?' },
-    { word: 'jump', phonetic: '/dʒʌmp/', meaning: '跳', example: 'I can jump.' }
+    { word: 'draw', phonetic: '/drɔː/', meaning: '画画', example: 'Let\'s draw some pictures.' },
+    { word: 'park', phonetic: '/pɑːk/', meaning: '公园', example: 'Let\'s go to the park.' },
+    { word: 'flower', phonetic: '/ˈflaʊə/', meaning: '花', example: 'Look at the flowers.' },
+    { word: 'tree', phonetic: '/triː/', meaning: '树', example: 'It\'s a big tree.' },
+    { word: 'river', phonetic: '/ˈrɪvə/', meaning: '河', example: 'There is a river.' },
+    { word: 'boat', phonetic: '/bəʊt/', meaning: '船', example: 'I can draw a boat.' },
+    { word: 'hill', phonetic: '/hɪl/', meaning: '小山', example: 'It\'s a hill.' },
+    { word: 'lake', phonetic: '/leɪk/', meaning: '湖', example: 'It\'s a lake.' }
   ],
   'en_5': [
-    { word: 'sofa', phonetic: '/ˈsəʊfə/', meaning: '沙发', example: 'The sofa is in the living room.' },
-    { word: 'fridge', phonetic: '/frɪdʒ/', meaning: '冰箱', example: 'It\'s in the fridge.' },
-    { word: 'clock', phonetic: '/klɒk/', meaning: '钟', example: 'Where\'s the clock?' },
-    { word: 'table', phonetic: '/ˈteɪbl/', meaning: '桌子', example: 'It\'s on the table.' },
-    { word: 'bathroom', phonetic: '/ˈbɑːθruːm/', meaning: '浴室', example: 'It\'s in the bathroom.' }
+    { word: 'season', phonetic: '/ˈsiːzn/', meaning: '季节', example: 'What\'s your favourite season?' },
+    { word: 'spring', phonetic: '/sprɪŋ/', meaning: '春天', example: 'Spring is warm.' },
+    { word: 'summer', phonetic: '/ˈsʌmə/', meaning: '夏天', example: 'Summer is hot.' },
+    { word: 'autumn', phonetic: '/ˈɔːtəm/', meaning: '秋天', example: 'Autumn is cool.' },
+    { word: 'winter', phonetic: '/ˈwɪntə/', meaning: '冬天', example: 'Winter is cold.' },
+    { word: 'warm', phonetic: '/wɔːm/', meaning: '温暖的', example: 'It\'s warm in spring.' },
+    { word: 'hot', phonetic: '/hɒt/', meaning: '热的', example: 'It\'s hot in summer.' },
+    { word: 'cool', phonetic: '/kuːl/', meaning: '凉爽的', example: 'It\'s cool in autumn.' },
+    { word: 'cold', phonetic: '/kəʊld/', meaning: '冷的', example: 'It\'s cold in winter.' }
   ],
   'en_6': [
-    { word: 'hamburger', phonetic: '/ˈhæmbɜːɡə/', meaning: '汉堡', example: 'I\'d like a hamburger.' },
-    { word: 'sandwich', phonetic: '/ˈsænwɪdʒ/', meaning: '三明治', example: 'A sandwich, please.' },
-    { word: 'rice', phonetic: '/raɪs/', meaning: '米饭', example: 'Some rice, please.' },
-    { word: 'milk', phonetic: '/mɪlk/', meaning: '牛奶', example: 'I\'d like some milk.' },
-    { word: 'noodles', phonetic: '/ˈnuːdlz/', meaning: '面条', example: 'Noodles, please.' }
+    { word: 'dress', phonetic: '/dres/', meaning: '连衣裙', example: 'Whose dress is this?' },
+    { word: 'party', phonetic: '/ˈpɑːti/', meaning: '聚会', example: 'We\'re going to a party.' },
+    { word: 'coat', phonetic: '/kəʊt/', meaning: '外套', example: 'Whose coat is this?' },
+    { word: 'shirt', phonetic: '/ʃɜːt/', meaning: '衬衫', example: 'It\'s my father\'s shirt.' },
+    { word: 'sweater', phonetic: '/ˈswetə/', meaning: '毛衣', example: 'It\'s too big.' },
+    { word: 'hand', phonetic: '/hænd/', meaning: '手', example: 'Try this.' },
+    { word: 'glove', phonetic: '/ɡlʌv/', meaning: '手套', example: 'Whose gloves are these?' }
   ],
   'en_7': [
-    { word: 'shoe', phonetic: '/ʃuː/', meaning: '鞋', example: 'How much are the shoes?' },
-    { word: 'sock', phonetic: '/sɒk/', meaning: '袜子', example: 'I\'d like these socks.' },
-    { word: 'umbrella', phonetic: '/ʌmˈbrelə/', meaning: '伞', example: 'It\'s only nineteen yuan.' },
-    { word: 'fan', phonetic: '/fæn/', meaning: '扇子', example: 'I\'d like that fan.' },
-    { word: 'twenty', phonetic: '/ˈtwenti/', meaning: '二十', example: 'It\'s twenty yuan.' }
+    { word: 'matter', phonetic: '/ˈmætə/', meaning: '事情', example: 'What\'s the matter?' },
+    { word: 'thirsty', phonetic: '/ˈθɜːsti/', meaning: '口渴的', example: 'I\'m thirsty.' },
+    { word: 'tired', phonetic: '/ˈtaɪəd/', meaning: '累的', example: 'I\'m tired.' },
+    { word: 'ill', phonetic: '/ɪl/', meaning: '生病的', example: 'I\'m ill.' },
+    { word: 'hungry', phonetic: '/ˈhʌŋɡri/', meaning: '饿的', example: 'I\'m hungry.' },
+    { word: 'dear', phonetic: '/dɪə/', meaning: '亲爱的', example: 'What\'s the matter, dear?' },
+    { word: 'happy', phonetic: '/ˈhæpi/', meaning: '开心的', example: 'Are you happy?' }
   ],
   'en_8': [
-    { word: 'doll', phonetic: '/dɒl/', meaning: '洋娃娃', example: 'Look at my doll.' },
-    { word: 'big', phonetic: '/bɪɡ/', meaning: '大的', example: 'Her eyes are big.' },
-    { word: 'small', phonetic: '/smɔːl/', meaning: '小的', example: 'His mouth is small.' },
-    { word: 'long', phonetic: '/lɒŋ/', meaning: '长的', example: 'Her hair is long.' },
-    { word: 'short', phonetic: '/ʃɔːt/', meaning: '短的/矮的', example: 'His nose is small.' }
+    { word: 'fine', phonetic: '/faɪn/', meaning: '好的', example: 'How are you? I\'m fine.' },
+    { word: 'come to school', phonetic: '/kʌm tuː skuːl/', meaning: '来学校', example: 'I come to school by bus.' },
+    { word: 'cold', phonetic: '/kəʊld/', meaning: '感冒', example: 'I have a cold.' },
+    { word: 'fever', phonetic: '/ˈfiːvə/', meaning: '发烧', example: 'I have a fever.' },
+    { word: 'headache', phonetic: '/ˈhedeɪk/', meaning: '头疼', example: 'I have a headache.' },
+    { word: 'cough', phonetic: '/kɒf/', meaning: '咳嗽', example: 'I have a cough.' },
+    { word: 'hear', phonetic: '/hɪə/', meaning: '听见', example: 'I\'m sorry to hear that.' }
   ]
 };
 
 const ENGLISH_DIALOGUES = {
   'en_1': [
-    { title: '谈论动物', a: 'Do you like dogs?', b: 'Yes, I do. They\'re cute.' },
-    { title: '询问喜好', a: 'What animals do you like?', b: 'I like pandas. They\'re cute and fat.' }
+    { role: 'A', text: 'What subjects do you like?' },
+    { role: 'B', text: 'I like Chinese and Maths.' },
+    { role: 'A', text: 'What about you?' },
+    { role: 'B', text: 'I like English. It\'s fun.' }
   ],
   'en_2': [
-    { title: '制作沙拉', a: 'Let\'s make a fruit salad.', b: 'Great! Do you have any bananas?' },
-    { title: '询问物品', a: 'Do you have any pineapples?', b: 'Yes, I do. / No, I don\'t.' }
+    { role: 'A', text: 'What day is it today?' },
+    { role: 'B', text: 'It\'s Monday.' },
+    { role: 'A', text: 'What lessons do you have?' },
+    { role: 'B', text: 'I have Chinese and Maths.' }
   ],
   'en_3': [
-    { title: '询问数量', a: 'How many stickers do you have?', b: 'I have fifteen stickers.' },
-    { title: '谈论玩具', a: 'What do you have?', b: 'I have some balls.' }
+    { role: 'A', text: 'When do you get up?' },
+    { role: 'B', text: 'I get up at six.' },
+    { role: 'A', text: 'When do you go to bed?' },
+    { role: 'B', text: 'I go to bed at nine.' }
   ],
   'en_4': [
-    { title: '谈论能力', a: 'Can you play basketball?', b: 'Yes, I can. / No, I can\'t.' },
-    { title: '邀请运动', a: 'Let\'s go and play football.', b: 'Sorry, I can\'t. I have a swimming lesson.' }
+    { role: 'A', text: 'What can you see in the park?' },
+    { role: 'B', text: 'I can see some flowers and trees.' },
+    { role: 'A', text: 'Can you draw them?' },
+    { role: 'B', text: 'Sure. It\'s easy.' }
   ],
   'en_5': [
-    { title: '寻找物品', a: 'Where\'s the bag?', b: 'It\'s in the bedroom.' },
-    { title: '介绍家居', a: 'Look at our new home.', b: 'It\'s nice! I like the living room.' }
+    { role: 'A', text: 'What\'s your favourite season?' },
+    { role: 'B', text: 'I like spring. It\'s warm.' },
+    { role: 'A', text: 'I like winter. I can make snowmen.' }
   ],
   'en_6': [
-    { title: '点餐用语', a: 'What would you like?', b: 'I\'d like a hamburger and a glass of milk.' },
-    { title: '用餐对话', a: 'Anything else?', b: 'Yes, I\'d like some noodles, please.' }
+    { role: 'A', text: 'Whose dress is this?' },
+    { role: 'B', text: 'It\'s my cousin\'s.' },
+    { role: 'A', text: 'It\'s too long.' },
+    { role: 'B', text: 'Try this.' }
   ],
   'en_7': [
-    { title: '询问价格', a: 'Can I help you?', b: 'I\'d like these shoes. How much are they?' },
-    { title: '购物对话', a: 'They\'re thirty yuan.', b: 'OK. I\'ll take them.' }
+    { role: 'A', text: 'What\'s the matter?' },
+    { role: 'B', text: 'I\'m thirsty.' },
+    { role: 'A', text: 'Here\'s some water for you.' },
+    { role: 'B', text: 'Thank you.' }
   ],
   'en_8': [
-    { title: '描述玩具', a: 'Look at my doll.', b: 'She\'s beautiful! Her eyes are big.' },
-    { title: '介绍特征', a: 'His mouth is small.', b: 'Yes, and his nose is small too.' }
+    { role: 'A', text: 'How are you?' },
+    { role: 'B', text: 'I\'m fine, thank you.' },
+    { role: 'A', text: 'I\'m sorry to hear that you have a cold.' },
+    { role: 'B', text: 'Take care.' }
   ]
-};
-
-const ENGLISH_SCENES = [
+}const ENGLISH_SCENES = [
   { id: 'en_1', name: 'I like dogs', icon: '🐕', color: '#818cf8', desc: '谈论喜欢的动物' },
   { id: 'en_2', name: 'Let\'s make a fruit salad', icon: '🥗', color: '#f472b6', desc: '制作水果沙拉' },
   { id: 'en_3', name: 'How many?', icon: '🔢', color: '#4ade80', desc: '询问数量' },
