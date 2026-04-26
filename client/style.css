@@ -1292,34 +1292,42 @@ body::before {
 .today-task {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 14px;
-  background: var(--bg);
-  border: 1px solid var(--border);
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--surface);
   border-radius: var(--radius-sm);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text2);
+  border: 1px solid var(--border);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
+  user-select: none;
+  font-size: 14px;
+  color: var(--text);
 }
 
 .today-task:hover {
-  border-color: var(--accent2);
-  color: var(--text);
-  background: var(--accent2-dim);
+  background: var(--surface2);
+  border-color: var(--border2);
 }
 
-.today-task.done {
+.today-task.completed {
+  opacity: 0.6;
   background: var(--accent-dim);
-  border-color: rgba(74,222,128,0.3);
-  color: var(--accent);
+  border-color: rgba(74,222,128,0.2);
+}
+
+.today-task.completed span:last-child {
+  text-decoration: line-through;
+  color: var(--text3);
 }
 
 .task-check {
-  font-size: 14px;
-  width: 18px;
-  text-align: center;
+  font-size: 20px;
+  transition: all 0.3s var(--ease-spring);
+  display: inline-block;
+}
+
+.today-task.completed .task-check {
+  transform: scale(1.2);
 }
 
 /* === 能量条 === */
@@ -8072,48 +8080,6 @@ body::before {
   font-size: 14px;
   color: var(--text2);
   margin-bottom: 20px;
-}
-
-/* ============================================================
-   今日任务交互
-   ============================================================ */
-.today-task {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  background: var(--surface);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  user-select: none;
-}
-
-.today-task:hover {
-  background: var(--surface2);
-  border-color: var(--border2);
-}
-
-.today-task.completed {
-  opacity: 0.6;
-  background: var(--accent-dim);
-  border-color: rgba(74,222,128,0.2);
-}
-
-.today-task.completed span:last-child {
-  text-decoration: line-through;
-  color: var(--text3);
-}
-
-.task-check {
-  font-size: 20px;
-  transition: all 0.3s var(--ease-spring);
-  display: inline-block;
-}
-
-.today-task.completed .task-check {
-  transform: scale(1.2);
 }
 
 /* ============================================================
