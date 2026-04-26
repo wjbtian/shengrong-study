@@ -75,6 +75,52 @@ function cleanupOldTasks() {
   }
 }
 
+// 检查是否所有任务都完成
+function checkAllTasksComplete() {
+  const allTasks = document.querySelectorAll('.today-task');
+  const completedTasks = document.querySelectorAll('.today-task.completed');
+  
+  if (allTasks.length > 0 && allTasks.length === completedTasks.length) {
+    // 所有任务完成！触发庆祝效果
+    showConfetti();
+    showToast('🎉 太棒了！今日任务全部完成！');
+    
+    // 给任务区域添加庆祝样式
+    const taskSection = document.getElementById('today-tasks');
+    if (taskSection) {
+      taskSection.classList.add('all-tasks-complete');
+      setTimeout(() => {
+        taskSection.classList.remove('all-tasks-complete');
+      }, 3000);
+    }
+  }
+}
+
+// 彩带庆祝效果
+function showConfetti() {
+  const container = document.createElement('div');
+  container.className = 'confetti-container';
+  
+  const colors = ['#4ade80', '#818cf8', '#f472b6', '#fbbf24', '#22d3ee', '#fb923c'];
+  
+  for (let i = 0; i < 50; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDelay = Math.random() * 2 + 's';
+    piece.style.animationDuration = (2 + Math.random() * 2) + 's';
+    container.appendChild(piece);
+  }
+  
+  document.body.appendChild(container);
+  
+  // 3秒后清理
+  setTimeout(() => {
+    container.remove();
+  }, 5000);
+}
+
 // 启动时清理旧数据
 cleanupOldTasks();
 
@@ -262,10 +308,13 @@ function bindPageEvents(page) {
         // 保存到本地存储
         saveTaskStatus(taskId, isCompleted);
         
-        // 添加完成动画
+        // 添加完成动画和庆祝效果
         if (isCompleted) {
           t.style.animation = 'pulse 0.5s ease';
           setTimeout(() => { t.style.animation = ''; }, 500);
+          
+          // 检查是否所有任务都完成了
+          checkAllTasksComplete();
         }
       });
     });
@@ -517,18 +566,84 @@ function renderActivityChart(diary, shines, guitar) {
 
 function renderMoodTimeline(diary) {
   const timeline = document.getElementById('mood-timeline');
-  if (!timeline || !diary?.length) {
+  const statsEl = document.getElementById('mood-stats');
+  const chartEl = document.getElementById('mood-chart-bars');
+  
+  if (!diary?.length) {
     if (timeline) timeline.innerHTML = '<p style="color:var(--text3)">暂无心情数据</p>';
+    if (statsEl) statsEl.innerHTML = '';
+    if (chartEl) chartEl.innerHTML = '';
     return;
   }
   
-  const recent = diary.slice(-7);
-  timeline.innerHTML = recent.map(d => `
-    <div class="mood-day">
-      <div class="mood-emoji">${d.mood || '😊'}</div>
-      <span class="mood-date">${d.date?.slice(5) || ''}</span>
-    </div>
-  `).join('');
+  // 统计心情分布
+  const moodStats = {};
+  diary.forEach(d => {
+    const mood = d.mood || '😊';
+    moodStats[mood] = (moodStats[mood] || 0) + 1;
+  });
+  
+  // 心情分类映射
+  const moodCategories = {
+    '😄': { label: '开心', class: 'mood-happy' },
+    '🤩': { label: '兴奋', class: 'mood-excited' },
+    '😊': { label: '愉快', class: 'mood-calm' },
+    '🙂': { label: '平静', class: 'mood-neutral' },
+    '😐': { label: '一般', class: 'mood-neutral' },
+    '😔': { label: '难过', class: 'mood-sad' },
+    '😤': { label: '生气', class: 'mood-angry' },
+    '😢': { label: '伤心', class: 'mood-sad' }
+  };
+  
+  // 渲染统计卡片
+  if (statsEl) {
+    const sortedMoods = Object.entries(moodStats).sort((a, b) => b[1] - a[1]).slice(0, 4);
+    statsEl.innerHTML = sortedMoods.map(([mood, count]) => `
+      <div class="mood-stat-item">
+        <div class="mood-stat-emoji">${mood}</div>
+        <div class="mood-stat-count">${count}</div>
+        <div class="mood-stat-label">${moodCategories[mood]?.label || '其他'}</div>
+      </div>
+    `).join('');
+  }
+  
+  // 渲染7天心情时间轴
+  if (timeline) {
+    const recent = diary.slice(-7);
+    timeline.innerHTML = recent.map(d => `
+      <div class="mood-day">
+        <div class="mood-emoji">${d.mood || '😊'}</div>
+        <span class="mood-date">${d.date?.slice(5) || ''}</span>
+      </div>
+    `).join('');
+  }
+  
+  // 渲染心情分布条形图
+  if (chartEl) {
+    const total = diary.length;
+    const sortedAll = Object.entries(moodStats).sort((a, b) => b[1] - a[1]);
+    const maxCount = Math.max(...Object.values(moodStats));
+    
+    chartEl.innerHTML = `
+      <div class="mood-chart-title">📊 心情分布（共 ${total} 篇日记）</div>
+      ${sortedAll.map(([mood, count]) => {
+        const percent = Math.round((count / total) * 100);
+        const width = Math.max(5, (count / maxCount) * 100);
+        const cat = moodCategories[mood] || { label: '其他', class: 'mood-neutral' };
+        return `
+          <div class="mood-bar-item">
+            <div class="mood-bar-emoji">${mood}</div>
+            <div class="mood-bar-track">
+              <div class="mood-bar-fill ${cat.class}" style="width: ${width}%">
+                <span class="mood-bar-count">${count}</span>
+              </div>
+            </div>
+            <div class="mood-bar-percent">${percent}%</div>
+          </div>
+        `;
+      }).join('')}
+    `;
+  }
 }
 
 function updateGreeting() {

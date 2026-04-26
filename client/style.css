@@ -102,6 +102,23 @@
   to { transform: rotate(360deg); }
 }
 
+@keyframes confetti-fall {
+  0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+@keyframes celebrate-pop {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes task-complete-glow {
+  0% { box-shadow: 0 0 0 0 rgba(74,222,128,0.4); }
+  50% { box-shadow: 0 0 20px 10px rgba(74,222,128,0.2); }
+  100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); }
+}
+
 /* === 基础重置 === */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -8180,4 +8197,161 @@ body::before {
   font-size: 14px;
   color: var(--text2);
   margin-bottom: 24px;
+}
+
+/* ============================================================
+   心情统计与图表
+   ============================================================ */
+.mood-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.mood-stat-item {
+  text-align: center;
+  padding: 12px 8px;
+  background: var(--surface2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.mood-stat-emoji {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+.mood-stat-count {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  font-family: var(--font-mono);
+}
+
+.mood-stat-label {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 2px;
+}
+
+.mood-chart-bars {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.mood-chart-title {
+  font-size: 13px;
+  color: var(--text2);
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.mood-bar-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.mood-bar-emoji {
+  font-size: 20px;
+  width: 32px;
+  text-align: center;
+}
+
+.mood-bar-track {
+  flex: 1;
+  height: 24px;
+  background: var(--surface2);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.mood-bar-fill {
+  height: 100%;
+  border-radius: 12px;
+  transition: width 1s var(--ease-spring);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 8px;
+}
+
+.mood-bar-count {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.mood-bar-percent {
+  font-size: 11px;
+  color: var(--text3);
+  width: 40px;
+  text-align: right;
+}
+
+/* 心情颜色 */
+.mood-happy { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+.mood-excited { background: linear-gradient(90deg, #f472b6, #ec4899); }
+.mood-calm { background: linear-gradient(90deg, #4ade80, #22c55e); }
+.mood-sad { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+.mood-angry { background: linear-gradient(90deg, #f87171, #ef4444); }
+.mood-tired { background: linear-gradient(90deg, #a78bfa, #8b5cf6); }
+.mood-neutral { background: linear-gradient(90deg, #9ca3af, #6b7280); }
+.mood-worried { background: linear-gradient(90deg, #fb923c, #f97316); }
+
+/* ============================================================
+   庆祝动画效果
+   ============================================================ */
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: -10px;
+  animation: confetti-fall 3s ease-out forwards;
+}
+
+.confetti-piece:nth-child(odd) {
+  width: 8px;
+  height: 8px;
+}
+
+.confetti-piece:nth-child(3n) {
+  width: 12px;
+  height: 6px;
+  border-radius: 2px;
+}
+
+.today-task.completed {
+  background: linear-gradient(135deg, rgba(74,222,128,0.15), rgba(74,222,128,0.05));
+  border-color: rgba(74,222,128,0.3);
+  animation: task-complete-glow 1s ease;
+}
+
+.today-task.completed .task-check {
+  animation: celebrate-pop 0.5s var(--ease-spring);
+}
+
+/* 任务全部完成庆祝 */
+.all-tasks-complete {
+  animation: celebrate-pop 0.6s var(--ease-spring);
+}
+
+.all-tasks-complete .section-title::after {
+  content: ' 🎉';
 }
