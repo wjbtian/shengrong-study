@@ -28,6 +28,55 @@ function initTechParticles() {
 }
 
 const API = window.location.origin;
+
+// ============================================================
+// 今日任务系统（本地存储）
+// ============================================================
+
+function getTodayKey() {
+  return 'tasks_' + new Date().toISOString().slice(0, 10);
+}
+
+function saveTaskStatus(taskId, completed) {
+  const key = getTodayKey();
+  const tasks = JSON.parse(localStorage.getItem(key) || '{}');
+  tasks[taskId] = completed;
+  localStorage.setItem(key, JSON.stringify(tasks));
+}
+
+function loadTaskStatus(taskId) {
+  const key = getTodayKey();
+  const tasks = JSON.parse(localStorage.getItem(key) || '{}');
+  return tasks[taskId] || false;
+}
+
+function loadTodayTasks() {
+  document.querySelectorAll('.today-task').forEach(t => {
+    const taskId = t.dataset.task;
+    if (!taskId) return;
+    
+    const isCompleted = loadTaskStatus(taskId);
+    if (isCompleted) {
+      t.classList.add('completed');
+      const check = t.querySelector('.task-check');
+      if (check) check.textContent = '✅';
+    }
+  });
+}
+
+// 清理旧任务数据（保留最近7天）
+function cleanupOldTasks() {
+  const today = new Date();
+  for (let i = 7; i < 30; i++) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    const key = 'tasks_' + d.toISOString().slice(0, 10);
+    localStorage.removeItem(key);
+  }
+}
+
+// 启动时清理旧数据
+cleanupOldTasks();
 let selectedMood = '😄';
 const MOODS = ['😄','🤩','😊','🙂','😐','😔','😤','😢'];
 
@@ -56,6 +105,17 @@ function navigate(path) {
   renderRoute();
 }
 
+// 显示/隐藏加载动画
+function showLoader() {
+  const loader = document.getElementById('page-loader');
+  if (loader) loader.classList.remove('hidden');
+}
+
+function hideLoader() {
+  const loader = document.getElementById('page-loader');
+  if (loader) loader.classList.add('hidden');
+}
+
 // 加载页面 HTML 并渲染
 async function renderRoute() {
   const page = getRoute();
@@ -68,23 +128,49 @@ async function renderRoute() {
     return;
   }
   
+  // 显示加载动画
+  showLoader();
+  
   // 加载对应页面 HTML
   try {
     const response = await fetch(`/pages/${page}.html`);
     console.log('页面加载状态:', response.status);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    
     const html = await response.text();
     console.log('页面内容长度:', html.length);
+    
+    // 模拟加载延迟，让动画更明显
+    await new Promise(r => setTimeout(r, 400));
+    
     main.innerHTML = html;
     
     // 绑定页面内的事件
     bindPageEvents(page);
     
     // 加载页面数据
-    loadPageData(page);
+    await loadPageData(page);
+    
+    // 隐藏加载动画
+    hideLoader();
     
   } catch (err) {
     console.error('加载页面失败:', err);
-    main.innerHTML = '<div class="empty-state"><span class="emoji">⚠️</span><p>页面加载失败</p></div>';
+    hideLoader();
+    main.innerHTML = `
+      <div class="error-page">
+        <div class="error-emoji">🚀</div>
+        <h2 class="error-title">页面迷路了</h2>
+        <p class="error-desc">好像飞到了外太空，找不到这个页面呢</p>
+        <div class="error-actions">
+          <button class="btn btn-primary" onclick="navigate('/')">🏠 回首页</button>
+          <button class="btn" onclick="window.location.reload()">🔄 刷新试试</button>
+        </div>
+      </div>
+    `;
   }
   
   window.scrollTo(0, 0);
@@ -114,11 +200,24 @@ function bindPageEvents(page) {
   
   // 首页事件
   if (page === 'home') {
+    // 加载今日任务状态
+    loadTodayTasks();
+    
     document.querySelectorAll('.today-task').forEach(t => {
       t.addEventListener('click', () => {
-        t.classList.toggle('done');
+        const taskId = t.dataset.task;
+        const isCompleted = t.classList.toggle('completed');
         const check = t.querySelector('.task-check');
-        if (check) check.textContent = t.classList.contains('done') ? '✅' : '⭕';
+        if (check) check.textContent = isCompleted ? '✅' : '⭕';
+        
+        // 保存到本地存储
+        saveTaskStatus(taskId, isCompleted);
+        
+        // 添加完成动画
+        if (isCompleted) {
+          t.style.animation = 'pulse 0.5s ease';
+          setTimeout(() => { t.style.animation = ''; }, 500);
+        }
       });
     });
   }

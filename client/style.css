@@ -7937,3 +7937,228 @@ body::before {
     width: 100%;
   }
 }
+
+/* ============================================================
+   加载动画
+   ============================================================ */
+.page-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.page-loader.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader-content {
+  text-align: center;
+}
+
+.loader-planet {
+  font-size: 64px;
+  margin-bottom: 16px;
+  animation: loaderBounce 1.5s ease infinite;
+}
+
+@keyframes loaderBounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.1); }
+}
+
+.loader-text {
+  font-size: 18px;
+  color: var(--text2);
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+}
+
+.loader-bar {
+  width: 200px;
+  height: 4px;
+  background: var(--surface3);
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.loader-progress {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+  animation: loaderProgress 2s ease-in-out infinite;
+}
+
+@keyframes loaderProgress {
+  0% { width: 0%; margin-left: 0%; }
+  50% { width: 60%; margin-left: 20%; }
+  100% { width: 0%; margin-left: 100%; }
+}
+
+/* ============================================================
+   错误页面
+   ============================================================ */
+.error-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  padding: 40px;
+}
+
+.error-emoji {
+  font-size: 80px;
+  margin-bottom: 20px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.error-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.error-desc {
+  font-size: 16px;
+  color: var(--text2);
+  margin-bottom: 24px;
+  max-width: 400px;
+}
+
+.error-actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* ============================================================
+   空状态增强
+   ============================================================ */
+.empty-state-enhanced {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.empty-state-enhanced .emoji {
+  font-size: 64px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.empty-state-enhanced h3 {
+  font-size: 20px;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.empty-state-enhanced p {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 20px;
+}
+
+/* ============================================================
+   今日任务交互
+   ============================================================ */
+.today-task {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.today-task:hover {
+  background: var(--surface2);
+  border-color: var(--border2);
+}
+
+.today-task.completed {
+  opacity: 0.6;
+  background: var(--accent-dim);
+  border-color: rgba(74,222,128,0.2);
+}
+
+.today-task.completed span:last-child {
+  text-decoration: line-through;
+  color: var(--text3);
+}
+
+.task-check {
+  font-size: 20px;
+  transition: all 0.3s var(--ease-spring);
+  display: inline-block;
+}
+
+.today-task.completed .task-check {
+  transform: scale(1.2);
+}
+
+/* ============================================================
+   吉他分析卡片
+   ============================================================ */
+.analysis-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.analysis-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.analysis-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border2);
+}
+
+.analysis-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.analysis-label {
+  font-size: 13px;
+  color: var(--text2);
+  margin-bottom: 4px;
+}
+
+.analysis-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent);
+  font-family: var(--font-mono);
+}
+
+.analysis-unit {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
