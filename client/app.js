@@ -2778,8 +2778,8 @@ async function loadGuitarData() {
     if (songsEl) songsEl.textContent = songs.size;
     if (streakEl) streakEl.textContent = calcStreakDays(dates);
     
-    // 更新目标进度
-    updateGoalProgress(videos?.length || 0);
+    // 更新目标进度（传入视频数组，计算本周次数）
+    updateGoalProgress(videos || []);
     
     // 最新视频
     const latestEl = document.getElementById('guitar-latest');
@@ -2938,8 +2938,25 @@ function calcStreakDays(dates) {
   return streak;
 }
 
+// 计算本周练习次数（从周日开始算一周）
+function calcWeeklyCount(videos) {
+  if (!videos || videos.length === 0) return 0;
+  
+  const now = new Date();
+  const dayOfWeek = now.getDay(); // 0=周日, 1=周一, ...
+  const startOfWeek = new Date(now);
+  startOfWeek.setDate(now.getDate() - dayOfWeek);
+  startOfWeek.setHours(0, 0, 0, 0);
+  
+  return videos.filter(v => {
+    if (!v.date) return false;
+    const videoDate = new Date(v.date);
+    return videoDate >= startOfWeek;
+  }).length;
+}
+
 // 更新目标进度
-function updateGoalProgress(current) {
+function updateGoalProgress(videos) {
   const goalCurrent = document.getElementById('goal-current');
   const goalFill = document.getElementById('goal-fill');
   const goalTarget = document.getElementById('goal-target');
@@ -2947,14 +2964,24 @@ function updateGoalProgress(current) {
   if (!goalCurrent || !goalFill) return;
   
   const target = parseInt(localStorage.getItem('guitar-goal-target') || '3');
-  if (goalTarget) goalTarget.textContent = target;
-  goalCurrent.textContent = Math.min(current, target);
+  const weeklyCount = calcWeeklyCount(videos);
   
-  const percent = Math.min((current / target) * 100, 100);
+  if (goalTarget) goalTarget.textContent = target;
+  goalCurrent.textContent = Math.min(weeklyCount, target);
+  
+  const percent = Math.min((weeklyCount / target) * 100, 100);
   goalFill.style.width = percent + '%';
   
+  // 根据进度设置不同颜色
   if (percent >= 100) {
     goalFill.style.background = 'linear-gradient(90deg, var(--accent), var(--yellow))';
+    goalFill.style.boxShadow = '0 0 12px rgba(74,222,128,0.4)';
+  } else if (percent >= 60) {
+    goalFill.style.background = 'linear-gradient(90deg, var(--accent), var(--cyan))';
+    goalFill.style.boxShadow = 'none';
+  } else {
+    goalFill.style.background = 'var(--accent)';
+    goalFill.style.boxShadow = 'none';
   }
 }
 
@@ -2972,9 +2999,8 @@ function saveGoal() {
   localStorage.setItem('guitar-goal-duration', duration);
   closeModal('modal-goal');
   
-  // 刷新显示
-  const videos = document.querySelectorAll('.guitar-item');
-  updateGoalProgress(videos.length);
+  // 刷新显示 - 重新加载吉他数据以获取最新进度
+  loadGuitarData();
 }
 
 // --- 闪光时刻数据 ---
@@ -3156,6 +3182,42 @@ function calcStreak(shines) {
   return streak;
 }
 
+// 科技新闻来源图标映射
+const TECH_SOURCE_ICONS = {
+  '新华社': '🏛️',
+  '人民日报': '📰',
+  '科技日报': '🔬',
+  '科学网': '🧪',
+  'Nature': '📚',
+  'Science': '📖',
+  'IEEE': '💻',
+  'MIT': '🎓',
+  'OpenAI': '🤖',
+  'Google': '🔍',
+  '微软': '🪟',
+  '苹果': '🍎',
+  '华为': '🇨🇳',
+  '腾讯': '🐧',
+  '阿里': '🐱',
+  '字节跳动': '🎵',
+  'SpaceX': '🚀',
+  'NASA': '🌌',
+  'CNSA': '🛰️',
+  '知乎': '💡',
+  'B站': '📺',
+  '微博': '📱',
+  '默认': '📡'
+};
+
+// 获取新闻来源图标
+function getTechSourceIcon(source) {
+  if (!source) return TECH_SOURCE_ICONS['默认'];
+  for (const [key, icon] of Object.entries(TECH_SOURCE_ICONS)) {
+    if (source.includes(key)) return icon;
+  }
+  return TECH_SOURCE_ICONS['默认'];
+}
+
 // --- 科技数据 ---
 async function loadTechData() {
   try {
@@ -3172,22 +3234,27 @@ async function loadTechData() {
       return;
     }
     
-    container.innerHTML = news.map(t => `
+    container.innerHTML = news.map(t => {
+      const sourceIcon = getTechSourceIcon(t.source);
+      return `
       <div class="tech-card ${t.fav ? 'fav' : ''}" data-id="${t.id}">
-        <div class="tech-category">${t.category || '🔬 科学'}</div>
+        <div class="tech-card-header">
+          <div class="tech-category">${t.category || '🔬 科学'}</div>
+          <div class="tech-actions">
+            <button class="btn-icon" onclick="toggleTechFav(${t.id})" title="收藏">
+              ${t.fav ? '⭐' : '☆'}
+            </button>
+            <button class="btn-icon" onclick="deleteTech(${t.id})" title="删除">🗑️</button>
+          </div>
+        </div>
         <div class="tech-title">${t.title}</div>
         <div class="tech-summary">${t.summary || ''}</div>
         <div class="tech-meta">
-          <span>${formatDate(t.date)}</span>
-          ${t.source ? `<span>📰 ${t.source}</span>` : ''}
+          <span class="tech-date">${formatDate(t.date)}</span>
+          ${t.source ? `<span class="tech-source"><span class="source-icon">${sourceIcon}</span> ${t.source}</span>` : ''}
         </div>
-        <div class="tech-actions">
-          <button class="btn-icon" onclick="toggleTechFav(${t.id})" title="收藏">
-            ${t.fav ? '⭐' : '☆'}
-          </button>
-          <button class="btn-icon" onclick="deleteTech(${t.id})" title="删除">🗑️</button>
-        </div>
-      </div>`).join('');
+      </div>`;
+    }).join('');
       
   } catch (err) {
     console.error('加载科技数据失败:', err);

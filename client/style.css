@@ -2908,6 +2908,13 @@ body::before {
   background: linear-gradient(135deg, var(--surface), rgba(239, 68, 68, 0.03));
 }
 
+.tech-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
 .tech-icon {
   font-size: 32px;
   flex-shrink: 0;
@@ -2941,6 +2948,21 @@ body::before {
   color: var(--text3);
 }
 
+.tech-source {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text2);
+  background: var(--surface2);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.source-icon {
+  font-size: 12px;
+}
+
 .tech-category {
   font-size: 11px;
   color: var(--accent2);
@@ -2952,7 +2974,6 @@ body::before {
 .tech-actions {
   display: flex;
   gap: 6px;
-  margin-left: auto;
 }
 
 .btn-fav {
