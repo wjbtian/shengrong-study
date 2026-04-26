@@ -4831,6 +4831,48 @@ body::before {
 .photo-tag.talent { background: rgba(244,114,182,0.15); color: #f472b6; }
 .photo-tag.progress { background: rgba(56,189,248,0.15); color: #38bdf8; }
 
+/* 闪光时刻精选按钮 */
+.photo-fav-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.7);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--duration-normal) ease;
+  z-index: 10;
+  opacity: 0;
+}
+
+.photo-card:hover .photo-fav-btn {
+  opacity: 1;
+}
+
+.photo-fav-btn:hover {
+  background: rgba(0,0,0,0.7);
+  transform: scale(1.1);
+}
+
+.photo-fav-btn.fav-active {
+  opacity: 1;
+  background: rgba(251,191,36,0.3);
+  border-color: var(--yellow);
+  color: var(--yellow);
+}
+
+.photo-fav-btn.fav-active:hover {
+  background: rgba(251,191,36,0.5);
+}
+
 .load-more-wrap {
   text-align: center;
   padding: 20px;

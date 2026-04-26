@@ -90,6 +90,15 @@ async function startServer() {
     res.json({ ok: true, likes: newLikes });
   });
 
+  // 闪光时刻精选/取消精选
+  app.post('/api/shines/:id/fav', (req, res) => {
+    const { fav } = req.body;
+    const row = get('SELECT fav FROM shines WHERE id = ?', [req.params.id]);
+    if (!row) return res.status(404).json({ ok: false, error: 'Not found' });
+    run('UPDATE shines SET fav = ? WHERE id = ?', [fav ? 1 : 0, req.params.id]);
+    res.json({ ok: true, fav: !!fav });
+  });
+
   // ===== 学习进度 API =====
   app.get('/api/progress', (req, res) => {
     const rows = all('SELECT * FROM progress');

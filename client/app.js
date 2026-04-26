@@ -1046,28 +1046,100 @@ toastStyle.textContent = `
 document.head.appendChild(toastStyle);
 
 // --- 日记数据 ---
+// 日记数据缓存（用于筛选）
+let diaryCache = [];
+let currentDiaryFilter = 'all';
+
 async function loadDiaryData() {
   try {
     const diary = await api('GET', '/diary');
+    diaryCache = diary || [];
     const container = document.getElementById('diary-list');
     if (!container) return;
     
     // 渲染心情墙
     renderMoodWall(diary);
     
-    if (!diary || !diary.length) {
-      container.innerHTML = `
-        <div class="empty-state">
-          <span class="emoji">📝</span>
-          <p>还没有日记<br>点击右上角写一篇吧</p>
-        </div>`;
-      return;
-    }
+    // 渲染日记列表（支持筛选）
+    renderDiaryList();
     
-    container.innerHTML = diary.map(d => createDiaryCard(d)).join('');
+    // 绑定筛选事件
+    bindDiaryFilterEvents();
+    
+    // 更新统计
+    updateDiaryStats(diary);
   } catch (err) {
     console.error('加载日记失败:', err);
   }
+}
+
+function renderDiaryList() {
+  const container = document.getElementById('diary-list');
+  if (!container) return;
+  
+  let filtered = diaryCache;
+  if (currentDiaryFilter !== 'all') {
+    filtered = diaryCache.filter(d => d.mood === currentDiaryFilter);
+  }
+  
+  if (!filtered.length) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <span class="emoji">📝</span>
+        <p>${currentDiaryFilter === 'all' ? '还没有日记' : '该心情下没有日记'}<br>点击右上角写一篇吧</p>
+      </div>`;
+    return;
+  }
+  
+  container.innerHTML = filtered.map(d => createDiaryCard(d)).join('');
+}
+
+function bindDiaryFilterEvents() {
+  document.querySelectorAll('.diary-filter').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.diary-filter').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentDiaryFilter = btn.dataset.filter || 'all';
+      renderDiaryList();
+    });
+  });
+}
+
+function updateDiaryStats(diary) {
+  const totalEl = document.getElementById('diary-total-count');
+  const streakEl = document.getElementById('diary-streak');
+  const monthEl = document.getElementById('diary-this-month');
+  
+  if (totalEl) totalEl.textContent = diary?.length || 0;
+  if (streakEl) streakEl.textContent = calculateDiaryStreak(diary);
+  if (monthEl) monthEl.textContent = countThisMonth(diary);
+}
+
+function calculateDiaryStreak(diary) {
+  if (!diary?.length) return 0;
+  const dates = [...new Set(diary.map(d => d.date))].sort().reverse();
+  let streak = 0;
+  const today = new Date().toISOString().split('T')[0];
+  const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+  
+  // 检查今天或昨天是否有记录
+  if (dates[0] === today || dates[0] === yesterday) {
+    streak = 1;
+    for (let i = 1; i < dates.length; i++) {
+      const prev = new Date(dates[i-1]);
+      const curr = new Date(dates[i]);
+      const diff = (prev - curr) / 86400000;
+      if (diff === 1) streak++;
+      else break;
+    }
+  }
+  return streak;
+}
+
+function countThisMonth(items) {
+  if (!items?.length) return 0;
+  const thisMonth = new Date().toISOString().slice(0, 7);
+  return items.filter(i => i.date?.startsWith(thisMonth)).length;
 }
 
 function renderMoodWall(diary) {
@@ -3001,6 +3073,9 @@ function createPhotoCard(s) {
           <span class="photo-date">${formatDate(s.date)}</span>
           ${photos.length > 1 ? `<span class="photo-count">📸 ${photos.length}</span>` : ''}
         </div>
+        <button class="photo-fav-btn ${s.fav ? 'fav-active' : ''}" onclick="toggleShineFav(event, ${s.id})" title="${s.fav ? '取消精选' : '设为精选'}">
+          ${s.fav ? '⭐' : '☆'}
+        </button>
       </div>
       <div class="photo-info">
         <div class="photo-title">${s.title}</div>
@@ -3010,6 +3085,54 @@ function createPhotoCard(s) {
         </div>
       </div>
     </div>`;
+}
+
+// 切换闪光时刻精选状态
+async function toggleShineFav(event, id) {
+  event.stopPropagation();
+  
+  try {
+    const shines = await api('GET', '/shines');
+    const shine = shines.find(s => s.id === id);
+    if (!shine) return;
+    
+    const newFav = !shine.fav;
+    await api('POST', '/shines/' + id + '/fav', { fav: newFav });
+    
+    // 更新本地显示
+    const card = document.querySelector(`.photo-card[data-id="${id}"]`);
+    if (card) {
+      const btn = card.querySelector('.photo-fav-btn');
+      if (btn) {
+        btn.classList.toggle('fav-active', newFav);
+        btn.innerHTML = newFav ? '⭐' : '☆';
+        btn.title = newFav ? '取消精选' : '设为精选';
+      }
+      
+      // 更新标签
+      const tags = card.querySelector('.photo-tags');
+      if (tags) {
+        const existingFavTag = tags.querySelector('.photo-tag[style*="yellow"]');
+        if (newFav && !existingFavTag) {
+          tags.innerHTML += '<span class="photo-tag" style="background:rgba(251,191,36,0.2);color:var(--yellow);">⭐ 精选</span>';
+        } else if (!newFav && existingFavTag) {
+          existingFavTag.remove();
+        }
+      }
+    }
+    
+    // 更新统计
+    const favCount = document.getElementById('shine-fav');
+    if (favCount) {
+      const count = shines.filter(s => s.id === id ? newFav : s.fav).length;
+      favCount.textContent = count;
+    }
+    
+    showToast(newFav ? '⭐ 已设为精选' : '☆ 已取消精选');
+  } catch (err) {
+    console.error('切换精选状态失败:', err);
+    showToast('❌ 操作失败，请重试');
+  }
 }
 
 function calcStreak(shines) {
