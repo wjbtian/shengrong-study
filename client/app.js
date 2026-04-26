@@ -77,6 +77,52 @@ function cleanupOldTasks() {
 
 // 启动时清理旧数据
 cleanupOldTasks();
+
+// ============================================================
+// 欢迎弹窗
+// ============================================================
+
+function checkWelcomePopup() {
+  const lastVisit = localStorage.getItem('last_visit');
+  const today = new Date().toISOString().slice(0, 10);
+  
+  if (lastVisit !== today) {
+    localStorage.setItem('last_visit', today);
+    
+    // 计算连续访问天数
+    let streak = parseInt(localStorage.getItem('visit_streak') || '0');
+    const lastDate = new Date(lastVisit || today);
+    const todayDate = new Date(today);
+    const diffDays = Math.floor((todayDate - lastDate) / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 1) {
+      streak++;
+    } else if (diffDays > 1) {
+      streak = 1;
+    }
+    localStorage.setItem('visit_streak', streak);
+    
+    // 显示欢迎弹窗
+    setTimeout(() => {
+      const popup = document.getElementById('welcome-popup');
+      const dayEl = document.getElementById('welcome-day');
+      if (popup && dayEl) {
+        dayEl.textContent = streak;
+        popup.style.display = 'flex';
+      }
+    }, 1000);
+  }
+}
+
+function closeWelcome() {
+  const popup = document.getElementById('welcome-popup');
+  if (popup) {
+    popup.style.animation = 'fadeOut 0.3s ease forwards';
+    setTimeout(() => {
+      popup.style.display = 'none';
+    }, 300);
+  }
+}
 let selectedMood = '😄';
 const MOODS = ['😄','🤩','😊','🙂','😐','😔','😤','😢'];
 
@@ -200,6 +246,9 @@ function bindPageEvents(page) {
   
   // 首页事件
   if (page === 'home') {
+    // 检查欢迎弹窗
+    checkWelcomePopup();
+    
     // 加载今日任务状态
     loadTodayTasks();
     
