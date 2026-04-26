@@ -5643,6 +5643,174 @@ body::before {
   border-radius: var(--radius-sm);
 }
 
+/* 奥数解题步骤 - 增强样式 */
+.solution-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.solution-step {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  transition: all var(--duration-normal) ease;
+}
+
+.solution-step:hover {
+  border-color: var(--accent);
+  background: rgba(74,222,128,0.05);
+}
+
+.step-number {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--bg);
+  margin-top: 2px;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-title {
+  font-weight: 700;
+  color: var(--text);
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.step-desc {
+  color: var(--text2);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.step-formula {
+  background: var(--surface2);
+  border-left: 3px solid var(--yellow);
+  padding: 8px 12px;
+  margin-top: 8px;
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--yellow);
+}
+
+/* 例题卡片 */
+.example-card {
+  background: linear-gradient(135deg, rgba(251,191,36,0.1), rgba(251,191,36,0.05));
+  border: 1px solid rgba(251,191,36,0.3);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-top: 12px;
+}
+
+.example-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-weight: 700;
+  color: var(--yellow);
+  font-size: 14px;
+}
+
+.example-question {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.6;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: rgba(0,0,0,0.2);
+  border-radius: var(--radius-sm);
+}
+
+.example-answer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.answer-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.answer-label {
+  color: var(--text3);
+  min-width: 60px;
+}
+
+.answer-value {
+  color: var(--accent);
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+/* 解题方法标签 */
+.method-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.method-tag {
+  padding: 6px 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 12px;
+  color: var(--text2);
+  transition: all var(--duration-fast) ease;
+}
+
+.method-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* 难度标识 */
+.difficulty-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.difficulty-easy {
+  background: rgba(74,222,128,0.15);
+  color: var(--accent);
+}
+
+.difficulty-medium {
+  background: rgba(251,191,36,0.15);
+  color: var(--yellow);
+}
+
+.difficulty-hard {
+  background: rgba(248,113,113,0.15);
+  color: var(--red);
+}
+
 /* 移动端时间轴适配 */
 @media (max-width: 768px) {
   .timeline::before {

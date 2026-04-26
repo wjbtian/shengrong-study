@@ -1811,62 +1811,474 @@ const OLYMPIAD_CONFIG = [
     category: '基础应用题',
     color: '#4ade80',
     topics: [
-      { id: 'om_1_1', name: '和差问题', desc: '已知两数的和与差，求这两个数', method: '大数=(和+差)÷2，小数=(和-差)÷2', example: '甲乙两数和为50，差为10，甲=30，乙=20' },
-      { id: 'om_1_2', name: '和倍问题', desc: '已知两数的和与倍数关系', method: '小数=和÷(倍数+1)，大数=小数×倍数', example: '甲乙和为60，甲是乙的2倍，乙=20，甲=40' },
-      { id: 'om_1_3', name: '差倍问题', desc: '已知两数的差与倍数关系', method: '小数=差÷(倍数-1)，大数=小数×倍数', example: '甲比乙大30，甲是乙的4倍，乙=10，甲=40' }
+      { 
+        id: 'om_1_1', 
+        name: '和差问题', 
+        desc: '已知两数的和与差，求这两个数',
+        difficulty: 'easy',
+        method: '大数=(和+差)÷2，小数=(和-差)÷2',
+        steps: [
+          { title: '理解题意', desc: '找出题目中给出的两个数的和与差' },
+          { title: '确定公式', desc: '大数 = (和 + 差) ÷ 2', formula: '大数 = (和 + 差) ÷ 2' },
+          { title: '计算小数', desc: '小数 = (和 - 差) ÷ 2 或 小数 = 和 - 大数', formula: '小数 = (和 - 差) ÷ 2' },
+          { title: '验证答案', desc: '检查：大数 + 小数 = 和，大数 - 小数 = 差' }
+        ],
+        example: {
+          question: '甲乙两数和为50，差为10，求甲乙各是多少？',
+          answer: [
+            { label: '大数(甲)', value: '(50 + 10) ÷ 2 = 30' },
+            { label: '小数(乙)', value: '(50 - 10) ÷ 2 = 20' },
+            { label: '验证', value: '30 + 20 = 50 ✓，30 - 20 = 10 ✓' }
+          ]
+        }
+      },
+      { 
+        id: 'om_1_2', 
+        name: '和倍问题', 
+        desc: '已知两数的和与倍数关系',
+        difficulty: 'easy',
+        method: '小数=和÷(倍数+1)，大数=小数×倍数',
+        steps: [
+          { title: '理解题意', desc: '找出两数的和以及它们之间的倍数关系' },
+          { title: '画线段图', desc: '小数画1段，大数画相应的倍数段' },
+          { title: '计算小数', desc: '小数 = 和 ÷ (倍数 + 1)', formula: '小数 = 和 ÷ (倍数 + 1)' },
+          { title: '计算大数', desc: '大数 = 小数 × 倍数', formula: '大数 = 小数 × 倍数' }
+        ],
+        example: {
+          question: '甲乙和为60，甲是乙的2倍，求甲乙各是多少？',
+          answer: [
+            { label: '小数(乙)', value: '60 ÷ (2 + 1) = 20' },
+            { label: '大数(甲)', value: '20 × 2 = 40' },
+            { label: '验证', value: '40 + 20 = 60 ✓' }
+          ]
+        }
+      },
+      { 
+        id: 'om_1_3', 
+        name: '差倍问题', 
+        desc: '已知两数的差与倍数关系',
+        difficulty: 'medium',
+        method: '小数=差÷(倍数-1)，大数=小数×倍数',
+        steps: [
+          { title: '理解题意', desc: '找出两数的差以及它们之间的倍数关系' },
+          { title: '分析差值', desc: '大数比小数多(倍数-1)倍' },
+          { title: '计算小数', desc: '小数 = 差 ÷ (倍数 - 1)', formula: '小数 = 差 ÷ (倍数 - 1)' },
+          { title: '计算大数', desc: '大数 = 小数 × 倍数', formula: '大数 = 小数 × 倍数' }
+        ],
+        example: {
+          question: '甲比乙大30，甲是乙的4倍，求甲乙各是多少？',
+          answer: [
+            { label: '小数(乙)', value: '30 ÷ (4 - 1) = 10' },
+            { label: '大数(甲)', value: '10 × 4 = 40' },
+            { label: '验证', value: '40 - 10 = 30 ✓' }
+          ]
+        }
+      }
     ]
   },
   {
     category: '生活应用题',
     color: '#38bdf8',
     topics: [
-      { id: 'om_2_1', name: '年龄问题', desc: '利用年龄差不变解题', method: '年龄差永远不变，画线段图分析', example: '爸爸35岁，儿子5岁，几年后爸爸是儿子的3倍？' },
-      { id: 'om_2_2', name: '植树问题', desc: '间隔与棵数的关系', method: '两端都植：棵数=间隔数+1；一端植：棵数=间隔数', example: '100米路每隔5米植树，两端都植，需21棵' },
-      { id: 'om_2_3', name: '盈亏问题', desc: '分配中的盈与亏', method: '(盈+亏)÷两次分配差=人数', example: '每人分5个多10个，每人分7个少6个，有8人' }
+      { 
+        id: 'om_2_1', 
+        name: '年龄问题', 
+        desc: '利用年龄差不变解题',
+        difficulty: 'medium',
+        method: '年龄差永远不变，画线段图分析',
+        steps: [
+          { title: '找出关键', desc: '年龄差是永远不变的' },
+          { title: '画线段图', desc: '用线段表示现在或未来的年龄关系' },
+          { title: '列方程', desc: '根据倍数关系列出等式' },
+          { title: '求解验证', desc: '解方程并验证是否符合题意' }
+        ],
+        example: {
+          question: '爸爸35岁，儿子5岁，几年后爸爸是儿子的3倍？',
+          answer: [
+            { label: '年龄差', value: '35 - 5 = 30岁（永远不变）' },
+            { label: '倍数时差', value: '30 ÷ (3 - 1) = 15岁（儿子）' },
+            { label: '经过年数', value: '15 - 5 = 10年' },
+            { label: '验证', value: '45 ÷ 15 = 3 ✓' }
+          ]
+        }
+      },
+      { 
+        id: 'om_2_2', 
+        name: '植树问题', 
+        desc: '间隔与棵数的关系',
+        difficulty: 'easy',
+        method: '两端都植：棵数=间隔数+1；一端植：棵数=间隔数',
+        steps: [
+          { title: '判断类型', desc: '确定是两端都植、一端植还是两端不植' },
+          { title: '计算间隔', desc: '间隔数 = 总长度 ÷ 间隔长度' },
+          { title: '应用公式', desc: '根据类型选择正确的棵数公式' },
+          { title: '验证答案', desc: '画图验证棵数是否正确' }
+        ],
+        example: {
+          question: '100米路每隔5米植树，两端都植，需多少棵？',
+          answer: [
+            { label: '间隔数', value: '100 ÷ 5 = 20个' },
+            { label: '棵数', value: '20 + 1 = 21棵（两端都植）' },
+            { label: '验证', value: '21棵树有20个间隔，20×5=100米 ✓' }
+          ]
+        }
+      },
+      { 
+        id: 'om_2_3', 
+        name: '盈亏问题', 
+        desc: '分配中的盈与亏',
+        difficulty: 'hard',
+        method: '(盈+亏)÷两次分配差=人数',
+        steps: [
+          { title: '理解盈和亏', desc: '盈是多出来的，亏是不够的部分' },
+          { title: '找出分配差', desc: '两次分配中每人分得的数量差' },
+          { title: '计算人数', desc: '人数 = (盈 + 亏) ÷ 分配差', formula: '人数 = (盈 + 亏) ÷ 分配差' },
+          { title: '计算总量', desc: '根据人数和任意一次分配计算总量' }
+        ],
+        example: {
+          question: '每人分5个多10个，每人分7个少6个，有多少人？',
+          answer: [
+            { label: '盈', value: '+10个' },
+            { label: '亏', value: '-6个' },
+            { label: '人数', value: '(10 + 6) ÷ (7 - 5) = 8人' },
+            { label: '验证', value: '5×8+10=50，7×8-6=50 ✓' }
+          ]
+        }
+      }
     ]
   },
   {
     category: '数量关系',
     color: '#f472b6',
     topics: [
-      { id: 'om_3_1', name: '平均数问题', desc: '求平均数的方法', method: '总数÷份数=平均数，移多补少', example: '三门成绩分别是85、90、95，平均分=90' },
-      { id: 'om_3_2', name: '归一问题', desc: '先求单一量', method: '先求1份的量，再求多份的量', example: '3小时做12个，5小时做多少个？先求每小时4个' },
-      { id: 'om_3_3', name: '归总问题', desc: '总量不变的问题', method: '总量=单一量×份数，新单一量=总量÷新份数', example: '每天读20页，15天读完；每天读25页，12天读完' }
+      { 
+        id: 'om_3_1', 
+        name: '平均数问题', 
+        desc: '求平均数的方法',
+        difficulty: 'easy',
+        method: '总数÷份数=平均数，移多补少',
+        steps: [
+          { title: '理解概念', desc: '平均数 = 总数 ÷ 份数' },
+          { title: '计算总数', desc: '把所有数相加得到总和' },
+          { title: '计算平均', desc: '平均数 = 总数 ÷ 个数', formula: '平均数 = 总数 ÷ 个数' },
+          { title: '移多补少', desc: '多的给少的，使每个数相等' }
+        ],
+        example: {
+          question: '三门成绩分别是85、90、95，平均分是多少？',
+          answer: [
+            { label: '总数', value: '85 + 90 + 95 = 270' },
+            { label: '平均数', value: '270 ÷ 3 = 90分' },
+            { label: '移多补少', value: '95给85各5分，三人都得90分' }
+          ]
+        }
+      },
+      { 
+        id: 'om_3_2', 
+        name: '归一问题', 
+        desc: '先求单一量',
+        difficulty: 'easy',
+        method: '先求1份的量，再求多份的量',
+        steps: [
+          { title: '理解题意', desc: '找出总量和对应的份数' },
+          { title: '求单一量', desc: '单一量 = 总量 ÷ 份数', formula: '单一量 = 总量 ÷ 份数' },
+          { title: '求新总量', desc: '新总量 = 单一量 × 新份数', formula: '新总量 = 单一量 × 新份数' },
+          { title: '验证答案', desc: '检查单位是否一致' }
+        ],
+        example: {
+          question: '3小时做12个零件，5小时做多少个？',
+          answer: [
+            { label: '单一量', value: '12 ÷ 3 = 4个/小时' },
+            { label: '新总量', value: '4 × 5 = 20个' },
+            { label: '验证', value: '20 ÷ 5 = 4个/小时 ✓' }
+          ]
+        }
+      },
+      { 
+        id: 'om_3_3', 
+        name: '归总问题', 
+        desc: '总量不变的问题',
+        difficulty: 'medium',
+        method: '总量=单一量×份数，新单一量=总量÷新份数',
+        steps: [
+          { title: '理解题意', desc: '总量不变，单一量和份数成反比' },
+          { title: '计算总量', desc: '总量 = 单一量 × 份数', formula: '总量 = 单一量 × 份数' },
+          { title: '计算新量', desc: '新单一量 = 总量 ÷ 新份数', formula: '新单一量 = 总量 ÷ 新份数' },
+          { title: '验证答案', desc: '检查总量是否相等' }
+        ],
+        example: {
+          question: '每天读20页，15天读完；每天读25页，几天读完？',
+          answer: [
+            { label: '总量', value: '20 × 15 = 300页' },
+            { label: '新天数', value: '300 ÷ 25 = 12天' },
+            { label: '验证', value: '25 × 12 = 300页 ✓' }
+          ]
+        }
+      }
     ]
   },
   {
     category: '行程问题',
     color: '#fbbf24',
     topics: [
-      { id: 'om_4_1', name: '行程问题', desc: '路程、速度、时间', method: '路程=速度×时间，速度=路程÷时间', example: '速度60km/h，行驶3小时，路程=180km' },
-      { id: 'om_4_2', name: '相遇问题', desc: '两人相向而行', method: '相遇时间=总路程÷速度和', example: 'AB相距300km，甲速60，乙速40，3小时相遇' },
-      { id: 'om_4_3', name: '追及问题', desc: '同向而行的追赶', method: '追及时间=路程差÷速度差', example: '甲先走2小时，速度40，乙速60，4小时追上' }
+      { 
+        id: 'om_4_1', 
+        name: '行程问题', 
+        desc: '路程、速度、时间',
+        difficulty: 'easy',
+        method: '路程=速度×时间，速度=路程÷时间',
+        steps: [
+          { title: '理解公式', desc: '路程 = 速度 × 时间' },
+          { title: '找出已知', desc: '确定题目中已知哪两个量' },
+          { title: '选择公式', desc: '求路程用乘法，求速度或时间用除法' },
+          { title: '单位统一', desc: '确保速度、时间单位匹配' }
+        ],
+        example: {
+          question: '速度60km/h，行驶3小时，路程是多少？',
+          answer: [
+            { label: '公式', value: '路程 = 速度 × 时间' },
+            { label: '计算', value: '60 × 3 = 180km' },
+            { label: '验证', value: '180 ÷ 3 = 60km/h ✓' }
+          ]
+        }
+      },
+      { 
+        id: 'om_4_2', 
+        name: '相遇问题', 
+        desc: '两人相向而行',
+        difficulty: 'medium',
+        method: '相遇时间=总路程÷速度和',
+        steps: [
+          { title: '理解运动', desc: '两人相向而行，距离越来越近' },
+          { title: '计算速度和', desc: '速度和 = 甲速 + 乙速', formula: '速度和 = 甲速 + 乙速' },
+          { title: '计算时间', desc: '相遇时间 = 总路程 ÷ 速度和', formula: '相遇时间 = 总路程 ÷ 速度和' },
+          { title: '计算路程', desc: '各自行程 = 各自速度 × 时间' }
+        ],
+        example: {
+          question: 'AB相距300km，甲速60km/h，乙速40km/h，几小时相遇？',
+          answer: [
+            { label: '速度和', value: '60 + 40 = 100km/h' },
+            { label: '相遇时间', value: '300 ÷ 100 = 3小时' },
+            { label: '验证', value: '60×3 + 40×3 = 300km ✓' }
+          ]
+        }
+      },
+      { 
+        id: 'om_4_3', 
+        name: '追及问题', 
+        desc: '同向而行的追赶',
+        difficulty: 'hard',
+        method: '追及时间=路程差÷速度差',
+        steps: [
+          { title: '理解运动', desc: '两人同向而行，快者追赶慢者' },
+          { title: '计算路程差', desc: '先走的路程 = 先走时间 × 速度' },
+          { title: '计算速度差', desc: '速度差 = 快者速度 - 慢者速度', formula: '速度差 = 快速 - 慢速' },
+          { title: '计算时间', desc: '追及时间 = 路程差 ÷ 速度差', formula: '追及时间 = 路程差 ÷ 速度差' }
+        ],
+        example: {
+          question: '甲先走2小时，速度40km/h，乙速度60km/h，几小时追上？',
+          answer: [
+            { label: '路程差', value: '40 × 2 = 80km' },
+            { label: '速度差', value: '60 - 40 = 20km/h' },
+            { label: '追及时间', value: '80 ÷ 20 = 4小时' },
+            { label: '验证', value: '60×4 = 40×(2+4) = 240km ✓' }
+          ]
+        }
+      }
     ]
   },
   {
     category: '经典趣题',
     color: '#a78bfa',
     topics: [
-      { id: 'om_5_1', name: '鸡兔同笼', desc: '经典假设法', method: '假设全是鸡，多出来的脚÷2=兔数', example: '头35个，脚94只，鸡23只，兔12只' },
-      { id: 'om_5_2', name: '牛吃草问题', desc: '生长与消耗', method: '草每天生长量=(牛1×天1-牛2×天2)÷(天1-天2)', example: '10牛20天吃完，15牛10天吃完，25牛5天吃完' },
-      { id: 'om_5_3', name: '工程问题', desc: '工作效率问题', method: '工效=1÷工时，合作工效=工效和', example: '甲10天完成，乙15天完成，合作6天完成' }
+      { 
+        id: 'om_5_1', 
+        name: '鸡兔同笼', 
+        desc: '经典假设法',
+        difficulty: 'medium',
+        method: '假设全是鸡，多出来的脚÷2=兔数',
+        steps: [
+          { title: '理解题意', desc: '知道头的总数和脚的总数，求鸡兔各多少' },
+          { title: '假设全是鸡', desc: '假设所有动物都是鸡（2只脚）' },
+          { title: '计算脚差', desc: '实际脚数 - 假设脚数 = 多出来的脚', formula: '多出来的脚 = 实际脚 - 2×头数' },
+          { title: '求兔数', desc: '兔数 = 多出来的脚 ÷ 2', formula: '兔数 = 多出来的脚 ÷ 2' },
+          { title: '求鸡数', desc: '鸡数 = 头数 - 兔数' }
+        ],
+        example: {
+          question: '头35个，脚94只，鸡兔各多少？',
+          answer: [
+            { label: '假设全是鸡', value: '35 × 2 = 70只脚' },
+            { label: '多出来的脚', value: '94 - 70 = 24只' },
+            { label: '兔数', value: '24 ÷ 2 = 12只' },
+            { label: '鸡数', value: '35 - 12 = 23只' },
+            { label: '验证', value: '23×2 + 12×4 = 46+48=94 ✓' }
+          ]
+        }
+      },
+      { 
+        id: 'om_5_2', 
+        name: '牛吃草问题', 
+        desc: '生长与消耗',
+        difficulty: 'hard',
+        method: '草每天生长量=(牛1×天1-牛2×天2)÷(天1-天2)',
+        steps: [
+          { title: '理解题意', desc: '草每天都在生长，牛每天都在吃草' },
+          { title: '假设变量', desc: '设原有草为G，每天生长量为g' },
+          { title: '列方程组', desc: '根据两次不同情况列出方程' },
+          { title: '求解生长量', desc: '草每天生长量 = (牛1×天1 - 牛2×天2) ÷ (天1 - 天2)' },
+          { title: '求解原有草', desc: '原有草 = 牛×天数 - 生长量×天数' }
+        ],
+        example: {
+          question: '10头牛20天吃完，15头牛10天吃完，25头牛几天吃完？',
+          answer: [
+            { label: '每天生长量', value: '(10×20 - 15×10) ÷ (20-10) = 5份/天' },
+            { label: '原有草量', value: '10×20 - 5×20 = 100份' },
+            { label: '25头牛', value: '5头吃新草，20头吃旧草' },
+            { label: '天数', value: '100 ÷ 20 = 5天' }
+          ]
+        }
+      },
+      { 
+        id: 'om_5_3', 
+        name: '工程问题', 
+        desc: '工作效率问题',
+        difficulty: 'medium',
+        method: '工效=1÷工时，合作工效=工效和',
+        steps: [
+          { title: '设总量为1', desc: '把工程总量看作单位"1"' },
+          { title: '计算工效', desc: '工作效率 = 1 ÷ 完成时间', formula: '工效 = 1 ÷ 工时' },
+          { title: '计算合作工效', desc: '合作工效 = 各工效之和', formula: '合作工效 = 甲工效 + 乙工效' },
+          { title: '计算时间', desc: '合作时间 = 1 ÷ 合作工效', formula: '合作时间 = 1 ÷ 合作工效' }
+        ],
+        example: {
+          question: '甲10天完成，乙15天完成，合作几天完成？',
+          answer: [
+            { label: '甲工效', value: '1/10（每天完成1/10）' },
+            { label: '乙工效', value: '1/15（每天完成1/15）' },
+            { label: '合作工效', value: '1/10 + 1/15 = 1/6' },
+            { label: '合作时间', value: '1 ÷ 1/6 = 6天' }
+          ]
+        }
+      }
     ]
   },
   {
     category: '分数与比例',
     color: '#fb923c',
     topics: [
-      { id: 'om_6_1', name: '分数应用题', desc: '分数的乘除应用', method: '找单位"1"，画线段图，列方程', example: '一本书看了3/5，还剩80页，全书200页' },
-      { id: 'om_6_2', name: '百分数应用', desc: '百分数的实际应用', method: '百分数=部分÷整体×100%', example: '原价200元，打8折，现价160元' },
-      { id: 'om_6_3', name: '比和比例', desc: '按比例分配', method: '总量÷总份数=每份量', example: '甲乙丙按2:3:5分100元，分别得20、30、50' }
+      { 
+        id: 'om_6_1', 
+        name: '分数应用题', 
+        desc: '分数的乘除应用',
+        difficulty: 'medium',
+        method: '找单位"1"，画线段图，列方程',
+        steps: [
+          { title: '找单位"1"', desc: '确定谁是整体，通常"的"字前面是单位"1"' },
+          { title: '画线段图', desc: '把单位"1"画成线段，标出已知分数' },
+          { title: '确定运算', desc: '已知单位"1"用乘法，求单位"1"用除法' },
+          { title: '列式计算', desc: '根据数量关系列出算式' }
+        ],
+        example: {
+          question: '一本书看了3/5，还剩80页，全书多少页？',
+          answer: [
+            { label: '单位"1"', value: '全书页数' },
+            { label: '剩余比例', value: '1 - 3/5 = 2/5' },
+            { label: '全书页数', value: '80 ÷ 2/5 = 200页' },
+            { label: '验证', value: '200 × 3/5 = 120页，200-120=80 ✓' }
+          ]
+        }
+      },
+      { 
+        id: 'om_6_2', 
+        name: '百分数应用', 
+        desc: '百分数的实际应用',
+        difficulty: 'easy',
+        method: '百分数=部分÷整体×100%',
+        steps: [
+          { title: '理解百分数', desc: '百分数表示一个数是另一个数的百分之几' },
+          { title: '找出整体', desc: '确定单位"1"（整体）是多少' },
+          { title: '计算百分数', desc: '百分数 = 部分 ÷ 整体 × 100%', formula: '百分数 = 部分 ÷ 整体 × 100%' },
+          { title: '实际应用', desc: '折扣、利率、税率等实际问题' }
+        ],
+        example: {
+          question: '原价200元，打8折，现价多少？',
+          answer: [
+            { label: '折扣含义', value: '8折 = 80% = 0.8' },
+            { label: '现价', value: '200 × 0.8 = 160元' },
+            { label: '节省', value: '200 - 160 = 40元' }
+          ]
+        }
+      },
+      { 
+        id: 'om_6_3', 
+        name: '比和比例', 
+        desc: '按比例分配',
+        difficulty: 'easy',
+        method: '总量÷总份数=每份量',
+        steps: [
+          { title: '理解比', desc: '比表示两个数的倍数关系' },
+          { title: '计算总份数', desc: '把比的前项和后项相加', formula: '总份数 = 前项 + 后项' },
+          { title: '计算每份', desc: '每份量 = 总量 ÷ 总份数', formula: '每份量 = 总量 ÷ 总份数' },
+          { title: '分配数量', desc: '各部分 = 每份量 × 各自份数' }
+        ],
+        example: {
+          question: '甲乙丙按2:3:5分100元，各得多少？',
+          answer: [
+            { label: '总份数', value: '2 + 3 + 5 = 10份' },
+            { label: '每份', value: '100 ÷ 10 = 10元' },
+            { label: '甲', value: '10 × 2 = 20元' },
+            { label: '乙', value: '10 × 3 = 30元' },
+            { label: '丙', value: '10 × 5 = 50元' }
+          ]
+        }
+      }
     ]
   },
   {
     category: '几何专题',
     color: '#22d3ee',
     topics: [
-      { id: 'om_7_1', name: '几何初步', desc: '周长与面积', method: '长方形周长=2×(长+宽)，面积=长×宽', example: '长8cm宽5cm的长方形，周长26cm，面积40cm²' },
-      { id: 'om_7_2', name: '立体几何', desc: '体积与表面积', method: '长方体体积=长×宽×高，表面积=2×(lw+lh+wh)', example: '棱长3cm的正方体，体积27cm³，表面积54cm²' }
+      { 
+        id: 'om_7_1', 
+        name: '几何初步', 
+        desc: '周长与面积',
+        difficulty: 'easy',
+        method: '长方形周长=2×(长+宽)，面积=长×宽',
+        steps: [
+          { title: '识别图形', desc: '确定是长方形、正方形还是其他图形' },
+          { title: '找出尺寸', desc: '确定长和宽（或边长）' },
+          { title: '选择公式', desc: '周长公式或面积公式' },
+          { title: '单位统一', desc: '确保所有长度单位一致' }
+        ],
+        example: {
+          question: '长8cm宽5cm的长方形，求周长和面积',
+          answer: [
+            { label: '周长', value: '2 × (8 + 5) = 26cm' },
+            { label: '面积', value: '8 × 5 = 40cm²' },
+            { label: '验证', value: '周长 = 8+5+8+5 = 26cm ✓' }
+          ]
+        }
+      },
+      { 
+        id: 'om_7_2', 
+        name: '立体几何', 
+        desc: '体积与表面积',
+        difficulty: 'medium',
+        method: '长方体体积=长×宽×高，表面积=2×(lw+lh+wh)',
+        steps: [
+          { title: '识别立体', desc: '确定是长方体、正方体还是圆柱' },
+          { title: '找出尺寸', desc: '确定长、宽、高（或棱长、半径）' },
+          { title: '计算体积', desc: '体积 = 长 × 宽 × 高', formula: 'V = l × w × h' },
+          { title: '计算表面积', desc: '表面积 = 2×(lw + lh + wh)' }
+        ],
+        example: {
+          question: '棱长3cm的正方体，求体积和表面积',
+          answer: [
+            { label: '体积', value: '3 × 3 × 3 = 27cm³' },
+            { label: '表面积', value: '6 × (3 × 3) = 54cm²' },
+            { label: '验证', value: '正方体6个面，每个面9cm² ✓' }
+          ]
+        }
+      }
     ]
   }
 ];
@@ -1918,19 +2330,58 @@ async function loadOlympiadData() {
                     </div>
                     <div class="fishbone-detail" id="om-detail-${t.id}" style="display:none">
                       <div class="fishbone-detail-content">
-                        <h4>${t.name}</h4>
-                        <p class="detail-desc">${t.desc}</p>
-                        <div class="detail-section">
-                          <h5>📝 解题方法</h5>
-                          <p>${t.method}</p>
+                        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+                          <h4 style="margin:0;">${t.name}</h4>
+                          <span class="difficulty-badge difficulty-${t.difficulty}">
+                            ${t.difficulty === 'easy' ? '⭐ 简单' : t.difficulty === 'medium' ? '⭐⭐ 中等' : '⭐⭐⭐ 困难'}
+                          </span>
                         </div>
+                        <p class="detail-desc">${t.desc}</p>
+                        
+                        <div class="detail-section">
+                          <h5>📝 解题步骤</h5>
+                          <div class="solution-steps">
+                            ${t.steps.map((step, idx) => `
+                              <div class="solution-step">
+                                <div class="step-number">${idx + 1}</div>
+                                <div class="step-content">
+                                  <div class="step-title">${step.title}</div>
+                                  <div class="step-desc">${step.desc}</div>
+                                  ${step.formula ? `<div class="step-formula">${step.formula}</div>` : ''}
+                                </div>
+                              </div>
+                            `).join('')}
+                          </div>
+                        </div>
+                        
                         <div class="detail-section">
                           <h5>💡 典型例题</h5>
-                          <p>${t.example}</p>
+                          <div class="example-card">
+                            <div class="example-header">
+                              <span>🎯</span>
+                              <span>例题解析</span>
+                            </div>
+                            <div class="example-question">${t.example.question}</div>
+                            <div class="example-answer">
+                              ${t.example.answer.map(a => `
+                                <div class="answer-row">
+                                  <span class="answer-label">${a.label}：</span>
+                                  <span class="answer-value">${a.value}</span>
+                                </div>
+                              `).join('')}
+                            </div>
+                          </div>
                         </div>
+                        
+                        <div class="method-tags">
+                          <span class="method-tag">📐 ${t.category}</span>
+                          <span class="method-tag">🔢 ${t.method.split('，')[0]}</span>
+                        </div>
+                        
                         <button class="btn btn-sm ${isDone ? 'btn-done' : 'btn-primary'}" 
-                          onclick="event.stopPropagation(); toggleTopic('${t.id}', ${isDone})">
-                          ${isDone ? '标记未完成' : '标记完成'}
+                          onclick="event.stopPropagation(); toggleTopic('${t.id}', ${isDone})"
+                          style="margin-top:16px;">
+                          ${isDone ? '✅ 标记未完成' : '⭕ 标记完成'}
                         </button>
                       </div>
                     </div>
