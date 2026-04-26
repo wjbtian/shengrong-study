@@ -17,6 +17,7 @@ export async function api(method, path, data) {
 export const getDiary = () => api('GET', '/diary')
 export const postDiary = (data) => api('POST', '/diary', data)
 export const getShines = () => api('GET', '/shines')
+export const postShine = (data) => api('POST', '/shines', data)
 export const getTech = () => api('GET', '/tech')
 export const postTech = (data) => api('POST', '/tech', data)
 export const putTechFav = (id) => api('PUT', `/tech/${id}/fav`)
