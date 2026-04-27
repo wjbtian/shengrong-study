@@ -215,9 +215,15 @@ app.delete('/api/guitar/:id', (req, res) => {
     }
   });
 
-  // SPA fallback
+  // SPA fallback - 优先使用 Vue dist 目录的 index.html
   app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'client', 'index.html'));
+    const distIndex = path.join(__dirname, '..', 'client', 'dist', 'index.html');
+    const clientIndex = path.join(__dirname, '..', 'client', 'index.html');
+    if (fs.existsSync(distIndex)) {
+      res.sendFile(distIndex);
+    } else {
+      res.sendFile(clientIndex);
+    }
   });
 
   // 启动
