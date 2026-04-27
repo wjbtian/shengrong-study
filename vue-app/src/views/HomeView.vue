@@ -214,6 +214,74 @@
         <div v-else class="empty-state">还没有闪光时刻</div>
       </section>
     </div>
+
+    <!-- 闪光时刻照片墙 -->
+    <section class="photo-wall-section">
+      <div class="section-header">
+        <h2>✨ 闪光时刻</h2>
+        <button class="btn-text" @click="$router.push('/shines')">查看全部 →</button>
+      </div>
+      <div class="photo-wall">
+        <div
+          v-for="(photo, idx) in showcasePhotos"
+          :key="idx"
+          class="wall-photo"
+          :class="'photo-size-' + (idx % 5)"
+          @click="openPhotoModal(photo)"
+        >
+          <img v-if="photo.url" :src="photo.url" :alt="photo.title" />
+          <div v-else class="photo-placeholder">
+            <span class="photo-emoji">{{ photo.icon || '✨' }}</span>
+          </div>
+          <div class="photo-overlay">
+            <span class="photo-title">{{ photo.title }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 吉他视频 -->
+    <section class="guitar-video-section">
+      <div class="section-header">
+        <h2>🎸 吉他演奏</h2>
+        <button class="btn-text" @click="$router.push('/guitar')">查看全部 →</button>
+      </div>
+      <div class="video-container">
+        <video
+          v-if="latestGuitarVideo"
+          ref="guitarVideo"
+          :src="latestGuitarVideo.url"
+          controls
+          autoplay
+          muted
+          loop
+          class="guitar-video"
+          poster=""
+        ></video>
+        <div v-else class="video-placeholder">
+          <span class="video-icon">🎸</span>
+          <p>还没有吉他视频</p>
+          <button class="btn-text" @click="$router.push('/guitar')">去录制 →</button>
+        </div>
+      </div>
+      <div v-if="latestGuitarVideo" class="video-info">
+        <span class="video-title">{{ latestGuitarVideo.title }}</span>
+        <span class="video-date">{{ latestGuitarVideo.date }}</span>
+      </div>
+    </section>
+
+    <!-- 照片查看弹窗 -->
+    <div v-if="selectedPhoto" class="photo-modal" @click.self="selectedPhoto = null">
+      <div class="photo-modal-content">
+        <button class="photo-modal-close" @click="selectedPhoto = null">✕</button>
+        <div class="photo-modal-image">
+          <img v-if="selectedPhoto.url" :src="selectedPhoto.url" :alt="selectedPhoto.title" />
+          <span v-else class="photo-modal-emoji">{{ selectedPhoto.icon || '✨' }}</span>
+        </div>
+        <h3>{{ selectedPhoto.title }}</h3>
+        <p>{{ selectedPhoto.date }}</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -229,6 +297,36 @@ const shines = ref([])
 const guitar = ref([])
 const tech = ref([])
 const progress = ref({})
+const guitarVideo = ref(null)
+
+// 照片墙展示数据（可替换的照片）
+const showcasePhotos = ref([
+  { url: '', title: '春游时光', icon: '🌸', date: '2026-04-20' },
+  { url: '', title: '数学竞赛', icon: '🏆', date: '2026-04-15' },
+  { url: '', title: '吉他练习', icon: '🎸', date: '2026-04-12' },
+  { url: '', title: '科技制作', icon: '🔬', date: '2026-04-10' },
+  { url: '', title: '英语演讲', icon: '🎤', date: '2026-04-08' },
+  { url: '', title: '运动时刻', icon: '⚽', date: '2026-04-05' },
+  { url: '', title: '阅读时光', icon: '📚', date: '2026-04-01' },
+])
+
+// 最新吉他视频
+const latestGuitarVideo = computed(() => {
+  if (guitar.value?.videos?.length) {
+    return guitar.value.videos[guitar.value.videos.length - 1]
+  }
+  if (guitar.value?.length) {
+    const v = guitar.value[guitar.value.length - 1]
+    return { title: v.title || '吉他练习', date: v.date, url: v.videoUrl || v.url }
+  }
+  return null
+})
+
+const selectedPhoto = ref(null)
+
+function openPhotoModal(photo) {
+  selectedPhoto.value = photo
+}
 
 // 今日任务
 const tasks = ref([
@@ -521,8 +619,10 @@ onMounted(async () => {
 
 <style scoped>
 .home-view {
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 100%;
+  padding: 0 12px;
+  box-sizing: border-box;
 }
 
 /* 顶部欢迎区 */
@@ -530,11 +630,11 @@ onMounted(async () => {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 32px;
-  padding: 24px;
-  background: linear-gradient(135deg, rgba(74, 222, 128, 0.08) 0%, rgba(129, 140, 248, 0.05) 100%);
-  border-radius: 16px;
-  border: 1px solid rgba(74, 222, 128, 0.15);
+  margin-bottom: 28px;
+  padding: 28px 32px;
+  background: linear-gradient(135deg, rgba(74, 222, 128, 0.1) 0%, rgba(129, 140, 248, 0.06) 100%);
+  border-radius: 20px;
+  border: 1px solid rgba(74, 222, 128, 0.2);
 }
 
 .hero-content {
@@ -542,18 +642,21 @@ onMounted(async () => {
 }
 
 .greeting {
-  font-size: 28px;
-  font-weight: 800;
-  margin-bottom: 4px;
+  font-size: 36px;
+  font-weight: 900;
+  margin-bottom: 6px;
   background: linear-gradient(135deg, var(--accent), var(--accent2));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(74, 222, 128, 0.3);
+  letter-spacing: -0.5px;
 }
 
 .today-date {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--text2);
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+  font-weight: 500;
 }
 
 .daily-quote {
@@ -564,77 +667,91 @@ onMounted(async () => {
 }
 
 .quote-mark {
-  font-size: 24px;
+  font-size: 28px;
   color: var(--accent);
-  opacity: 0.5;
+  opacity: 0.6;
   line-height: 1;
+  font-weight: 700;
 }
 
 .quote-text {
   color: var(--text);
-  font-size: 15px;
+  font-size: 16px;
   font-style: italic;
+  line-height: 1.6;
 }
 
 .quote-author {
   color: var(--text2);
   font-size: 13px;
+  font-weight: 500;
 }
 
 .hero-stats {
   display: flex;
-  gap: 24px;
-  padding-left: 24px;
-  border-left: 1px solid var(--border);
+  gap: 32px;
+  padding-left: 32px;
+  border-left: 1px solid rgba(255,255,255,0.1);
 }
 
 .hero-stat {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
 }
 
 .hero-stat-value {
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 42px;
+  font-weight: 900;
   color: var(--accent);
+  text-shadow: 0 0 20px rgba(74, 222, 128, 0.4);
+  line-height: 1;
 }
 
 .hero-stat-label {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text2);
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
 /* 通用 section */
 section {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
+  border-radius: 20px;
+  padding: 28px;
+  margin-bottom: 24px;
+  transition: all 0.3s ease;
+}
+
+section:hover {
+  border-color: rgba(74, 222, 128, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .section-header h2 {
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 800;
   color: var(--text);
   margin: 0;
+  letter-spacing: -0.3px;
 }
 
 /* 两列布局 */
 .two-column {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-bottom: 20px;
+  gap: 24px;
+  margin-bottom: 24px;
 }
 
 .two-column section {
@@ -732,57 +849,61 @@ section {
 .progress-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 18px;
 }
 
 .progress-item {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .progress-info {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .progress-icon {
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .progress-name {
   flex: 1;
-  font-size: 14px;
+  font-size: 15px;
   color: var(--text);
-}
-
-.progress-fraction {
-  font-size: 13px;
-  color: var(--text2);
   font-weight: 600;
 }
 
+.progress-fraction {
+  font-size: 14px;
+  color: var(--text2);
+  font-weight: 700;
+}
+
 .progress-bar-bg {
-  height: 8px;
+  height: 10px;
   background: var(--surface3);
-  border-radius: 4px;
+  border-radius: 5px;
   overflow: hidden;
 }
 
 .progress-bar-fill {
   height: 100%;
-  border-radius: 4px;
+  border-radius: 5px;
   transition: width 0.5s ease;
+  background: linear-gradient(90deg, var(--accent), #22c55e) !important;
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.3);
 }
 
 /* 活跃度图表 */
 .activity-chart {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: flex-end;
-  height: 140px;
-  padding: 16px 8px 0;
+  height: 160px;
+  padding: 20px 16px 0;
+  gap: 8px;
 }
 
 .activity-day {
@@ -790,52 +911,67 @@ section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  max-width: 80px;
 }
 
 .activity-bars {
   display: flex;
-  gap: 2px;
+  gap: 3px;
   align-items: flex-end;
-  height: 100px;
+  height: 120px;
+  width: 100%;
+  justify-content: center;
 }
 
 .activity-bar {
-  width: 8px;
-  border-radius: 4px 4px 0 0;
+  width: 10px;
+  border-radius: 5px 5px 0 0;
   transition: height 0.3s ease;
-  min-height: 2px;
+  min-height: 4px;
+  position: relative;
 }
 
-.activity-bar.diary { background: var(--accent); }
-.activity-bar.shine { background: var(--accent2); }
-.activity-bar.guitar { background: var(--yellow); }
+.activity-bar.diary { 
+  background: linear-gradient(180deg, #4ade80, #22c55e);
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.3);
+}
+.activity-bar.shine { 
+  background: linear-gradient(180deg, #818cf8, #6366f1);
+  box-shadow: 0 0 8px rgba(129, 140, 248, 0.3);
+}
+.activity-bar.guitar { 
+  background: linear-gradient(180deg, #fbbf24, #f59e0b);
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.3);
+}
 
 .day-label {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text3);
+  font-weight: 500;
 }
 
 .day-label.today {
   color: var(--accent);
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .chart-legend {
   display: flex;
   justify-content: center;
-  gap: 16px;
-  margin-top: 12px;
-  font-size: 12px;
+  gap: 24px;
+  margin-top: 16px;
+  font-size: 13px;
   color: var(--text2);
+  font-weight: 500;
 }
 
 .legend-dot {
   display: inline-block;
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  margin-right: 4px;
+  margin-right: 6px;
 }
 
 .legend-dot.diary { background: var(--accent); }
@@ -915,20 +1051,26 @@ section {
 /* 徽章 */
 .badges-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 14px;
 }
 
 .badge-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 12px 8px;
-  border-radius: 10px;
+  gap: 8px;
+  padding: 16px 10px;
+  border-radius: 14px;
   background: var(--surface2);
   transition: all 0.3s;
   position: relative;
+  cursor: pointer;
+}
+
+.badge-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .badge-item.unlocked {
@@ -943,7 +1085,7 @@ section {
 .badge-glow {
   position: absolute;
   inset: 0;
-  border-radius: 10px;
+  border-radius: 14px;
   background: radial-gradient(circle at center, rgba(74, 222, 128, 0.2), transparent 70%);
   animation: pulse 2s ease-in-out infinite;
 }
@@ -954,17 +1096,18 @@ section {
 }
 
 .badge-icon {
-  font-size: 28px;
+  font-size: 32px;
   position: relative;
   z-index: 1;
 }
 
 .badge-name {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text2);
   text-align: center;
   position: relative;
   z-index: 1;
+  font-weight: 500;
 }
 
 /* 复习 */
@@ -1059,6 +1202,210 @@ section {
   margin-top: 2px;
 }
 
+/* 照片墙 - 真正的照片墙形式 */
+.photo-wall {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 140px;
+  gap: 12px;
+}
+
+.wall-photo {
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  background: var(--surface2);
+  transition: all 0.3s ease;
+}
+
+.wall-photo:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  z-index: 10;
+}
+
+.wall-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.wall-photo:hover img {
+  transform: scale(1.1);
+}
+
+/* 照片墙大小变化 - 错落有致 */
+.photo-size-0 {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.photo-size-1 {
+  grid-column: span 1;
+  grid-row: span 1;
+}
+
+.photo-size-2 {
+  grid-column: span 1;
+  grid-row: span 2;
+}
+
+.photo-size-3 {
+  grid-column: span 2;
+  grid-row: span 1;
+}
+
+.photo-size-4 {
+  grid-column: span 1;
+  grid-row: span 1;
+}
+
+.photo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--surface2), var(--surface3));
+}
+
+.photo-emoji {
+  font-size: 40px;
+}
+
+.wall-photo.photo-size-0 .photo-emoji,
+.wall-photo.photo-size-2 .photo-emoji {
+  font-size: 64px;
+}
+
+.photo-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 10px 10px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.wall-photo:hover .photo-overlay {
+  opacity: 1;
+}
+
+.photo-title {
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* 照片弹窗 */
+.photo-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+  padding: 40px;
+}
+
+.photo-modal-content {
+  text-align: center;
+  color: var(--text);
+  max-width: 80vw;
+  max-height: 80vh;
+}
+
+.photo-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 24px;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.1);
+}
+
+.photo-modal-image {
+  max-width: 600px;
+  max-height: 60vh;
+  margin: 0 auto 20px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.photo-modal-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.photo-modal-emoji {
+  font-size: 120px;
+  display: block;
+  padding: 40px;
+}
+
+/* 吉他视频 */
+.video-container {
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--surface2);
+}
+
+.guitar-video {
+  width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  display: block;
+}
+
+.video-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 12px;
+}
+
+.video-icon {
+  font-size: 64px;
+}
+
+.video-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding: 0 4px;
+}
+
+.video-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.video-date {
+  font-size: 13px;
+  color: var(--text2);
+}
+
 /* 通用 */
 .empty-state {
   text-align: center;
@@ -1083,6 +1430,20 @@ section {
 }
 
 /* 响应式 */
+@media (max-width: 1024px) {
+  .photo-wall {
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 120px;
+  }
+  .photo-size-0 {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+  .photo-size-2 {
+    grid-row: span 1;
+  }
+}
+
 @media (max-width: 768px) {
   .two-column {
     grid-template-columns: 1fr;
@@ -1101,6 +1462,35 @@ section {
   }
   .greeting {
     font-size: 22px;
+  }
+  .photo-wall {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 100px;
+    gap: 8px;
+  }
+  .photo-size-0 {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+  .photo-size-2 {
+    grid-row: span 1;
+  }
+  .wall-photo {
+    border-radius: 12px;
+  }
+  .wall-photo .photo-emoji {
+    font-size: 32px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .photo-wall {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 90px;
+  }
+  .photo-size-0 {
+    grid-column: span 2;
+    grid-row: span 2;
   }
 }
 </style>

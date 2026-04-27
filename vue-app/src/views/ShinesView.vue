@@ -52,20 +52,29 @@
         @click="openLightbox(item)"
       >
         <div class="photo-placeholder">
-          <span class="photo-icon">{{ categoryIcon(item.category) }}</span>
+          <img v-if="item.photoUrl" :src="item.photoUrl" class="photo-img" alt="">
+          <span v-else class="photo-icon">{{ categoryIcon(item.category) }}</span>
         </div>
         <div class="photo-info">
           <h4 class="photo-title">{{ item.title }}</h4>
           <p class="photo-date">{{ item.date }}</p>
           <p v-if="item.desc" class="photo-desc">{{ item.desc }}</p>
         </div>
-        <button
-          class="photo-fav"
-          :class="{ active: item.fav }"
-          @click.stop="toggleFav(item)"
-        >
-          {{ item.fav ? '⭐' : '☆' }}
-        </button>
+        <div class="photo-actions">
+          <button
+            class="photo-fav"
+            :class="{ active: item.fav }"
+            @click.stop="toggleFav(item)"
+          >
+            {{ item.fav ? '⭐' : '☆' }}
+          </button>
+          <button
+            class="photo-delete"
+            @click.stop="confirmDelete(item)"
+          >
+            🗑️
+          </button>
+        </div>
       </div>
     </div>
 
@@ -100,11 +109,29 @@
       <div class="lightbox-content">
         <button class="lightbox-close" @click="lightboxItem = null">✕</button>
         <div class="lightbox-photo">
-          <span class="lightbox-icon">{{ categoryIcon(lightboxItem.category) }}</span>
+          <img v-if="lightboxItem.photoUrl" :src="lightboxItem.photoUrl" class="lightbox-img" alt="">
+          <span v-else class="lightbox-icon">{{ categoryIcon(lightboxItem.category) }}</span>
         </div>
         <h3>{{ lightboxItem.title }}</h3>
         <p>{{ lightboxItem.date }}</p>
         <p v-if="lightboxItem.desc">{{ lightboxItem.desc }}</p>
+      </div>
+    </div>
+
+    <!-- 删除确认弹窗 -->
+    <div v-if="showDeleteModal" class="modal" @click.self="showDeleteModal = false">
+      <div class="modal-content modal-sm">
+        <div class="modal-header">
+          <h3>🗑️ 确认删除</h3>
+          <button class="modal-close" @click="showDeleteModal = false">✕</button>
+        </div>
+        <div class="modal-body">
+          <p>确定要删除「{{ deleteTarget?.title }}」吗？此操作不可恢复。</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" @click="showDeleteModal = false">取消</button>
+          <button class="btn btn-danger" @click="doDelete">删除</button>
+        </div>
       </div>
     </div>
   </div>
@@ -112,12 +139,14 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { getShines, postShine } from '../utils/api.js'
+import { getShines, postShine, deleteShine } from '../utils/api.js'
 
 const shines = ref([])
 const showAddModal = ref(false)
+const showDeleteModal = ref(false)
 const currentFilter = ref('all')
 const lightboxItem = ref(null)
+const deleteTarget = ref(null)
 
 const categories = [
   { value: 'award', label: '🏆 获奖' },
@@ -197,6 +226,24 @@ function toggleFav(item) {
 
 function openLightbox(item) {
   lightboxItem.value = item
+}
+
+function confirmDelete(item) {
+  deleteTarget.value = item
+  showDeleteModal.value = true
+}
+
+async function doDelete() {
+  if (!deleteTarget.value) return
+  try {
+    await deleteShine(deleteTarget.value.id)
+    shines.value = shines.value.filter(s => s.id !== deleteTarget.value.id)
+    showDeleteModal.value = false
+    deleteTarget.value = null
+  } catch (e) {
+    console.error('删除失败:', e)
+    alert('删除失败，请重试')
+  }
 }
 
 onMounted(async () => {
@@ -349,6 +396,18 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+}
+
+.photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.photo-card:hover .photo-img {
+  transform: scale(1.05);
 }
 
 .photo-icon {
@@ -382,17 +441,23 @@ onMounted(async () => {
   overflow: hidden;
 }
 
-.photo-fav {
+.photo-actions {
   position: absolute;
   top: 10px;
   right: 10px;
+  display: flex;
+  gap: 6px;
+}
+
+.photo-fav,
+.photo-delete {
   width: 32px;
   height: 32px;
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.5);
   border: none;
   color: var(--text);
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -400,12 +465,18 @@ onMounted(async () => {
   transition: all 0.2s;
 }
 
-.photo-fav:hover {
+.photo-fav:hover,
+.photo-delete:hover {
   background: rgba(0, 0, 0, 0.7);
+  transform: scale(1.1);
 }
 
 .photo-fav.active {
   color: #fbbf24;
+}
+
+.photo-delete:hover {
+  background: rgba(239, 68, 68, 0.8);
 }
 
 /* 弹窗 */
@@ -498,6 +569,21 @@ onMounted(async () => {
   font-weight: 600;
 }
 
+.btn-danger {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: white;
+  font-weight: 600;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+}
+
+.modal-sm {
+  max-width: 400px;
+}
+
 /* 灯箱 */
 .lightbox {
   position: fixed;
@@ -527,18 +613,31 @@ onMounted(async () => {
 }
 
 .lightbox-photo {
-  width: 200px;
-  height: 200px;
+  max-width: 80vw;
+  max-height: 60vh;
   margin: 0 auto 20px;
   background: var(--surface);
   border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+}
+
+.lightbox-img {
+  max-width: 100%;
+  max-height: 60vh;
+  object-fit: contain;
+  border-radius: 16px;
 }
 
 .lightbox-icon {
   font-size: 80px;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .empty-state {

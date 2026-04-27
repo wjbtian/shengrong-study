@@ -133,12 +133,12 @@ onUnmounted(() => {
 }
 
 .main-content {
-  padding: 72px 40px 40px;
+  padding: 72px 16px 40px;
   position: relative;
   z-index: 2;
   min-height: 100vh;
-  max-width: 1600px;
-  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* 页面切换动画 */
@@ -155,7 +155,7 @@ onUnmounted(() => {
 /* 响应式 */
 @media (max-width: 768px) {
   .main-content {
-    padding: 80px 16px 16px;
+    padding: 80px 12px 16px;
   }
 }
 </style>
