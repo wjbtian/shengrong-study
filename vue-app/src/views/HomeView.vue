@@ -623,7 +623,7 @@ onMounted(async () => {
 .home-view {
   width: 100%;
   max-width: 100%;
-  padding: 80px 12px 0;
+  padding: 50px 12px 0;
   box-sizing: border-box;
 }
 
