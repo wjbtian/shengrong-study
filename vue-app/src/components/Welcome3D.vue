@@ -300,21 +300,15 @@ function loadMechaImage() {
     const imgW = img.naturalWidth
     const imgH = img.naturalHeight
     
-    // 提高分辨率，完整显示
-    const maxSize = 600
-    let drawW, drawH
-    if (imgW > imgH) {
-      drawW = maxSize
-      drawH = (imgH / imgW) * maxSize
-    } else {
-      drawH = maxSize
-      drawW = (imgW / imgH) * maxSize
-    }
+    // 使用原始分辨率，完整显示
+    const scale = 1.5 // 放大系数
+    const drawW = imgW * scale
+    const drawH = imgH * scale
     
     canvas.width = drawW
     canvas.height = drawH
 
-    // 居中绘制，保持比例
+    // 完整绘制原始图片
     ctx.drawImage(img, 0, 0, drawW, drawH)
 
     const data = ctx.getImageData(0, 0, drawW, drawH).data
@@ -331,11 +325,11 @@ function loadMechaImage() {
         const b = data[i + 2]
         const bright = (r + g + b) / 3
 
-        if (bright > 40) { // 降低亮度阈值
+        if (bright > 30) { // 进一步降低亮度阈值，捕捉更多细节
           candidates.push({
-            x: (x - drawW / 2) / 30, // 调整缩放比例
-            y: -(y - drawH / 2) / 30, // 垂直翻转并居中
-            z: (bright / 255) * 3 - 1.5,
+            x: (x - drawW / 2) / 80, // 减小缩放比例，让图像更大
+            y: -(y - drawH / 2) / 80, // 垂直翻转并居中
+            z: (bright / 255) * 2 - 1,
             bright: bright
           })
         }
@@ -349,13 +343,16 @@ function loadMechaImage() {
     for (let i = 0; i < PARTICLE_COUNT; i++) {
       if (i < candidates.length) {
         const c = candidates[i]
-        targets[i * 3] = c.x + (Math.random() - 0.5) * 0.3
-        targets[i * 3 + 1] = c.y + (Math.random() - 0.5) * 0.3
+        targets[i * 3] = c.x + (Math.random() - 0.5) * 0.2
+        targets[i * 3 + 1] = c.y + (Math.random() - 0.5) * 0.2
         targets[i * 3 + 2] = c.z
       } else {
-        targets[i * 3] = (Math.random() - 0.5) * 15
-        targets[i * 3 + 1] = (Math.random() - 0.5) * 20
-        targets[i * 3 + 2] = (Math.random() - 0.5) * 5
+        // 在机甲周围随机分布，而不是远处
+        const angle = Math.random() * Math.PI * 2
+        const radius = 3 + Math.random() * 4
+        targets[i * 3] = Math.cos(angle) * radius
+        targets[i * 3 + 1] = Math.sin(angle) * radius
+        targets[i * 3 + 2] = (Math.random() - 0.5) * 2
       }
     }
 
