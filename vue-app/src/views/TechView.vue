@@ -132,6 +132,8 @@ onMounted(async () => {
 .tech-view {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 50px 12px 0;
+  box-sizing: border-box;
 }
 
 /* 顶部 */
