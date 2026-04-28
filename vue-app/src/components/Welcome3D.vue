@@ -25,14 +25,15 @@ const emit = defineEmits(['skip'])
 const canvasContainer = ref(null)
 const showText = ref(false)
 let scene, camera, renderer, composer, bloomPass
-let pointsMain, pointsGlow
+let pointsMain, pointsGlow, pointsSparkle
 let animFrame = null
 let startTime = null
-const ANIMATION_DURATION = 8000
+const ANIMATION_DURATION = 10000 // 10秒总动画
 
-const PARTICLE_COUNT = 12000
+const PARTICLE_COUNT = 8000
 const posMain = new Float32Array(PARTICLE_COUNT * 3)
 const posGlow = new Float32Array(PARTICLE_COUNT * 3)
+const posSparkle = new Float32Array(PARTICLE_COUNT * 3)
 const target = new Float32Array(PARTICLE_COUNT * 3)
 const velocity = new Float32Array(PARTICLE_COUNT * 3)
 
@@ -46,17 +47,19 @@ function init() {
 
   // ===== 场景 =====
   scene = new THREE.Scene()
+  scene.fog = new THREE.FogExp2(0x000000, 0.03)
 
   // ===== 相机 =====
   camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100)
-  camera.position.set(0, 0, 9)
+  camera.position.set(0, 0, 12)
 
   // ===== 渲染器（HDR关键）=====
-  renderer = new THREE.WebGLRenderer({ antialias: true })
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
   renderer.setSize(window.innerWidth, window.innerHeight)
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
   renderer.toneMapping = THREE.ACESFilmicToneMapping
-  renderer.toneMappingExposure = 1.2
+  renderer.toneMappingExposure = 1.5
+  renderer.outputColorSpace = THREE.SRGBColorSpace
   container.appendChild(renderer.domElement)
 
   // ===== 后期处理 =====
@@ -65,71 +68,102 @@ function init() {
 
   bloomPass = new UnrealBloomPass(
     new THREE.Vector2(window.innerWidth, window.innerHeight),
-    2.2,  // 强度
-    0.4,  // 半径
-    0.85  // 阈值
+    1.5,  // 强度 - 降低让效果更自然
+    0.5,  // 半径
+    0.5   // 阈值 - 降低让更多粒子发光
   )
   composer.addPass(bloomPass)
 
   // ===== 初始化粒子 =====
   for (let i = 0; i < PARTICLE_COUNT; i++) {
-    posMain[i * 3] = posGlow[i * 3] = 0
-    posMain[i * 3 + 1] = posGlow[i * 3 + 1] = 0
-    posMain[i * 3 + 2] = posGlow[i * 3 + 2] = 0
+    posMain[i * 3] = posGlow[i * 3] = posSparkle[i * 3] = 0
+    posMain[i * 3 + 1] = posGlow[i * 3 + 1] = posSparkle[i * 3 + 1] = 0
+    posMain[i * 3 + 2] = posGlow[i * 3 + 2] = posSparkle[i * 3 + 2] = 0
 
-    velocity[i * 3] = (Math.random() - 0.5) * 6
-    velocity[i * 3 + 1] = (Math.random() - 0.5) * 6
-    velocity[i * 3 + 2] = (Math.random() - 0.5) * 2
+    velocity[i * 3] = (Math.random() - 0.5) * 8
+    velocity[i * 3 + 1] = (Math.random() - 0.5) * 8
+    velocity[i * 3 + 2] = (Math.random() - 0.5) * 4
   }
 
-  // ===== 实体粒子（金色）=====
+  // ===== 主粒子层（亮金色）=====
   const geoMain = new THREE.BufferGeometry()
   geoMain.setAttribute('position', new THREE.BufferAttribute(posMain, 3))
 
   const matMain = new THREE.PointsMaterial({
-    size: 0.045,
-    color: 0xffcc00,
+    size: 0.08,
+    color: 0xffd700,
     blending: THREE.AdditiveBlending,
     transparent: true,
-    depthWrite: false
+    opacity: 0.9,
+    depthWrite: false,
+    sizeAttenuation: true
   })
 
   pointsMain = new THREE.Points(geoMain, matMain)
   scene.add(pointsMain)
 
-  // ===== 发光轮廓粒子（淡黄色）=====
+  // ===== 发光层（淡黄色，更大）=====
   const geoGlow = new THREE.BufferGeometry()
   geoGlow.setAttribute('position', new THREE.BufferAttribute(posGlow, 3))
 
   const matGlow = new THREE.PointsMaterial({
-    size: 0.09,
-    color: 0xffffaa,
-    opacity: 0.6,
+    size: 0.18,
+    color: 0xffaa00,
+    opacity: 0.4,
     blending: THREE.AdditiveBlending,
     transparent: true,
-    depthWrite: false
+    depthWrite: false,
+    sizeAttenuation: true
   })
 
   pointsGlow = new THREE.Points(geoGlow, matGlow)
   scene.add(pointsGlow)
 
-  // ===== 地面（反射感）=====
-  const plane = new THREE.Mesh(
-    new THREE.PlaneGeometry(30, 30),
-    new THREE.MeshStandardMaterial({
-      color: 0x111111,
-      roughness: 0.2,
-      metalness: 0.8
-    })
-  )
+  // ===== 闪光层（白色，最小最亮）=====
+  const geoSparkle = new THREE.BufferGeometry()
+  geoSparkle.setAttribute('position', new THREE.BufferAttribute(posSparkle, 3))
+
+  const matSparkle = new THREE.PointsMaterial({
+    size: 0.04,
+    color: 0xffffff,
+    opacity: 0.8,
+    blending: THREE.AdditiveBlending,
+    transparent: true,
+    depthWrite: false,
+    sizeAttenuation: true
+  })
+
+  pointsSparkle = new THREE.Points(geoSparkle, matSparkle)
+  scene.add(pointsSparkle)
+
+  // ===== 地面反射 =====
+  const planeGeo = new THREE.PlaneGeometry(50, 50)
+  const planeMat = new THREE.MeshStandardMaterial({
+    color: 0x0a0a0a,
+    roughness: 0.1,
+    metalness: 0.95,
+    envMapIntensity: 1
+  })
+  const plane = new THREE.Mesh(planeGeo, planeMat)
   plane.rotation.x = -Math.PI / 2
-  plane.position.y = -3
+  plane.position.y = -4
   scene.add(plane)
 
-  // ===== 灯光 =====
-  const light = new THREE.PointLight(0xffffff, 2)
-  light.position.set(0, 5, 5)
-  scene.add(light)
+  // ===== 多光源系统 =====
+  const ambientLight = new THREE.AmbientLight(0x222222, 0.5)
+  scene.add(ambientLight)
+
+  const mainLight = new THREE.PointLight(0xffd700, 3, 50)
+  mainLight.position.set(0, 8, 8)
+  scene.add(mainLight)
+
+  const rimLight = new THREE.PointLight(0x00aaff, 2, 50)
+  rimLight.position.set(-8, 4, -5)
+  scene.add(rimLight)
+
+  const fillLight = new THREE.PointLight(0xff6600, 1.5, 50)
+  fillLight.position.set(8, 2, 5)
+  scene.add(fillLight)
 
   // ===== 加载机甲图 =====
   loadMechaImage()
@@ -144,33 +178,40 @@ function loadMechaImage() {
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')
 
-    canvas.width = 300
-    canvas.height = 500
+    // 提高分辨率
+    canvas.width = 400
+    canvas.height = 600
 
-    ctx.drawImage(img, 0, 0, 300, 500)
+    ctx.drawImage(img, 0, 0, 400, 600)
 
-    const data = ctx.getImageData(0, 0, 300, 500).data
+    const data = ctx.getImageData(0, 0, 400, 600).data
 
     let i3 = 0
-    for (let y = 0; y < 500; y += 2) {
-      for (let x = 0; x < 300; x += 2) {
-        const i = (y * 300 + x) * 4
-        const bright = data[i] + data[i + 1] + data[i + 2]
+    const step = 2 // 采样步长
+    
+    for (let y = 0; y < 600; y += step) {
+      for (let x = 0; x < 400; x += step) {
+        const i = (y * 400 + x) * 4
+        const r = data[i]
+        const g = data[i + 1]
+        const b = data[i + 2]
+        const bright = (r + g + b) / 3
 
-        if (bright > 200 && i3 < PARTICLE_COUNT) {
-          target[i3 * 3] = (x - 150) / 35
-          target[i3 * 3 + 1] = (250 - y) / 35
-          target[i3 * 3 + 2] = (Math.random() - 0.5) * 2
+        // 降低亮度阈值，让更多粒子显示
+        if (bright > 80 && i3 < PARTICLE_COUNT) {
+          target[i3 * 3] = (x - 200) / 40
+          target[i3 * 3 + 1] = (300 - y) / 40
+          target[i3 * 3 + 2] = (bright / 255) * 3 - 1.5 // 根据亮度设置深度
           i3++
         }
       }
     }
 
-    // 填充剩余粒子
+    // 填充剩余粒子为随机分布
     while (i3 < PARTICLE_COUNT) {
-      target[i3 * 3] = (Math.random() - 0.5) * 15
-      target[i3 * 3 + 1] = (Math.random() - 0.5) * 20
-      target[i3 * 3 + 2] = (Math.random() - 0.5) * 5
+      target[i3 * 3] = (Math.random() - 0.5) * 20
+      target[i3 * 3 + 1] = (Math.random() - 0.5) * 25
+      target[i3 * 3 + 2] = (Math.random() - 0.5) * 8
       i3++
     }
 
@@ -178,23 +219,25 @@ function loadMechaImage() {
     startTime = Date.now()
     animate()
 
-    // 2.5秒后显示文字
+    // 3秒后显示文字
     setTimeout(() => {
       showText.value = true
-    }, 2500)
+    }, 3000)
   }
   img.onerror = () => {
-    // 图片加载失败，使用随机分布
+    // 图片加载失败，使用螺旋分布
     for (let i = 0; i < PARTICLE_COUNT; i++) {
-      target[i * 3] = (Math.random() - 0.5) * 15
-      target[i * 3 + 1] = (Math.random() - 0.5) * 20
-      target[i * 3 + 2] = (Math.random() - 0.5) * 5
+      const angle = (i / PARTICLE_COUNT) * Math.PI * 20
+      const radius = (i / PARTICLE_COUNT) * 10
+      target[i * 3] = Math.cos(angle) * radius
+      target[i * 3 + 1] = (i / PARTICLE_COUNT) * 20 - 10
+      target[i * 3 + 2] = Math.sin(angle) * radius * 0.5
     }
     startTime = Date.now()
     animate()
     setTimeout(() => {
       showText.value = true
-    }, 2500)
+    }, 3000)
   }
   img.src = '/mecha.jpg'
 }
@@ -208,55 +251,94 @@ function animate() {
 
   const pMain = pointsMain.geometry.attributes.position.array
   const pGlow = pointsGlow.geometry.attributes.position.array
+  const pSparkle = pointsSparkle.geometry.attributes.position.array
 
   for (let i = 0; i < PARTICLE_COUNT; i++) {
     const i3 = i * 3
 
-    if (time < 0.6) {
-      // 爆发阶段
-      pMain[i3] += velocity[i3] * 0.35
-      pMain[i3 + 1] += velocity[i3 + 1] * 0.35
-      pMain[i3 + 2] += velocity[i3 + 2] * 0.35
+    if (time < 1) {
+      // 阶段1：爆发 - 粒子向四周飞散
+      const explosionForce = 1 - time // 随时间减弱
+      pMain[i3] += velocity[i3] * 0.4 * explosionForce
+      pMain[i3 + 1] += velocity[i3 + 1] * 0.4 * explosionForce
+      pMain[i3 + 2] += velocity[i3 + 2] * 0.4 * explosionForce
 
-      pGlow[i3] += velocity[i3] * 0.45
-      pGlow[i3 + 1] += velocity[i3 + 1] * 0.45
-      pGlow[i3 + 2] += velocity[i3 + 2] * 0.45
-    } else if (time < 2) {
-      // 聚合阶段
-      pMain[i3] += (target[i3] - pMain[i3]) * 0.12
-      pMain[i3 + 1] += (target[i3 + 1] - pMain[i3 + 1]) * 0.12
-      pMain[i3 + 2] += (target[i3 + 2] - pMain[i3 + 2]) * 0.12
+      pGlow[i3] += velocity[i3] * 0.5 * explosionForce
+      pGlow[i3 + 1] += velocity[i3 + 1] * 0.5 * explosionForce
+      pGlow[i3 + 2] += velocity[i3 + 2] * 0.5 * explosionForce
 
-      pGlow[i3] += (target[i3] - pGlow[i3]) * 0.08
-      pGlow[i3 + 1] += (target[i3 + 1] - pGlow[i3 + 1]) * 0.08
-      pGlow[i3 + 2] += (target[i3 + 2] - pGlow[i3 + 2]) * 0.08
+      pSparkle[i3] += velocity[i3] * 0.6 * explosionForce
+      pSparkle[i3 + 1] += velocity[i3 + 1] * 0.6 * explosionForce
+      pSparkle[i3 + 2] += velocity[i3 + 2] * 0.6 * explosionForce
+    } else if (time < 3) {
+      // 阶段2：聚合 - 粒子向目标位置聚集
+      const t = (time - 1) / 2 // 0-1
+      const ease = t * t * (3 - 2 * t) // smoothstep
+      const lerpFactor = 0.08 + ease * 0.12
+
+      pMain[i3] += (target[i3] - pMain[i3]) * lerpFactor
+      pMain[i3 + 1] += (target[i3 + 1] - pMain[i3 + 1]) * lerpFactor
+      pMain[i3 + 2] += (target[i3 + 2] - pMain[i3 + 2]) * lerpFactor
+
+      pGlow[i3] += (target[i3] - pGlow[i3]) * (lerpFactor * 0.7)
+      pGlow[i3 + 1] += (target[i3 + 1] - pGlow[i3 + 1]) * (lerpFactor * 0.7)
+      pGlow[i3 + 2] += (target[i3 + 2] - pGlow[i3 + 2]) * (lerpFactor * 0.7)
+
+      pSparkle[i3] += (target[i3] - pSparkle[i3]) * (lerpFactor * 0.5)
+      pSparkle[i3 + 1] += (target[i3 + 1] - pSparkle[i3 + 1]) * (lerpFactor * 0.5)
+      pSparkle[i3 + 2] += (target[i3 + 2] - pSparkle[i3 + 2]) * (lerpFactor * 0.5)
     } else {
-      // 稳定阶段 - 轻微呼吸
-      const breathe = Math.sin(time * 2 + i * 0.01) * 0.02
+      // 阶段3：稳定 - 轻微浮动+呼吸效果
+      const breathe = Math.sin(time * 3 + i * 0.05) * 0.03
+      const drift = Math.sin(time * 1.5 + i * 0.1) * 0.02
+
       pMain[i3] += (target[i3] - pMain[i3]) * 0.05 + breathe
-      pMain[i3 + 1] += (target[i3 + 1] - pMain[i3 + 1]) * 0.05 + breathe
+      pMain[i3 + 1] += (target[i3 + 1] - pMain[i3 + 1]) * 0.05 + drift
       pMain[i3 + 2] += (target[i3 + 2] - pMain[i3 + 2]) * 0.05
 
-      pGlow[i3] += (target[i3] - pGlow[i3]) * 0.03
-      pGlow[i3 + 1] += (target[i3 + 1] - pGlow[i3 + 1]) * 0.03
+      pGlow[i3] += (target[i3] - pGlow[i3]) * 0.03 + breathe * 1.5
+      pGlow[i3 + 1] += (target[i3 + 1] - pGlow[i3 + 1]) * 0.03 + drift * 1.5
       pGlow[i3 + 2] += (target[i3 + 2] - pGlow[i3 + 2]) * 0.03
+
+      pSparkle[i3] += (target[i3] - pSparkle[i3]) * 0.02
+      pSparkle[i3 + 1] += (target[i3 + 1] - pSparkle[i3 + 1]) * 0.02
+      pSparkle[i3 + 2] += (target[i3 + 2] - pSparkle[i3 + 2]) * 0.02
     }
   }
 
   pointsMain.geometry.attributes.position.needsUpdate = true
   pointsGlow.geometry.attributes.position.needsUpdate = true
+  pointsSparkle.geometry.attributes.position.needsUpdate = true
 
-  // 🎥 镜头推进
-  if (time > 1.5 && time < 3) {
-    camera.position.z -= 0.025
+  // 🎥 镜头动画
+  if (time > 2 && time < 5) {
+    // 缓慢推进
+    camera.position.z = 12 - (time - 2) * 0.8
   }
 
-  // Bloom爆发
-  if (time > 2) {
-    bloomPass.strength = 3
+  // Bloom动态调整
+  if (time > 1 && time < 3) {
+    // 聚合时增强
+    bloomPass.strength = 1.5 + (time - 1) * 0.5
+  } else if (time >= 3) {
+    // 稳定后保持
+    bloomPass.strength = 2.5 + Math.sin(time * 2) * 0.3
   }
 
-  // 使用composer渲染（带辉光）
+  // 粒子大小呼吸
+  const breatheScale = 1 + Math.sin(time * 4) * 0.1
+  pointsMain.material.size = 0.08 * breatheScale
+  pointsGlow.material.size = 0.18 * breatheScale
+
+  // 整体缓慢旋转
+  if (time > 3) {
+    const rotSpeed = 0.001
+    pointsMain.rotation.y += rotSpeed
+    pointsGlow.rotation.y += rotSpeed
+    pointsSparkle.rotation.y += rotSpeed
+  }
+
+  // 使用composer渲染
   composer.render()
 
   if (progress < 1) {
@@ -320,47 +402,55 @@ onUnmounted(() => {
   text-align: center;
   pointer-events: none;
   z-index: 10;
-  animation: textFadeIn 1s ease forwards;
+  animation: textFadeIn 1.5s ease forwards;
 }
 
 .welcome-text h1 {
-  font-size: 50px;
+  font-size: 56px;
   font-weight: bold;
   color: #ffd700;
-  text-shadow: 0 0 30px gold, 0 0 60px rgba(255, 215, 0, 0.5);
-  margin: 0 0 16px 0;
+  text-shadow: 
+    0 0 20px rgba(255, 215, 0, 0.8),
+    0 0 40px rgba(255, 215, 0, 0.5),
+    0 0 80px rgba(255, 215, 0, 0.3);
+  margin: 0 0 20px 0;
+  letter-spacing: 8px;
 }
 
 .welcome-text p {
-  font-size: 20px;
-  color: rgba(255, 255, 255, 0.8);
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.9);
   margin: 0;
+  letter-spacing: 4px;
 }
 
 @keyframes textFadeIn {
   from {
     opacity: 0;
     transform: translate(-50%, -40%);
+    filter: blur(10px);
   }
   to {
     opacity: 1;
     transform: translate(-50%, -50%);
+    filter: blur(0);
   }
 }
 
 .welcome-skip {
   position: absolute;
-  bottom: 40px;
+  bottom: 50px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.5);
   animation: skipPulse 2s ease infinite;
   pointer-events: none;
+  letter-spacing: 2px;
 }
 
 @keyframes skipPulse {
   0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.7; }
+  50% { opacity: 0.8; }
 }
 </style>
