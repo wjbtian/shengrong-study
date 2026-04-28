@@ -121,7 +121,7 @@ onUnmounted(() => {
 .app-container::before {
   content: '';
   position: fixed;
-  top: 56px;
+  top: 72px;
   left: 0;
   right: 0;
   bottom: 0;
@@ -133,7 +133,7 @@ onUnmounted(() => {
 }
 
 .main-content {
-  padding: 72px 16px 40px;
+  padding: 88px 16px 40px;
   position: relative;
   z-index: 2;
   min-height: 100vh;
@@ -155,7 +155,7 @@ onUnmounted(() => {
 /* 响应式 */
 @media (max-width: 768px) {
   .main-content {
-    padding: 80px 12px 16px;
+    padding: 88px 12px 16px;
   }
 }
 </style>

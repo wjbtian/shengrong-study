@@ -17,7 +17,7 @@
         :class="{ active: $route.path === item.path }"
       >
         <span class="nav-icon">{{ item.icon }}</span>
-        <span class="nav-text">{{ item.label }}</span>
+        <span v-if="showText" class="nav-text">{{ item.label }}</span>
       </router-link>
     </nav>
 
@@ -38,6 +38,7 @@ const route = useRoute()
 const userStore = useUserStore()
 const isScrolled = ref(false)
 const isDark = ref(true)
+const showText = ref(window.innerWidth > 900)
 
 function onScroll() {
   isScrolled.value = window.scrollY > 20
@@ -48,11 +49,17 @@ function toggleTheme() {
   // 实际主题切换逻辑可扩展
 }
 
+function onResize() {
+  showText.value = window.innerWidth > 900
+}
+
 onMounted(() => {
   window.addEventListener('scroll', onScroll)
+  window.addEventListener('resize', onResize)
 })
 onUnmounted(() => {
   window.removeEventListener('scroll', onScroll)
+  window.removeEventListener('resize', onResize)
 })
 
 const navItems = [
@@ -66,6 +73,9 @@ const navItems = [
   { path: '/guitar', icon: '🎸', label: '吉他' },
   { path: '/shines', icon: '✨', label: '时刻' }
 ]
+
+// 根据屏幕宽度动态显示/隐藏文字
+
 </script>
 
 <style scoped>
@@ -74,14 +84,14 @@ const navItems = [
   top: 0;
   left: 0;
   right: 0;
-  height: 56px;
+  height: 72px;
   background: rgba(8, 8, 16, 0.8);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
+  padding: 0 40px;
   z-index: 100;
   transition: all 0.3s;
 }
@@ -98,14 +108,14 @@ const navItems = [
 }
 
 .avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
   background: linear-gradient(135deg, var(--accent), var(--accent2));
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
+  font-size: 22px;
   box-shadow: 0 0 20px rgba(74,222,128,0.3);
 }
 
@@ -115,33 +125,35 @@ const navItems = [
 }
 
 .brand-name {
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 800;
   color: var(--text);
 }
 
 .brand-sub {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text2);
 }
 
 .nav-menu {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
 }
 
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
+  gap: 8px;
+  padding: 10px 18px;
   border-radius: var(--radius-sm);
   color: var(--text2);
-  font-size: 14px;
+  font-size: 17px;
+  font-weight: 600;
   text-decoration: none;
   transition: all 0.25s;
   position: relative;
+  white-space: nowrap;
 }
 
 .nav-item:hover {
@@ -166,7 +178,7 @@ const navItems = [
 }
 
 .nav-icon {
-  font-size: 16px;
+  font-size: 20px;
 }
 
 .nav-actions {
@@ -176,13 +188,13 @@ const navItems = [
 }
 
 .action-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
   border: 1px solid var(--border2);
   background: transparent;
   color: var(--text2);
-  font-size: 16px;
+  font-size: 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -196,21 +208,37 @@ const navItems = [
   color: var(--accent);
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 900px) {
   .nav-text {
     display: none;
   }
   .nav-item {
-    padding: 8px 12px;
+    padding: 12px 14px;
   }
 }
 
 @media (max-width: 768px) {
   .top-nav {
-    padding: 0 16px;
+    padding: 0 20px;
+    height: 64px;
   }
   .brand-sub {
     display: none;
+  }
+  .nav-item {
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-menu {
+    gap: 4px;
+  }
+  .nav-item {
+    padding: 8px 10px;
+  }
+  .nav-icon {
+    font-size: 18px;
   }
 }
 </style>

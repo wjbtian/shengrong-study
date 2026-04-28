@@ -1,5 +1,8 @@
 <template>
   <div class="home-view">
+    <!-- 3D欢迎动画 -->
+    <Welcome3D :showWelcome="showWelcome" @skip="skipWelcome" />
+
     <!-- 顶部欢迎区 -->
     <section class="hero-section">
       <div class="hero-content">
@@ -84,31 +87,52 @@
       </section>
     </div>
 
-    <!-- 活跃度图表 -->
-    <section class="activity-section">
-      <div class="section-header">
-        <h2>📊 7天活跃度</h2>
-      </div>
-      <div class="activity-chart">
-        <div
-          v-for="(day, idx) in activityData"
-          :key="idx"
-          class="activity-day"
-        >
-          <div class="activity-bars">
-            <div class="activity-bar diary" :style="{ height: day.diaryHeight + 'px' }"></div>
-            <div class="activity-bar shine" :style="{ height: day.shineHeight + 'px' }"></div>
-            <div class="activity-bar guitar" :style="{ height: day.guitarHeight + 'px' }"></div>
-          </div>
-          <span class="day-label" :class="{ today: day.isToday }">{{ day.label }}</span>
+    <!-- 7天活跃度 + 最近日记 -->
+    <div class="two-column">
+      <!-- 左：7天活跃度 -->
+      <section class="activity-section">
+        <div class="section-header">
+          <h2>📊 7天活跃度</h2>
         </div>
-      </div>
-      <div class="chart-legend">
-        <span><span class="legend-dot diary"></span>日记</span>
-        <span><span class="legend-dot shine"></span>闪光</span>
-        <span><span class="legend-dot guitar"></span>吉他</span>
-      </div>
-    </section>
+        <div class="activity-chart">
+          <div
+            v-for="(day, idx) in activityData"
+            :key="idx"
+            class="activity-day"
+          >
+            <div class="activity-bars">
+              <div class="activity-bar diary" :style="{ height: day.diaryHeight + 'px' }"></div>
+              <div class="activity-bar shine" :style="{ height: day.shineHeight + 'px' }"></div>
+              <div class="activity-bar guitar" :style="{ height: day.guitarHeight + 'px' }"></div>
+            </div>
+            <span class="day-label" :class="{ today: day.isToday }">{{ day.label }}</span>
+          </div>
+        </div>
+        <div class="chart-legend">
+          <span><span class="legend-dot diary"></span>日记</span>
+          <span><span class="legend-dot shine"></span>闪光</span>
+          <span><span class="legend-dot guitar"></span>吉他</span>
+        </div>
+      </section>
+
+      <!-- 右：最近日记 -->
+      <section class="recent-section">
+        <div class="section-header">
+          <h2>📝 最近日记</h2>
+          <button class="btn-text" @click="$router.push('/diary')">查看全部 →</button>
+        </div>
+        <div v-if="recentDiary.length" class="recent-list">
+          <div v-for="d in recentDiary" :key="d.id" class="recent-item">
+            <span class="recent-mood">{{ d.mood }}</span>
+            <div class="recent-content">
+              <div class="recent-title">{{ d.title || '无标题' }}</div>
+              <div class="recent-date">{{ d.date }}</div>
+            </div>
+          </div>
+        </div>
+        <div v-else class="empty-state">还没有日记</div>
+      </section>
+    </div>
 
     <!-- 心情趋势 + 成就徽章 -->
     <div class="two-column">
@@ -178,97 +202,62 @@
       </div>
     </section>
 
-    <!-- 最近记录 -->
+    <!-- 闪光时刻照片墙 + 吉他视频 -->
     <div class="two-column">
-      <section class="recent-section">
+      <!-- 左：照片墙 -->
+      <section class="photo-wall-section">
         <div class="section-header">
-          <h2>📝 最近日记</h2>
-          <button class="btn-text" @click="$router.push('/diary')">查看全部 →</button>
-        </div>
-        <div v-if="recentDiary.length" class="recent-list">
-          <div v-for="d in recentDiary" :key="d.id" class="recent-item">
-            <span class="recent-mood">{{ d.mood }}</span>
-            <div class="recent-content">
-              <div class="recent-title">{{ d.title || '无标题' }}</div>
-              <div class="recent-date">{{ d.date }}</div>
-            </div>
-          </div>
-        </div>
-        <div v-else class="empty-state">还没有日记</div>
-      </section>
-
-      <section class="recent-section">
-        <div class="section-header">
-          <h2>✨ 最近闪光</h2>
+          <h2>✨ 闪光时刻</h2>
           <button class="btn-text" @click="$router.push('/shines')">查看全部 →</button>
         </div>
-        <div v-if="recentShines.length" class="recent-list">
-          <div v-for="s in recentShines" :key="s.id" class="recent-item">
-            <span class="recent-icon">{{ s.icon || '✨' }}</span>
-            <div class="recent-content">
-              <div class="recent-title">{{ s.title }}</div>
-              <div class="recent-date">{{ s.date }}</div>
+        <div class="photo-wall">
+          <div
+            v-for="(photo, idx) in showcasePhotos.slice(0, 6)"
+            :key="idx"
+            class="wall-photo"
+            @click="openPhotoModal(photo)"
+          >
+            <img v-if="photo.url" :src="photo.url" :alt="photo.title" />
+            <div v-else class="photo-placeholder">
+              <span class="photo-emoji">{{ photo.icon || '✨' }}</span>
+            </div>
+            <div class="photo-overlay">
+              <span class="photo-title">{{ photo.title }}</span>
             </div>
           </div>
         </div>
-        <div v-else class="empty-state">还没有闪光时刻</div>
+      </section>
+
+      <!-- 右：吉他视频 -->
+      <section class="guitar-video-section">
+        <div class="section-header">
+          <h2>🎸 吉他演奏</h2>
+          <button class="btn-text" @click="$router.push('/guitar')">查看全部 →</button>
+        </div>
+        <div class="video-container">
+          <video
+            v-if="latestGuitarVideo"
+            ref="guitarVideo"
+            :src="latestGuitarVideo.url"
+            controls
+            autoplay
+            muted
+            loop
+            class="guitar-video"
+            poster=""
+          ></video>
+          <div v-else class="video-placeholder">
+            <span class="video-icon">🎸</span>
+            <p>还没有吉他视频</p>
+            <button class="btn-text" @click="$router.push('/guitar')">去录制 →</button>
+          </div>
+        </div>
+        <div v-if="latestGuitarVideo" class="video-info">
+          <span class="video-title">{{ latestGuitarVideo.title }}</span>
+          <span class="video-date">{{ latestGuitarVideo.date }}</span>
+        </div>
       </section>
     </div>
-
-    <!-- 闪光时刻照片墙 -->
-    <section class="photo-wall-section">
-      <div class="section-header">
-        <h2>✨ 闪光时刻</h2>
-        <button class="btn-text" @click="$router.push('/shines')">查看全部 →</button>
-      </div>
-      <div class="photo-wall">
-        <div
-          v-for="(photo, idx) in showcasePhotos"
-          :key="idx"
-          class="wall-photo"
-          :class="'photo-size-' + (idx % 5)"
-          @click="openPhotoModal(photo)"
-        >
-          <img v-if="photo.url" :src="photo.url" :alt="photo.title" />
-          <div v-else class="photo-placeholder">
-            <span class="photo-emoji">{{ photo.icon || '✨' }}</span>
-          </div>
-          <div class="photo-overlay">
-            <span class="photo-title">{{ photo.title }}</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 吉他视频 -->
-    <section class="guitar-video-section">
-      <div class="section-header">
-        <h2>🎸 吉他演奏</h2>
-        <button class="btn-text" @click="$router.push('/guitar')">查看全部 →</button>
-      </div>
-      <div class="video-container">
-        <video
-          v-if="latestGuitarVideo"
-          ref="guitarVideo"
-          :src="latestGuitarVideo.url"
-          controls
-          autoplay
-          muted
-          loop
-          class="guitar-video"
-          poster=""
-        ></video>
-        <div v-else class="video-placeholder">
-          <span class="video-icon">🎸</span>
-          <p>还没有吉他视频</p>
-          <button class="btn-text" @click="$router.push('/guitar')">去录制 →</button>
-        </div>
-      </div>
-      <div v-if="latestGuitarVideo" class="video-info">
-        <span class="video-title">{{ latestGuitarVideo.title }}</span>
-        <span class="video-date">{{ latestGuitarVideo.date }}</span>
-      </div>
-    </section>
 
     <!-- 照片查看弹窗 -->
     <div v-if="selectedPhoto" class="photo-modal" @click.self="selectedPhoto = null">
@@ -289,6 +278,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { getDiary, getShines, getGuitar, getTech, getProgress } from '../utils/api.js'
+import Welcome3D from '../components/Welcome3D.vue'
 
 const router = useRouter()
 
@@ -596,6 +586,18 @@ const reviews = computed(() => {
 
 const recentDiary = computed(() => diary.value.slice(0, 3))
 const recentShines = computed(() => shines.value.slice(0, 3))
+
+// 欢迎动画
+const showWelcome = ref(true)
+
+function skipWelcome() {
+  showWelcome.value = false
+}
+
+// 自动关闭欢迎动画（6秒后）
+setTimeout(() => {
+  showWelcome.value = false
+}, 6000)
 
 onMounted(async () => {
   try {
@@ -1202,12 +1204,16 @@ section:hover {
   margin-top: 2px;
 }
 
-/* 照片墙 - 真正的照片墙形式 */
+/* 照片墙 - 统一正方形，不裁剪变形 */
 .photo-wall {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 140px;
-  gap: 12px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.photo-wall .wall-photo {
+  aspect-ratio: 1;
+  border-radius: 12px;
 }
 
 .wall-photo {
@@ -1236,30 +1242,12 @@ section:hover {
   transform: scale(1.1);
 }
 
-/* 照片墙大小变化 - 错落有致 */
-.photo-size-0 {
-  grid-column: span 2;
-  grid-row: span 2;
-}
-
-.photo-size-1 {
-  grid-column: span 1;
-  grid-row: span 1;
-}
-
-.photo-size-2 {
-  grid-column: span 1;
-  grid-row: span 2;
-}
-
-.photo-size-3 {
-  grid-column: span 2;
-  grid-row: span 1;
-}
-
-.photo-size-4 {
-  grid-column: span 1;
-  grid-row: span 1;
+/* 照片统一正方形，图片自适应填充 */
+.wall-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: var(--surface2);
 }
 
 .photo-placeholder {
@@ -1359,18 +1347,22 @@ section:hover {
   padding: 40px;
 }
 
-/* 吉他视频 */
+/* 吉他视频 - 适配手机竖屏 9:16 */
 .video-container {
   width: 100%;
+  max-width: 280px;
+  margin: 0 auto;
   border-radius: 16px;
   overflow: hidden;
   background: var(--surface2);
+  aspect-ratio: 9 / 16;
+  max-height: 360px;
 }
 
 .guitar-video {
   width: 100%;
-  max-height: 400px;
-  object-fit: contain;
+  height: 100%;
+  object-fit: cover;
   display: block;
 }
 
@@ -1448,6 +1440,10 @@ section:hover {
   .two-column {
     grid-template-columns: 1fr;
   }
+  .photo-wall {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
   .hero-section {
     flex-direction: column;
     gap: 20px;
@@ -1485,12 +1481,149 @@ section:hover {
 
 @media (max-width: 480px) {
   .photo-wall {
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: 90px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
   }
-  .photo-size-0 {
-    grid-column: span 2;
-    grid-row: span 2;
+}
+
+/* 欢迎动画 */
+.welcome-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3e 50%, #0a0a1a 100%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  animation: welcomeFadeOut 0.8s ease 4.5s forwards;
+  cursor: pointer;
+}
+
+.welcome-text {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0 20px;
+}
+
+.welcome-char {
+  font-size: 52px;
+  font-weight: 900;
+  color: var(--accent);
+  text-shadow: 0 0 30px rgba(74, 222, 128, 0.5), 0 0 60px rgba(74, 222, 128, 0.2);
+  opacity: 0;
+  transform: translateY(-100px);
+  animation: charDrop 0.6s ease forwards;
+}
+
+@keyframes charDrop {
+  0% {
+    opacity: 0;
+    transform: translateY(-100px) rotate(-10deg);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(10px) rotate(3deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0);
+  }
+}
+
+.welcome-subtitle {
+  font-size: 18px;
+  color: var(--text2);
+  opacity: 0;
+  animation: subtitleIn 0.8s ease forwards;
+}
+
+@keyframes subtitleIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.welcome-photos {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.welcome-photo {
+  width: 80px;
+  height: 80px;
+  border-radius: 16px;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(0) rotate(-20deg);
+  animation: photoPop 0.6s ease forwards;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+@keyframes photoPop {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(-20deg);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.1) rotate(5deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+.welcome-skip {
+  position: absolute;
+  bottom: 40px;
+  font-size: 13px;
+  color: var(--text3);
+  opacity: 0.6;
+  animation: skipPulse 2s ease infinite;
+}
+
+@keyframes skipPulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes welcomeFadeOut {
+  0% {
+    opacity: 1;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media (max-width: 768px) {
+  .welcome-char {
+    font-size: 36px;
+  }
+  .welcome-subtitle {
+    font-size: 15px;
+  }
+  .welcome-photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
   }
 }
 </style>
