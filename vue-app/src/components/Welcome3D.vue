@@ -296,45 +296,61 @@ function loadMechaImage() {
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')
 
-    // 高分辨率提取
-    canvas.width = 500
-    canvas.height = 700
+    // 获取图片原始尺寸
+    const imgW = img.naturalWidth
+    const imgH = img.naturalHeight
+    
+    // 提高分辨率，完整显示
+    const maxSize = 600
+    let drawW, drawH
+    if (imgW > imgH) {
+      drawW = maxSize
+      drawH = (imgH / imgW) * maxSize
+    } else {
+      drawH = maxSize
+      drawW = (imgW / imgH) * maxSize
+    }
+    
+    canvas.width = drawW
+    canvas.height = drawH
 
-    ctx.drawImage(img, 0, 0, 500, 700)
+    // 居中绘制，保持比例
+    ctx.drawImage(img, 0, 0, drawW, drawH)
 
-    const data = ctx.getImageData(0, 0, 500, 700).data
+    const data = ctx.getImageData(0, 0, drawW, drawH).data
 
-    let i3 = 0
-    const step = 3 // 步长3，约28000个候选点
+    const step = 2 // 减小步长，更多粒子
 
     // 收集所有候选点
     const candidates = []
-    for (let y = 0; y < 700; y += step) {
-      for (let x = 0; x < 500; x += step) {
-        const i = (y * 500 + x) * 4
+    for (let y = 0; y < drawH; y += step) {
+      for (let x = 0; x < drawW; x += step) {
+        const i = (y * drawW + x) * 4
         const r = data[i]
         const g = data[i + 1]
         const b = data[i + 2]
         const bright = (r + g + b) / 3
 
-        if (bright > 60) {
+        if (bright > 40) { // 降低亮度阈值
           candidates.push({
-            x: (x - 250) / 35,
-            y: (350 - y) / 35,
-            z: (bright / 255) * 4 - 2,
+            x: (x - drawW / 2) / 30, // 调整缩放比例
+            y: -(y - drawH / 2) / 30, // 垂直翻转并居中
+            z: (bright / 255) * 3 - 1.5,
             bright: bright
           })
         }
       }
     }
 
-    // 随机选择6000个点
+    // 按亮度排序，优先使用重要像素
+    candidates.sort((a, b) => b.bright - a.bright)
+    
+    // 使用前6000个最亮的点，如果不够则随机填充
     for (let i = 0; i < PARTICLE_COUNT; i++) {
       if (i < candidates.length) {
-        const idx = Math.floor(Math.random() * candidates.length)
-        const c = candidates[idx]
-        targets[i * 3] = c.x + (Math.random() - 0.5) * 0.5
-        targets[i * 3 + 1] = c.y + (Math.random() - 0.5) * 0.5
+        const c = candidates[i]
+        targets[i * 3] = c.x + (Math.random() - 0.5) * 0.3
+        targets[i * 3 + 1] = c.y + (Math.random() - 0.5) * 0.3
         targets[i * 3 + 2] = c.z
       } else {
         targets[i * 3] = (Math.random() - 0.5) * 15
