@@ -327,8 +327,8 @@ function loadMechaImage() {
 
         if (bright > 20) { // 大幅降低亮度阈值，捕捉头部等暗部细节
           candidates.push({
-            x: (x - drawW / 2) / 80, // 减小缩放比例，让图像更大
-            y: -(y - drawH / 2) / 80, // 垂直翻转并居中
+            x: (x - drawW / 2) / 40, // 增大缩放比例，让机甲更大
+            y: -(y - drawH / 2) / 40, // 垂直翻转并居中
             z: (bright / 255) * 2 - 1,
             bright: bright
           })
