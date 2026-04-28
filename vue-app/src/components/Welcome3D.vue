@@ -1,6 +1,10 @@
 <template>
   <div v-if="showWelcome" class="welcome-3d-overlay" @click="skipWelcome">
     <div ref="canvasContainer" class="canvas-container"></div>
+    <div class="welcome-text">
+      <h1>欢迎 永远的神</h1>
+      <p>开启今天的学习之旅</p>
+    </div>
     <div class="welcome-skip">点击跳过</div>
   </div>
 </template>
@@ -56,9 +60,24 @@ function setImageTargets() {
 
       const imageData = ctx.getImageData(0, 0, w, h).data
 
-      // 收集图片像素位置（根据亮度）
+      // 收集图片像素位置（提高对比度和清晰度）
       const imagePixels = []
-      const step = 3 // 采样步长
+      const step = 2 // 减小采样步长，提高密度
+      
+      // 先计算平均亮度用于自适应阈值
+      let totalBrightness = 0
+      let pixelCount = 0
+      for (let y = 0; y < h; y += step) {
+        for (let x = 0; x < w; x += step) {
+          const i = (y * w + x) * 4
+          const brightness = (imageData[i] + imageData[i + 1] + imageData[i + 2]) / 3
+          totalBrightness += brightness
+          pixelCount++
+        }
+      }
+      const avgBrightness = totalBrightness / pixelCount
+      const threshold = avgBrightness * 0.7 // 自适应阈值
+      
       for (let y = 0; y < h; y += step) {
         for (let x = 0; x < w; x += step) {
           const i = (y * w + x) * 4
@@ -67,13 +86,17 @@ function setImageTargets() {
           const b = imageData[i + 2]
           const a = imageData[i + 3]
 
-          // 计算亮度，只保留较亮的像素
+          // 计算亮度，使用自适应阈值
           const brightness = (r + g + b) / 3
-          if (brightness > 80 && a > 128) {
+          
+          // 增强对比度：暗部更暗，亮部更亮
+          const contrast = (brightness - avgBrightness) * 1.5 + avgBrightness
+          
+          if (contrast > threshold && a > 128) {
             imagePixels.push({
-              x: (x - w / 2) / 25,
-              y: -(y - h / 2) / 25,
-              z: (Math.random() - 0.5) * 2
+              x: (x - w / 2) / 20, // 放大图像
+              y: -(y - h / 2) / 20,
+              z: (Math.random() - 0.5) * 3
             })
           }
         }
@@ -294,6 +317,42 @@ onUnmounted(() => {
   display: block;
   width: 100%;
   height: 100%;
+}
+
+.welcome-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.welcome-text h1 {
+  font-size: 48px;
+  font-weight: bold;
+  color: #4ade80;
+  text-shadow: 0 0 20px rgba(74, 222, 128, 0.5), 0 0 40px rgba(74, 222, 128, 0.3);
+  margin: 0 0 16px 0;
+  animation: textGlow 2s ease-in-out infinite;
+}
+
+.welcome-text p {
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+@keyframes textGlow {
+  0%, 100% { 
+    text-shadow: 0 0 20px rgba(74, 222, 128, 0.5), 0 0 40px rgba(74, 222, 128, 0.3);
+    opacity: 1;
+  }
+  50% { 
+    text-shadow: 0 0 30px rgba(74, 222, 128, 0.8), 0 0 60px rgba(74, 222, 128, 0.5);
+    opacity: 0.9;
+  }
 }
 
 .welcome-skip {
