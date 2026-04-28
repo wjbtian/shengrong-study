@@ -328,7 +328,7 @@ function loadMechaImage() {
         if (bright > 30) { // 降低亮度阈值，捕捉更多细节
           candidates.push({
             x: (x - drawW / 2) / 80, // 减小缩放比例，让图像更大
-            y: -(y - drawH / 2) / 80 - 2, // 垂直翻转并居中，整体下移2个单位
+            y: -(y - drawH / 2) / 80, // 垂直翻转并居中
             z: (bright / 255) * 2 - 1,
             bright: bright
           })
