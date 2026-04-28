@@ -28,7 +28,7 @@ let scene, camera, renderer, composer, bloomPass
 let pointsMesh, trailMesh
 let animFrame = null
 let startTime = null
-const ANIMATION_DURATION = 12000 // 12秒总动画
+const ANIMATION_DURATION = 20000 // 20秒总动画
 
 const PARTICLE_COUNT = 6000
 const TRAIL_LENGTH = 8 // 拖尾长度
@@ -399,7 +399,7 @@ function fallbackAnimation() {
   animate()
   setTimeout(() => {
     showText.value = true
-  }, 3500)
+  }, 5000)
 }
 
 function updateTrails() {
@@ -433,30 +433,30 @@ function animate() {
   for (let i = 0; i < PARTICLE_COUNT; i++) {
     const i3 = i * 3
 
-    if (time < 1.2) {
-      // 阶段1：爆发
-      const force = 1 - time / 1.2
+    if (time < 0.8) {
+      // 阶段1：爆发（缩短到0.8秒）
+      const force = 1 - time / 0.8
       pos[i3] += velocities[i3] * 0.5 * force
       pos[i3 + 1] += velocities[i3 + 1] * 0.5 * force
       pos[i3 + 2] += velocities[i3 + 2] * 0.5 * force
-    } else if (time < 3.5) {
-      // 阶段2：聚合到机甲形状
-      const t = (time - 1.2) / 2.3
+    } else if (time < 4) {
+      // 阶段2：聚合到机甲形状（延长到3.2秒）
+      const t = (time - 0.8) / 3.2
       const ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
-      const lerp = 0.06 + ease * 0.14
+      const lerp = 0.04 + ease * 0.12
 
       pos[i3] += (targets[i3] - pos[i3]) * lerp
       pos[i3 + 1] += (targets[i3 + 1] - pos[i3 + 1]) * lerp
       pos[i3 + 2] += (targets[i3 + 2] - pos[i3 + 2]) * lerp
     } else {
-      // 阶段3：稳定 + 呼吸
-      const breathe = Math.sin(time * 2.5 + i * 0.03) * 0.04
-      const driftX = Math.sin(time * 1.2 + i * 0.07) * 0.02
-      const driftY = Math.cos(time * 1.5 + i * 0.05) * 0.02
+      // 阶段3：稳定展示 + 呼吸（延长到16秒）
+      const breathe = Math.sin(time * 2 + i * 0.02) * 0.03
+      const driftX = Math.sin(time * 0.8 + i * 0.05) * 0.015
+      const driftY = Math.cos(time * 1.0 + i * 0.04) * 0.015
 
-      pos[i3] += (targets[i3] - pos[i3]) * 0.04 + breathe + driftX
-      pos[i3 + 1] += (targets[i3 + 1] - pos[i3 + 1]) * 0.04 + driftY
-      pos[i3 + 2] += (targets[i3 + 2] - pos[i3 + 2]) * 0.04
+      pos[i3] += (targets[i3] - pos[i3]) * 0.02 + breathe + driftX
+      pos[i3 + 1] += (targets[i3 + 1] - pos[i3 + 1]) * 0.02 + driftY
+      pos[i3 + 2] += (targets[i3 + 2] - pos[i3 + 2]) * 0.02
     }
   }
 
@@ -467,22 +467,22 @@ function animate() {
     updateTrails()
   }
 
-  // 镜头动画
-  if (time > 2 && time < 5) {
-    camera.position.z = 15 - (time - 2) * 1.5
-    camera.position.y = (time - 2) * 0.5
+  // 镜头动画（延长）
+  if (time > 1.5 && time < 6) {
+    camera.position.z = 15 - (time - 1.5) * 1.0
+    camera.position.y = (time - 1.5) * 0.3
   }
 
-  // Bloom动态
-  if (time > 1.5 && time < 3.5) {
-    bloomPass.strength = 2.0 + (time - 1.5) * 0.7
-  } else if (time >= 3.5) {
-    bloomPass.strength = 3.2 + Math.sin(time * 3) * 0.5
+  // Bloom动态（延长）
+  if (time > 1 && time < 5) {
+    bloomPass.strength = 1.5 + (time - 1) * 0.4
+  } else if (time >= 5) {
+    bloomPass.strength = 3.1 + Math.sin(time * 2) * 0.4
   }
 
-  // 整体旋转
-  if (time > 3) {
-    pointsMesh.rotation.y = Math.sin(time * 0.3) * 0.15
+  // 整体旋转（更慢更柔和）
+  if (time > 4) {
+    pointsMesh.rotation.y = Math.sin(time * 0.2) * 0.12
     trailMesh.rotation.y = pointsMesh.rotation.y
   }
 
