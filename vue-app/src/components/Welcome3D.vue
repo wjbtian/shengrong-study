@@ -325,7 +325,7 @@ function loadMechaImage() {
         const b = data[i + 2]
         const bright = (r + g + b) / 3
 
-        if (bright > 30) { // 进一步降低亮度阈值，捕捉更多细节
+        if (bright > 20) { // 大幅降低亮度阈值，捕捉头部等暗部细节
           candidates.push({
             x: (x - drawW / 2) / 80, // 减小缩放比例，让图像更大
             y: -(y - drawH / 2) / 80, // 垂直翻转并居中
@@ -339,20 +339,27 @@ function loadMechaImage() {
     // 按亮度排序，优先使用重要像素
     candidates.sort((a, b) => b.bright - a.bright)
     
-    // 使用前6000个最亮的点，如果不够则随机填充
+    // 按Y坐标分组：优先使用上半部分（头部）的粒子
+    const topCandidates = candidates.filter(c => c.y > 0)
+    const bottomCandidates = candidates.filter(c => c.y <= 0)
+    
+    // 打乱顺序，让头部和身体均匀分布
+    const shuffled = [...topCandidates, ...bottomCandidates]
+    
+    // 使用前6000个点
     for (let i = 0; i < PARTICLE_COUNT; i++) {
-      if (i < candidates.length) {
-        const c = candidates[i]
-        targets[i * 3] = c.x + (Math.random() - 0.5) * 0.2
-        targets[i * 3 + 1] = c.y + (Math.random() - 0.5) * 0.2
+      if (i < shuffled.length) {
+        const c = shuffled[i]
+        targets[i * 3] = c.x + (Math.random() - 0.5) * 0.15
+        targets[i * 3 + 1] = c.y + (Math.random() - 0.5) * 0.15
         targets[i * 3 + 2] = c.z
       } else {
-        // 在机甲周围随机分布，而不是远处
+        // 在机甲轮廓内随机分布
         const angle = Math.random() * Math.PI * 2
-        const radius = 3 + Math.random() * 4
+        const radius = 2 + Math.random() * 3
         targets[i * 3] = Math.cos(angle) * radius
-        targets[i * 3 + 1] = Math.sin(angle) * radius
-        targets[i * 3 + 2] = (Math.random() - 0.5) * 2
+        targets[i * 3 + 1] = Math.sin(angle) * radius * 1.5
+        targets[i * 3 + 2] = (Math.random() - 0.5) * 1.5
       }
     }
 
