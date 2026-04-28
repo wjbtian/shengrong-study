@@ -3,7 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
-const { initDB, getDB } = require('./db/python_db');
+const { initDB, getDB } = require('./db/database');
 
 const app = express();
 const PORT = 3200;
@@ -27,32 +27,34 @@ function today() {
 }
 
 // 初始化示例数据
-async function seedData(db) {
+function seedData(db) {
   const sampleDiary = [
     { mood: '😄', title: '今天很开心', content: '学会了新的吉他曲子！', date: today() },
     { mood: '🤔', title: '数学思考题', content: '今天遇到了一道有趣的数学题...', date: today() },
   ];
+  const stmt = db.prepare('INSERT INTO diary (mood, title, content, date) VALUES (?, ?, ?, ?)');
   for (const d of sampleDiary) {
-    await db.run('INSERT INTO diary (mood, title, content, date) VALUES (?, ?, ?, ?)',
-      [d.mood, d.title, d.content, d.date]);
+    stmt.run(d.mood, d.title, d.content, d.date);
   }
   console.log('✅ 示例数据已初始化');
 }
 
-async function startServer() {
-  // 初始化 Python 数据库
-  const db = await initDB();
+function startServer() {
+  // 初始化数据库
+  initDB();
+  const db = getDB();
 
   // 如果是新数据库，初始化示例数据
-  const diaryCount = await db.get('SELECT COUNT(*) as c FROM diary');
+  const diaryCount = db.prepare('SELECT COUNT(*) as c FROM diary').get();
   if (!diaryCount || diaryCount.c === 0) {
     console.log('新数据库，初始化示例数据...');
-    await seedData(db);
+    seedData(db);
   }
 
   // 中间件
   app.use(cors());
   app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
 
   // 静态文件
   const distPath = path.join(__dirname, '..', 'client', 'dist');
@@ -67,29 +69,29 @@ async function startServer() {
   app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
   // ===== 日记 API =====
-  app.get('/api/diary', async (req, res) => {
+  app.get('/api/diary', (req, res) => {
     try {
-      const rows = await db.all('SELECT * FROM diary ORDER BY date DESC, id DESC');
+      const rows = db.prepare('SELECT * FROM diary ORDER BY date DESC, id DESC').all();
       res.json(rows);
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
   });
 
-  app.post('/api/diary', async (req, res) => {
+  app.post('/api/diary', (req, res) => {
     try {
       const { mood, title, content, date } = req.body;
-      const result = await db.run('INSERT INTO diary (mood, title, content, date) VALUES (?, ?, ?, ?)',
-        [mood, title, content, date]);
+      const result = db.prepare('INSERT INTO diary (mood, title, content, date) VALUES (?, ?, ?, ?)')
+        .run(mood, title, content, date);
       res.json({ id: result.lastInsertRowid, ok: true });
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
   });
 
-  app.delete('/api/diary/:id', async (req, res) => {
+  app.delete('/api/diary/:id', (req, res) => {
     try {
-      await db.run('DELETE FROM diary WHERE id = ?', [req.params.id]);
+      db.prepare('DELETE FROM diary WHERE id = ?').run(req.params.id);
       res.json({ ok: true });
     } catch (e) {
       res.status(500).json({ error: e.message });
@@ -97,9 +99,9 @@ async function startServer() {
   });
 
   // ===== 闪光时刻 API =====
-  app.get('/api/shines', async (req, res) => {
+  app.get('/api/shines', (req, res) => {
     try {
-      const rows = await db.all('SELECT * FROM shines ORDER BY date DESC, id DESC');
+      const rows = db.prepare('SELECT * FROM shines ORDER BY date DESC, id DESC').all();
       rows.forEach(r => {
         if (r.photo && r.photo !== 'pending_migration' && !r.photo.startsWith('http')) {
           r.photoUrl = `/uploads/${r.photo}`;
@@ -111,52 +113,51 @@ async function startServer() {
     }
   });
 
-  app.post('/api/shines', upload.single('photo'), async (req, res) => {
+  app.post('/api/shines', upload.single('photo'), (req, res) => {
     try {
       const { title, type, icon, description, date } = req.body;
       const photo = req.file ? req.file.filename : null;
-      const result = await db.run(
-        'INSERT INTO shines (title, type, icon, description, date, photo) VALUES (?, ?, ?, ?, ?, ?)',
-        [title, type, icon || type.split(' ')[0], description, date, photo]
-      );
+      const result = db.prepare(
+        'INSERT INTO shines (title, type, icon, description, date, photo) VALUES (?, ?, ?, ?, ?, ?)'
+      ).run(title, type, icon || type.split(' ')[0], description, date, photo);
       res.json({ id: result.lastInsertRowid, ok: true });
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
   });
 
-  app.delete('/api/shines/:id', async (req, res) => {
+  app.delete('/api/shines/:id', (req, res) => {
     try {
-      const row = await db.get('SELECT photo FROM shines WHERE id = ?', [req.params.id]);
+      const row = db.prepare('SELECT photo FROM shines WHERE id = ?').get(req.params.id);
       if (row && row.photo) {
         const p = path.join(__dirname, 'uploads', row.photo);
         if (fs.existsSync(p)) fs.unlinkSync(p);
       }
-      await db.run('DELETE FROM shines WHERE id = ?', [req.params.id]);
+      db.prepare('DELETE FROM shines WHERE id = ?').run(req.params.id);
       res.json({ ok: true });
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
   });
 
-  app.post('/api/shines/:id/like', async (req, res) => {
+  app.post('/api/shines/:id/like', (req, res) => {
     try {
-      const row = await db.get('SELECT likes FROM shines WHERE id = ?', [req.params.id]);
+      const row = db.prepare('SELECT likes FROM shines WHERE id = ?').get(req.params.id);
       if (!row) return res.status(404).json({ ok: false });
       const newLikes = (row.likes || 0) + 1;
-      await db.run('UPDATE shines SET likes = ? WHERE id = ?', [newLikes, req.params.id]);
+      db.prepare('UPDATE shines SET likes = ? WHERE id = ?').run(newLikes, req.params.id);
       res.json({ ok: true, likes: newLikes });
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
   });
 
-  app.post('/api/shines/:id/fav', async (req, res) => {
+  app.post('/api/shines/:id/fav', (req, res) => {
     try {
       const { fav } = req.body;
-      const row = await db.get('SELECT fav FROM shines WHERE id = ?', [req.params.id]);
+      const row = db.prepare('SELECT fav FROM shines WHERE id = ?').get(req.params.id);
       if (!row) return res.status(404).json({ ok: false, error: 'Not found' });
-      await db.run('UPDATE shines SET fav = ? WHERE id = ?', [fav ? 1 : 0, req.params.id]);
+      db.prepare('UPDATE shines SET fav = ? WHERE id = ?').run(fav ? 1 : 0, req.params.id);
       res.json({ ok: true, fav: !!fav });
     } catch (e) {
       res.status(500).json({ error: e.message });
@@ -164,9 +165,9 @@ async function startServer() {
   });
 
   // ===== 学习进度 API =====
-  app.get('/api/progress', async (req, res) => {
+  app.get('/api/progress', (req, res) => {
     try {
-      const rows = await db.all('SELECT * FROM progress');
+      const rows = db.prepare('SELECT * FROM progress').all();
       const result = { doneUnits: [], doneOM: [] };
       rows.forEach(r => {
         if (r.completed) {
@@ -180,23 +181,22 @@ async function startServer() {
     }
   });
 
-  app.post('/api/progress/:subject/:unit', async (req, res) => {
+  app.post('/api/progress/:subject/:unit', (req, res) => {
     try {
       const { subject, unit } = req.params;
-      await db.run(
-        'INSERT OR REPLACE INTO progress (subject, unit, completed, completed_at) VALUES (?, ?, 1, datetime("now","localtime"))',
-        [subject, unit]
-      );
+      db.prepare(
+        'INSERT OR REPLACE INTO progress (subject, unit, completed, completed_at) VALUES (?, ?, 1, datetime("now","localtime"))'
+      ).run(subject, unit);
       res.json({ ok: true });
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
   });
 
-  app.delete('/api/progress/:subject/:unit', async (req, res) => {
+  app.delete('/api/progress/:subject/:unit', (req, res) => {
     try {
       const { subject, unit } = req.params;
-      await db.run('DELETE FROM progress WHERE subject = ? AND unit = ?', [subject, unit]);
+      db.prepare('DELETE FROM progress WHERE subject = ? AND unit = ?').run(subject, unit);
       res.json({ ok: true });
     } catch (e) {
       res.status(500).json({ error: e.message });
@@ -204,9 +204,9 @@ async function startServer() {
   });
 
   // ===== 吉他视频 API =====
-  app.get('/api/guitar', async (req, res) => {
+  app.get('/api/guitar', (req, res) => {
     try {
-      const rows = await db.all('SELECT * FROM guitar_videos ORDER BY date DESC, id DESC');
+      const rows = db.prepare('SELECT * FROM guitar_videos ORDER BY date DESC, id DESC').all();
       rows.forEach(r => { if (r.video_path) r.videoUrl = `/uploads/${r.video_path}`; });
       res.json(rows);
     } catch (e) {
@@ -214,28 +214,27 @@ async function startServer() {
     }
   });
 
-  app.post('/api/guitar', upload.single('video'), async (req, res) => {
+  app.post('/api/guitar', upload.single('video'), (req, res) => {
     try {
       const { title, notes, date, duration, bpm, key_sig } = req.body;
       const videoPath = req.file ? req.file.filename : null;
-      const result = await db.run(
-        'INSERT INTO guitar_videos (title, video_path, duration, bpm, key_sig, notes, date) VALUES (?, ?, ?, ?, ?, ?, ?)',
-        [title, videoPath, duration || null, bpm || null, key_sig || null, notes || '', date]
-      );
+      const result = db.prepare(
+        'INSERT INTO guitar_videos (title, video_path, duration, bpm, key_sig, notes, date) VALUES (?, ?, ?, ?, ?, ?, ?)'
+      ).run(title, videoPath, duration || null, bpm || null, key_sig || null, notes || '', date);
       res.json({ id: result.lastInsertRowid, ok: true });
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
   });
 
-  app.delete('/api/guitar/:id', async (req, res) => {
+  app.delete('/api/guitar/:id', (req, res) => {
     try {
-      const row = await db.get('SELECT video_path FROM guitar_videos WHERE id = ?', [req.params.id]);
+      const row = db.prepare('SELECT video_path FROM guitar_videos WHERE id = ?').get(req.params.id);
       if (row && row.video_path) {
         const p = path.join(__dirname, 'uploads', row.video_path);
         if (fs.existsSync(p)) fs.unlinkSync(p);
       }
-      await db.run('DELETE FROM guitar_videos WHERE id = ?', [req.params.id]);
+      db.prepare('DELETE FROM guitar_videos WHERE id = ?').run(req.params.id);
       res.json({ ok: true });
     } catch (e) {
       res.status(500).json({ error: e.message });
@@ -243,70 +242,68 @@ async function startServer() {
   });
 
   // ===== 科技新闻 API =====
-  app.get('/api/tech', async (req, res) => {
+  app.get('/api/tech', (req, res) => {
     try {
-      const rows = await db.all('SELECT * FROM tech ORDER BY fav DESC, date DESC, id DESC');
+      const rows = db.prepare('SELECT * FROM tech ORDER BY fav DESC, date DESC, id DESC').all();
       res.json(rows);
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
   });
 
-  app.post('/api/tech', async (req, res) => {
+  app.post('/api/tech', (req, res) => {
     try {
       const { title, summary, source, category, date } = req.body;
-      const result = await db.run(
-        'INSERT INTO tech (title, summary, source, category, date) VALUES (?, ?, ?, ?, ?)',
-        [title, summary, source || '', category || '🔬 科学', date]
-      );
+      const result = db.prepare(
+        'INSERT INTO tech (title, summary, source, category, date) VALUES (?, ?, ?, ?, ?)'
+      ).run(title, summary, source || '', category || '🔬 科学', date);
       res.json({ id: result.lastInsertRowid, ok: true });
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
   });
 
-  app.delete('/api/tech/:id', async (req, res) => {
+  app.delete('/api/tech/:id', (req, res) => {
     try {
-      await db.run('DELETE FROM tech WHERE id = ?', [req.params.id]);
+      db.prepare('DELETE FROM tech WHERE id = ?').run(req.params.id);
       res.json({ ok: true });
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
   });
 
-  app.put('/api/tech/:id/fav', async (req, res) => {
+  app.put('/api/tech/:id/fav', (req, res) => {
     try {
-      const row = await db.get('SELECT fav FROM tech WHERE id = ?', [req.params.id]);
+      const row = db.prepare('SELECT fav FROM tech WHERE id = ?').get(req.params.id);
       if (!row) return res.status(404).json({ ok: false });
       const newFav = row.fav ? 0 : 1;
-      await db.run('UPDATE tech SET fav = ? WHERE id = ?', [newFav, req.params.id]);
+      db.prepare('UPDATE tech SET fav = ? WHERE id = ?').run(newFav, req.params.id);
       res.json({ ok: true, fav: newFav });
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
   });
 
-  app.get('/api/tech/daily', async (req, res) => {
+  app.get('/api/tech/daily', (req, res) => {
     try {
       const today = new Date().toISOString().slice(0, 10);
-      const count = await db.get('SELECT COUNT(*) as c FROM tech WHERE date = ?', [today]);
+      const count = db.prepare('SELECT COUNT(*) as c FROM tech WHERE date = ?').get(today);
       res.json({ hasDaily: count.c > 0, today });
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
   });
 
-  app.post('/api/tech/seed', async (req, res) => {
+  app.post('/api/tech/seed', (req, res) => {
     try {
       const { items } = req.body;
       if (!Array.isArray(items)) return res.status(400).json({ ok: false });
+      const checkStmt = db.prepare('SELECT id FROM tech WHERE title = ?');
+      const insertStmt = db.prepare('INSERT INTO tech (title, summary, source, category, date) VALUES (?, ?, ?, ?, ?)');
       for (const item of items) {
-        const exists = await db.get('SELECT id FROM tech WHERE title = ?', [item.title]);
+        const exists = checkStmt.get(item.title);
         if (!exists) {
-          await db.run(
-            'INSERT INTO tech (title, summary, source, category, date) VALUES (?, ?, ?, ?, ?)',
-            [item.title, item.summary || '', item.source || '', item.category || '🔬 科学', item.date || today()]
-          );
+          insertStmt.run(item.title, item.summary || '', item.source || '', item.category || '🔬 科学', item.date || today());
         }
       }
       res.json({ ok: true });
@@ -316,25 +313,24 @@ async function startServer() {
   });
 
   // ===== 数据迁移 API =====
-  app.post('/api/migrate', async (req, res) => {
+  app.post('/api/migrate', (req, res) => {
     try {
-      // 简化版迁移
       const data = req.body;
       if (data.diary) {
+        const checkStmt = db.prepare('SELECT id FROM diary WHERE id = ?');
+        const insertStmt = db.prepare('INSERT INTO diary (id, mood, title, content, date) VALUES (?, ?, ?, ?, ?)');
         for (const d of data.diary) {
-          const exists = await db.get('SELECT id FROM diary WHERE id = ?', [d.id]);
-          if (!exists) {
-            await db.run('INSERT INTO diary (id, mood, title, content, date) VALUES (?, ?, ?, ?, ?)',
-              [d.id, d.mood, d.title, d.content, d.date]);
+          if (!checkStmt.get(d.id)) {
+            insertStmt.run(d.id, d.mood, d.title, d.content, d.date);
           }
         }
       }
       if (data.shines) {
+        const checkStmt = db.prepare('SELECT id FROM shines WHERE id = ?');
+        const insertStmt = db.prepare('INSERT INTO shines (id, title, type, icon, description, date, photo) VALUES (?, ?, ?, ?, ?, ?, ?)');
         for (const s of data.shines) {
-          const exists = await db.get('SELECT id FROM shines WHERE id = ?', [s.id]);
-          if (!exists) {
-            await db.run('INSERT INTO shines (id, title, type, icon, description, date, photo) VALUES (?, ?, ?, ?, ?, ?, ?)',
-              [s.id, s.title, s.type, s.icon, s.desc || s.description || '', s.date, s.photo || null]);
+          if (!checkStmt.get(s.id)) {
+            insertStmt.run(s.id, s.title, s.type, s.icon, s.desc || s.description || '', s.date, s.photo || null);
           }
         }
       }
@@ -347,11 +343,10 @@ async function startServer() {
   // SPA fallback
   app.get('*', (req, res) => {
     const distIndex = path.join(__dirname, '..', 'client', 'dist', 'index.html');
-    const clientIndex = path.join(__dirname, '..', 'client', 'index.html');
     if (fs.existsSync(distIndex)) {
       res.sendFile(distIndex);
     } else {
-      res.sendFile(clientIndex);
+      res.status(404).send('构建产物不存在，请先运行 npm run build');
     }
   });
 
@@ -373,7 +368,4 @@ async function startServer() {
   });
 }
 
-startServer().catch(err => {
-  console.error('启动失败:', err);
-  process.exit(1);
-});
+startServer();
