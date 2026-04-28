@@ -560,7 +560,7 @@ onUnmounted(() => {
     0 0 30px rgba(255, 215, 0, 0.9),
     0 0 60px rgba(255, 215, 0, 0.6),
     0 0 120px rgba(255, 215, 0, 0.3);
-  margin: 0 0 20px 0;
+  margin: 0 0 8px 0;
   letter-spacing: 10px;
 }
 
