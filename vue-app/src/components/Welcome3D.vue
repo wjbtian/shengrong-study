@@ -543,7 +543,7 @@ onUnmounted(() => {
 
 .welcome-text {
   position: absolute;
-  top: 62%;
+  top: 35%;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
