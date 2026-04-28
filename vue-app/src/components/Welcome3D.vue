@@ -1,7 +1,7 @@
 <template>
   <div v-if="showWelcome" class="welcome-3d-overlay" @click="skipWelcome">
     <div ref="canvasContainer" class="canvas-container"></div>
-    <div class="welcome-text">
+    <div v-if="showText" class="welcome-text">
       <h1>欢迎 永远的神</h1>
       <p>开启今天的学习之旅</p>
     </div>
@@ -20,19 +20,74 @@ const props = defineProps({
 const emit = defineEmits(['skip'])
 
 const canvasContainer = ref(null)
+const showText = ref(true)
 let scene, camera, renderer
 let points, trails
 let animFrame = null
 let startTime = null
-const ANIMATION_DURATION = 5000 // 5秒总动画
+const ANIMATION_DURATION = 8000 // 8秒总动画
 
-const PARTICLE_COUNT = 4000
+const PARTICLE_COUNT = 5000
 const positions = new Float32Array(PARTICLE_COUNT * 3)
-const targets = new Float32Array(PARTICLE_COUNT * 3)
+const textTargets = new Float32Array(PARTICLE_COUNT * 3)
+const imageTargets = new Float32Array(PARTICLE_COUNT * 3)
 const velocities = new Float32Array(PARTICLE_COUNT * 3)
+let currentTargets = textTargets // 当前目标
 
 function skipWelcome() {
   emit('skip')
+}
+
+// 从文字生成粒子目标位置
+function setTextTargets() {
+  const canvas = document.createElement('canvas')
+  const ctx = canvas.getContext('2d')
+  canvas.width = 600
+  canvas.height = 200
+
+  // 绘制文字
+  ctx.fillStyle = '#000'
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  ctx.fillStyle = '#fff'
+  ctx.font = 'bold 60px sans-serif'
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.fillText('欢迎 永远的神', canvas.width / 2, canvas.height / 2 - 20)
+  ctx.font = '30px sans-serif'
+  ctx.fillText('开启今天的学习之旅', canvas.width / 2, canvas.height / 2 + 40)
+
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data
+
+  // 收集文字像素
+  const textPixels = []
+  const step = 2
+  for (let y = 0; y < canvas.height; y += step) {
+    for (let x = 0; x < canvas.width; x += step) {
+      const i = (y * canvas.width + x) * 4
+      if (imageData[i + 3] > 128) {
+        textPixels.push({
+          x: (x - canvas.width / 2) / 30,
+          y: -(y - canvas.height / 2) / 30,
+          z: (Math.random() - 0.5) * 2
+        })
+      }
+    }
+  }
+
+  // 分配目标位置
+  let pixelIdx = 0
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    if (pixelIdx < textPixels.length) {
+      textTargets[i * 3] = textPixels[pixelIdx].x
+      textTargets[i * 3 + 1] = textPixels[pixelIdx].y
+      textTargets[i * 3 + 2] = textPixels[pixelIdx].z
+      pixelIdx++
+    } else {
+      textTargets[i * 3] = (Math.random() - 0.5) * 30
+      textTargets[i * 3 + 1] = (Math.random() - 0.5) * 10
+      textTargets[i * 3 + 2] = (Math.random() - 0.5) * 5
+    }
+  }
 }
 
 // 从图片生成粒子目标位置
@@ -44,8 +99,7 @@ function setImageTargets() {
       const canvas = document.createElement('canvas')
       const ctx = canvas.getContext('2d')
 
-      // 限制图片尺寸，保持比例
-      const maxSize = 300
+      const maxSize = 350
       let w = img.width
       let h = img.height
       if (w > h) {
@@ -60,11 +114,10 @@ function setImageTargets() {
 
       const imageData = ctx.getImageData(0, 0, w, h).data
 
-      // 收集图片像素位置（提高对比度和清晰度）
+      // 收集图片像素
       const imagePixels = []
-      const step = 2 // 减小采样步长，提高密度
+      const step = 2
       
-      // 先计算平均亮度用于自适应阈值
       let totalBrightness = 0
       let pixelCount = 0
       for (let y = 0; y < h; y += step) {
@@ -76,26 +129,18 @@ function setImageTargets() {
         }
       }
       const avgBrightness = totalBrightness / pixelCount
-      const threshold = avgBrightness * 0.7 // 自适应阈值
-      
+      const threshold = avgBrightness * 0.6
+
       for (let y = 0; y < h; y += step) {
         for (let x = 0; x < w; x += step) {
           const i = (y * w + x) * 4
-          const r = imageData[i]
-          const g = imageData[i + 1]
-          const b = imageData[i + 2]
-          const a = imageData[i + 3]
-
-          // 计算亮度，使用自适应阈值
-          const brightness = (r + g + b) / 3
-          
-          // 增强对比度：暗部更暗，亮部更亮
+          const brightness = (imageData[i] + imageData[i + 1] + imageData[i + 2]) / 3
           const contrast = (brightness - avgBrightness) * 1.5 + avgBrightness
-          
-          if (contrast > threshold && a > 128) {
+
+          if (contrast > threshold && imageData[i + 3] > 128) {
             imagePixels.push({
-              x: (x - w / 2) / 20, // 放大图像
-              y: -(y - h / 2) / 20,
+              x: (x - w / 2) / 18,
+              y: -(y - h / 2) / 18,
               z: (Math.random() - 0.5) * 3
             })
           }
@@ -106,27 +151,25 @@ function setImageTargets() {
       let pixelIdx = 0
       for (let i = 0; i < PARTICLE_COUNT; i++) {
         if (pixelIdx < imagePixels.length) {
-          targets[i * 3] = imagePixels[pixelIdx].x
-          targets[i * 3 + 1] = imagePixels[pixelIdx].y
-          targets[i * 3 + 2] = imagePixels[pixelIdx].z
+          imageTargets[i * 3] = imagePixels[pixelIdx].x
+          imageTargets[i * 3 + 1] = imagePixels[pixelIdx].y
+          imageTargets[i * 3 + 2] = imagePixels[pixelIdx].z
           pixelIdx++
         } else {
-          // 多余粒子随机分布在图像周围
-          targets[i * 3] = (Math.random() - 0.5) * 25
-          targets[i * 3 + 1] = (Math.random() - 0.5) * 15
-          targets[i * 3 + 2] = (Math.random() - 0.5) * 5
+          imageTargets[i * 3] = (Math.random() - 0.5) * 25
+          imageTargets[i * 3 + 1] = (Math.random() - 0.5) * 15
+          imageTargets[i * 3 + 2] = (Math.random() - 0.5) * 5
         }
       }
 
       resolve()
     }
     img.onerror = () => {
-      console.error('Failed to load mecha image')
       // 如果图片加载失败，使用随机分布
       for (let i = 0; i < PARTICLE_COUNT; i++) {
-        targets[i * 3] = (Math.random() - 0.5) * 20
-        targets[i * 3 + 1] = (Math.random() - 0.5) * 10
-        targets[i * 3 + 2] = (Math.random() - 0.5) * 5
+        imageTargets[i * 3] = (Math.random() - 0.5) * 20
+        imageTargets[i * 3 + 1] = (Math.random() - 0.5) * 10
+        imageTargets[i * 3 + 2] = (Math.random() - 0.5) * 5
       }
       resolve()
     }
@@ -155,7 +198,6 @@ function init() {
 
   // 初始化粒子
   for (let i = 0; i < PARTICLE_COUNT; i++) {
-    // 初始全部在中心（爆发感）
     positions[i * 3] = 0
     positions[i * 3 + 1] = 0
     positions[i * 3 + 2] = 0
@@ -164,6 +206,10 @@ function init() {
     velocities[i * 3 + 1] = (Math.random() - 0.5) * 3
     velocities[i * 3 + 2] = (Math.random() - 0.5) * 3
   }
+
+  // 设置文字目标
+  setTextTargets()
+  currentTargets = textTargets
 
   // 主粒子
   const geo = new THREE.BufferGeometry()
@@ -196,14 +242,13 @@ function init() {
   trails = new THREE.Points(trailGeo, trailMat)
   scene.add(trails)
 
-  // 设置图片目标
+  // 先加载图片目标
   setImageTargets().then(() => {
     // 开始动画
     startTime = Date.now()
     animate()
   })
 
-  // 窗口大小调整
   window.addEventListener('resize', onResize)
 }
 
@@ -211,11 +256,18 @@ function animate() {
   if (!startTime) return
 
   const elapsed = Date.now() - startTime
-  const time = elapsed / 1000 // 转换为秒
+  const time = elapsed / 1000
   const progress = Math.min(elapsed / ANIMATION_DURATION, 1)
 
   const pos = points.geometry.attributes.position.array
   const trailPos = trails.geometry.attributes.position.array
+
+  // 时间轴：
+  // 0-1秒：爆发
+  // 1-3秒：聚合到文字
+  // 3-4秒：文字停留
+  // 4-6秒：切换到机甲
+  // 6-8秒：机甲停留+淡出
 
   for (let i = 0; i < PARTICLE_COUNT; i++) {
     const i3 = i * 3
@@ -225,29 +277,45 @@ function animate() {
     trailPos[i3 + 1] = pos[i3 + 1]
     trailPos[i3 + 2] = pos[i3 + 2]
 
-    // ===== 阶段1：爆发 (0-0.8秒) =====
-    if (time < 0.8) {
+    if (time < 1) {
+      // 阶段1：爆发
       pos[i3] += velocities[i3] * 0.15
       pos[i3 + 1] += velocities[i3 + 1] * 0.15
       pos[i3 + 2] += velocities[i3 + 2] * 0.15
-    }
-    // ===== 阶段2：聚合 (0.8-2.5秒) =====
-    else if (time < 2.5) {
-      const ease = 0.1
-      pos[i3] += (targets[i3] - pos[i3]) * ease
-      pos[i3 + 1] += (targets[i3 + 1] - pos[i3 + 1]) * ease
-      pos[i3 + 2] += (targets[i3 + 2] - pos[i3 + 2]) * ease
-    }
-    // ===== 阶段3：稳定+呼吸 (2.5-5秒) =====
-    else {
-      // 轻微浮动
+    } else if (time < 3) {
+      // 阶段2：聚合到文字
+      const ease = 0.08
+      pos[i3] += (textTargets[i3] - pos[i3]) * ease
+      pos[i3 + 1] += (textTargets[i3 + 1] - pos[i3 + 1]) * ease
+      pos[i3 + 2] += (textTargets[i3 + 2] - pos[i3 + 2]) * ease
+    } else if (time < 4) {
+      // 阶段3：文字停留，轻微浮动
+      pos[i3] += (Math.random() - 0.5) * 0.01
+      pos[i3 + 1] += (Math.random() - 0.5) * 0.01
+      pos[i3 + 2] += (Math.random() - 0.5) * 0.005
+      
+      // 保持靠近目标
+      pos[i3] += (textTargets[i3] - pos[i3]) * 0.03
+      pos[i3 + 1] += (textTargets[i3 + 1] - pos[i3 + 1]) * 0.03
+    } else if (time < 6) {
+      // 阶段4：切换到机甲
+      if (currentTargets !== imageTargets) {
+        currentTargets = imageTargets
+        // 隐藏文字
+        showText.value = false
+      }
+      const ease = 0.06
+      pos[i3] += (imageTargets[i3] - pos[i3]) * ease
+      pos[i3 + 1] += (imageTargets[i3 + 1] - pos[i3 + 1]) * ease
+      pos[i3 + 2] += (imageTargets[i3 + 2] - pos[i3 + 2]) * ease
+    } else {
+      // 阶段5：机甲停留+呼吸
       pos[i3] += (Math.random() - 0.5) * 0.02
       pos[i3 + 1] += (Math.random() - 0.5) * 0.02
       pos[i3 + 2] += (Math.random() - 0.5) * 0.01
-
-      // 保持靠近目标
-      pos[i3] += (targets[i3] - pos[i3]) * 0.05
-      pos[i3 + 1] += (targets[i3 + 1] - pos[i3 + 1]) * 0.05
+      
+      pos[i3] += (imageTargets[i3] - pos[i3]) * 0.05
+      pos[i3 + 1] += (imageTargets[i3 + 1] - pos[i3 + 1]) * 0.05
     }
   }
 
@@ -256,13 +324,18 @@ function animate() {
 
   // 呼吸光效果
   if (points.material) {
-    points.material.size = 0.06 + Math.sin(time * 8) * 0.03
+    points.material.size = 0.06 + Math.sin(time * 6) * 0.02
   }
 
   // 整体旋转
-  if (time > 2.5) {
-    points.rotation.y = Math.sin((time - 2.5) * 0.3) * 0.1
-    trails.rotation.y = Math.sin((time - 2.5) * 0.3) * 0.1
+  if (time > 3 && time < 4) {
+    // 文字旋转
+    points.rotation.y = Math.sin((time - 3) * Math.PI) * 0.2
+    trails.rotation.y = Math.sin((time - 3) * Math.PI) * 0.2
+  } else if (time > 6) {
+    // 机甲旋转
+    points.rotation.y = Math.sin((time - 6) * 0.3) * 0.1
+    trails.rotation.y = Math.sin((time - 6) * 0.3) * 0.1
   }
 
   renderer.render(scene, camera)
@@ -327,6 +400,7 @@ onUnmounted(() => {
   text-align: center;
   pointer-events: none;
   z-index: 10;
+  transition: opacity 0.5s ease;
 }
 
 .welcome-text h1 {
