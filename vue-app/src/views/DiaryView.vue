@@ -38,7 +38,7 @@
           :key="item.mood"
           class="mood-dist-item"
         >
-          <span class="mood-dist-emoji">{{ item.mood }}</span>
+          <span class="mood-dist-icon" :style="{ color: item.color }">{{ item.mood }}</span>
           <div class="mood-dist-bar-bg">
             <div
               class="mood-dist-bar-fill"
@@ -65,7 +65,7 @@
             :class="{ active: selectedMood === item.mood }"
             @click="selectMood(item.mood)"
           >
-            <span class="mood-wall-emoji">{{ item.mood }}</span>
+            <span class="mood-wall-icon">{{ item.mood }}</span>
             <span class="mood-wall-date">{{ item.date }}</span>
           </div>
         </div>
@@ -98,8 +98,12 @@
           class="diary-card"
         >
           <div class="diary-card-header">
-            <span class="diary-card-mood">{{ item.mood }}</span>
-            <span class="diary-card-date">{{ item.date }}</span>
+            <span class="diary-card-mood" :style="getMoodStyle(item.mood)">{{ item.mood }}</span>
+            <div class="diary-card-actions">
+              <span class="diary-card-date">{{ item.date }}</span>
+              <button class="diary-action-btn" @click.stop="openEdit(item)" title="编辑">✏️</button>
+              <button class="diary-action-btn delete" @click.stop="removeDiary(item.id)" title="删除">🗑️</button>
+            </div>
           </div>
           <h4 class="diary-card-title">{{ item.title || '无标题' }}</h4>
           <p class="diary-card-content">{{ item.content }}</p>
@@ -110,6 +114,11 @@
       </div>
       <div v-if="filteredDiary.length === 0" class="empty-state">
         暂无日记记录
+      </div>
+      <div v-if="hasMore" class="load-more">
+        <button class="btn-load-more" @click="loadMore">
+          加载更多 ({{ filteredDiary.length }} / {{ diary.length }})
+        </button>
       </div>
     </section>
 
@@ -140,33 +149,91 @@
         </div>
       </div>
     </div>
+
+    <!-- 编辑日记弹窗 -->
+    <div v-if="showEditModal" class="modal" @click.self="showEditModal = false">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>✏️ 编辑日记</h3>
+          <button class="modal-close" @click="showEditModal = false">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="mood-selector">
+            <span
+              v-for="m in moods"
+              :key="m"
+              class="mood-option"
+              :class="{ selected: editingDiary?.mood === m }"
+              @click="editingDiary && (editingDiary.mood = m)"
+            >{{ m }}</span>
+          </div>
+          <input v-model="editingDiary.title" class="input" placeholder="标题（可选）">
+          <textarea v-model="editingDiary.content" class="textarea" rows="6" placeholder="今天发生了什么有趣的事？"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" @click="showEditModal = false">取消</button>
+          <button class="btn btn-primary" @click="updateDiary">保存</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { getDiary, postDiary } from '../utils/api.js'
+import { getDiary, postDiary, putDiary, deleteDiary } from '../utils/api.js'
 
 const diary = ref([])
 const showWriteModal = ref(false)
+const showEditModal = ref(false)
+const editingDiary = ref(null)
 const currentFilter = ref('all')
 const selectedMood = ref(null)
 
-const moods = ['😄', '😊', '🤩', '😎', '🥳', '😐', '😔', '😢', '😭', '😤', '😴']
+// 心情配置：图标 + 颜色
+const moodConfig = {
+  happy:     { icon: '☀️', label: '开心', color: '#fbbf24', bg: 'rgba(251, 191, 36, 0.15)' },
+  good:      { icon: '🌟', label: '不错', color: '#4ade80', bg: 'rgba(74, 222, 128, 0.15)' },
+  awesome:   { icon: '🔥', label: '超棒', color: '#f97316', bg: 'rgba(249, 115, 22, 0.15)' },
+  cool:      { icon: '🚀', label: '酷炫', color: '#818cf8', bg: 'rgba(129, 140, 248, 0.15)' },
+  celebrate: { icon: '🎉', label: '庆祝', color: '#ec4899', bg: 'rgba(236, 72, 153, 0.15)' },
+  calm:      { icon: '🍃', label: '平静', color: '#94a3b8', bg: 'rgba(148, 163, 184, 0.15)' },
+  sad:       { icon: '🌧️', label: '难过', color: '#64748b', bg: 'rgba(100, 116, 139, 0.15)' },
+  cry:       { icon: '💧', label: '伤心', color: '#475569', bg: 'rgba(71, 85, 105, 0.15)' },
+  angry:     { icon: '⚡', label: '生气', color: '#ef4444', bg: 'rgba(239, 68, 68, 0.15)' },
+  tired:     { icon: '🌙', label: '疲惫', color: '#a78bfa', bg: 'rgba(167, 139, 250, 0.15)' }
+}
+
+const moodKeys = Object.keys(moodConfig)
+const moods = moodKeys.map(k => moodConfig[k].icon)
 
 const newDiary = ref({
-  mood: '😊',
+  mood: moodConfig.good.icon,
   title: '',
   content: '',
   tags: ''
 })
 
+// 分页
+const pageSize = 10
+const currentPage = ref(1)
+const hasMore = computed(() => {
+  let result = diary.value
+  if (currentFilter.value !== 'all') {
+    result = result.filter(d => d.mood === currentFilter.value)
+  }
+  if (selectedMood.value) {
+    result = result.filter(d => d.mood === selectedMood.value)
+  }
+  return result.length > currentPage.value * pageSize
+})
+
 const filters = [
   { value: 'all', label: '全部' },
-  { value: '😄', label: '😄 开心' },
-  { value: '🤩', label: '🤩 超棒' },
-  { value: '😊', label: '😊 不错' },
-  { value: '😔', label: '😔 难过' },
+  { value: '☀️', label: '☀️ 开心' },
+  { value: '🔥', label: '🔥 超棒' },
+  { value: '🌟', label: '🌟 不错' },
+  { value: '🌧️', label: '🌧️ 难过' },
 ]
 
 // 心情分布
@@ -174,13 +241,11 @@ const moodDistribution = computed(() => {
   const stats = {}
   diary.value.forEach(d => { if (d.mood) stats[d.mood] = (stats[d.mood] || 0) + 1 })
   const total = Object.values(stats).reduce((a, b) => a + b, 0)
-  const colors = {
-    '😊': '#4ade80', '😄': '#22c55e', '🤩': '#16a34a', '😎': '#15803d',
-    '🥳': '#86efac', '😐': '#94a3b8', '😔': '#64748b', '😢': '#475569',
-    '😭': '#334155', '😤': '#f87171', '😴': '#cbd5e1'
-  }
   return Object.entries(stats)
-    .map(([mood, count]) => ({ mood, count, percent: total ? Math.round((count / total) * 100) : 0, color: colors[mood] || '#94a3b8' }))
+    .map(([mood, count]) => {
+      const cfg = Object.values(moodConfig).find(m => m.icon === mood) || { color: '#94a3b8', bg: 'rgba(148, 163, 184, 0.15)' }
+      return { mood, count, percent: total ? Math.round((count / total) * 100) : 0, color: cfg.color }
+    })
     .sort((a, b) => b.count - a.count)
 })
 
@@ -192,7 +257,7 @@ const moodWallItems = computed(() => {
     .map(d => ({ id: d.id, mood: d.mood, date: d.date.slice(5) }))
 })
 
-// 筛选
+// 筛选 + 分页
 const filteredDiary = computed(() => {
   let result = diary.value
   if (currentFilter.value !== 'all') {
@@ -201,8 +266,12 @@ const filteredDiary = computed(() => {
   if (selectedMood.value) {
     result = result.filter(d => d.mood === selectedMood.value)
   }
-  return result
+  return result.slice(0, currentPage.value * pageSize)
 })
+
+function loadMore() {
+  currentPage.value++
+}
 
 // 连续天数
 const streak = computed(() => {
@@ -230,6 +299,23 @@ function selectMood(mood) {
   selectedMood.value = selectedMood.value === mood ? null : mood
 }
 
+function getMoodStyle(moodIcon) {
+  const cfg = Object.values(moodConfig).find(m => m.icon === moodIcon)
+  if (!cfg) return {}
+  return {
+    color: cfg.color,
+    background: cfg.bg,
+    padding: '4px 8px',
+    borderRadius: '8px',
+    fontSize: '18px'
+  }
+}
+
+function getMoodLabel(icon) {
+  const cfg = Object.values(moodConfig).find(m => m.icon === icon)
+  return cfg ? cfg.label : ''
+}
+
 async function saveDiary() {
   if (!newDiary.value.content.trim()) return
   const data = {
@@ -241,9 +327,38 @@ async function saveDiary() {
     await postDiary(data)
     diary.value.unshift(data)
     showWriteModal.value = false
-    newDiary.value = { mood: '😊', title: '', content: '', tags: '' }
+    newDiary.value = { mood: moodConfig.good.icon, title: '', content: '', tags: '' }
+    currentPage.value = 1 // 重置到第一页
   } catch (e) {
     console.error('保存日记失败:', e)
+  }
+}
+
+function openEdit(item) {
+  editingDiary.value = { ...item }
+  showEditModal.value = true
+}
+
+async function updateDiary() {
+  if (!editingDiary.value || !editingDiary.value.content.trim()) return
+  try {
+    await putDiary(editingDiary.value.id, editingDiary.value)
+    const idx = diary.value.findIndex(d => d.id === editingDiary.value.id)
+    if (idx !== -1) diary.value[idx] = { ...editingDiary.value }
+    showEditModal.value = false
+    editingDiary.value = null
+  } catch (e) {
+    console.error('更新日记失败:', e)
+  }
+}
+
+async function removeDiary(id) {
+  if (!confirm('确定要删除这篇日记吗？')) return
+  try {
+    await deleteDiary(id)
+    diary.value = diary.value.filter(d => d.id !== id)
+  } catch (e) {
+    console.error('删除日记失败:', e)
   }
 }
 
@@ -362,7 +477,7 @@ onMounted(async () => {
   gap: 10px;
 }
 
-.mood-dist-emoji {
+.mood-dist-icon {
   font-size: 20px;
   width: 32px;
   text-align: center;
@@ -430,7 +545,7 @@ onMounted(async () => {
   border: 1px solid var(--accent);
 }
 
-.mood-wall-emoji {
+.mood-wall-icon {
   font-size: 28px;
 }
 
@@ -511,9 +626,35 @@ onMounted(async () => {
   font-size: 20px;
 }
 
+.diary-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .diary-card-date {
   font-size: 12px;
   color: var(--text2);
+}
+
+.diary-action-btn {
+  background: none;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  opacity: 0.6;
+  transition: all 0.2s;
+}
+
+.diary-action-btn:hover {
+  opacity: 1;
+  background: var(--surface3);
+}
+
+.diary-action-btn.delete:hover {
+  background: rgba(248, 113, 113, 0.2);
 }
 
 .diary-card-title {
@@ -546,6 +687,29 @@ onMounted(async () => {
   background: var(--surface3);
   border-radius: 4px;
   color: var(--text2);
+}
+
+/* 加载更多 */
+.load-more {
+  text-align: center;
+  padding: 20px 0 10px;
+}
+
+.btn-load-more {
+  padding: 10px 24px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text2);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-load-more:hover {
+  background: var(--surface3);
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 /* 弹窗 */

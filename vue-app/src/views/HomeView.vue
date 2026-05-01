@@ -1,7 +1,7 @@
 <template>
   <div class="home-view">
-    <!-- 3D欢迎动画 -->
-    <Welcome3D :showWelcome="showWelcome" @skip="skipWelcome" />
+    <!-- 3D欢迎动画（已移到App.vue） -->
+    <!-- <Welcome3D :showWelcome="showWelcome" @skip="skipWelcome" /> -->
 
     <!-- 顶部欢迎区 -->
     <section class="hero-section">
@@ -212,17 +212,22 @@
         </div>
         <div class="photo-wall">
           <div
-            v-for="(photo, idx) in showcasePhotos.slice(0, 6)"
+            v-for="(photo, idx) in displayPhotos"
             :key="idx"
             class="wall-photo"
+            :class="{ 'has-image': photo.url || photo.photoUrl }"
             @click="openPhotoModal(photo)"
           >
-            <img v-if="photo.url" :src="photo.url" :alt="photo.title" />
+            <img v-if="photo.url || photo.photoUrl" :src="photo.url || photo.photoUrl" :alt="photo.title" />
             <div v-else class="photo-placeholder">
               <span class="photo-emoji">{{ photo.icon || '✨' }}</span>
             </div>
             <div class="photo-overlay">
               <span class="photo-title">{{ photo.title }}</span>
+            </div>
+            <div class="photo-edit-overlay" @click.stop="openPhotoSelector(idx)">
+              <span class="edit-icon">✏️</span>
+              <span class="edit-text">更换</span>
             </div>
           </div>
         </div>
@@ -264,11 +269,38 @@
       <div class="photo-modal-content">
         <button class="photo-modal-close" @click="selectedPhoto = null">✕</button>
         <div class="photo-modal-image">
-          <img v-if="selectedPhoto.url" :src="selectedPhoto.url" :alt="selectedPhoto.title" />
+          <img v-if="selectedPhoto.url || selectedPhoto.photoUrl" :src="selectedPhoto.url || selectedPhoto.photoUrl" :alt="selectedPhoto.title" />
           <span v-else class="photo-modal-emoji">{{ selectedPhoto.icon || '✨' }}</span>
         </div>
         <h3>{{ selectedPhoto.title }}</h3>
         <p>{{ selectedPhoto.date }}</p>
+      </div>
+    </div>
+
+    <!-- 选择闪光时刻弹窗 -->
+    <div v-if="showPhotoSelector" class="modal" @click.self="showPhotoSelector = false">
+      <div class="modal-content selector-modal">
+        <div class="modal-header">
+          <h3>选择闪光时刻</h3>
+          <button class="modal-close" @click="showPhotoSelector = false">✕</button>
+        </div>
+        <div class="modal-body">
+          <div v-if="shines.length" class="shine-selector-grid">
+            <div
+              v-for="shine in shines"
+              :key="shine.id"
+              class="shine-selector-item"
+              @click="selectShineForWall(shine)"
+            >
+              <div class="shine-selector-img">
+                <img v-if="shine.photoUrl" :src="shine.photoUrl" :alt="shine.title">
+                <span v-else class="shine-selector-icon">{{ categoryIcon(shine.category) }}</span>
+              </div>
+              <span class="shine-selector-title">{{ shine.title }}</span>
+            </div>
+          </div>
+          <div v-else class="empty-state">还没有闪光时刻，去添加一些吧！</div>
+        </div>
       </div>
     </div>
   </div>
@@ -278,8 +310,6 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { getDiary, getShines, getGuitar, getTech, getProgress } from '../utils/api.js'
-import Welcome3D from '../components/Welcome3D.vue'
-
 const router = useRouter()
 
 const diary = ref([])
@@ -288,17 +318,6 @@ const guitar = ref([])
 const tech = ref([])
 const progress = ref({})
 const guitarVideo = ref(null)
-
-// 照片墙展示数据（可替换的照片）
-const showcasePhotos = ref([
-  { url: '', title: '春游时光', icon: '🌸', date: '2026-04-20' },
-  { url: '', title: '数学竞赛', icon: '🏆', date: '2026-04-15' },
-  { url: '', title: '吉他练习', icon: '🎸', date: '2026-04-12' },
-  { url: '', title: '科技制作', icon: '🔬', date: '2026-04-10' },
-  { url: '', title: '英语演讲', icon: '🎤', date: '2026-04-08' },
-  { url: '', title: '运动时刻', icon: '⚽', date: '2026-04-05' },
-  { url: '', title: '阅读时光', icon: '📚', date: '2026-04-01' },
-])
 
 // 最新吉他视频
 const latestGuitarVideo = computed(() => {
@@ -313,9 +332,95 @@ const latestGuitarVideo = computed(() => {
 })
 
 const selectedPhoto = ref(null)
+const showPhotoSelector = ref(false)
+const editingPhotoIndex = ref(null)
+
+// 从闪光时刻取前6个填充照片墙
+const displayPhotos = computed(() => {
+  const photos = []
+  const customWall = JSON.parse(localStorage.getItem('customPhotoWall') || '[]')
+
+  // 先用用户自定义的照片
+  for (let i = 0; i < 6; i++) {
+    if (customWall[i]?.id) {
+      // 找到对应的闪光时刻数据
+      const shine = shines.value?.find(s => s.id === customWall[i].id)
+      if (shine) {
+        photos.push({
+          ...shine,
+          url: shine.photoUrl || shine.url || '',
+          title: shine.title || '闪光时刻',
+          date: shine.date
+        })
+        continue
+      }
+    }
+    // 没有自定义的，用闪光时刻的
+    if (shines.value?.[i]) {
+      const shine = shines.value[i]
+      photos.push({
+        ...shine,
+        url: shine.photoUrl || shine.url || '',
+        title: shine.title || '闪光时刻',
+        date: shine.date
+      })
+    } else {
+      // 用占位符
+      const placeholders = [
+        { url: '', title: '春游时光', icon: '🌸', date: '' },
+        { url: '', title: '数学竞赛', icon: '🏆', date: '' },
+        { url: '', title: '吉他练习', icon: '🎸', date: '' },
+        { url: '', title: '科技制作', icon: '🔬', date: '' },
+        { url: '', title: '英语演讲', icon: '🎤', date: '' },
+        { url: '', title: '运动时刻', icon: '⚽', date: '' },
+      ]
+      photos.push(placeholders[i])
+    }
+  }
+  return photos
+})
 
 function openPhotoModal(photo) {
   selectedPhoto.value = photo
+}
+
+function openPhotoSelector(index) {
+  editingPhotoIndex.value = index
+  showPhotoSelector.value = true
+}
+
+function selectShineForWall(shine) {
+  if (editingPhotoIndex.value === null) return
+  
+  // 更新本地数据，触发响应式更新
+  const idx = shines.value.findIndex(s => s.id === shine.id)
+  if (idx !== -1) {
+    // 确保该闪光时刻在数组前面，这样照片墙会显示它
+    const item = shines.value[idx]
+    shines.value.splice(idx, 1)
+    shines.value.unshift(item)
+  }
+  
+  // 保存到 localStorage
+  const customWall = JSON.parse(localStorage.getItem('customPhotoWall') || '[]')
+  customWall[editingPhotoIndex.value] = {
+    id: shine.id,
+    title: shine.title,
+    photoUrl: shine.photoUrl || shine.url || '',
+    date: shine.date
+  }
+  localStorage.setItem('customPhotoWall', JSON.stringify(customWall))
+  showPhotoSelector.value = false
+  editingPhotoIndex.value = null
+}
+
+// 分类图标映射
+function categoryIcon(category) {
+  const icons = {
+    study: '📚', sports: '⚽', art: '🎨', music: '🎸',
+    tech: '🔬', travel: '✈️', life: '🌟', other: '✨'
+  }
+  return icons[category] || '✨'
 }
 
 // 今日任务
@@ -586,18 +691,6 @@ const reviews = computed(() => {
 
 const recentDiary = computed(() => diary.value.slice(0, 3))
 const recentShines = computed(() => shines.value.slice(0, 3))
-
-// 欢迎动画
-const showWelcome = ref(true)
-
-function skipWelcome() {
-  showWelcome.value = false
-}
-
-// 自动关闭欢迎动画（6秒后）
-setTimeout(() => {
-  showWelcome.value = false
-}, 6000)
 
 onMounted(async () => {
   try {
@@ -1214,32 +1307,16 @@ section:hover {
 .photo-wall .wall-photo {
   aspect-ratio: 1;
   border-radius: 12px;
+  position: relative;
+  overflow: hidden;
 }
 
-.wall-photo {
-  border-radius: 16px;
-  overflow: hidden;
-  cursor: pointer;
-  position: relative;
-  background: var(--surface2);
-  transition: all 0.3s ease;
-}
+
 
 .wall-photo:hover {
   transform: translateY(-4px) scale(1.02);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
   z-index: 10;
-}
-
-.wall-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.wall-photo:hover img {
-  transform: scale(1.1);
 }
 
 /* 照片统一正方形，图片自适应填充 */
@@ -1248,6 +1325,11 @@ section:hover {
   height: 100%;
   object-fit: contain;
   background: var(--surface2);
+  transition: transform 0.3s ease;
+}
+
+.wall-photo:hover img {
+  transform: scale(1.05);
 }
 
 .photo-placeholder {
@@ -1421,18 +1503,101 @@ section:hover {
   background: var(--accent-dim);
 }
 
+/* 照片编辑悬停 */
+.photo-edit-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 16px;
+  cursor: pointer;
+}
+
+.wall-photo:hover .photo-edit-overlay {
+  opacity: 1;
+}
+
+.edit-icon {
+  font-size: 24px;
+}
+
+.edit-text {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* 闪光时刻选择器 */
+.selector-modal {
+  max-width: 600px;
+  max-height: 80vh;
+}
+
+.shine-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.shine-selector-item {
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 12px;
+  background: var(--surface2);
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.shine-selector-item:hover {
+  background: var(--accent-dim);
+  transform: translateY(-2px);
+}
+
+.shine-selector-img {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.shine-selector-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.shine-selector-icon {
+  font-size: 32px;
+}
+
+.shine-selector-title {
+  font-size: 12px;
+  color: var(--text);
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* 响应式 */
 @media (max-width: 1024px) {
   .photo-wall {
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: 120px;
   }
-  .photo-size-0 {
-    grid-column: span 2;
-    grid-row: span 2;
-  }
-  .photo-size-2 {
-    grid-row: span 1;
+  .shine-selector-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
@@ -1464,18 +1629,14 @@ section:hover {
     grid-auto-rows: 100px;
     gap: 8px;
   }
-  .photo-size-0 {
-    grid-column: span 2;
-    grid-row: span 2;
-  }
-  .photo-size-2 {
-    grid-row: span 1;
-  }
   .wall-photo {
     border-radius: 12px;
   }
   .wall-photo .photo-emoji {
     font-size: 32px !important;
+  }
+  .shine-selector-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -1483,6 +1644,9 @@ section:hover {
   .photo-wall {
     grid-template-columns: repeat(3, 1fr);
     gap: 6px;
+  }
+  .shine-selector-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 

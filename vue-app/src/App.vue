@@ -1,5 +1,7 @@
 <template>
   <div class="app-container">
+    <!-- 3D 欢迎动画 -->
+    <Welcome3D v-if="showWelcome" @skip="skipWelcome" />
     <!-- 科技感背景 -->
     <canvas ref="bgCanvas" class="tech-bg"></canvas>
     <TopNav />
@@ -16,6 +18,27 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import TopNav from './components/TopNav.vue'
+import Welcome3D from './components/Welcome3D.vue'
+
+const showWelcome = ref(false)
+
+function shouldShowWelcome() {
+  const lastShow = localStorage.getItem('welcomeLastShow')
+  if (!lastShow) return true
+  const hoursSince = (Date.now() - parseInt(lastShow)) / (1000 * 60 * 60)
+  return hoursSince >= 1
+}
+
+function skipWelcome() {
+  showWelcome.value = false
+  localStorage.setItem('welcomeLastShow', Date.now().toString())
+}
+
+onMounted(() => {
+  if (shouldShowWelcome()) {
+    showWelcome.value = true
+  }
+})
 
 const bgCanvas = ref(null)
 let animFrame = null

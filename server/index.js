@@ -89,6 +89,17 @@ function startServer() {
     }
   });
 
+  app.put('/api/diary/:id', (req, res) => {
+    try {
+      const { mood, title, content, date } = req.body;
+      db.prepare('UPDATE diary SET mood = ?, title = ?, content = ?, date = ? WHERE id = ?')
+        .run(mood, title, content, date, req.params.id);
+      res.json({ ok: true });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
   app.delete('/api/diary/:id', (req, res) => {
     try {
       db.prepare('DELETE FROM diary WHERE id = ?').run(req.params.id);
@@ -351,7 +362,7 @@ function startServer() {
   });
 
   // 启动
-  app.listen(PORT, () => {
+  const server = app.listen(PORT, () => {
     const os = require('os');
     const nets = os.networkInterfaces();
     let localIP = 'localhost';
@@ -365,6 +376,14 @@ function startServer() {
     console.log(`🚀 尚融成长网站已启动！`);
     console.log(`   本机访问: http://localhost:${PORT}`);
     console.log(`   局域网访问: http://${localIP}:${PORT}`);
+  });
+  
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.log(`端口 ${PORT} 已被占用，跳过启动`);
+    } else {
+      console.error('服务器错误:', err);
+    }
   });
 }
 

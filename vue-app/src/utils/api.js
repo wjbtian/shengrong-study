@@ -16,8 +16,11 @@ export async function api(method, path, data) {
 
 export const getDiary = () => api('GET', '/diary')
 export const postDiary = (data) => api('POST', '/diary', data)
+export const putDiary = (id, data) => api('PUT', `/diary/${id}`, data)
+export const deleteDiary = (id) => api('DELETE', `/diary/${id}`)
 export const getShines = () => api('GET', '/shines')
 export const postShine = (data) => api('POST', '/shines', data)
+export const updateShine = (id, data) => api('PUT', `/shines/${id}`, data)
 export const deleteShine = (id) => api('DELETE', `/shines/${id}`)
 export const getTech = () => api('GET', '/tech')
 export const postTech = (data) => api('POST', '/tech', data)

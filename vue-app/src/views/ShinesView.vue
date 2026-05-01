@@ -69,6 +69,12 @@
             {{ item.fav ? '⭐' : '☆' }}
           </button>
           <button
+            class="photo-edit"
+            @click.stop="openEditModal(item)"
+          >
+            ✏️
+          </button>
+          <button
             class="photo-delete"
             @click.stop="confirmDelete(item)"
           >
@@ -118,6 +124,28 @@
       </div>
     </div>
 
+    <!-- 编辑弹窗 -->
+    <div v-if="showEditModal" class="modal" @click.self="showEditModal = false">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>✏️ 编辑闪光时刻</h3>
+          <button class="modal-close" @click="showEditModal = false">✕</button>
+        </div>
+        <div class="modal-body">
+          <input v-model="editShine.title" class="input" placeholder="标题">
+          <select v-model="editShine.category" class="input">
+            <option v-for="cat in categories" :key="cat.value" :value="cat.value">{{ cat.label }}</option>
+          </select>
+          <textarea v-model="editShine.desc" class="textarea" rows="3" placeholder="描述（可选）"></textarea>
+          <input type="file" class="input" accept="image/*" @change="onEditPhotoChange">
+        </div>
+        <div class="modal-footer">
+          <button class="btn" @click="showEditModal = false">取消</button>
+          <button class="btn btn-primary" @click="saveEdit">保存</button>
+        </div>
+      </div>
+    </div>
+
     <!-- 删除确认弹窗 -->
     <div v-if="showDeleteModal" class="modal" @click.self="showDeleteModal = false">
       <div class="modal-content modal-sm">
@@ -139,10 +167,11 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { getShines, postShine, deleteShine } from '../utils/api.js'
+import { getShines, postShine, deleteShine, updateShine } from '../utils/api.js'
 
 const shines = ref([])
 const showAddModal = ref(false)
+const showEditModal = ref(false)
 const showDeleteModal = ref(false)
 const currentFilter = ref('all')
 const lightboxItem = ref(null)
@@ -168,6 +197,14 @@ const filters = [
 ]
 
 const newShine = ref({
+  title: '',
+  category: 'other',
+  desc: '',
+  photo: null
+})
+
+const editShine = ref({
+  id: null,
   title: '',
   category: 'other',
   desc: '',
@@ -201,6 +238,46 @@ function categoryIcon(category) {
 
 function onPhotoChange(e) {
   newShine.value.photo = e.target.files[0]
+}
+
+function onEditPhotoChange(e) {
+  editShine.value.photo = e.target.files[0]
+}
+
+function openEditModal(item) {
+  editShine.value = {
+    id: item.id,
+    title: item.title,
+    category: item.category,
+    desc: item.desc || '',
+    photo: null
+  }
+  showEditModal.value = true
+}
+
+async function saveEdit() {
+  if (!editShine.value.title.trim()) return
+  try {
+    const data = {
+      title: editShine.value.title,
+      category: editShine.value.category,
+      desc: editShine.value.desc
+    }
+    
+    // 调用 API 更新
+    await updateShine(editShine.value.id, data)
+    
+    // 更新本地数据
+    const idx = shines.value.findIndex(s => s.id === editShine.value.id)
+    if (idx !== -1) {
+      shines.value[idx] = { ...shines.value[idx], ...data }
+    }
+    showEditModal.value = false
+    editShine.value = { id: null, title: '', category: 'other', desc: '', photo: null }
+  } catch (e) {
+    console.error('编辑失败:', e)
+    alert('编辑失败，请重试')
+  }
 }
 
 async function saveShine() {
@@ -452,6 +529,7 @@ onMounted(async () => {
 }
 
 .photo-fav,
+.photo-edit,
 .photo-delete {
   width: 32px;
   height: 32px;
@@ -468,6 +546,7 @@ onMounted(async () => {
 }
 
 .photo-fav:hover,
+.photo-edit:hover,
 .photo-delete:hover {
   background: rgba(0, 0, 0, 0.7);
   transform: scale(1.1);
@@ -475,6 +554,10 @@ onMounted(async () => {
 
 .photo-fav.active {
   color: #fbbf24;
+}
+
+.photo-edit:hover {
+  background: rgba(96, 165, 250, 0.8);
 }
 
 .photo-delete:hover {
