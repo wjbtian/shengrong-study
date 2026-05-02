@@ -132,6 +132,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { getGuitar, postGuitar } from '../utils/api.js'
+import { uploadFile } from '../utils/upload.js'
 
 const guitar = ref([])
 const showUploadModal = ref(false)
@@ -185,18 +186,29 @@ function onFileChange(e) {
 
 async function uploadVideo() {
   if (!newVideo.value.title.trim()) return
-  const data = {
-    title: newVideo.value.title,
-    notes: newVideo.value.notes,
-    date: new Date().toISOString().split('T')[0]
-  }
+  
   try {
-    await postGuitar(data)
-    guitar.value.unshift(data)
+    let videoUrl = ''
+    
+    // 如果有视频文件，先上传
+    if (newVideo.value.file) {
+      videoUrl = await uploadFile(newVideo.value.file, 'video')
+    }
+    
+    const data = {
+      title: newVideo.value.title,
+      notes: newVideo.value.notes,
+      videoUrl: videoUrl,
+      date: new Date().toISOString().split('T')[0]
+    }
+    
+    const result = await postGuitar(data)
+    guitar.value.unshift({ ...data, id: result.id || Date.now() })
     showUploadModal.value = false
     newVideo.value = { title: '', file: null, notes: '' }
   } catch (e) {
     console.error('上传失败:', e)
+    alert('上传失败，请重试')
   }
 }
 

@@ -1,32 +1,76 @@
 const API_BASE = ''
 
-export async function api(method, path, data) {
+// 统一的请求处理
+async function request(method, path, data, options = {}) {
+  const { retries = 1, timeout = 10000 } = options
+  
   const opts = {
     method,
-    headers: {}
+    headers: {},
+    signal: AbortSignal.timeout(timeout)
   }
-  if (data) {
+  
+  if (data && !(data instanceof FormData)) {
     opts.headers['Content-Type'] = 'application/json'
     opts.body = JSON.stringify(data)
+  } else if (data) {
+    opts.body = data
   }
-  const res = await fetch(`${API_BASE}/api${path}`, opts)
-  if (!res.ok) throw new Error(`HTTP ${res.status}`)
-  return res.json()
+  
+  let lastError
+  for (let i = 0; i <= retries; i++) {
+    try {
+      const res = await fetch(`${API_BASE}/api${path}`, opts)
+      
+      if (!res.ok) {
+        const errorText = await res.text().catch(() => 'Unknown error')
+        throw new Error(`HTTP ${res.status}: ${errorText}`)
+      }
+      
+      // 处理空响应
+      const contentType = res.headers.get('content-type')
+      if (contentType && contentType.includes('application/json')) {
+        return await res.json()
+      }
+      return await res.text()
+    } catch (e) {
+      lastError = e
+      if (i < retries) {
+        await new Promise(r => setTimeout(r, 1000 * (i + 1)))
+      }
+    }
+  }
+  
+  throw lastError
 }
 
-export const getDiary = () => api('GET', '/diary')
-export const postDiary = (data) => api('POST', '/diary', data)
-export const putDiary = (id, data) => api('PUT', `/diary/${id}`, data)
-export const deleteDiary = (id) => api('DELETE', `/diary/${id}`)
-export const getShines = () => api('GET', '/shines')
-export const postShine = (data) => api('POST', '/shines', data)
-export const updateShine = (id, data) => api('PUT', `/shines/${id}`, data)
-export const deleteShine = (id) => api('DELETE', `/shines/${id}`)
-export const getTech = () => api('GET', '/tech')
-export const postTech = (data) => api('POST', '/tech', data)
-export const putTechFav = (id) => api('PUT', `/tech/${id}/fav`)
-export const deleteTech = (id) => api('DELETE', `/tech/${id}`)
-export const getGuitar = () => api('GET', '/guitar')
-export const postGuitar = (data) => api('POST', '/guitar', data)
-export const getProgress = () => api('GET', '/progress')
-export const postProgress = (data) => api('POST', '/progress', data)
+// API 方法
+export const api = request
+
+export const getDiary = () => request('GET', '/diary')
+export const postDiary = (data) => request('POST', '/diary', data)
+export const putDiary = (id, data) => request('PUT', `/diary/${id}`, data)
+export const deleteDiary = (id) => request('DELETE', `/diary/${id}`)
+
+export const getShines = () => request('GET', '/shines')
+export const postShine = (data) => request('POST', '/shines', data)
+export const updateShine = (id, data) => request('PUT', `/shines/${id}`, data)
+export const deleteShine = (id) => request('DELETE', `/shines/${id}`)
+
+export const getTech = () => request('GET', '/tech')
+export const postTech = (data) => request('POST', '/tech', data)
+export const putTechFav = (id) => request('PUT', `/tech/${id}/fav`)
+export const deleteTech = (id) => request('DELETE', `/tech/${id}`)
+
+export const getGuitar = () => request('GET', '/guitar')
+export const postGuitar = (data) => request('POST', '/guitar', data)
+
+export const getProgress = () => request('GET', '/progress')
+export const postProgress = (data) => request('POST', '/progress', data)
+
+// 上传文件
+export const uploadFile = (file) => {
+  const formData = new FormData()
+  formData.append('file', file)
+  return request('POST', '/upload', formData)
+}

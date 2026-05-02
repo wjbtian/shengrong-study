@@ -1,47 +1,15 @@
 <template>
-  <div class="english-view">
-    <!-- 顶部英雄区 -->
-    <section class="subject-hero">
-      <div class="subject-hero-main">
-        <div class="subject-hero-icon">🌍</div>
-        <div class="subject-hero-info">
-          <h1 class="subject-hero-title">英语学习</h1>
-          <p class="subject-hero-subtitle">译林版四年级下册 · 8个单元 · 情景式学习</p>
-        </div>
-      </div>
-      <div class="subject-hero-progress">
-        <div class="progress-ring-wrap">
-          <svg viewBox="0 0 120 120" class="progress-ring">
-            <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="8"/>
-            <circle cx="60" cy="60" r="54" fill="none" stroke="#f472b6" stroke-width="8"
-              :stroke-dasharray="339.292"
-              :stroke-dashoffset="339.292 - (339.292 * progressPercent / 100)"
-              stroke-linecap="round"/>
-          </svg>
-          <div class="progress-ring-text">
-            <div class="progress-percent">{{ progressPercent }}%</div>
-          </div>
-        </div>
-        <div class="progress-count">{{ doneCount }} / 8 单元</div>
-      </div>
-    </section>
-
-    <!-- 统计卡片 -->
-    <div class="stats-row">
-      <div class="stat-card">
-        <span class="stat-value">40</span>
-        <span class="stat-label">单词</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-value">16</span>
-        <span class="stat-label">对话</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-value">0</span>
-        <span class="stat-label">听力</span>
-      </div>
-    </div>
-
+  <SubjectLayout
+    icon="🌍"
+    title="英语学习"
+    subtitle="译林版四年级下册 · 8个单元 · 情景式学习"
+    color="#f472b6"
+    :progressPercent="progressPercent"
+    :doneCount="doneCount"
+    :total="8"
+    unitLabel="单元"
+    :stats="[{ value: 40, label: '单词' }, { value: 16, label: '对话' }, { value: 0, label: '听力' }]"
+  >
     <!-- 单元情景 -->
     <section class="scenes-section">
       <div class="section-header">
@@ -123,24 +91,25 @@
         <span class="listening-hint">在微信对话中告诉我听力练习情况</span>
       </div>
     </section>
-  </div>
+  </SubjectLayout>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { getProgress } from '../utils/api.js'
+import { ref } from 'vue'
+import SubjectLayout from '../components/SubjectLayout.vue'
+import { useSubjectProgress } from '../composables/useSubjectProgress.js'
 
-const progress = ref({})
+const { doneCount, progressPercent } = useSubjectProgress('english_', 8)
 
 const scenes = ref([
-  { id: 'en_1', icon: '🏫', title: 'Our School Subjects', desc: '谈论学校课程', completed: false, words: ['Maths', 'English', 'Chinese', 'PE'] },
-  { id: 'en_2', icon: '🕐', title: 'After School', desc: '课后活动安排', completed: false, words: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'] },
-  { id: 'en_3', icon: '🔢', title: 'How Many?', desc: '询问数量', completed: false, words: ['thirteen', 'fourteen', 'fifteen', 'sixteen'] },
-  { id: 'en_4', icon: '📅', title: 'Drawing in the Park', desc: '公园画画', completed: false, words: ['draw', 'park', 'river', 'boat'] },
-  { id: 'en_5', icon: '🌳', title: 'Seasons', desc: '四季变化', completed: false, words: ['spring', 'summer', 'autumn', 'winter'] },
-  { id: 'en_6', icon: '👕', title: 'Whose Dress Is This?', desc: '衣物归属', completed: false, words: ['dress', 'coat', 'shirt', 'sweater'] },
-  { id: 'en_7', icon: '🌡️', title: 'What\'s the Matter?', desc: '询问状况', completed: false, words: ['tired', 'ill', 'hungry', 'thirsty'] },
-  { id: 'en_8', icon: '🏠', title: 'How Are You?', desc: '问候与告别', completed: false, words: ['fine', 'well', 'good', 'bye'] },
+  { id: 'english_1', icon: '🏫', title: 'Our School Subjects', desc: '谈论学校课程', completed: false, words: ['Maths', 'English', 'Chinese', 'PE'] },
+  { id: 'english_2', icon: '🕐', title: 'After School', desc: '课后活动安排', completed: false, words: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'] },
+  { id: 'english_3', icon: '🔢', title: 'How Many?', desc: '询问数量', completed: false, words: ['thirteen', 'fourteen', 'fifteen', 'sixteen'] },
+  { id: 'english_4', icon: '📅', title: 'Drawing in the Park', desc: '公园画画', completed: false, words: ['draw', 'park', 'river', 'boat'] },
+  { id: 'english_5', icon: '🌳', title: 'Seasons', desc: '四季变化', completed: false, words: ['spring', 'summer', 'autumn', 'winter'] },
+  { id: 'english_6', icon: '👕', title: 'Whose Dress Is This?', desc: '衣物归属', completed: false, words: ['dress', 'coat', 'shirt', 'sweater'] },
+  { id: 'english_7', icon: '🌡️', title: 'What\'s the Matter?', desc: '询问状况', completed: false, words: ['tired', 'ill', 'hungry', 'thirsty'] },
+  { id: 'english_8', icon: '🏠', title: 'How Are You?', desc: '问候与告别', completed: false, words: ['fine', 'well', 'good', 'bye'] },
 ])
 
 const vocab = ref([
@@ -175,141 +144,12 @@ const dialogues = ref([
   },
 ])
 
-const doneCount = computed(() => {
-  const done = progress.value?.doneUnits || []
-  return done.filter(u => u.startsWith('english_')).length
-})
-const progressPercent = computed(() => Math.round((doneCount.value / 8) * 100))
-
 function openScene(scene) {
   // 可以展开单元详情
 }
-
-onMounted(async () => {
-  try {
-    progress.value = await getProgress().catch(() => ({}))
-    const done = progress.value?.doneUnits || []
-    scenes.value.forEach(s => {
-      s.completed = done.includes(s.id)
-    })
-  } catch (e) {
-    console.error('加载进度失败:', e)
-  }
-})
 </script>
 
 <style scoped>
-.english-view {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 50px 12px 0;
-  box-sizing: border-box;
-}
-
-/* 英雄区 */
-.subject-hero {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 32px;
-  background: linear-gradient(135deg, rgba(244, 114, 182, 0.08) 0%, rgba(129, 140, 248, 0.05) 100%);
-  border-radius: 16px;
-  border: 1px solid rgba(244, 114, 182, 0.15);
-  margin-bottom: 24px;
-}
-
-.subject-hero-main {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.subject-hero-icon {
-  font-size: 48px;
-}
-
-.subject-hero-title {
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--text);
-  margin-bottom: 4px;
-}
-
-.subject-hero-subtitle {
-  font-size: 14px;
-  color: var(--text2);
-}
-
-.subject-hero-progress {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-
-.progress-ring-wrap {
-  position: relative;
-  width: 100px;
-  height: 100px;
-}
-
-.progress-ring {
-  width: 100px;
-  height: 100px;
-  transform: rotate(-90deg);
-}
-
-.progress-ring circle {
-  transition: stroke-dashoffset 0.5s ease;
-}
-
-.progress-ring-text {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.progress-percent {
-  font-size: 20px;
-  font-weight: 700;
-  color: #f472b6;
-}
-
-.progress-count {
-  font-size: 13px;
-  color: var(--text2);
-}
-
-/* 统计 */
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.stat-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px;
-  text-align: center;
-}
-
-.stat-value {
-  font-size: 32px;
-  font-weight: 700;
-  color: #f472b6;
-}
-
-.stat-label {
-  font-size: 13px;
-  color: var(--text2);
-  margin-top: 4px;
-}
-
 /* 单元情景 */
 .scenes-section {
   background: var(--surface);
@@ -544,11 +384,6 @@ onMounted(async () => {
 }
 
 @media (max-width: 768px) {
-  .subject-hero {
-    flex-direction: column;
-    gap: 20px;
-    text-align: center;
-  }
   .scenes-grid, .vocab-grid {
     grid-template-columns: 1fr;
   }

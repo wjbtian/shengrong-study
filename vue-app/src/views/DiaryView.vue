@@ -38,7 +38,9 @@
           :key="item.mood"
           class="mood-dist-item"
         >
-          <span class="mood-dist-icon" :style="{ color: item.color }">{{ item.mood }}</span>
+          <span class="mood-dist-icon" :style="{ color: item.color }">
+            <MoodIcon :name="getMoodIcon(item.mood)" :color="item.color" />
+          </span>
           <div class="mood-dist-bar-bg">
             <div
               class="mood-dist-bar-fill"
@@ -65,7 +67,9 @@
             :class="{ active: selectedMood === item.mood }"
             @click="selectMood(item.mood)"
           >
-            <span class="mood-wall-icon">{{ item.mood }}</span>
+            <span class="mood-wall-icon">
+            <MoodIcon :name="getMoodIcon(item.mood)" :color="getMoodColor(item.mood)" />
+          </span>
             <span class="mood-wall-date">{{ item.date }}</span>
           </div>
         </div>
@@ -98,7 +102,9 @@
           class="diary-card"
         >
           <div class="diary-card-header">
-            <span class="diary-card-mood" :style="getMoodStyle(item.mood)">{{ item.mood }}</span>
+            <span class="diary-card-mood" :style="getMoodStyle(item.mood)">
+              <MoodIcon :name="getMoodIcon(item.mood)" :color="getMoodColor(item.mood)" />
+            </span>
             <div class="diary-card-actions">
               <span class="diary-card-date">{{ item.date }}</span>
               <button class="diary-action-btn" @click.stop="openEdit(item)" title="编辑">✏️</button>
@@ -132,12 +138,15 @@
         <div class="modal-body">
           <div class="mood-selector">
             <span
-              v-for="m in moods"
-              :key="m"
+              v-for="(m, key) in moodConfig"
+              :key="key"
               class="mood-option"
-              :class="{ selected: newDiary.mood === m }"
-              @click="newDiary.mood = m"
-            >{{ m }}</span>
+              :class="{ selected: newDiary.mood === key }"
+              @click="newDiary.mood = key"
+              :title="m.label"
+            >
+              <MoodIcon :name="m.icon" :color="m.color" />
+            </span>
           </div>
           <input v-model="newDiary.title" class="input" placeholder="标题（可选）">
           <textarea v-model="newDiary.content" class="textarea" rows="6" placeholder="今天发生了什么有趣的事？"></textarea>
@@ -160,12 +169,15 @@
         <div class="modal-body">
           <div class="mood-selector">
             <span
-              v-for="m in moods"
-              :key="m"
+              v-for="(m, key) in moodConfig"
+              :key="key"
               class="mood-option"
-              :class="{ selected: editingDiary?.mood === m }"
-              @click="editingDiary && (editingDiary.mood = m)"
-            >{{ m }}</span>
+              :class="{ selected: editingDiary?.mood === key }"
+              @click="editingDiary && (editingDiary.mood = key)"
+              :title="m.label"
+            >
+              <MoodIcon :name="m.icon" :color="m.color" />
+            </span>
           </div>
           <input v-model="editingDiary.title" class="input" placeholder="标题（可选）">
           <textarea v-model="editingDiary.content" class="textarea" rows="6" placeholder="今天发生了什么有趣的事？"></textarea>
@@ -190,28 +202,61 @@ const editingDiary = ref(null)
 const currentFilter = ref('all')
 const selectedMood = ref(null)
 
-// 心情配置：图标 + 颜色
+// 心情配置：SVG图标 + 颜色
 const moodConfig = {
-  happy:     { icon: '☀️', label: '开心', color: '#fbbf24', bg: 'rgba(251, 191, 36, 0.15)' },
-  good:      { icon: '🌟', label: '不错', color: '#4ade80', bg: 'rgba(74, 222, 128, 0.15)' },
-  awesome:   { icon: '🔥', label: '超棒', color: '#f97316', bg: 'rgba(249, 115, 22, 0.15)' },
-  cool:      { icon: '🚀', label: '酷炫', color: '#818cf8', bg: 'rgba(129, 140, 248, 0.15)' },
-  celebrate: { icon: '🎉', label: '庆祝', color: '#ec4899', bg: 'rgba(236, 72, 153, 0.15)' },
-  calm:      { icon: '🍃', label: '平静', color: '#94a3b8', bg: 'rgba(148, 163, 184, 0.15)' },
-  sad:       { icon: '🌧️', label: '难过', color: '#64748b', bg: 'rgba(100, 116, 139, 0.15)' },
-  cry:       { icon: '💧', label: '伤心', color: '#475569', bg: 'rgba(71, 85, 105, 0.15)' },
-  angry:     { icon: '⚡', label: '生气', color: '#ef4444', bg: 'rgba(239, 68, 68, 0.15)' },
-  tired:     { icon: '🌙', label: '疲惫', color: '#a78bfa', bg: 'rgba(167, 139, 250, 0.15)' }
+  happy:     { icon: 'diary-mood-happy', label: '开心', color: '#fbbf24', bg: 'rgba(251, 191, 36, 0.15)' },
+  good:      { icon: 'diary-mood-good', label: '不错', color: '#4ade80', bg: 'rgba(74, 222, 128, 0.15)' },
+  awesome:   { icon: 'diary-mood-awesome', label: '超棒', color: '#f97316', bg: 'rgba(249, 115, 22, 0.15)' },
+  cool:      { icon: 'diary-mood-cool', label: '酷炫', color: '#818cf8', bg: 'rgba(129, 140, 248, 0.15)' },
+  celebrate: { icon: 'diary-mood-celebrate', label: '庆祝', color: '#ec4899', bg: 'rgba(236, 72, 153, 0.15)' },
+  calm:      { icon: 'diary-mood-calm', label: '平静', color: '#94a3b8', bg: 'rgba(148, 163, 184, 0.15)' },
+  sad:       { icon: 'diary-mood-sad', label: '难过', color: '#64748b', bg: 'rgba(100, 116, 139, 0.15)' },
+  cry:       { icon: 'diary-mood-cry', label: '伤心', color: '#475569', bg: 'rgba(71, 85, 105, 0.15)' },
+  angry:     { icon: 'diary-mood-angry', label: '生气', color: '#ef4444', bg: 'rgba(239, 68, 68, 0.15)' },
+  tired:     { icon: 'diary-mood-tired', label: '疲惫', color: '#a78bfa', bg: 'rgba(167, 139, 250, 0.15)' }
 }
 
 const moodKeys = Object.keys(moodConfig)
 const moods = moodKeys.map(k => moodConfig[k].icon)
 
+// 心情图标组件 - 使用 emoji 但带颜色样式
+const MoodIcon = {
+  props: ['name', 'color'],
+  setup(props) {
+    const emojiMap = {
+      'diary-mood-happy': '☀️',
+      'diary-mood-good': '🌟',
+      'diary-mood-awesome': '🔥',
+      'diary-mood-cool': '🚀',
+      'diary-mood-celebrate': '🎉',
+      'diary-mood-calm': '🍃',
+      'diary-mood-sad': '🌧️',
+      'diary-mood-cry': '💧',
+      'diary-mood-angry': '⚡',
+      'diary-mood-tired': '🌙',
+    }
+    return () => emojiMap[props.name] || '✨'
+  }
+}
+
 const newDiary = ref({
-  mood: moodConfig.good.icon,
+  mood: 'good',
   title: '',
   content: '',
   tags: ''
+})
+
+// 心情分布
+const moodDistribution = computed(() => {
+  const stats = {}
+  diary.value.forEach(d => { if (d.mood) stats[d.mood] = (stats[d.mood] || 0) + 1 })
+  const total = Object.values(stats).reduce((a, b) => a + b, 0)
+  return Object.entries(stats)
+    .map(([mood, count]) => {
+      const cfg = moodConfig[mood] || { color: '#94a3b8', bg: 'rgba(148, 163, 184, 0.15)' }
+      return { mood, count, percent: total ? Math.round((count / total) * 100) : 0, color: cfg.color }
+    })
+    .sort((a, b) => b.count - a.count)
 })
 
 // 分页
@@ -230,24 +275,13 @@ const hasMore = computed(() => {
 
 const filters = [
   { value: 'all', label: '全部' },
-  { value: '☀️', label: '☀️ 开心' },
-  { value: '🔥', label: '🔥 超棒' },
-  { value: '🌟', label: '🌟 不错' },
-  { value: '🌧️', label: '🌧️ 难过' },
+  { value: 'happy', label: '开心' },
+  { value: 'awesome', label: '超棒' },
+  { value: 'good', label: '不错' },
+  { value: 'sad', label: '难过' },
 ]
 
-// 心情分布
-const moodDistribution = computed(() => {
-  const stats = {}
-  diary.value.forEach(d => { if (d.mood) stats[d.mood] = (stats[d.mood] || 0) + 1 })
-  const total = Object.values(stats).reduce((a, b) => a + b, 0)
-  return Object.entries(stats)
-    .map(([mood, count]) => {
-      const cfg = Object.values(moodConfig).find(m => m.icon === mood) || { color: '#94a3b8', bg: 'rgba(148, 163, 184, 0.15)' }
-      return { mood, count, percent: total ? Math.round((count / total) * 100) : 0, color: cfg.color }
-    })
-    .sort((a, b) => b.count - a.count)
-})
+
 
 // 心情墙
 const moodWallItems = computed(() => {
@@ -299,8 +333,8 @@ function selectMood(mood) {
   selectedMood.value = selectedMood.value === mood ? null : mood
 }
 
-function getMoodStyle(moodIcon) {
-  const cfg = Object.values(moodConfig).find(m => m.icon === moodIcon)
+function getMoodStyle(moodKey) {
+  const cfg = moodConfig[moodKey]
   if (!cfg) return {}
   return {
     color: cfg.color,
@@ -311,10 +345,19 @@ function getMoodStyle(moodIcon) {
   }
 }
 
-function getMoodLabel(icon) {
-  const cfg = Object.values(moodConfig).find(m => m.icon === icon)
-  return cfg ? cfg.label : ''
+function getMoodIcon(moodKey) {
+  return moodConfig[moodKey]?.icon || 'diary-mood-good'
 }
+
+function getMoodColor(moodKey) {
+  return moodConfig[moodKey]?.color || '#4ade80'
+}
+
+function getMoodLabel(moodKey) {
+  return moodConfig[moodKey]?.label || ''
+}
+
+
 
 async function saveDiary() {
   if (!newDiary.value.content.trim()) return
@@ -324,13 +367,14 @@ async function saveDiary() {
     date: new Date().toISOString().split('T')[0]
   }
   try {
-    await postDiary(data)
-    diary.value.unshift(data)
+    const result = await postDiary(data)
+    diary.value.unshift({ ...data, id: result.id || Date.now() })
     showWriteModal.value = false
-    newDiary.value = { mood: moodConfig.good.icon, title: '', content: '', tags: '' }
+    newDiary.value = { mood: 'good', title: '', content: '', tags: '' }
     currentPage.value = 1 // 重置到第一页
   } catch (e) {
     console.error('保存日记失败:', e)
+    alert('保存失败，请重试')
   }
 }
 

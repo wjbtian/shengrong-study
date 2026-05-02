@@ -1,47 +1,15 @@
 <template>
-  <div class="math-view">
-    <!-- 顶部英雄区 -->
-    <section class="subject-hero">
-      <div class="subject-hero-main">
-        <div class="subject-hero-icon">🔢</div>
-        <div class="subject-hero-info">
-          <h1 class="subject-hero-title">数学学习</h1>
-          <p class="subject-hero-subtitle">苏教版四年级下册 · 8个单元 · 思维导图式学习</p>
-        </div>
-      </div>
-      <div class="subject-hero-progress">
-        <div class="progress-ring-wrap">
-          <svg viewBox="0 0 120 120" class="progress-ring">
-            <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="8"/>
-            <circle cx="60" cy="60" r="54" fill="none" stroke="#60a5fa" stroke-width="8"
-              :stroke-dasharray="339.292"
-              :stroke-dashoffset="339.292 - (339.292 * progressPercent / 100)"
-              stroke-linecap="round"/>
-          </svg>
-          <div class="progress-ring-text">
-            <div class="progress-percent">{{ progressPercent }}%</div>
-          </div>
-        </div>
-        <div class="progress-count">{{ doneCount }} / 8 单元</div>
-      </div>
-    </section>
-
-    <!-- 统计卡片 -->
-    <div class="stats-row">
-      <div class="stat-card">
-        <span class="stat-value">16</span>
-        <span class="stat-label">公式</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-value">0</span>
-        <span class="stat-label">错题</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-value">0</span>
-        <span class="stat-label">练习</span>
-      </div>
-    </div>
-
+  <SubjectLayout
+    icon="🔢"
+    title="数学学习"
+    subtitle="苏教版四年级下册 · 8个单元 · 思维导图式学习"
+    color="#60a5fa"
+    :progressPercent="progressPercent"
+    :doneCount="doneCount"
+    :total="8"
+    unitLabel="单元"
+    :stats="[{ value: 16, label: '公式' }, { value: 0, label: '错题' }, { value: 0, label: '练习' }]"
+  >
     <!-- 知识网络 -->
     <section class="mindmap-section">
       <div class="section-header">
@@ -97,14 +65,15 @@
         <span class="mistake-hint">在微信对话中发送错题照片，我会帮你记录</span>
       </div>
     </section>
-  </div>
+  </SubjectLayout>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { getProgress } from '../utils/api.js'
+import { ref } from 'vue'
+import SubjectLayout from '../components/SubjectLayout.vue'
+import { useSubjectProgress } from '../composables/useSubjectProgress.js'
 
-const progress = ref({})
+const { doneCount, progressPercent } = useSubjectProgress('math_', 8)
 
 const mindmapNodes = ref([
   { id: 1, icon: '🔢', title: '计算器', expanded: false, children: ['认识计算器', '用计算器计算', '探索规律'] },
@@ -125,134 +94,9 @@ const formulas = ref([
   { name: '乘法分配律', expr: '(a + b) × c = a × c + b × c', desc: '两个数的和与一个数相乘，可以先把它们与这个数分别相乘，再相加' },
   { name: '三角形内角和', expr: '∠A + ∠B + ∠C = 180°', desc: '任意三角形的三个内角之和等于180度' },
 ])
-
-const doneCount = computed(() => {
-  const done = progress.value?.doneUnits || []
-  return done.filter(u => u.startsWith('math_')).length
-})
-const progressPercent = computed(() => Math.round((doneCount.value / 8) * 100))
-
-onMounted(async () => {
-  try {
-    progress.value = await getProgress().catch(() => ({}))
-  } catch (e) {
-    console.error('加载进度失败:', e)
-  }
-})
 </script>
 
 <style scoped>
-.math-view {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 50px 12px 0;
-  box-sizing: border-box;
-}
-
-/* 英雄区 */
-.subject-hero {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 32px;
-  background: linear-gradient(135deg, rgba(96, 165, 250, 0.08) 0%, rgba(129, 140, 248, 0.05) 100%);
-  border-radius: 16px;
-  border: 1px solid rgba(96, 165, 250, 0.15);
-  margin-bottom: 24px;
-}
-
-.subject-hero-main {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.subject-hero-icon {
-  font-size: 48px;
-}
-
-.subject-hero-title {
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--text);
-  margin-bottom: 4px;
-}
-
-.subject-hero-subtitle {
-  font-size: 14px;
-  color: var(--text2);
-}
-
-.subject-hero-progress {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-
-.progress-ring-wrap {
-  position: relative;
-  width: 100px;
-  height: 100px;
-}
-
-.progress-ring {
-  width: 100px;
-  height: 100px;
-  transform: rotate(-90deg);
-}
-
-.progress-ring circle {
-  transition: stroke-dashoffset 0.5s ease;
-}
-
-.progress-ring-text {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.progress-percent {
-  font-size: 20px;
-  font-weight: 700;
-  color: #60a5fa;
-}
-
-.progress-count {
-  font-size: 13px;
-  color: var(--text2);
-}
-
-/* 统计 */
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.stat-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px;
-  text-align: center;
-}
-
-.stat-value {
-  font-size: 32px;
-  font-weight: 700;
-  color: #60a5fa;
-}
-
-.stat-label {
-  font-size: 13px;
-  color: var(--text2);
-  margin-top: 4px;
-}
-
 /* 知识网络 */
 .mindmap-section {
   background: var(--surface);
@@ -421,11 +265,6 @@ onMounted(async () => {
 }
 
 @media (max-width: 768px) {
-  .subject-hero {
-    flex-direction: column;
-    gap: 20px;
-    text-align: center;
-  }
   .mindmap-grid, .formula-grid {
     grid-template-columns: 1fr;
   }

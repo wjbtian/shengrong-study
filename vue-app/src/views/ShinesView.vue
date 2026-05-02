@@ -49,13 +49,12 @@
         v-for="item in filteredShines"
         :key="item.id"
         class="photo-card"
-        @click="openLightbox(item)"
       >
-        <div class="photo-placeholder">
+        <div class="photo-placeholder" @click="openLightbox(item)">
           <img v-if="item.photoUrl" :src="item.photoUrl" class="photo-img" alt="">
           <span v-else class="photo-icon">{{ categoryIcon(item.category) }}</span>
         </div>
-        <div class="photo-info">
+        <div class="photo-info" @click="openLightbox(item)">
           <h4 class="photo-title">{{ item.title }}</h4>
           <p class="photo-date">{{ item.date }}</p>
           <p v-if="item.desc" class="photo-desc">{{ item.desc }}</p>
@@ -64,19 +63,19 @@
           <button
             class="photo-fav"
             :class="{ active: item.fav }"
-            @click.stop="toggleFav(item)"
+            @click.prevent="toggleFav(item)"
           >
             {{ item.fav ? '⭐' : '☆' }}
           </button>
           <button
             class="photo-edit"
-            @click.stop="openEditModal(item)"
+            @click.prevent="openEditModal(item)"
           >
             ✏️
           </button>
           <button
             class="photo-delete"
-            @click.stop="confirmDelete(item)"
+            @click.prevent="confirmDelete(item)"
           >
             🗑️
           </button>
@@ -168,6 +167,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { getShines, postShine, deleteShine, updateShine } from '../utils/api.js'
+import { uploadFile } from '../utils/upload.js'
 
 const shines = ref([])
 const showAddModal = ref(false)
@@ -208,7 +208,8 @@ const editShine = ref({
   title: '',
   category: 'other',
   desc: '',
-  photo: null
+  photo: null,
+  photoUrl: ''
 })
 
 const filteredShines = computed(() => {
@@ -250,7 +251,8 @@ function openEditModal(item) {
     title: item.title,
     category: item.category,
     desc: item.desc || '',
-    photo: null
+    photo: null,
+    photoUrl: item.photoUrl || ''
   }
   showEditModal.value = true
 }
@@ -258,10 +260,18 @@ function openEditModal(item) {
 async function saveEdit() {
   if (!editShine.value.title.trim()) return
   try {
+    let photoUrl = editShine.value.photoUrl || ''
+    
+    // 如果有新图片，先上传
+    if (editShine.value.photo) {
+      photoUrl = await uploadFile(editShine.value.photo, 'image')
+    }
+    
     const data = {
       title: editShine.value.title,
       category: editShine.value.category,
-      desc: editShine.value.desc
+      desc: editShine.value.desc,
+      photoUrl: photoUrl
     }
     
     // 调用 API 更新
@@ -273,7 +283,7 @@ async function saveEdit() {
       shines.value[idx] = { ...shines.value[idx], ...data }
     }
     showEditModal.value = false
-    editShine.value = { id: null, title: '', category: 'other', desc: '', photo: null }
+    editShine.value = { id: null, title: '', category: 'other', desc: '', photo: null, photoUrl: '' }
   } catch (e) {
     console.error('编辑失败:', e)
     alert('编辑失败，请重试')
@@ -282,23 +292,43 @@ async function saveEdit() {
 
 async function saveShine() {
   if (!newShine.value.title.trim()) return
-  const data = {
-    ...newShine.value,
-    date: new Date().toISOString().split('T')[0],
-    fav: false
-  }
+  
   try {
-    await postShine(data)
-    shines.value.unshift(data)
+    let photoUrl = ''
+    
+    // 如果有图片，先上传
+    if (newShine.value.photo) {
+      photoUrl = await uploadFile(newShine.value.photo, 'image')
+    }
+    
+    const data = {
+      title: newShine.value.title,
+      category: newShine.value.category,
+      desc: newShine.value.desc,
+      photoUrl: photoUrl,
+      date: new Date().toISOString().split('T')[0],
+      fav: false
+    }
+    
+    const result = await postShine(data)
+    shines.value.unshift({ ...data, id: result.id || Date.now() })
     showAddModal.value = false
     newShine.value = { title: '', category: 'other', desc: '', photo: null }
   } catch (e) {
     console.error('保存失败:', e)
+    alert('保存失败，请重试')
   }
 }
 
-function toggleFav(item) {
-  item.fav = !item.fav
+async function toggleFav(item) {
+  const newFav = !item.fav
+  try {
+    await updateShine(item.id, { fav: newFav })
+    item.fav = newFav
+  } catch (e) {
+    console.error('更新收藏失败:', e)
+    alert('更新失败，请重试')
+  }
 }
 
 function openLightbox(item) {
@@ -459,7 +489,6 @@ onMounted(async () => {
   border: 1px solid var(--border);
   border-radius: 12px;
   overflow: hidden;
-  cursor: pointer;
   transition: all 0.2s;
   position: relative;
 }
@@ -476,6 +505,7 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .photo-img {
@@ -495,6 +525,7 @@ onMounted(async () => {
 
 .photo-info {
   padding: 14px;
+  cursor: pointer;
 }
 
 .photo-title {

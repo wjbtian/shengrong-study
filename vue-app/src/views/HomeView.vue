@@ -334,9 +334,13 @@ const latestGuitarVideo = computed(() => {
 const selectedPhoto = ref(null)
 const showPhotoSelector = ref(false)
 const editingPhotoIndex = ref(null)
+const photoWallRefreshKey = ref(0)
 
 // 从闪光时刻取前6个填充照片墙
 const displayPhotos = computed(() => {
+  // 使用 refreshKey 强制重新计算
+  photoWallRefreshKey.value
+  
   const photos = []
   const customWall = JSON.parse(localStorage.getItem('customPhotoWall') || '[]')
 
@@ -392,15 +396,6 @@ function openPhotoSelector(index) {
 function selectShineForWall(shine) {
   if (editingPhotoIndex.value === null) return
   
-  // 更新本地数据，触发响应式更新
-  const idx = shines.value.findIndex(s => s.id === shine.id)
-  if (idx !== -1) {
-    // 确保该闪光时刻在数组前面，这样照片墙会显示它
-    const item = shines.value[idx]
-    shines.value.splice(idx, 1)
-    shines.value.unshift(item)
-  }
-  
   // 保存到 localStorage
   const customWall = JSON.parse(localStorage.getItem('customPhotoWall') || '[]')
   customWall[editingPhotoIndex.value] = {
@@ -410,6 +405,10 @@ function selectShineForWall(shine) {
     date: shine.date
   }
   localStorage.setItem('customPhotoWall', JSON.stringify(customWall))
+  
+  // 强制刷新 computed 属性
+  photoWallRefreshKey.value++
+  
   showPhotoSelector.value = false
   editingPhotoIndex.value = null
 }
