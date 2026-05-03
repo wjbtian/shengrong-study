@@ -387,9 +387,20 @@ function openLightbox(item) {
 }
 
 function getPhotos(item) {
+  if (!item) return []
+  
+  let photosData = item.photos
+  
+  // 🚨 容错：后端返回的是 JSON 字符串，自己解析
+  if (typeof photosData === 'string' && photosData.startsWith('[')) {
+    try {
+      photosData = JSON.parse(photosData)
+    } catch (e) {}
+  }
+  
   // 情况1: 新数据 - photos 数组
-  if (item.photos && Array.isArray(item.photos) && item.photos.length > 0) {
-    return item.photos.filter(p => p && p !== 'pending_migration')
+  if (photosData && Array.isArray(photosData) && photosData.length > 0) {
+    return photosData.filter(p => p && p !== 'pending_migration')
   }
   // 情况2: 旧数据 - photoUrl 单个图片
   if (item.photoUrl) {
@@ -444,6 +455,10 @@ async function doDelete() {
 onMounted(async () => {
   try {
     shines.value = await getShines().catch(() => [])
+    console.log('✅ 加载数据完成，共', shines.value.length, '条')
+    shines.value.forEach((item, i) => {
+      console.log('  ', i + 1, item.title, 'photos:', getPhotos(item))
+    })
   } catch (e) {
     console.error('加载闪光时刻失败:', e)
   }

@@ -135,8 +135,12 @@ function startServer() {
         // 新数据：photos JSON 数组
         if (r.photos) {
           try {
-            const photos = JSON.parse(r.photos);
-            r.photos = photos.map(p => p.startsWith('http') || p.startsWith('/') ? p : `/uploads/${p}`);
+            // 数据库是 JSON 字符串，需要解析
+            const photoData = typeof r.photos === 'string' ? JSON.parse(r.photos) : r.photos;
+            r.photos = photoData.map(p => {
+              if (!p) return null;
+              return p.startsWith('http') || p.startsWith('/') ? p : `/uploads/${p}`;
+            }).filter(Boolean);
           } catch (e) {
             r.photos = [r.photoUrl || ''].filter(Boolean);
           }
