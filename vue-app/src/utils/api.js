@@ -1,4 +1,4 @@
-const API_BASE = ''
+const API_BASE = 'http://localhost:3200'
 
 // 统一的请求处理
 async function request(method, path, data, options = {}) {

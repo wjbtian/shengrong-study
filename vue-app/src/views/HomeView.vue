@@ -415,9 +415,10 @@ async function selectShineForWall(shine) {
     console.log('正在保存照片墙配置:', newConfig)
     const result = await savePhotoWall(newConfig)
     console.log('保存照片墙配置成功:', result)
+    alert('保存成功！')
   } catch (e) {
     console.error('保存照片墙配置失败:', e)
-    alert('保存失败: ' + e.message)
+    alert('保存失败: ' + e.message + '\n请检查网络连接')
   }
   
   // 强制刷新 computed 属性
