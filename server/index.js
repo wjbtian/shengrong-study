@@ -68,6 +68,20 @@ function startServer() {
   }
   app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+  // ===== 通用上传 API =====
+  app.post('/api/upload', upload.single('file'), (req, res) => {
+    try {
+      if (!req.file) return res.status(400).json({ error: '没有收到文件' });
+      const type = req.body.type || 'image';
+      const subDir = type === 'video' ? 'videos' : 'images';
+      // multer 已经把文件存到 uploads/ 目录了
+      const url = `/uploads/${req.file.filename}`;
+      res.json({ url, photoUrl: url, videoUrl: type === 'video' ? url : '', filename: req.file.filename });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
   // ===== 日记 API =====
   app.get('/api/diary', (req, res) => {
     try {
