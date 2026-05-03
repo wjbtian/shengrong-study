@@ -138,28 +138,38 @@ function startServer() {
     }
   });
 
-  app.post('/api/shines', upload.single('photo'), (req, res) => {
+  app.post('/api/shines', (req, res, next) => {
+    // 如果是 JSON 请求，跳过 multer，直接处理
+    if (req.is('application/json')) {
+      return handleShinesCreate(req, res);
+    }
+    // multipart 表单，用 multer 处理
+    upload.single('photo')(req, res, (err) => {
+      if (err) return res.status(500).json({ error: err.message });
+      handleShinesCreate(req, res);
+    });
+  });
+
+  function handleShinesCreate(req, res) {
     try {
-      // 支持两种方式：1) multipart 表单上传 2) JSON + photoUrl
       let title, type, icon, description, date, photo;
       
-      if (req.is('multipart/form-data') || req.file) {
-        // 旧方式：multipart 表单
+      if (req.file) {
+        // multipart 表单方式
         title = req.body.title;
         type = req.body.type;
         icon = req.body.icon;
         description = req.body.description;
         date = req.body.date;
-        photo = req.file ? req.file.filename : null;
+        photo = req.file.filename;
       } else {
-        // 新方式：JSON body，图片已通过 /api/upload 单独上传
+        // JSON 方式，图片已通过 /api/upload 单独上传
         const body = req.body;
         title = body.title;
         type = body.category || body.type;
         icon = body.category || body.type;
         description = body.desc || body.description;
         date = body.date;
-        // photoUrl 格式如 /uploads/xxx.jpg，提取文件名存入 photo 字段
         if (body.photoUrl) {
           photo = body.photoUrl.replace('/uploads/', '');
         } else {
@@ -172,9 +182,10 @@ function startServer() {
       ).run(title, type || '📸 照片', icon || '📸', description || '', date, photo);
       res.json({ id: result.lastInsertRowid, ok: true });
     } catch (e) {
+      console.error('shines create error:', e);
       res.status(500).json({ error: e.message });
     }
-  });
+  }
 
   app.delete('/api/shines/:id', (req, res) => {
     try {
@@ -264,21 +275,31 @@ function startServer() {
     }
   });
 
-  app.post('/api/guitar', upload.single('video'), (req, res) => {
+  app.post('/api/guitar', (req, res, next) => {
+    if (req.is('application/json')) {
+      return handleGuitarCreate(req, res);
+    }
+    upload.single('video')(req, res, (err) => {
+      if (err) return res.status(500).json({ error: err.message });
+      handleGuitarCreate(req, res);
+    });
+  });
+
+  function handleGuitarCreate(req, res) {
     try {
       let title, notes, date, duration, bpm, key_sig, videoPath;
       
-      if (req.is('multipart/form-data') || req.file) {
-        // 旧方式：multipart 表单
+      if (req.file) {
+        // multipart 方式
         title = req.body.title;
         notes = req.body.notes;
         date = req.body.date;
         duration = req.body.duration;
         bpm = req.body.bpm;
         key_sig = req.body.key_sig;
-        videoPath = req.file ? req.file.filename : null;
+        videoPath = req.file.filename;
       } else {
-        // 新方式：JSON body，视频已通过 /api/upload 单独上传
+        // JSON 方式
         const body = req.body;
         title = body.title;
         notes = body.notes || '';
@@ -298,9 +319,10 @@ function startServer() {
       ).run(title, videoPath, duration || null, bpm || null, key_sig || null, notes || '', date);
       res.json({ id: result.lastInsertRowid, ok: true });
     } catch (e) {
+      console.error('guitar create error:', e);
       res.status(500).json({ error: e.message });
     }
-  });
+  }
 
   app.delete('/api/guitar/:id', (req, res) => {
     try {
