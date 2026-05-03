@@ -359,7 +359,8 @@ async function saveShine() {
     }
     
     const result = await postShine(data)
-    shines.value.unshift({ ...data, id: result.id || Date.now() })
+    // 保存成功后重新拉取数据，保证 photos 格式正确
+    shines.value = await getShines().catch(() => [])
     showAddModal.value = false
     newShine.value = { title: '', category: 'other', desc: '', photos: [] }
   } catch (e) {
@@ -386,11 +387,17 @@ function openLightbox(item) {
 }
 
 function getPhotos(item) {
-  if (item.photos && Array.isArray(item.photos)) {
-    return item.photos
+  // 情况1: 新数据 - photos 数组
+  if (item.photos && Array.isArray(item.photos) && item.photos.length > 0) {
+    return item.photos.filter(p => p && p !== 'pending_migration')
   }
+  // 情况2: 旧数据 - photoUrl 单个图片
   if (item.photoUrl) {
     return [item.photoUrl]
+  }
+  // 情况3: 旧数据 - photo 字段
+  if (item.photo && item.photo !== 'pending_migration') {
+    return [item.photo.startsWith('/') ? item.photo : `/uploads/${item.photo}`]
   }
   return []
 }
