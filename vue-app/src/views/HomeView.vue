@@ -412,9 +412,12 @@ async function selectShineForWall(shine) {
   
   // 保存到服务器
   try {
-    await savePhotoWall(newConfig)
+    console.log('正在保存照片墙配置:', newConfig)
+    const result = await savePhotoWall(newConfig)
+    console.log('保存照片墙配置成功:', result)
   } catch (e) {
     console.error('保存照片墙配置失败:', e)
+    alert('保存失败: ' + e.message)
   }
   
   // 强制刷新 computed 属性
@@ -719,10 +722,13 @@ onMounted(async () => {
     progress.value = p
     
     // 加载照片墙配置（优先使用服务器数据，否则用 localStorage）
+    console.log('照片墙服务器数据:', wall)
     if (wall && wall.config && wall.config.length > 0) {
       photoWallConfig.value = wall.config
+      console.log('使用服务器照片墙配置:', wall.config)
     } else {
       const localConfig = JSON.parse(localStorage.getItem('customPhotoWall') || '[]')
+      console.log('照片墙本地配置:', localConfig)
       if (localConfig.length > 0) {
         photoWallConfig.value = localConfig
       }
