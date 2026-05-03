@@ -351,6 +351,31 @@ function startServer() {
     }
   });
 
+  // ===== 照片墙配置 API =====
+  app.get('/api/photo-wall', (req, res) => {
+    try {
+      const row = db.prepare('SELECT config FROM photo_wall WHERE id = 1').get();
+      res.json({ config: row ? JSON.parse(row.config) : [] });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  app.post('/api/photo-wall', (req, res) => {
+    try {
+      const { config } = req.body;
+      const exists = db.prepare('SELECT id FROM photo_wall WHERE id = 1').get();
+      if (exists) {
+        db.prepare('UPDATE photo_wall SET config = ? WHERE id = 1').run(JSON.stringify(config));
+      } else {
+        db.prepare('INSERT INTO photo_wall (id, config) VALUES (1, ?)').run(JSON.stringify(config));
+      }
+      res.json({ ok: true });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
   // SPA fallback
   app.get('*', (req, res) => {
     const distIndex = path.join(__dirname, '..', 'client', 'dist', 'index.html');

@@ -309,7 +309,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { getDiary, getShines, getGuitar, getTech, getProgress } from '../utils/api.js'
+import { getDiary, getShines, getGuitar, getTech, getProgress, getPhotoWall, savePhotoWall } from '../utils/api.js'
 const router = useRouter()
 
 const diary = ref([])
@@ -335,6 +335,7 @@ const selectedPhoto = ref(null)
 const showPhotoSelector = ref(false)
 const editingPhotoIndex = ref(null)
 const photoWallRefreshKey = ref(0)
+const photoWallConfig = ref([])
 
 // 从闪光时刻取前6个填充照片墙
 const displayPhotos = computed(() => {
@@ -342,7 +343,7 @@ const displayPhotos = computed(() => {
   photoWallRefreshKey.value
   
   const photos = []
-  const customWall = JSON.parse(localStorage.getItem('customPhotoWall') || '[]')
+  const customWall = photoWallConfig.value.length > 0 ? photoWallConfig.value : JSON.parse(localStorage.getItem('customPhotoWall') || '[]')
 
   // 先用用户自定义的照片
   for (let i = 0; i < 6; i++) {
@@ -393,18 +394,28 @@ function openPhotoSelector(index) {
   showPhotoSelector.value = true
 }
 
-function selectShineForWall(shine) {
+async function selectShineForWall(shine) {
   if (editingPhotoIndex.value === null) return
   
-  // 保存到 localStorage
-  const customWall = JSON.parse(localStorage.getItem('customPhotoWall') || '[]')
-  customWall[editingPhotoIndex.value] = {
+  // 更新配置
+  const newConfig = [...photoWallConfig.value]
+  newConfig[editingPhotoIndex.value] = {
     id: shine.id,
     title: shine.title,
     photoUrl: shine.photoUrl || shine.url || '',
     date: shine.date
   }
-  localStorage.setItem('customPhotoWall', JSON.stringify(customWall))
+  photoWallConfig.value = newConfig
+  
+  // 同时保存到 localStorage 作为备份
+  localStorage.setItem('customPhotoWall', JSON.stringify(newConfig))
+  
+  // 保存到服务器
+  try {
+    await savePhotoWall(newConfig)
+  } catch (e) {
+    console.error('保存照片墙配置失败:', e)
+  }
   
   // 强制刷新 computed 属性
   photoWallRefreshKey.value++
@@ -693,18 +704,29 @@ const recentShines = computed(() => shines.value.slice(0, 3))
 
 onMounted(async () => {
   try {
-    const [d, s, g, t, p] = await Promise.all([
+    const [d, s, g, t, p, wall] = await Promise.all([
       getDiary().catch(() => []),
       getShines().catch(() => []),
       getGuitar().catch(() => []),
       getTech().catch(() => []),
-      getProgress().catch(() => ({}))
+      getProgress().catch(() => ({})),
+      getPhotoWall().catch(() => ({ config: [] }))
     ])
     diary.value = d
     shines.value = s
     guitar.value = g
     tech.value = t
     progress.value = p
+    
+    // 加载照片墙配置（优先使用服务器数据，否则用 localStorage）
+    if (wall && wall.config && wall.config.length > 0) {
+      photoWallConfig.value = wall.config
+    } else {
+      const localConfig = JSON.parse(localStorage.getItem('customPhotoWall') || '[]')
+      if (localConfig.length > 0) {
+        photoWallConfig.value = localConfig
+      }
+    }
   } catch (e) {
     console.error('加载首页数据失败:', e)
   }

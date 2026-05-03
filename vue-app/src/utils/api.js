@@ -68,6 +68,10 @@ export const postGuitar = (data) => request('POST', '/guitar', data)
 export const getProgress = () => request('GET', '/progress')
 export const postProgress = (data) => request('POST', '/progress', data)
 
+// 照片墙配置
+export const getPhotoWall = () => request('GET', '/photo-wall')
+export const savePhotoWall = (config) => request('POST', '/photo-wall', { config })
+
 // 上传文件
 export const uploadFile = async (file, type = 'image') => {
   if (!file) return ''

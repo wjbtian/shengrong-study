@@ -89,6 +89,14 @@ function initDB() {
     )
   `);
 
+  // 照片墙配置表
+  database.exec(`
+    CREATE TABLE IF NOT EXISTS photo_wall (
+      id INTEGER PRIMARY KEY CHECK (id = 1),
+      config TEXT NOT NULL DEFAULT '[]'
+    )
+  `);
+
   console.log('✅ 数据库初始化完成');
   return database;
 }
