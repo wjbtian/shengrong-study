@@ -1,310 +1,167 @@
 <template>
   <div class="home-view">
-    <!-- 3D欢迎动画（已移到App.vue） -->
-    <!-- <Welcome3D :showWelcome="showWelcome" @skip="skipWelcome" /> -->
+    <!-- 左右分栏大容器 -->
+    <div class="home-split-layout">
 
-    <!-- 顶部欢迎区 -->
-    <section class="hero-section">
-      <div class="hero-content">
-        <h1 class="greeting">{{ greeting }}，永远的神！</h1>
-        <p class="today-date">{{ todayDate }}</p>
-        <div class="daily-quote" v-if="dailyQuote">
-          <span class="quote-mark">"</span>
-          <span class="quote-text">{{ dailyQuote.text }}</span>
-          <span class="quote-author">—— {{ dailyQuote.author }}</span>
-        </div>
-      </div>
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <span class="hero-stat-value">{{ stats.diary }}</span>
-          <span class="hero-stat-label">日记</span>
-        </div>
-        <div class="hero-stat">
-          <span class="hero-stat-value">{{ stats.shines }}</span>
-          <span class="hero-stat-label">闪光</span>
-        </div>
-        <div class="hero-stat">
-          <span class="hero-stat-value">{{ stats.guitar }}</span>
-          <span class="hero-stat-label">吉他</span>
-        </div>
-        <div class="hero-stat">
-          <span class="hero-stat-value">{{ unlockedBadges }}</span>
-          <span class="hero-stat-label">徽章</span>
-        </div>
-      </div>
-    </section>
+      <!-- ===== 【左栏】徽章 + 吉他 ===== -->
+      <div class="home-left-col">
 
-    <!-- 今日任务 + 学习进度 -->
-    <div class="two-column">
-      <!-- 左：今日任务 -->
-      <section class="tasks-section">
-        <div class="section-header">
-          <h2>📋 今日任务</h2>
-          <span class="task-progress">{{ completedTasks }}/{{ tasks.length }}</span>
-        </div>
-        <div class="task-list">
-          <div
-            v-for="task in tasks"
-            :key="task.id"
-            class="task-item"
-            :class="{ completed: task.completed }"
-            @click="toggleTask(task.id)"
-          >
-            <div class="task-checkbox" :class="{ checked: task.completed }">
-              <svg v-if="task.completed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            </div>
-            <span class="task-text">{{ task.text }}</span>
-            <span class="task-tag" :class="task.category">{{ task.category }}</span>
+        <!-- 成就徽章 -->
+        <section class="badges-section">
+          <div class="section-header">
+            <h2> 成就徽章</h2>
+            <span class="badge-count">{{ unlockedBadges }}/{{ badges.length }}</span>
           </div>
-        </div>
-        <div v-if="allTasksDone" class="tasks-celebrate">
-          🎉 太棒了！今日任务全部完成！
-        </div>
-      </section>
-
-      <!-- 右：学习进度 -->
-      <section class="progress-section">
-        <div class="section-header">
-          <h2>📚 学习进度</h2>
-        </div>
-        <div class="progress-list">
-          <div v-for="subject in subjects" :key="subject.key" class="progress-item">
-            <div class="progress-info">
-              <span class="progress-icon">{{ subject.icon }}</span>
-              <span class="progress-name">{{ subject.name }}</span>
-              <span class="progress-fraction">{{ subject.completed }}/{{ subject.total }}</span>
+          <div class="badges-grid">
+            <div
+              v-for="badge in badges.slice(0, 8)"
+              :key="badge.id"
+              class="badge-item"
+              :class="{ unlocked: badge.unlocked, mystery: badge.isMystery }"
+              :title="badge.desc"
+            >
+              <div class="badge-glow" v-if="badge.unlocked"></div>
+              <div class="badge-icon">{{ badge.icon }}</div>
+              <div class="badge-name">{{ badge.name }}</div>
             </div>
-            <div class="progress-bar-bg">
+          </div>
+        </section>
+
+        <!-- 吉他视频 -->
+        <section class="guitar-video-section">
+          <div class="section-header">
+            <h2>🎸 吉他演奏</h2>
+            <button class="btn-text" @click="$router.push('/guitar')">查看全部 →</button>
+          </div>
+          <div class="video-container" style="margin-top: 12px;">
+            <video
+              v-if="latestGuitarVideo"
+              ref="guitarVideo"
+              :src="latestGuitarVideo.url"
+              controls
+              muted
+              class="video-player"
+            ></video>
+            <div v-else class="empty-video">
+              <span class="empty-icon">🎸</span>
+              <p>还没有上传演奏视频</p>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ===== 【右栏】Hero + 任务 + 进度 + 照片墙 ===== -->
+      <div class="home-right-col">
+
+        <!-- 顶部欢迎区 -->
+        <section class="hero-section">
+          <div class="hero-content">
+            <h1 class="greeting">{{ greeting }}，永远的神！</h1>
+            <p class="today-date">{{ todayDate }}</p>
+            <div class="daily-quote" v-if="dailyQuote">
+              <span class="quote-mark">"</span>
+              <span class="quote-text">{{ dailyQuote.text }}</span>
+              <span class="quote-author">—— {{ dailyQuote.author }}</span>
+            </div>
+          </div>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <span class="hero-stat-value">{{ stats.diary }}</span>
+              <span class="hero-stat-label">日记</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-value">{{ stats.shines }}</span>
+              <span class="hero-stat-label">闪光</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-value">{{ stats.guitar }}</span>
+              <span class="hero-stat-label">吉他</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-value">{{ unlockedBadges }}</span>
+              <span class="hero-stat-label">徽章</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- 今日任务 + 学习进度 -->
+        <div class="two-column">
+          <!-- 左：今日任务 -->
+          <section class="tasks-section">
+            <div class="section-header">
+              <h2>📋 今日任务</h2>
+              <span class="task-progress">{{ completedTasks }}/{{ tasks.length }}</span>
+            </div>
+            <div class="task-list">
               <div
-                class="progress-bar-fill"
-                :style="{ width: subject.percent + '%', background: subject.color }"
-              ></div>
+                v-for="task in tasks"
+                :key="task.id"
+                class="task-item"
+                :class="{ completed: task.completed }"
+                @click="toggleTask(task.id)"
+              >
+                <span class="task-checkbox" :class="{ checked: task.completed }">
+                <svg v-if="task.completed" viewBox="0 0 12 12" fill="none">
+                  <path d="M2 6L5 9L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="task-text">{{ task.text }}</span>
+              </div>
             </div>
-          </div>
-        </div>
-      </section>
-    </div>
+          </section>
 
-    <!-- 7天活跃度 + 最近日记 -->
-    <div class="two-column">
-      <!-- 左：7天活跃度 -->
-      <section class="activity-section">
-        <div class="section-header">
-          <h2>📊 7天活跃度</h2>
-        </div>
-        <div class="activity-chart">
-          <div
-            v-for="(day, idx) in activityData"
-            :key="idx"
-            class="activity-day"
-          >
-            <div class="activity-bars">
-              <div class="activity-bar diary" :style="{ height: day.diaryHeight + 'px' }"></div>
-              <div class="activity-bar shine" :style="{ height: day.shineHeight + 'px' }"></div>
-              <div class="activity-bar guitar" :style="{ height: day.guitarHeight + 'px' }"></div>
+          <!-- 右：学习进度 -->
+          <section class="progress-section">
+            <div class="section-header">
+              <h2>📚 学习进度</h2>
+              <button class="btn-text" @click="$router.push('/plan')">管理</button>
             </div>
-            <span class="day-label" :class="{ today: day.isToday }">{{ day.label }}</span>
-          </div>
+            <div class="progress-list">
+              <div v-for="item in subjects" :key="item.key" class="progress-item">
+                <div class="progress-info">
+                  <span class="progress-icon">{{ item.icon }}</span>
+                  <span class="progress-name">{{ item.name }}</span>
+                  <span class="progress-fraction">{{ item.completed }}/{{ item.total }}</span>
+                </div>
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill" :style="{ width: item.percent + '%' }"></div>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
-        <div class="chart-legend">
-          <span><span class="legend-dot diary"></span>日记</span>
-          <span><span class="legend-dot shine"></span>闪光</span>
-          <span><span class="legend-dot guitar"></span>吉他</span>
-        </div>
-      </section>
 
-      <!-- 右：最近日记 -->
-      <section class="recent-section">
-        <div class="section-header">
-          <h2>📝 最近日记</h2>
-          <button class="btn-text" @click="$router.push('/diary')">查看全部 →</button>
-        </div>
-        <div v-if="recentDiary.length" class="recent-list">
-          <div v-for="d in recentDiary" :key="d.id" class="recent-item">
-            <span class="recent-mood">{{ d.mood }}</span>
-            <div class="recent-content">
-              <div class="recent-title">{{ d.title || '无标题' }}</div>
-              <div class="recent-date">{{ d.date }}</div>
-            </div>
+        <!-- 闪光时刻照片墙 -->
+        <section class="photo-wall-section">
+          <div class="section-header">
+            <h2>✨ 闪光时刻</h2>
+            <button class="btn-text" @click="$router.push('/shines')">查看全部 →</button>
           </div>
-        </div>
-        <div v-else class="empty-state">还没有日记</div>
-      </section>
-    </div>
-
-    <!-- 心情趋势 + 成就徽章 -->
-    <div class="two-column">
-      <!-- 左：心情 -->
-      <section class="mood-section">
-        <div class="section-header">
-          <h2>😊 心情趋势</h2>
-        </div>
-        <div v-if="moodData.length" class="mood-content">
-          <div class="mood-timeline">
-            <div v-for="(mood, idx) in recentMoods" :key="idx" class="mood-item">
-              <span class="mood-emoji">{{ mood.mood }}</span>
-              <span class="mood-date">{{ mood.date }}</span>
-            </div>
-          </div>
-          <div class="mood-distribution">
+          <div class="photo-wall">
             <div
-              v-for="(item, idx) in moodDistribution"
+              v-for="(photo, idx) in displayPhotos"
               :key="idx"
-              class="mood-bar-item"
+              class="wall-photo"
+              :class="{ 'has-image': photo.url || photo.photoUrl }"
+              @click="openPhotoModal(photo)"
             >
-              <span class="mood-label">{{ item.mood }}</span>
-              <div class="mood-bar-bg">
-                <div class="mood-bar-fill" :style="{ width: item.percent + '%', background: item.color }"></div>
+              <img v-if="photo.url || photo.photoUrl" :src="photo.url || photo.photoUrl" :alt="photo.title" />
+              <div v-else class="photo-placeholder">
+                <span class="photo-emoji">{{ photo.icon || '✨' }}</span>
               </div>
-              <span class="mood-count">{{ item.count }}</span>
-            </div>
-          </div>
-        </div>
-        <div v-else class="empty-state">暂无心情数据</div>
-      </section>
-
-      <!-- 右：徽章 -->
-      <section class="badges-section">
-        <div class="section-header">
-          <h2>🏅 成就徽章</h2>
-          <span class="badge-count">{{ unlockedBadges }}/{{ badges.length }}</span>
-        </div>
-        <div class="badges-grid">
-          <div
-            v-for="badge in visibleBadges"
-            :key="badge.id"
-            class="badge-item"
-            :class="{ unlocked: badge.unlocked, mystery: badge.isMystery }"
-            :title="badge.desc"
-          >
-            <div class="badge-glow" v-if="badge.unlocked"></div>
-            <div class="badge-icon">{{ badge.icon }}</div>
-            <div class="badge-name">{{ badge.name }}</div>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <!-- 艾宾浩斯复习 -->
-    <section v-if="reviews.length" class="reviews-section">
-      <div class="section-header">
-        <h2>🧠 今日复习</h2>
-        <span class="review-count">{{ reviews.length }} 项</span>
-      </div>
-      <div class="review-list">
-        <div v-for="review in reviews" :key="review.id" class="review-item">
-          <span class="review-subject">{{ review.subject }}</span>
-          <span class="review-title">{{ review.title }}</span>
-          <span class="review-stage" :class="review.stageType">{{ review.stage }}</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- 闪光时刻照片墙 + 吉他视频 -->
-    <div class="two-column">
-      <!-- 左：照片墙 -->
-      <section class="photo-wall-section">
-        <div class="section-header">
-          <h2>✨ 闪光时刻</h2>
-          <button class="btn-text" @click="$router.push('/shines')">查看全部 →</button>
-        </div>
-        <div class="photo-wall">
-          <div
-            v-for="(photo, idx) in displayPhotos"
-            :key="idx"
-            class="wall-photo"
-            :class="{ 'has-image': photo.url || photo.photoUrl }"
-            @click="openPhotoModal(photo)"
-          >
-            <img v-if="photo.url || photo.photoUrl" :src="photo.url || photo.photoUrl" :alt="photo.title" />
-            <div v-else class="photo-placeholder">
-              <span class="photo-emoji">{{ photo.icon || '✨' }}</span>
-            </div>
-            <div class="photo-overlay">
-              <span class="photo-title">{{ photo.title }}</span>
-            </div>
-            <div class="photo-edit-overlay" @click.stop="openPhotoSelector(idx)">
-              <span class="edit-icon">✏️</span>
-              <span class="edit-text">更换</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 右：吉他视频 -->
-      <section class="guitar-video-section">
-        <div class="section-header">
-          <h2>🎸 吉他演奏</h2>
-          <button class="btn-text" @click="$router.push('/guitar')">查看全部 →</button>
-        </div>
-        <div class="video-container">
-          <video
-            v-if="latestGuitarVideo"
-            ref="guitarVideo"
-            :src="latestGuitarVideo.url"
-            controls
-            autoplay
-            muted
-            loop
-            class="guitar-video"
-            poster=""
-          ></video>
-          <div v-else class="video-placeholder">
-            <span class="video-icon">🎸</span>
-            <p>还没有吉他视频</p>
-            <button class="btn-text" @click="$router.push('/guitar')">去录制 →</button>
-          </div>
-        </div>
-        <div v-if="latestGuitarVideo" class="video-info">
-          <span class="video-title">{{ latestGuitarVideo.title }}</span>
-          <span class="video-date">{{ latestGuitarVideo.date }}</span>
-        </div>
-      </section>
-    </div>
-
-    <!-- 照片查看弹窗 -->
-    <div v-if="selectedPhoto" class="photo-modal" @click.self="selectedPhoto = null">
-      <div class="photo-modal-content">
-        <button class="photo-modal-close" @click="selectedPhoto = null">✕</button>
-        <div class="photo-modal-image">
-          <img v-if="selectedPhoto.url || selectedPhoto.photoUrl" :src="selectedPhoto.url || selectedPhoto.photoUrl" :alt="selectedPhoto.title" />
-          <span v-else class="photo-modal-emoji">{{ selectedPhoto.icon || '✨' }}</span>
-        </div>
-        <h3>{{ selectedPhoto.title }}</h3>
-        <p>{{ selectedPhoto.date }}</p>
-      </div>
-    </div>
-
-    <!-- 选择闪光时刻弹窗 -->
-    <div v-if="showPhotoSelector" class="modal" @click.self="showPhotoSelector = false">
-      <div class="modal-content selector-modal">
-        <div class="modal-header">
-          <h3>选择闪光时刻</h3>
-          <button class="modal-close" @click="showPhotoSelector = false">✕</button>
-        </div>
-        <div class="modal-body">
-          <div v-if="shines.length" class="shine-selector-grid">
-            <div
-              v-for="shine in shines"
-              :key="shine.id"
-              class="shine-selector-item"
-              @click="selectShineForWall(shine)"
-            >
-              <div class="shine-selector-img">
-                <img v-if="shine.photoUrl" :src="shine.photoUrl" :alt="shine.title">
-                <span v-else class="shine-selector-icon">{{ categoryIcon(shine.category) }}</span>
+              <div class="photo-overlay">
+                <span class="photo-title">{{ photo.title }}</span>
               </div>
-              <span class="shine-selector-title">{{ shine.title }}</span>
             </div>
           </div>
-          <div v-else class="empty-state">还没有闪光时刻，去添加一些吧！</div>
-        </div>
+        </section>
+
       </div>
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
@@ -897,6 +754,7 @@ section:hover {
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s;
+  min-width: 0;
 }
 
 .task-item:hover {
@@ -937,8 +795,11 @@ section:hover {
 
 .task-text {
   flex: 1;
-  color: var(--text);
+  color: #f0f0f5 !important;
   font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .task-tag {
@@ -1818,4 +1679,156 @@ section:hover {
     border-radius: 12px;
   }
 }
+
+/* ===== 左右分栏布局 ===== */
+.home-split-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 20px;
+}
+.home-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.home-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 响应式 */
+@media (max-width: 1024px) {
+  .home-split-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* 左栏模块样式 */
+.home-left-col section {
+  margin-bottom: 0;
+}
+
+
+/* ===== 吉他视频优化 ===== */
+.guitar-video-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  flex: 1;
+}
+.video-container {
+  margin-top: 12px;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+.video-player {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  display: block;
+}
+.empty-video {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: var(--surface2);
+  border-radius: 12px;
+  aspect-ratio: 16/9;
+}
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  opacity: 0.4;
+}
+.empty-video p {
+  color: var(--text3);
+  font-size: 13px;
+  margin: 0;
+}
+
+/* ===== 照片墙优化 ===== */
+.photo-wall-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+}
+.photo-wall {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.wall-photo {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--surface2);
+  border: 2px solid transparent;
+}
+.wall-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+.wall-photo:hover {
+  transform: translateY(-4px) scale(1.02);
+  border-color: var(--accent);
+  box-shadow: 0 12px 24px rgba(74, 222, 128, 0.2);
+  z-index: 10;
+}
+.wall-photo:hover img {
+  transform: scale(1.1);
+}
+.photo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--surface2), var(--surface3));
+}
+.photo-emoji {
+  font-size: 36px;
+  opacity: 0.5;
+}
+.photo-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 12px 12px;
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+  color: white;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.wall-photo:hover .photo-overlay {
+  opacity: 1;
+}
+.photo-title {
+  font-size: 12px;
+  font-weight: 600;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.photo-date {
+  font-size: 10px;
+  color: rgba(255,255,255,0.7);
+  margin-top: 2px;
+}
+
 </style>

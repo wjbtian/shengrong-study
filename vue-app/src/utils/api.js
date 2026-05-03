@@ -54,7 +54,7 @@ export const deleteDiary = (id) => request('DELETE', `/diary/${id}`)
 
 export const getShines = () => request('GET', '/shines')
 export const postShine = (data) => request('POST', '/shines', data)
-export const updateShine = (id, data) => request('PUT', `/shines/${id}`, data)
+export const updateShine = (id, data) => request('POST', `/shines/${id}`, data)
 export const deleteShine = (id) => request('DELETE', `/shines/${id}`)
 
 export const getTech = () => request('GET', '/tech')

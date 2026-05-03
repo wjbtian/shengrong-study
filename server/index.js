@@ -128,27 +128,30 @@ function startServer() {
     try {
       const rows = db.prepare('SELECT * FROM shines ORDER BY date DESC, id DESC').all();
       rows.forEach(r => {
-        // 兼容旧数据：单个 photo 字段
-        if (r.photo && r.photo !== 'pending_migration' && !r.photo.startsWith('http')) {
-          r.photoUrl = `/uploads/${r.photo}`;
-        }
-        // 新数据：photos JSON 数组
+        // 统一返回 photos 数组
+        let photos = [];
         if (r.photos) {
           try {
-            // 数据库是 JSON 字符串，需要解析
-            const photoData = typeof r.photos === 'string' ? JSON.parse(r.photos) : r.photos;
-            r.photos = photoData.map(p => {
+            const raw = typeof r.photos === 'string' ? JSON.parse(r.photos) : r.photos;
+            photos = raw.map(p => {
               if (!p) return null;
-              return p.startsWith('http') || p.startsWith('/') ? p : `/uploads/${p}`;
+              // 已经是完整路径
+              if (p.startsWith('http') || p.startsWith('/')) return p;
+              // 旧数据：photo 字段存文件名
+              return `/uploads/${p}`;
             }).filter(Boolean);
           } catch (e) {
-            r.photos = [r.photoUrl || ''].filter(Boolean);
+            photos = [];
           }
-        } else if (r.photoUrl) {
-          r.photos = [r.photoUrl];
-        } else {
-          r.photos = [];
+        } else if (r.photo && r.photo !== 'pending_migration') {
+          // 旧数据兼容：单 photo 字段
+          const p = r.photo.startsWith('/') ? r.photo : `/uploads/${r.photo}`;
+          photos = [p];
         }
+        r.photos = photos;
+        // 兼容前端旧字段
+        r.photoUrl = photos[0] || '';
+        delete r.photo;
       });
       res.json(rows);
     } catch (e) {
@@ -177,12 +180,17 @@ function startServer() {
       const description = body.desc || body.description;
       const date = body.date;
       
-      // 保存 photos 为 JSON 数组
-      const photos = JSON.stringify(body.photos || []);
+      // 支持单个 photoUrl 或 photos 数组
+      let photos = [];
+      if (body.photos && Array.isArray(body.photos)) {
+        photos = body.photos;
+      } else if (body.photoUrl) {
+        photos = [body.photoUrl];
+      }
       
       const result = db.prepare(
         'INSERT INTO shines (title, type, icon, description, date, photos) VALUES (?, ?, ?, ?, ?, ?)'
-      ).run(title, type || '📸 照片', icon || '📸', description || '', date, photos);
+      ).run(title, type || '📸 照片', icon || '📸', description || '', date, JSON.stringify(photos));
       
       res.json({ id: result.lastInsertRowid, ok: true });
     } catch (e) {
