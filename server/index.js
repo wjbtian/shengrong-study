@@ -140,11 +140,36 @@ function startServer() {
 
   app.post('/api/shines', upload.single('photo'), (req, res) => {
     try {
-      const { title, type, icon, description, date } = req.body;
-      const photo = req.file ? req.file.filename : null;
+      // 支持两种方式：1) multipart 表单上传 2) JSON + photoUrl
+      let title, type, icon, description, date, photo;
+      
+      if (req.is('multipart/form-data') || req.file) {
+        // 旧方式：multipart 表单
+        title = req.body.title;
+        type = req.body.type;
+        icon = req.body.icon;
+        description = req.body.description;
+        date = req.body.date;
+        photo = req.file ? req.file.filename : null;
+      } else {
+        // 新方式：JSON body，图片已通过 /api/upload 单独上传
+        const body = req.body;
+        title = body.title;
+        type = body.category || body.type;
+        icon = body.category || body.type;
+        description = body.desc || body.description;
+        date = body.date;
+        // photoUrl 格式如 /uploads/xxx.jpg，提取文件名存入 photo 字段
+        if (body.photoUrl) {
+          photo = body.photoUrl.replace('/uploads/', '');
+        } else {
+          photo = null;
+        }
+      }
+      
       const result = db.prepare(
         'INSERT INTO shines (title, type, icon, description, date, photo) VALUES (?, ?, ?, ?, ?, ?)'
-      ).run(title, type, icon || type.split(' ')[0], description, date, photo);
+      ).run(title, type || '📸 照片', icon || '📸', description || '', date, photo);
       res.json({ id: result.lastInsertRowid, ok: true });
     } catch (e) {
       res.status(500).json({ error: e.message });
@@ -241,8 +266,33 @@ function startServer() {
 
   app.post('/api/guitar', upload.single('video'), (req, res) => {
     try {
-      const { title, notes, date, duration, bpm, key_sig } = req.body;
-      const videoPath = req.file ? req.file.filename : null;
+      let title, notes, date, duration, bpm, key_sig, videoPath;
+      
+      if (req.is('multipart/form-data') || req.file) {
+        // 旧方式：multipart 表单
+        title = req.body.title;
+        notes = req.body.notes;
+        date = req.body.date;
+        duration = req.body.duration;
+        bpm = req.body.bpm;
+        key_sig = req.body.key_sig;
+        videoPath = req.file ? req.file.filename : null;
+      } else {
+        // 新方式：JSON body，视频已通过 /api/upload 单独上传
+        const body = req.body;
+        title = body.title;
+        notes = body.notes || '';
+        date = body.date;
+        duration = body.duration;
+        bpm = body.bpm;
+        key_sig = body.key_sig;
+        if (body.videoUrl) {
+          videoPath = body.videoUrl.replace('/uploads/', '');
+        } else {
+          videoPath = null;
+        }
+      }
+      
       const result = db.prepare(
         'INSERT INTO guitar_videos (title, video_path, duration, bpm, key_sig, notes, date) VALUES (?, ?, ?, ?, ?, ?, ?)'
       ).run(title, videoPath, duration || null, bpm || null, key_sig || null, notes || '', date);
