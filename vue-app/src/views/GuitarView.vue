@@ -131,8 +131,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { getGuitar, postGuitar } from '../utils/api.js'
-import { uploadFile } from '../utils/upload.js'
+import { getGuitar, postGuitar, uploadFile } from '../utils/api.js'
 
 const guitar = ref([])
 const showUploadModal = ref(false)

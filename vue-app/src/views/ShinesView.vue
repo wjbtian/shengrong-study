@@ -166,8 +166,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { getShines, postShine, deleteShine, updateShine } from '../utils/api.js'
-import { uploadFile } from '../utils/upload.js'
+import { getShines, postShine, deleteShine, updateShine, uploadFile } from '../utils/api.js'
 
 const shines = ref([])
 const showAddModal = ref(false)

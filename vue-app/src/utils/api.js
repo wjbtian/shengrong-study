@@ -69,8 +69,27 @@ export const getProgress = () => request('GET', '/progress')
 export const postProgress = (data) => request('POST', '/progress', data)
 
 // 上传文件
-export const uploadFile = (file) => {
+export const uploadFile = async (file, type = 'image') => {
+  if (!file) return ''
+  
   const formData = new FormData()
   formData.append('file', file)
-  return request('POST', '/upload', formData)
+  formData.append('type', type)
+  
+  try {
+    const res = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData
+    })
+    
+    if (!res.ok) {
+      throw new Error(`上传失败: HTTP ${res.status}`)
+    }
+    
+    const data = await res.json()
+    return data.url || data.photoUrl || data.videoUrl || ''
+  } catch (e) {
+    console.error('文件上传失败:', e)
+    throw e
+  }
 }
