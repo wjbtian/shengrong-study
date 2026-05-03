@@ -128,8 +128,22 @@ function startServer() {
     try {
       const rows = db.prepare('SELECT * FROM shines ORDER BY date DESC, id DESC').all();
       rows.forEach(r => {
+        // 兼容旧数据：单个 photo 字段
         if (r.photo && r.photo !== 'pending_migration' && !r.photo.startsWith('http')) {
           r.photoUrl = `/uploads/${r.photo}`;
+        }
+        // 新数据：photos JSON 数组
+        if (r.photos) {
+          try {
+            const photos = JSON.parse(r.photos);
+            r.photos = photos.map(p => p.startsWith('http') || p.startsWith('/') ? p : `/uploads/${p}`);
+          } catch (e) {
+            r.photos = [r.photoUrl || ''].filter(Boolean);
+          }
+        } else if (r.photoUrl) {
+          r.photos = [r.photoUrl];
+        } else {
+          r.photos = [];
         }
       });
       res.json(rows);
@@ -152,34 +166,20 @@ function startServer() {
 
   function handleShinesCreate(req, res) {
     try {
-      let title, type, icon, description, date, photo;
+      const body = req.body;
+      const title = body.title;
+      const type = body.category || body.type;
+      const icon = body.category || body.type;
+      const description = body.desc || body.description;
+      const date = body.date;
       
-      if (req.file) {
-        // multipart 表单方式
-        title = req.body.title;
-        type = req.body.type;
-        icon = req.body.icon;
-        description = req.body.description;
-        date = req.body.date;
-        photo = req.file.filename;
-      } else {
-        // JSON 方式，图片已通过 /api/upload 单独上传
-        const body = req.body;
-        title = body.title;
-        type = body.category || body.type;
-        icon = body.category || body.type;
-        description = body.desc || body.description;
-        date = body.date;
-        if (body.photoUrl) {
-          photo = body.photoUrl.replace('/uploads/', '');
-        } else {
-          photo = null;
-        }
-      }
+      // 保存 photos 为 JSON 数组
+      const photos = JSON.stringify(body.photos || []);
       
       const result = db.prepare(
-        'INSERT INTO shines (title, type, icon, description, date, photo) VALUES (?, ?, ?, ?, ?, ?)'
-      ).run(title, type || '📸 照片', icon || '📸', description || '', date, photo);
+        'INSERT INTO shines (title, type, icon, description, date, photos) VALUES (?, ?, ?, ?, ?, ?)'
+      ).run(title, type || '📸 照片', icon || '📸', description || '', date, photos);
+      
       res.json({ id: result.lastInsertRowid, ok: true });
     } catch (e) {
       console.error('shines create error:', e);
@@ -189,10 +189,24 @@ function startServer() {
 
   app.delete('/api/shines/:id', (req, res) => {
     try {
-      const row = db.prepare('SELECT photo FROM shines WHERE id = ?').get(req.params.id);
-      if (row && row.photo) {
-        const p = path.join(__dirname, 'uploads', row.photo);
-        if (fs.existsSync(p)) fs.unlinkSync(p);
+      const row = db.prepare('SELECT photo, photos FROM shines WHERE id = ?').get(req.params.id);
+      if (row) {
+        // 删除单张旧图片
+        if (row.photo) {
+          const p = path.join(__dirname, 'uploads', row.photo);
+          if (fs.existsSync(p)) fs.unlinkSync(p);
+        }
+        // 删除多张图片
+        if (row.photos) {
+          try {
+            const photos = JSON.parse(row.photos);
+            photos.forEach(photo => {
+              const filename = photo.replace('/uploads/', '');
+              const p = path.join(__dirname, 'uploads', filename);
+              if (fs.existsSync(p)) fs.unlinkSync(p);
+            });
+          } catch (e) {}
+        }
       }
       db.prepare('DELETE FROM shines WHERE id = ?').run(req.params.id);
       res.json({ ok: true });
@@ -209,6 +223,31 @@ function startServer() {
       db.prepare('UPDATE shines SET likes = ? WHERE id = ?').run(newLikes, req.params.id);
       res.json({ ok: true, likes: newLikes });
     } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  
+  // 更新闪光时刻
+  app.post('/api/shines/:id', (req, res) => {
+    try {
+      const { title, category, desc, photos, fav } = req.body;
+      
+      // 更新收藏单独处理
+      if (fav !== undefined) {
+        db.prepare('UPDATE shines SET fav = ? WHERE id = ?').run(fav ? 1 : 0, req.params.id);
+        return res.json({ ok: true });
+      }
+      
+      // 更新其他字段
+      const photosJson = JSON.stringify(photos || []);
+      db.prepare(
+        'UPDATE shines SET title = ?, type = ?, icon = ?, description = ?, photos = ? WHERE id = ?'
+      ).run(title, category, category, desc || '', photosJson, req.params.id);
+      
+      res.json({ ok: true });
+    } catch (e) {
+      console.error('shines update error:', e);
       res.status(500).json({ error: e.message });
     }
   });

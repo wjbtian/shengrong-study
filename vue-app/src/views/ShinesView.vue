@@ -51,7 +51,10 @@
         class="photo-card"
       >
         <div class="photo-placeholder" @click="openLightbox(item)">
-          <img v-if="item.photoUrl" :src="item.photoUrl" class="photo-img" alt="">
+          <img v-if="getFirstPhoto(item)" :src="getFirstPhoto(item)" class="photo-img" alt="">
+          <div v-if="item.photos && item.photos.length > 1" class="photo-count-badge">
+            📷 {{ item.photos.length }}张
+          </div>
           <span v-else class="photo-icon">{{ categoryIcon(item.category) }}</span>
         </div>
         <div class="photo-info" @click="openLightbox(item)">
@@ -100,7 +103,16 @@
             <option v-for="cat in categories" :key="cat.value" :value="cat.value">{{ cat.label }}</option>
           </select>
           <textarea v-model="newShine.desc" class="textarea" rows="3" placeholder="描述（可选）"></textarea>
-          <input type="file" class="input" accept="image/*" @change="onPhotoChange">
+          <div class="upload-area">
+          <input type="file" class="input" accept="image/*" multiple @change="onPhotosChange">
+          <p class="upload-hint">💡 按住 Ctrl/Cmd 可选择多张图片</p>
+          <div class="photo-preview-list">
+            <div v-for="(photo, idx) in newShine.photos" :key="idx" class="photo-preview-item">
+              <img :src="photo.preview">
+              <button class="photo-remove" @click="removeNewPhoto(idx)">✕</button>
+            </div>
+          </div>
+        </div>
         </div>
         <div class="modal-footer">
           <button class="btn" @click="showAddModal = false">取消</button>
@@ -136,7 +148,16 @@
             <option v-for="cat in categories" :key="cat.value" :value="cat.value">{{ cat.label }}</option>
           </select>
           <textarea v-model="editShine.desc" class="textarea" rows="3" placeholder="描述（可选）"></textarea>
-          <input type="file" class="input" accept="image/*" @change="onEditPhotoChange">
+          <div class="upload-area">
+          <input type="file" class="input" accept="image/*" multiple @change="onEditPhotosChange">
+          <p class="upload-hint">💡 按住 Ctrl/Cmd 可选择多张图片</p>
+          <div class="photo-preview-list">
+            <div v-for="(photo, idx) in editShine.photos" :key="idx" class="photo-preview-item">
+              <img :src="photo.preview">
+              <button class="photo-remove" @click="removeEditPhoto(idx)">✕</button>
+            </div>
+          </div>
+        </div>
         </div>
         <div class="modal-footer">
           <button class="btn" @click="showEditModal = false">取消</button>
@@ -199,7 +220,7 @@ const newShine = ref({
   title: '',
   category: 'other',
   desc: '',
-  photo: null
+  photos: []
 })
 
 const editShine = ref({
@@ -207,9 +228,12 @@ const editShine = ref({
   title: '',
   category: 'other',
   desc: '',
-  photo: null,
-  photoUrl: ''
+  photos: []
 })
+
+// 灯箱轮播状态
+const currentPhotoIndex = ref(0)
+const lightboxPhotos = ref([])
 
 const filteredShines = computed(() => {
   if (currentFilter.value === 'all') return shines.value
@@ -236,12 +260,36 @@ function categoryIcon(category) {
   return map[category] || '✨'
 }
 
-function onPhotoChange(e) {
-  newShine.value.photo = e.target.files[0]
+async function onPhotosChange(e) {
+  const files = Array.from(e.target.files)
+  for (const file of files) {
+    const preview = await fileToDataUrl(file)
+    newShine.value.photos.push({ file, preview })
+  }
 }
 
-function onEditPhotoChange(e) {
-  editShine.value.photo = e.target.files[0]
+function removeNewPhoto(idx) {
+  newShine.value.photos.splice(idx, 1)
+}
+
+function fileToDataUrl(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader()
+    reader.onload = (e) => resolve(e.target.result)
+    reader.readAsDataURL(file)
+  })
+}
+
+async function onEditPhotosChange(e) {
+  const files = Array.from(e.target.files)
+  for (const file of files) {
+    const preview = await fileToDataUrl(file)
+    editShine.value.photos.push({ file, preview })
+  }
+}
+
+function removeEditPhoto(idx) {
+  editShine.value.photos.splice(idx, 1)
 }
 
 function openEditModal(item) {
@@ -250,8 +298,7 @@ function openEditModal(item) {
     title: item.title,
     category: item.category,
     desc: item.desc || '',
-    photo: null,
-    photoUrl: item.photoUrl || ''
+    photos: []
   }
   showEditModal.value = true
 }
@@ -259,18 +306,19 @@ function openEditModal(item) {
 async function saveEdit() {
   if (!editShine.value.title.trim()) return
   try {
-    let photoUrl = editShine.value.photoUrl || ''
+    const photoUrls = []
     
-    // 如果有新图片，先上传
-    if (editShine.value.photo) {
-      photoUrl = await uploadFile(editShine.value.photo, 'image')
+    // 上传所有新图片
+    for (const p of editShine.value.photos) {
+      const url = await uploadFile(p.file, 'image')
+      photoUrls.push(url)
     }
     
     const data = {
       title: editShine.value.title,
       category: editShine.value.category,
       desc: editShine.value.desc,
-      photoUrl: photoUrl
+      photos: photoUrls
     }
     
     // 调用 API 更新
@@ -282,7 +330,7 @@ async function saveEdit() {
       shines.value[idx] = { ...shines.value[idx], ...data }
     }
     showEditModal.value = false
-    editShine.value = { id: null, title: '', category: 'other', desc: '', photo: null, photoUrl: '' }
+    editShine.value = { id: null, title: '', category: 'other', desc: '', photos: [] }
   } catch (e) {
     console.error('编辑失败:', e)
     alert('编辑失败，请重试')
@@ -293,18 +341,19 @@ async function saveShine() {
   if (!newShine.value.title.trim()) return
   
   try {
-    let photoUrl = ''
+    const photoUrls = []
     
-    // 如果有图片，先上传
-    if (newShine.value.photo) {
-      photoUrl = await uploadFile(newShine.value.photo, 'image')
+    // 上传所有图片
+    for (const p of newShine.value.photos) {
+      const url = await uploadFile(p.file, 'image')
+      photoUrls.push(url)
     }
     
     const data = {
       title: newShine.value.title,
       category: newShine.value.category,
       desc: newShine.value.desc,
-      photoUrl: photoUrl,
+      photos: photoUrls,
       date: new Date().toISOString().split('T')[0],
       fav: false
     }
@@ -312,7 +361,7 @@ async function saveShine() {
     const result = await postShine(data)
     shines.value.unshift({ ...data, id: result.id || Date.now() })
     showAddModal.value = false
-    newShine.value = { title: '', category: 'other', desc: '', photo: null }
+    newShine.value = { title: '', category: 'other', desc: '', photos: [] }
   } catch (e) {
     console.error('保存失败:', e)
     alert('保存失败，请重试')
@@ -332,6 +381,39 @@ async function toggleFav(item) {
 
 function openLightbox(item) {
   lightboxItem.value = item
+  lightboxPhotos.value = getPhotos(item)
+  currentPhotoIndex.value = 0
+}
+
+function getPhotos(item) {
+  if (item.photos && Array.isArray(item.photos)) {
+    return item.photos
+  }
+  if (item.photoUrl) {
+    return [item.photoUrl]
+  }
+  return []
+}
+
+function getFirstPhoto(item) {
+  const photos = getPhotos(item)
+  return photos[0] || ''
+}
+
+function prevPhoto() {
+  if (currentPhotoIndex.value > 0) {
+    currentPhotoIndex.value--
+  } else {
+    currentPhotoIndex.value = lightboxPhotos.value.length - 1
+  }
+}
+
+function nextPhoto() {
+  if (currentPhotoIndex.value < lightboxPhotos.value.length - 1) {
+    currentPhotoIndex.value++
+  } else {
+    currentPhotoIndex.value = 0
+  }
 }
 
 function confirmDelete(item) {
@@ -362,6 +444,143 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+/* ===== 多图上传样式优化 ===== */
+.upload-hint {
+  font-size: 12px;
+  color: #666;
+  margin: 4px 0 8px;
+}
+
+.photo-preview-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.photo-preview-item {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.photo-preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-remove {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+  border: none;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+}
+
+.photo-remove:hover {
+  background: rgb(220, 38, 38);
+}
+
+.photo-count-badge {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0,0,0,.7);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  z-index: 5;
+}
+
+/* ===== 灯箱轮播样式 ===== */
+.lightbox-gallery {
+  position: relative;
+  width: 100%;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-container {
+  position: relative;
+  max-width: 85%;
+  max-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-container img {
+  max-width: 100%;
+  max-height: 60vh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.gallery-prev,
+.gallery-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(0,0,0,.6);
+  color: white;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background .2s;
+}
+
+.gallery-prev:hover,
+.gallery-next:hover {
+  background: rgba(0,0,0,.85);
+}
+
+.gallery-prev {
+  left: 10px;
+}
+
+.gallery-next {
+  right: 10px;
+}
+
+.gallery-counter {
+  position: absolute;
+  bottom: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,.6);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
 .shines-view {
   max-width: 1200px;
   margin: 0 auto;
