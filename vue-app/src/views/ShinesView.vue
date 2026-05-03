@@ -121,17 +121,30 @@
       </div>
     </div>
 
-    <!-- 灯箱 -->
+    <!-- 灯箱 - 支持多图轮播 -->
     <div v-if="lightboxItem" class="lightbox" @click.self="lightboxItem = null">
       <div class="lightbox-content">
         <button class="lightbox-close" @click="lightboxItem = null">✕</button>
-        <div class="lightbox-photo">
-          <img v-if="lightboxItem.photoUrl" :src="lightboxItem.photoUrl" class="lightbox-img" alt="">
-          <span v-else class="lightbox-icon">{{ categoryIcon(lightboxItem.category) }}</span>
+        
+        <!-- 多图轮播区 -->
+        <div class="gallery-container">
+          <button v-if="lightboxPhotos.length > 1" class="gallery-btn gallery-prev" @click.stop="prevPhoto()">◀</button>
+          
+          <div class="gallery-main">
+            <img v-if="lightboxPhotos.length > 0" :src="lightboxPhotos[currentPhotoIndex]" class="lightbox-img" alt="">
+            <span v-else class="lightbox-icon">{{ categoryIcon(lightboxItem.type || lightboxItem.category) }}</span>
+          </div>
+          
+          <button v-if="lightboxPhotos.length > 1" class="gallery-btn gallery-next" @click.stop="nextPhoto()">▶</button>
+          
+          <div v-if="lightboxPhotos.length > 1" class="gallery-counter">
+            {{ currentPhotoIndex + 1 }} / {{ lightboxPhotos.length }}
+          </div>
         </div>
+        
         <h3>{{ lightboxItem.title }}</h3>
         <p>{{ lightboxItem.date }}</p>
-        <p v-if="lightboxItem.desc">{{ lightboxItem.desc }}</p>
+        <p v-if="lightboxItem.description">{{ lightboxItem.description }}</p>
       </div>
     </div>
 
@@ -384,6 +397,7 @@ function openLightbox(item) {
   lightboxItem.value = item
   lightboxPhotos.value = getPhotos(item)
   currentPhotoIndex.value = 0
+  console.log('🖼️ 打开灯箱，照片列表:', lightboxPhotos.value)
 }
 
 function getPhotos(item) {
