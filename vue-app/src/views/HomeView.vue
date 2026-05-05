@@ -1137,105 +1137,62 @@ section:hover {
   margin-top: 2px;
 }
 
-/* 照片墙 - 真正的照片墙形式 */
+/* 照片墙 - 高端卡片式设计 */
 .photo-wall {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: 200px;
   gap: 20px;
 }
 
 .wall-photo {
-  border-radius: 16px;
+  border-radius: 20px;
   overflow: hidden;
   cursor: pointer;
   position: relative;
-  background: var(--surface2);
-  transition: all 0.3s ease;
+  background: linear-gradient(135deg, var(--surface2), var(--surface3));
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  aspect-ratio: 1;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.wall-photo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    rgba(74, 222, 128, 0.1), 
+    rgba(129, 140, 248, 0.1));
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .wall-photo:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(74, 222, 128, 0.2);
   z-index: 10;
+}
+
+.wall-photo:hover::before {
+  opacity: 1;
 }
 
 .wall-photo img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  transition: transform 0.3s ease;
-  background: var(--surface3);
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .wall-photo:hover img {
-  transform: scale(1.1);
+  transform: scale(1.15);
 }
 
 
-.photo-size-0 {
-  grid-column: span 2;
-  grid-row: span 2;
-}
 
-.photo-size-1 {
-  grid-column: span 1;
-  grid-row: span 1;
-}
-
-.photo-size-2 {
-  grid-column: span 1;
-  grid-row: span 2;
-}
-
-.photo-size-3 {
-  grid-column: span 2;
-  grid-row: span 1;
-}
-
-.photo-size-4 {
-  grid-column: span 1;
-  grid-row: span 1;
-}
-
-.photo-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, var(--surface2), var(--surface3));
-}
-
-.photo-emoji {
-  font-size: 40px;
-}
-
-.wall-photo.photo-size-0 .photo-emoji,
-.wall-photo.photo-size-2 .photo-emoji {
-  font-size: 64px;
-}
-
-.photo-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 20px 10px 10px;
-  background: linear-gradient(transparent, rgba(0,0,0,0.7));
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.wall-photo:hover .photo-overlay {
-  opacity: 1;
-}
-
-.photo-title {
-  color: white;
-  font-size: 13px;
-  font-weight: 600;
-}
 
 /* 照片弹窗 */
 .photo-modal {
