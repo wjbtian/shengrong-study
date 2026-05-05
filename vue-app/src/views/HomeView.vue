@@ -9,7 +9,7 @@
         <!-- 成就徽章 -->
         <section class="badges-section">
           <div class="section-header">
-            <h2> 成就徽章</h2>
+            <h2>🏅 成就徽章</h2>
             <span class="badge-count">{{ unlockedBadges }}/{{ badges.length }}</span>
           </div>
           <div class="badges-grid">
@@ -33,10 +33,9 @@
             <h2>🎸 吉他演奏</h2>
             <button class="btn-text" @click="$router.push('/guitar')">查看全部 →</button>
           </div>
-          <div class="video-container" style="margin-top: 12px;">
+          <div class="video-container">
             <video
               v-if="latestGuitarVideo"
-              ref="guitarVideo"
               :src="latestGuitarVideo.url"
               controls
               muted
@@ -51,122 +50,140 @@
 
       </div>
 
-      <!-- ===== 【右栏】Hero + 任务 + 进度 + 照片墙 ===== -->
+      <!-- ===== 【右栏】主内容区 ===== -->
       <div class="home-right-col">
 
         <!-- 顶部欢迎区 -->
         <section class="hero-section">
-          <div class="hero-content">
-            <h1 class="greeting">{{ greeting }}，永远的神！</h1>
-            <p class="today-date">{{ todayDate }}</p>
-            <div class="daily-quote" v-if="dailyQuote">
-              <span class="quote-mark">"</span>
-              <span class="quote-text">{{ dailyQuote.text }}</span>
-              <span class="quote-author">—— {{ dailyQuote.author }}</span>
-            </div>
-          </div>
-          <div class="hero-stats">
-            <div class="hero-stat">
-              <span class="hero-stat-value">{{ stats.diary }}</span>
-              <span class="hero-stat-label">日记</span>
-            </div>
-            <div class="hero-stat">
-              <span class="hero-stat-value">{{ stats.shines }}</span>
-              <span class="hero-stat-label">闪光</span>
-            </div>
-            <div class="hero-stat">
-              <span class="hero-stat-value">{{ stats.guitar }}</span>
-              <span class="hero-stat-label">吉他</span>
-            </div>
-            <div class="hero-stat">
-              <span class="hero-stat-value">{{ unlockedBadges }}</span>
-              <span class="hero-stat-label">徽章</span>
-            </div>
-          </div>
-        </section>
-
-        <!-- 今日任务 + 学习进度 -->
-        <div class="two-column">
-          <!-- 左：今日任务 -->
-          <section class="tasks-section">
-            <div class="section-header">
-              <h2>📋 今日任务</h2>
-              <span class="task-progress">{{ completedTasks }}/{{ tasks.length }}</span>
-            </div>
-            <div class="task-list">
-              <div
-                v-for="task in tasks"
-                :key="task.id"
-                class="task-item"
-                :class="{ completed: task.completed }"
-                @click="toggleTask(task.id)"
-              >
-                <span class="task-checkbox" :class="{ checked: task.completed }">
-                <svg v-if="task.completed" viewBox="0 0 12 12" fill="none">
-                  <path d="M2 6L5 9L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-              <span class="task-text">{{ task.text }}</span>
-              </div>
-            </div>
-          </section>
-
-          <!-- 右：学习进度 -->
-          <section class="progress-section">
-            <div class="section-header">
-              <h2>📚 学习进度</h2>
-              <button class="btn-text" @click="$router.push('/plan')">管理</button>
-            </div>
-            <div class="progress-list">
-              <div v-for="item in subjects" :key="item.key" class="progress-item">
-                <div class="progress-info">
-                  <span class="progress-icon">{{ item.icon }}</span>
-                  <span class="progress-name">{{ item.name }}</span>
-                  <span class="progress-fraction">{{ item.completed }}/{{ item.total }}</span>
-                </div>
-                <div class="progress-bar-bg">
-                  <div class="progress-bar-fill" :style="{ width: item.percent + '%' }"></div>
-                </div>
-              </div>
-            </div>
-          </section>
+      <div class="hero-content">
+        <h1 class="greeting">{{ greeting }}，永远的神！</h1>
+        <p class="today-date">{{ todayDate }}</p>
+        <div class="daily-quote" v-if="dailyQuote">
+          <span class="quote-mark">"</span>
+          <span class="quote-text">{{ dailyQuote.text }}</span>
+          <span class="quote-author">—— {{ dailyQuote.author }}</span>
         </div>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="hero-stat-value">{{ stats.diary }}</span>
+          <span class="hero-stat-label">日记</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-value">{{ stats.shines }}</span>
+          <span class="hero-stat-label">闪光</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-value">{{ stats.guitar }}</span>
+          <span class="hero-stat-label">吉他</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-value">{{ unlockedBadges }}</span>
+          <span class="hero-stat-label">徽章</span>
+        </div>
+      </div>
+    </section>
 
-        <!-- 闪光时刻照片墙 -->
-        <section class="photo-wall-section">
-          <div class="section-header">
-            <h2>✨ 闪光时刻</h2>
-            <button class="btn-text" @click="$router.push('/shines')">查看全部 →</button>
+    <!-- 今日任务 + 学习进度 -->
+    <div class="two-column">
+      <!-- 左：今日任务 -->
+      <section class="tasks-section">
+        <div class="section-header">
+          <h2>📋 今日任务</h2>
+          <span class="task-progress">{{ completedTasks }}/{{ tasks.length }}</span>
+        </div>
+        <div class="task-list">
+          <div
+            v-for="task in tasks"
+            :key="task.id"
+            class="task-item"
+            :class="{ completed: task.completed }"
+            @click="toggleTask(task.id)"
+          >
+            <div class="task-checkbox" :class="{ checked: task.completed }">
+              <svg v-if="task.completed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <span class="task-text">{{ task.text }}</span>
+            <span class="task-tag" :class="task.category">{{ task.category }}</span>
           </div>
-          <div class="photo-wall">
-            <div
-              v-for="(photo, idx) in displayPhotos"
-              :key="idx"
-              class="wall-photo"
-              :class="{ 'has-image': photo.url || photo.photoUrl }"
-              @click="openPhotoModal(photo)"
-            >
-              <img v-if="photo.url || photo.photoUrl" :src="photo.url || photo.photoUrl" :alt="photo.title" />
-              <div v-else class="photo-placeholder">
-                <span class="photo-emoji">{{ photo.icon || '✨' }}</span>
-              </div>
-              <div class="photo-overlay">
-                <span class="photo-title">{{ photo.title }}</span>
-              </div>
+        </div>
+        <div v-if="allTasksDone" class="tasks-celebrate">
+          🎉 太棒了！今日任务全部完成！
+        </div>
+      </section>
+
+      <!-- 右：学习进度 -->
+      <section class="progress-section">
+        <div class="section-header">
+          <h2>📚 学习进度</h2>
+        </div>
+        <div class="progress-list">
+          <div v-for="subject in subjects" :key="subject.key" class="progress-item">
+            <div class="progress-info">
+              <span class="progress-icon">{{ subject.icon }}</span>
+              <span class="progress-name">{{ subject.name }}</span>
+              <span class="progress-fraction">{{ subject.completed }}/{{ subject.total }}</span>
+            </div>
+            <div class="progress-bar-bg">
+              <div
+                class="progress-bar-fill"
+                :style="{ width: subject.percent + '%', background: subject.color }"
+              ></div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
+    </div>
 
+    <!-- 闪光时刻照片墙 -->
+    <section class="photo-wall-section">
+      <div class="section-header">
+        <h2>✨ 闪光时刻</h2>
+        <button class="btn-text" @click="$router.push('/shines')">查看全部 →</button>
+      </div>
+      <div class="photo-wall">
+        <div
+          v-for="(photo, idx) in displayPhotos"
+          :key="idx"
+          class="wall-photo"
+          :class="{ 'has-image': photo.url }"
+          @click="openPhotoModal(photo)"
+        >
+          <img v-if="photo.url" :src="photo.url" :alt="photo.title" />
+          <div v-else class="photo-placeholder">
+            <span class="photo-emoji">{{ photo.icon || '✨' }}</span>
+          </div>
+          <div class="photo-overlay">
+            <span class="photo-title">{{ photo.title }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 照片查看弹窗 -->
+    <div v-if="selectedPhoto" class="photo-modal" @click.self="selectedPhoto = null">
+      <div class="photo-modal-content">
+        <button class="photo-modal-close" @click="selectedPhoto = null">✕</button>
+        <div class="photo-modal-image">
+          <img v-if="selectedPhoto.url" :src="selectedPhoto.url" :alt="selectedPhoto.title" />
+          <span v-else class="photo-modal-emoji">{{ selectedPhoto.icon || '✨' }}</span>
+        </div>
+        <h3>{{ selectedPhoto.title }}</h3>
+        <p>{{ selectedPhoto.date }}</p>
+      </div>
+    </div>
       </div>
     </div>
   </div>
 </template>
 
-
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { getDiary, getShines, getGuitar, getTech, getProgress, getPhotoWall, savePhotoWall } from '../utils/api.js'
+import { getDiary, getShines, getGuitar, getTech, getProgress } from '../utils/api.js'
+
 const router = useRouter()
 
 const diary = ref([])
@@ -175,6 +192,58 @@ const guitar = ref([])
 const tech = ref([])
 const progress = ref({})
 const guitarVideo = ref(null)
+
+// 照片墙展示数据：从 shines 提取真实照片
+const displayPhotos = computed(() => {
+  const photos = []
+  shines.value.forEach(shine => {
+    if (shine.photos) {
+      try {
+        const shinePhotos = typeof shine.photos === 'string' ? JSON.parse(shine.photos) : shine.photos
+        shinePhotos.forEach((p, i) => {
+          if (photos.length < 8) {
+            photos.push({
+              url: p,
+              title: shine.title,
+              date: shine.date,
+              icon: shine.icon || '✨'
+            })
+          }
+        })
+      } catch (e) {
+        if (photos.length < 8 && shine.photoUrl) {
+          photos.push({
+            url: shine.photoUrl,
+            title: shine.title,
+            date: shine.date,
+            icon: shine.icon || '✨'
+          })
+        }
+      }
+    } else if (shine.photoUrl && photos.length < 8) {
+      photos.push({
+        url: shine.photoUrl,
+        title: shine.title,
+        date: shine.date,
+        icon: shine.icon || '✨'
+      })
+    }
+  })
+  // 不足时补充占位
+  const placeholders = [
+    { title: '期待更多美好', icon: '✨' },
+    { title: '记录精彩瞬间', icon: '📸' },
+    { title: '分享你的故事', icon: '🌟' },
+  ]
+  while (photos.length < 3) {
+    photos.push({
+      url: '',
+      title: placeholders[photos.length % placeholders.length].title,
+      icon: placeholders[photos.length % placeholders.length].icon
+    })
+  }
+  return photos
+})
 
 // 最新吉他视频
 const latestGuitarVideo = computed(() => {
@@ -189,109 +258,9 @@ const latestGuitarVideo = computed(() => {
 })
 
 const selectedPhoto = ref(null)
-const showPhotoSelector = ref(false)
-const editingPhotoIndex = ref(null)
-const photoWallRefreshKey = ref(0)
-const photoWallConfig = ref([])
-
-// 从闪光时刻取前6个填充照片墙
-const displayPhotos = computed(() => {
-  // 使用 refreshKey 强制重新计算
-  photoWallRefreshKey.value
-  
-  const photos = []
-  const customWall = photoWallConfig.value.length > 0 ? photoWallConfig.value : JSON.parse(localStorage.getItem('customPhotoWall') || '[]')
-
-  // 先用用户自定义的照片
-  for (let i = 0; i < 6; i++) {
-    if (customWall[i]?.id) {
-      // 找到对应的闪光时刻数据
-      const shine = shines.value?.find(s => s.id === customWall[i].id)
-      if (shine) {
-        photos.push({
-          ...shine,
-          url: shine.photoUrl || shine.url || '',
-          title: shine.title || '闪光时刻',
-          date: shine.date
-        })
-        continue
-      }
-    }
-    // 没有自定义的，用闪光时刻的
-    if (shines.value?.[i]) {
-      const shine = shines.value[i]
-      photos.push({
-        ...shine,
-        url: shine.photoUrl || shine.url || '',
-        title: shine.title || '闪光时刻',
-        date: shine.date
-      })
-    } else {
-      // 用占位符
-      const placeholders = [
-        { url: '', title: '春游时光', icon: '🌸', date: '' },
-        { url: '', title: '数学竞赛', icon: '🏆', date: '' },
-        { url: '', title: '吉他练习', icon: '🎸', date: '' },
-        { url: '', title: '科技制作', icon: '🔬', date: '' },
-        { url: '', title: '英语演讲', icon: '🎤', date: '' },
-        { url: '', title: '运动时刻', icon: '⚽', date: '' },
-      ]
-      photos.push(placeholders[i])
-    }
-  }
-  return photos
-})
 
 function openPhotoModal(photo) {
   selectedPhoto.value = photo
-}
-
-function openPhotoSelector(index) {
-  editingPhotoIndex.value = index
-  showPhotoSelector.value = true
-}
-
-async function selectShineForWall(shine) {
-  if (editingPhotoIndex.value === null) return
-  
-  // 更新配置
-  const newConfig = [...photoWallConfig.value]
-  newConfig[editingPhotoIndex.value] = {
-    id: shine.id,
-    title: shine.title,
-    photoUrl: shine.photoUrl || shine.url || '',
-    date: shine.date
-  }
-  photoWallConfig.value = newConfig
-  
-  // 同时保存到 localStorage 作为备份
-  localStorage.setItem('customPhotoWall', JSON.stringify(newConfig))
-  
-  // 保存到服务器
-  try {
-    console.log('正在保存照片墙配置:', newConfig)
-    const result = await savePhotoWall(newConfig)
-    console.log('保存照片墙配置成功:', result)
-    alert('保存成功！')
-  } catch (e) {
-    console.error('保存照片墙配置失败:', e)
-    alert('保存失败: ' + e.message + '\n请检查网络连接')
-  }
-  
-  // 强制刷新 computed 属性
-  photoWallRefreshKey.value++
-  
-  showPhotoSelector.value = false
-  editingPhotoIndex.value = null
-}
-
-// 分类图标映射
-function categoryIcon(category) {
-  const icons = {
-    study: '📚', sports: '⚽', art: '🎨', music: '🎸',
-    tech: '🔬', travel: '✈️', life: '🌟', other: '✨'
-  }
-  return icons[category] || '✨'
 }
 
 // 今日任务
@@ -565,32 +534,18 @@ const recentShines = computed(() => shines.value.slice(0, 3))
 
 onMounted(async () => {
   try {
-    const [d, s, g, t, p, wall] = await Promise.all([
+    const [d, s, g, t, p] = await Promise.all([
       getDiary().catch(() => []),
       getShines().catch(() => []),
       getGuitar().catch(() => []),
       getTech().catch(() => []),
-      getProgress().catch(() => ({})),
-      getPhotoWall().catch(() => ({ config: [] }))
+      getProgress().catch(() => ({}))
     ])
     diary.value = d
     shines.value = s
     guitar.value = g
     tech.value = t
     progress.value = p
-    
-    // 加载照片墙配置（优先使用服务器数据，否则用 localStorage）
-    console.log('照片墙服务器数据:', wall)
-    if (wall && wall.config && wall.config.length > 0) {
-      photoWallConfig.value = wall.config
-      console.log('使用服务器照片墙配置:', wall.config)
-    } else {
-      const localConfig = JSON.parse(localStorage.getItem('customPhotoWall') || '[]')
-      console.log('照片墙本地配置:', localConfig)
-      if (localConfig.length > 0) {
-        photoWallConfig.value = localConfig
-      }
-    }
   } catch (e) {
     console.error('加载首页数据失败:', e)
   }
@@ -601,7 +556,7 @@ onMounted(async () => {
 .home-view {
   width: 100%;
   max-width: 100%;
-  padding: 50px 12px 0;
+  padding: 0 12px;
   box-sizing: border-box;
 }
 
@@ -754,7 +709,6 @@ section:hover {
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s;
-  min-width: 0;
 }
 
 .task-item:hover {
@@ -795,11 +749,8 @@ section:hover {
 
 .task-text {
   flex: 1;
-  color: #f0f0f5 !important;
+  color: var(--text);
   font-size: 14px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .task-tag {
@@ -1035,7 +986,7 @@ section:hover {
 /* 徽章 */
 .badges-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 14px;
 }
 
@@ -1186,21 +1137,22 @@ section:hover {
   margin-top: 2px;
 }
 
-/* 照片墙 - 统一正方形，不裁剪变形 */
+/* 照片墙 - 真正的照片墙形式 */
 .photo-wall {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  grid-auto-rows: 200px;
+  gap: 20px;
 }
 
-.photo-wall .wall-photo {
-  aspect-ratio: 1;
-  border-radius: 12px;
-  position: relative;
+.wall-photo {
+  border-radius: 16px;
   overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  background: var(--surface2);
+  transition: all 0.3s ease;
 }
-
-
 
 .wall-photo:hover {
   transform: translateY(-4px) scale(1.02);
@@ -1208,17 +1160,42 @@ section:hover {
   z-index: 10;
 }
 
-/* 照片统一正方形，图片自适应填充 */
 .wall-photo img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  background: var(--surface2);
   transition: transform 0.3s ease;
+  background: var(--surface3);
 }
 
 .wall-photo:hover img {
-  transform: scale(1.05);
+  transform: scale(1.1);
+}
+
+
+.photo-size-0 {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.photo-size-1 {
+  grid-column: span 1;
+  grid-row: span 1;
+}
+
+.photo-size-2 {
+  grid-column: span 1;
+  grid-row: span 2;
+}
+
+.photo-size-3 {
+  grid-column: span 2;
+  grid-row: span 1;
+}
+
+.photo-size-4 {
+  grid-column: span 1;
+  grid-row: span 1;
 }
 
 .photo-placeholder {
@@ -1318,22 +1295,18 @@ section:hover {
   padding: 40px;
 }
 
-/* 吉他视频 - 适配手机竖屏 9:16 */
+/* 吉他视频 */
 .video-container {
   width: 100%;
-  max-width: 280px;
-  margin: 0 auto;
   border-radius: 16px;
   overflow: hidden;
   background: var(--surface2);
-  aspect-ratio: 9 / 16;
-  max-height: 360px;
 }
 
 .guitar-video {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-height: 400px;
+  object-fit: contain;
   display: block;
 }
 
@@ -1392,111 +1365,24 @@ section:hover {
   background: var(--accent-dim);
 }
 
-/* 照片编辑悬停 */
-.photo-edit-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  border-radius: 16px;
-  cursor: pointer;
-}
-
-.wall-photo:hover .photo-edit-overlay {
-  opacity: 1;
-}
-
-.edit-icon {
-  font-size: 24px;
-}
-
-.edit-text {
-  font-size: 13px;
-  color: var(--text);
-  font-weight: 500;
-}
-
-/* 闪光时刻选择器 */
-.selector-modal {
-  max-width: 600px;
-  max-height: 80vh;
-}
-
-.shine-selector-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-
-.shine-selector-item {
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 12px;
-  background: var(--surface2);
-  transition: all 0.2s;
-  text-align: center;
-}
-
-.shine-selector-item:hover {
-  background: var(--accent-dim);
-  transform: translateY(-2px);
-}
-
-.shine-selector-img {
-  width: 100%;
-  aspect-ratio: 1;
-  border-radius: 8px;
-  overflow: hidden;
-  background: var(--surface3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 8px;
-}
-
-.shine-selector-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.shine-selector-icon {
-  font-size: 32px;
-}
-
-.shine-selector-title {
-  font-size: 12px;
-  color: var(--text);
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 /* 响应式 */
 @media (max-width: 1024px) {
   .photo-wall {
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: 120px;
   }
-  .shine-selector-grid {
-    grid-template-columns: repeat(3, 1fr);
+  .photo-size-0 {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+  .photo-size-2 {
+    grid-row: span 1;
   }
 }
 
 @media (max-width: 768px) {
   .two-column {
     grid-template-columns: 1fr;
-  }
-  .photo-wall {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
   }
   .hero-section {
     flex-direction: column;
@@ -1518,178 +1404,46 @@ section:hover {
     grid-auto-rows: 100px;
     gap: 8px;
   }
+  .photo-size-0 {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+  .photo-size-2 {
+    grid-row: span 1;
+  }
   .wall-photo {
     border-radius: 12px;
   }
   .wall-photo .photo-emoji {
     font-size: 32px !important;
   }
-  .shine-selector-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 @media (max-width: 480px) {
   .photo-wall {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-  }
-  .shine-selector-grid {
     grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 90px;
+  }
+  .photo-size-0 {
+    grid-column: span 2;
+    grid-row: span 2;
   }
 }
 
-/* 欢迎动画 */
-.welcome-overlay {
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3e 50%, #0a0a1a 100%);
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 30px;
-  animation: welcomeFadeOut 0.8s ease 4.5s forwards;
-  cursor: pointer;
-}
-
-.welcome-text {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 0 20px;
-}
-
-.welcome-char {
-  font-size: 52px;
-  font-weight: 900;
-  color: var(--accent);
-  text-shadow: 0 0 30px rgba(74, 222, 128, 0.5), 0 0 60px rgba(74, 222, 128, 0.2);
-  opacity: 0;
-  transform: translateY(-100px);
-  animation: charDrop 0.6s ease forwards;
-}
-
-@keyframes charDrop {
-  0% {
-    opacity: 0;
-    transform: translateY(-100px) rotate(-10deg);
-  }
-  60% {
-    opacity: 1;
-    transform: translateY(10px) rotate(3deg);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) rotate(0);
-  }
-}
-
-.welcome-subtitle {
-  font-size: 18px;
-  color: var(--text2);
-  opacity: 0;
-  animation: subtitleIn 0.8s ease forwards;
-}
-
-@keyframes subtitleIn {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.welcome-photos {
-  display: flex;
-  gap: 16px;
-  margin-top: 20px;
-}
-
-.welcome-photo {
-  width: 80px;
-  height: 80px;
-  border-radius: 16px;
-  object-fit: cover;
-  opacity: 0;
-  transform: scale(0) rotate(-20deg);
-  animation: photoPop 0.6s ease forwards;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-}
-
-@keyframes photoPop {
-  0% {
-    opacity: 0;
-    transform: scale(0) rotate(-20deg);
-  }
-  70% {
-    opacity: 1;
-    transform: scale(1.1) rotate(5deg);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) rotate(0);
-  }
-}
-
-.welcome-skip {
-  position: absolute;
-  bottom: 40px;
-  font-size: 13px;
-  color: var(--text3);
-  opacity: 0.6;
-  animation: skipPulse 2s ease infinite;
-}
-
-@keyframes skipPulse {
-  0%, 100% {
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 0.8;
-  }
-}
-
-@keyframes welcomeFadeOut {
-  0% {
-    opacity: 1;
-    visibility: visible;
-  }
-  100% {
-    opacity: 0;
-    visibility: hidden;
-  }
-}
-
-@media (max-width: 768px) {
-  .welcome-char {
-    font-size: 36px;
-  }
-  .welcome-subtitle {
-    font-size: 15px;
-  }
-  .welcome-photo {
-    width: 60px;
-    height: 60px;
-    border-radius: 12px;
-  }
-}
 
 /* ===== 左右分栏布局 ===== */
 .home-split-layout {
   display: grid;
   grid-template-columns: 320px 1fr;
   gap: 20px;
+  align-items: start;
 }
 .home-left-col {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  flex-shrink: 0;
+  align-items: flex-start;
 }
 .home-right-col {
   display: flex;
@@ -1704,20 +1458,18 @@ section:hover {
   }
 }
 
-
 /* 左栏模块样式 */
 .home-left-col section {
-  margin-bottom: 0;
+  width: 100%;
 }
 
-
-/* ===== 吉他视频优化 ===== */
+/* ===== 吉他视频 ===== */
 .guitar-video-section {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 16px;
-  flex: 1;
+  width: 100%;
 }
 .video-container {
   margin-top: 12px;
@@ -1725,12 +1477,14 @@ section:hover {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  width: 100%;
 }
 .video-player {
   width: 100%;
   aspect-ratio: 16/9;
   object-fit: cover;
   display: block;
+  border-radius: 12px;
 }
 .empty-video {
   display: flex;
@@ -1753,82 +1507,9 @@ section:hover {
   margin: 0;
 }
 
-/* ===== 照片墙优化 ===== */
-.photo-wall-section {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 16px;
-}
-.photo-wall {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 12px;
-  margin-top: 12px;
-}
-.wall-photo {
-  position: relative;
-  aspect-ratio: 1;
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background: var(--surface2);
-  border: 2px solid transparent;
-}
-.wall-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s;
-}
-.wall-photo:hover {
-  transform: translateY(-4px) scale(1.02);
-  border-color: var(--accent);
-  box-shadow: 0 12px 24px rgba(74, 222, 128, 0.2);
-  z-index: 10;
-}
-.wall-photo:hover img {
-  transform: scale(1.1);
-}
-.photo-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, var(--surface2), var(--surface3));
-}
-.photo-emoji {
-  font-size: 36px;
-  opacity: 0.5;
-}
-.photo-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 20px 12px 12px;
-  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
-  color: white;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.wall-photo:hover .photo-overlay {
-  opacity: 1;
-}
-.photo-title {
-  font-size: 12px;
-  font-weight: 600;
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.photo-date {
-  font-size: 10px;
-  color: rgba(255,255,255,0.7);
-  margin-top: 2px;
-}
 
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
 </style>

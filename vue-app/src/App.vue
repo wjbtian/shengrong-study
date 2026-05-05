@@ -162,6 +162,8 @@ onUnmounted(() => {
   min-height: 100vh;
   width: 100%;
   box-sizing: border-box;
+  overflow-y: auto;
+  height: 100vh;
 }
 
 /* 页面切换动画 */
