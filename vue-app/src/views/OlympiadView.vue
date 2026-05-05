@@ -450,9 +450,10 @@ onMounted(async () => {
 
 <style scoped>
 .olympiad-view {
-  padding: 24px;
+  padding: 50px 24px 0;
   max-width: 1200px;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 /* 英雄区 */

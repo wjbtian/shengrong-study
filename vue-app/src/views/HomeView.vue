@@ -138,29 +138,7 @@
     </div>
 
     <!-- 闪光时刻照片墙 -->
-    <section class="photo-wall-section">
-      <div class="section-header">
-        <h2>✨ 闪光时刻</h2>
-        <button class="btn-text" @click="$router.push('/shines')">查看全部 →</button>
-      </div>
-      <div class="photo-wall">
-        <div
-          v-for="(photo, idx) in displayPhotos"
-          :key="idx"
-          class="wall-photo"
-          :class="{ 'has-image': photo.url }"
-          @click="openPhotoModal(photo)"
-        >
-          <img v-if="photo.url" :src="photo.url" :alt="photo.title" />
-          <div v-else class="photo-placeholder">
-            <span class="photo-emoji">{{ photo.icon || '✨' }}</span>
-          </div>
-          <div class="photo-overlay">
-            <span class="photo-title">{{ photo.title }}</span>
-          </div>
-        </div>
-      </div>
-    </section>
+    <PhotoWall :photos="displayPhotos" @open="openPhotoModal" />
 
     <!-- 照片查看弹窗 -->
     <div v-if="selectedPhoto" class="photo-modal" @click.self="selectedPhoto = null">
@@ -183,6 +161,9 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { getDiary, getShines, getGuitar, getTech, getProgress } from '../utils/api.js'
+import PhotoWall from '../components/PhotoWall.vue'
+import ActivityChart from '../components/ActivityChart.vue'
+import MoodStats from '../components/MoodStats.vue'
 
 const router = useRouter()
 
@@ -556,7 +537,7 @@ onMounted(async () => {
 .home-view {
   width: 100%;
   max-width: 100%;
-  padding: 0 12px;
+  padding: 50px 12px 0;
   box-sizing: border-box;
 }
 
