@@ -2,6 +2,7 @@
   <div class="diary-card" :style="moodStyle">
     <div class="diary-header">
       <span class="diary-mood">{{ moodIcon }}</span>
+      <span class="diary-title">{{ diary.title }}</span>
       <span class="diary-date">{{ diary.date }}</span>
     </div>
     <p class="diary-content">{{ diary.content }}</p>
@@ -58,6 +59,13 @@ const moodIcon = computed(() => moodConfig[props.diary.mood]?.icon || '📝')
 
 .diary-mood {
   font-size: 24px;
+}
+
+.diary-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  flex: 1;
 }
 
 .diary-date {

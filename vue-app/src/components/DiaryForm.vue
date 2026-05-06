@@ -24,6 +24,13 @@
           </div>
         </div>
 
+        <!-- 标题 -->
+        <input
+          v-model="form.title"
+          class="input"
+          placeholder="日记标题"
+        >
+
         <!-- 内容 -->
         <textarea
           v-model="form.content"
@@ -60,17 +67,18 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'save'])
 
-const form = ref({ mood: 'happy', content: '', tagsInput: '' })
+const form = ref({ mood: 'happy', title: '', content: '', tagsInput: '' })
 
 watch(() => props.diary, (d) => {
   if (d) {
     form.value = {
       mood: d.mood || 'happy',
+      title: d.title || '',
       content: d.content || '',
       tagsInput: d.tags?.join(', ') || ''
     }
   } else {
-    form.value = { mood: 'happy', content: '', tagsInput: '' }
+    form.value = { mood: 'happy', title: '', content: '', tagsInput: '' }
   }
 }, { immediate: true })
 
@@ -83,6 +91,7 @@ function save() {
   emit('save', {
     ...(props.diary?.id ? { id: props.diary.id } : {}),
     mood: form.value.mood,
+    title: form.value.title.trim() || '无标题',
     content: form.value.content.trim(),
     tags
   })

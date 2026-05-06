@@ -94,13 +94,13 @@ export function useDiary() {
   })
 
   const filters = [
-    { value: 'all', label: '全部' },
+    { value: null, label: '全部' },
     ...moodKeys.map(k => ({ value: k, label: `${moodConfig[k].icon} ${moodConfig[k].label}` }))
   ]
 
   // 工具函数
   function selectMood(mood) {
-    selectedMood.value = selectedMood.value === mood ? null : mood
+    selectedMood.value = mood
     currentPage.value = 1
   }
 
