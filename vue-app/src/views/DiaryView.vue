@@ -1,565 +1,293 @@
 <template>
   <div class="diary-view">
-    <!-- 顶部英雄区 -->
-    <section class="diary-hero">
-      <div class="diary-hero-content">
-        <div class="diary-hero-emoji">📔</div>
-        <h1 class="diary-hero-title">成长日记</h1>
-        <p class="diary-hero-subtitle">记录每一天的精彩瞬间</p>
-        <div class="diary-hero-stats">
-          <div class="diary-hero-stat">
-            <span class="diary-hero-stat-num">{{ diary.length }}</span>
-            <span class="diary-hero-stat-label">篇日记</span>
-          </div>
-          <div class="diary-hero-stat">
-            <span class="diary-hero-stat-num">{{ streak }}</span>
-            <span class="diary-hero-stat-label">连续天数</span>
-          </div>
-          <div class="diary-hero-stat">
-            <span class="diary-hero-stat-num">{{ thisMonth }}</span>
-            <span class="diary-hero-stat-label">本月</span>
-          </div>
-        </div>
+    <!-- 顶部 -->
+    <section class="page-header">
+      <div>
+        <h1>📔 日记本</h1>
+        <p class="subtitle">记录每一天的心情和故事</p>
       </div>
-      <button class="btn-write" @click="showWriteModal = true">
-        <span>✍️</span> 写日记
+      <button class="btn-primary" @click="openWriteModal">
+        <span>✏️</span> 写日记
       </button>
     </section>
 
-    <!-- 心情分布 -->
-    <section class="mood-stats-section">
-      <div class="section-header">
-        <h3 class="section-title">心情分布</h3>
-        <span class="section-subtitle">最近30天</span>
-      </div>
-      <div class="mood-distribution">
-        <div
-          v-for="item in moodDistribution"
-          :key="item.mood"
-          class="mood-dist-item"
-        >
-          <span class="mood-dist-icon" :style="{ color: item.color }">
-            <MoodIcon :name="getMoodIcon(item.mood)" :color="item.color" />
-          </span>
-          <div class="mood-dist-bar-bg">
-            <div
-              class="mood-dist-bar-fill"
-              :style="{ width: item.percent + '%', background: item.color }"
-            ></div>
-          </div>
-          <span class="mood-dist-count">{{ item.count }}</span>
+    <!-- 统计 -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <span class="stat-icon">📖</span>
+        <div>
+          <span class="stat-value">{{ diary.length }}</span>
+          <span class="stat-label">篇日记</span>
         </div>
       </div>
-    </section>
+      <div class="stat-card">
+        <span class="stat-icon">🔥</span>
+        <div>
+          <span class="stat-value">{{ streak }}</span>
+          <span class="stat-label">连续(天)</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">📅</span>
+        <div>
+          <span class="stat-value">{{ thisMonth }}</span>
+          <span class="stat-label">本月</span>
+        </div>
+      </div>
+    </div>
 
-    <!-- 心情时光轴 -->
-    <section class="mood-wall-section">
-      <div class="section-header">
-        <h3 class="section-title">心情时光轴</h3>
-        <span class="section-subtitle">点击表情查看详情</span>
-      </div>
-      <div class="mood-wall">
-        <div class="mood-wall-items">
-          <div
-            v-for="item in moodWallItems"
-            :key="item.id"
-            class="mood-wall-item"
-            :class="{ active: selectedMood === item.mood }"
-            @click="selectMood(item.mood)"
-          >
-            <span class="mood-wall-icon">
-            <MoodIcon :name="getMoodIcon(item.mood)" :color="getMoodColor(item.mood)" />
-          </span>
-            <span class="mood-wall-date">{{ item.date }}</span>
+    <!-- 心情分布 -->
+    <div class="mood-distribution" v-if="moodDistribution.length">
+      <p class="section-title">心情分布</p>
+      <div class="mood-bars">
+        <div
+          v-for="m in moodDistribution"
+          :key="m.mood"
+          class="mood-bar-item"
+          :title="`${m.label}: ${m.count}篇`"
+        >
+          <span class="mood-bar-icon">{{ m.icon }}</span>
+          <div class="mood-bar-track">
+            <div class="mood-bar-fill" :style="{ width: m.percent + '%', background: m.color }"></div>
           </div>
+          <span class="mood-bar-count">{{ m.count }}</span>
         </div>
       </div>
-    </section>
+    </div>
+
+    <!-- 心情墙 -->
+    <div class="mood-wall" v-if="moodWallItems.length">
+      <p class="section-title">近三月心情</p>
+      <div class="mood-wall-items">
+        <div v-for="item in moodWallItems" :key="item.month" class="mood-wall-item">
+          <span class="mood-wall-icon">{{ item.icon }}</span>
+          <span class="mood-wall-month">{{ item.month }}</span>
+          <span class="mood-wall-count">{{ item.count }}篇</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 筛选 -->
+    <MoodFilter :filters="filters" :current="selectedMood" @change="selectMood" />
 
     <!-- 日记列表 -->
-    <section class="diary-list-section">
-      <div class="section-header-with-action">
-        <div>
-          <h3 class="section-title">日记列表</h3>
-          <span class="section-subtitle">按时间倒序排列</span>
-        </div>
-        <div class="diary-filters">
-          <button
-            v-for="filter in filters"
-            :key="filter.value"
-            class="diary-filter"
-            :class="{ active: currentFilter === filter.value }"
-            @click="currentFilter = filter.value"
-          >
-            {{ filter.label }}
-          </button>
-        </div>
-      </div>
-      <div class="diary-card-list">
-        <div
-          v-for="item in filteredDiary"
-          :key="item.id"
-          class="diary-card"
-        >
-          <div class="diary-card-header">
-            <span class="diary-card-mood" :style="getMoodStyle(item.mood)">
-              <MoodIcon :name="getMoodIcon(item.mood)" :color="getMoodColor(item.mood)" />
-            </span>
-            <div class="diary-card-actions">
-              <span class="diary-card-date">{{ item.date }}</span>
-              <button class="diary-action-btn" @click.stop="openEdit(item)" title="编辑">✏️</button>
-              <button class="diary-action-btn delete" @click.stop="removeDiary(item.id)" title="删除">🗑️</button>
-            </div>
-          </div>
-          <h4 class="diary-card-title">{{ item.title || '无标题' }}</h4>
-          <p class="diary-card-content">{{ item.content }}</p>
-          <div v-if="item.tags?.length" class="diary-card-tags">
-            <span v-for="tag in item.tags" :key="tag" class="diary-tag">{{ tag }}</span>
-          </div>
-        </div>
-      </div>
-      <div v-if="filteredDiary.length === 0" class="empty-state">
-        暂无日记记录
-      </div>
-      <div v-if="hasMore" class="load-more">
-        <button class="btn-load-more" @click="loadMore">
-          加载更多 ({{ filteredDiary.length }} / {{ diary.length }})
-        </button>
-      </div>
-    </section>
+    <div class="diary-list">
+      <DiaryCard
+        v-for="item in pagedDiary"
+        :key="item.id"
+        :diary="item"
+        @edit="openEditModal(item)"
+        @delete="confirmDelete(item)"
+      />
+    </div>
+
+    <!-- 加载更多 -->
+    <div v-if="hasMore" class="load-more">
+      <button class="btn-load" @click="loadMore">加载更多</button>
+    </div>
+
+    <!-- 空状态 -->
+    <div v-if="pagedDiary.length === 0 && !loading" class="empty-state">
+      <span class="empty-icon">📔</span>
+      <p>还没有日记</p>
+      <button class="btn-primary" @click="openWriteModal">写下第一篇</button>
+    </div>
 
     <!-- 写日记弹窗 -->
-    <div v-if="showWriteModal" class="modal" @click.self="showWriteModal = false">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>✍️ 写日记</h3>
-          <button class="modal-close" @click="showWriteModal = false">✕</button>
-        </div>
-        <div class="modal-body">
-          <div class="mood-selector">
-            <span
-              v-for="(m, key) in moodConfig"
-              :key="key"
-              class="mood-option"
-              :class="{ selected: newDiary.mood === key }"
-              @click="newDiary.mood = key"
-              :title="m.label"
-            >
-              <MoodIcon :name="m.icon" :color="m.color" />
-            </span>
-          </div>
-          <input v-model="newDiary.title" class="input" placeholder="标题（可选）">
-          <textarea v-model="newDiary.content" class="textarea" rows="6" placeholder="今天发生了什么有趣的事？"></textarea>
-          <input v-model="newDiary.tags" class="input" placeholder="标签，用空格分隔">
-        </div>
-        <div class="modal-footer">
-          <button class="btn" @click="showWriteModal = false">取消</button>
-          <button class="btn btn-primary" @click="saveDiary">保存</button>
-        </div>
-      </div>
-    </div>
+    <DiaryForm :show="showWriteModal" @close="showWriteModal = false" @save="handleSave" />
 
-    <!-- 编辑日记弹窗 -->
-    <div v-if="showEditModal" class="modal" @click.self="showEditModal = false">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>✏️ 编辑日记</h3>
-          <button class="modal-close" @click="showEditModal = false">✕</button>
-        </div>
-        <div class="modal-body">
-          <div class="mood-selector">
-            <span
-              v-for="(m, key) in moodConfig"
-              :key="key"
-              class="mood-option"
-              :class="{ selected: editingDiary?.mood === key }"
-              @click="editingDiary && (editingDiary.mood = key)"
-              :title="m.label"
-            >
-              <MoodIcon :name="m.icon" :color="m.color" />
-            </span>
-          </div>
-          <input v-model="editingDiary.title" class="input" placeholder="标题（可选）">
-          <textarea v-model="editingDiary.content" class="textarea" rows="6" placeholder="今天发生了什么有趣的事？"></textarea>
-        </div>
-        <div class="modal-footer">
-          <button class="btn" @click="showEditModal = false">取消</button>
-          <button class="btn btn-primary" @click="updateDiary">保存</button>
-        </div>
-      </div>
-    </div>
+    <!-- 编辑弹窗 -->
+    <DiaryForm :show="showEditModal" :diary="editingDiary" @close="closeEditModal" @save="handleUpdate" />
+
+    <!-- 删除确认 -->
+    <ConfirmDialog
+      v-if="deleteTarget"
+      :show="!!deleteTarget"
+      title="删除日记"
+      :message="`确定要删除这篇日记吗？`"
+      confirm-text="删除"
+      @confirm="doDelete"
+      @cancel="deleteTarget = null"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { getDiary, postDiary, putDiary, deleteDiary } from '../utils/api.js'
+import { ref, onMounted } from 'vue'
+import { useDiary } from '../composables/useDiary.js'
+import DiaryCard from '../components/DiaryCard.vue'
+import DiaryForm from '../components/DiaryForm.vue'
+import MoodFilter from '../components/MoodFilter.vue'
+import ConfirmDialog from '../components/ConfirmDialog.vue'
 
-const diary = ref([])
+const {
+  diary,
+  loading,
+  selectedMood,
+  moodDistribution,
+  pagedDiary,
+  hasMore,
+  streak,
+  thisMonth,
+  moodWallItems,
+  filters,
+  selectMood,
+  load,
+  save,
+  update,
+  remove
+} = useDiary()
+
 const showWriteModal = ref(false)
 const showEditModal = ref(false)
 const editingDiary = ref(null)
-const currentFilter = ref('all')
-const selectedMood = ref(null)
+const deleteTarget = ref(null)
 
-// 心情配置：SVG图标 + 颜色
-const moodConfig = {
-  happy:     { icon: 'diary-mood-happy', label: '开心', color: '#fbbf24', bg: 'rgba(251, 191, 36, 0.15)' },
-  good:      { icon: 'diary-mood-good', label: '不错', color: '#4ade80', bg: 'rgba(74, 222, 128, 0.15)' },
-  awesome:   { icon: 'diary-mood-awesome', label: '超棒', color: '#f97316', bg: 'rgba(249, 115, 22, 0.15)' },
-  cool:      { icon: 'diary-mood-cool', label: '酷炫', color: '#818cf8', bg: 'rgba(129, 140, 248, 0.15)' },
-  celebrate: { icon: 'diary-mood-celebrate', label: '庆祝', color: '#ec4899', bg: 'rgba(236, 72, 153, 0.15)' },
-  calm:      { icon: 'diary-mood-calm', label: '平静', color: '#94a3b8', bg: 'rgba(148, 163, 184, 0.15)' },
-  sad:       { icon: 'diary-mood-sad', label: '难过', color: '#64748b', bg: 'rgba(100, 116, 139, 0.15)' },
-  cry:       { icon: 'diary-mood-cry', label: '伤心', color: '#475569', bg: 'rgba(71, 85, 105, 0.15)' },
-  angry:     { icon: 'diary-mood-angry', label: '生气', color: '#ef4444', bg: 'rgba(239, 68, 68, 0.15)' },
-  tired:     { icon: 'diary-mood-tired', label: '疲惫', color: '#a78bfa', bg: 'rgba(167, 139, 250, 0.15)' }
+function openWriteModal() { showWriteModal.value = true }
+function openEditModal(item) { editingDiary.value = item; showEditModal.value = true }
+function closeEditModal() { showEditModal.value = false; editingDiary.value = null }
+
+async function handleSave(data) {
+  await save(data)
+  showWriteModal.value = false
 }
 
-const moodKeys = Object.keys(moodConfig)
-const moods = moodKeys.map(k => moodConfig[k].icon)
+async function handleUpdate(data) {
+  await update(data.id, data)
+  closeEditModal()
+}
 
-// 心情图标组件 - 使用 emoji 但带颜色样式
-const MoodIcon = {
-  props: ['name', 'color'],
-  setup(props) {
-    const emojiMap = {
-      'diary-mood-happy': '☀️',
-      'diary-mood-good': '🌟',
-      'diary-mood-awesome': '🔥',
-      'diary-mood-cool': '🚀',
-      'diary-mood-celebrate': '🎉',
-      'diary-mood-calm': '🍃',
-      'diary-mood-sad': '🌧️',
-      'diary-mood-cry': '💧',
-      'diary-mood-angry': '⚡',
-      'diary-mood-tired': '🌙',
-    }
-    return () => emojiMap[props.name] || '✨'
+function confirmDelete(item) { deleteTarget.value = item }
+async function doDelete() {
+  if (deleteTarget.value) {
+    await remove(deleteTarget.value.id)
+    deleteTarget.value = null
   }
 }
 
-const newDiary = ref({
-  mood: 'good',
-  title: '',
-  content: '',
-  tags: ''
-})
-
-// 心情分布
-const moodDistribution = computed(() => {
-  const stats = {}
-  diary.value.forEach(d => { if (d.mood) stats[d.mood] = (stats[d.mood] || 0) + 1 })
-  const total = Object.values(stats).reduce((a, b) => a + b, 0)
-  return Object.entries(stats)
-    .map(([mood, count]) => {
-      const cfg = moodConfig[mood] || { color: '#94a3b8', bg: 'rgba(148, 163, 184, 0.15)' }
-      return { mood, count, percent: total ? Math.round((count / total) * 100) : 0, color: cfg.color }
-    })
-    .sort((a, b) => b.count - a.count)
-})
-
-// 分页
-const pageSize = 10
-const currentPage = ref(1)
-const hasMore = computed(() => {
-  let result = diary.value
-  if (currentFilter.value !== 'all') {
-    result = result.filter(d => d.mood === currentFilter.value)
-  }
-  if (selectedMood.value) {
-    result = result.filter(d => d.mood === selectedMood.value)
-  }
-  return result.length > currentPage.value * pageSize
-})
-
-const filters = [
-  { value: 'all', label: '全部' },
-  { value: 'happy', label: '开心' },
-  { value: 'awesome', label: '超棒' },
-  { value: 'good', label: '不错' },
-  { value: 'sad', label: '难过' },
-]
-
-
-
-// 心情墙
-const moodWallItems = computed(() => {
-  return diary.value
-    .filter(d => d.mood)
-    .slice(0, 30)
-    .map(d => ({ id: d.id, mood: d.mood, date: d.date.slice(5) }))
-})
-
-// 筛选 + 分页
-const filteredDiary = computed(() => {
-  let result = diary.value
-  if (currentFilter.value !== 'all') {
-    result = result.filter(d => d.mood === currentFilter.value)
-  }
-  if (selectedMood.value) {
-    result = result.filter(d => d.mood === selectedMood.value)
-  }
-  return result.slice(0, currentPage.value * pageSize)
-})
-
-function loadMore() {
-  currentPage.value++
-}
-
-// 连续天数
-const streak = computed(() => {
-  const dates = [...new Set(diary.value.map(d => d.date))].sort().reverse()
-  if (!dates.length) return 0
-  let count = 1
-  const today = new Date().toISOString().split('T')[0]
-  if (dates[0] !== today) return 0
-  for (let i = 1; i < dates.length; i++) {
-    const prev = new Date(dates[i - 1])
-    const curr = new Date(dates[i])
-    if ((prev - curr) / 86400000 === 1) count++
-    else break
-  }
-  return count
-})
-
-// 本月
-const thisMonth = computed(() => {
-  const month = new Date().toISOString().slice(0, 7)
-  return diary.value.filter(d => d.date?.startsWith(month)).length
-})
-
-function selectMood(mood) {
-  selectedMood.value = selectedMood.value === mood ? null : mood
-}
-
-function getMoodStyle(moodKey) {
-  const cfg = moodConfig[moodKey]
-  if (!cfg) return {}
-  return {
-    color: cfg.color,
-    background: cfg.bg,
-    padding: '4px 8px',
-    borderRadius: '8px',
-    fontSize: '18px'
-  }
-}
-
-function getMoodIcon(moodKey) {
-  return moodConfig[moodKey]?.icon || 'diary-mood-good'
-}
-
-function getMoodColor(moodKey) {
-  return moodConfig[moodKey]?.color || '#4ade80'
-}
-
-function getMoodLabel(moodKey) {
-  return moodConfig[moodKey]?.label || ''
-}
-
-
-
-async function saveDiary() {
-  if (!newDiary.value.content.trim()) return
-  const data = {
-    ...newDiary.value,
-    tags: newDiary.value.tags.split(' ').filter(Boolean),
-    date: new Date().toISOString().split('T')[0]
-  }
-  try {
-    const result = await postDiary(data)
-    diary.value.unshift({ ...data, id: result.id || Date.now() })
-    showWriteModal.value = false
-    newDiary.value = { mood: 'good', title: '', content: '', tags: '' }
-    currentPage.value = 1 // 重置到第一页
-  } catch (e) {
-    console.error('保存日记失败:', e)
-    alert('保存失败，请重试')
-  }
-}
-
-function openEdit(item) {
-  editingDiary.value = { ...item }
-  showEditModal.value = true
-}
-
-async function updateDiary() {
-  if (!editingDiary.value || !editingDiary.value.content.trim()) return
-  try {
-    await putDiary(editingDiary.value.id, editingDiary.value)
-    const idx = diary.value.findIndex(d => d.id === editingDiary.value.id)
-    if (idx !== -1) diary.value[idx] = { ...editingDiary.value }
-    showEditModal.value = false
-    editingDiary.value = null
-  } catch (e) {
-    console.error('更新日记失败:', e)
-  }
-}
-
-async function removeDiary(id) {
-  if (!confirm('确定要删除这篇日记吗？')) return
-  try {
-    await deleteDiary(id)
-    diary.value = diary.value.filter(d => d.id !== id)
-  } catch (e) {
-    console.error('删除日记失败:', e)
-  }
-}
-
-onMounted(async () => {
-  try {
-    diary.value = await getDiary().catch(() => [])
-  } catch (e) {
-    console.error('加载日记失败:', e)
-  }
-})
+onMounted(() => load())
 </script>
 
 <style scoped>
 .diary-view {
-  max-width: 1200px;
+  max-width: 800px;
   margin: 0 auto;
-  padding: 50px 12px 0;
-  box-sizing: border-box;
+  padding: 60px 20px 40px;
 }
 
-/* 英雄区 */
-.diary-hero {
+.page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 32px;
-  background: linear-gradient(135deg, rgba(74, 222, 128, 0.08) 0%, rgba(129, 140, 248, 0.05) 100%);
-  border-radius: 16px;
-  border: 1px solid rgba(74, 222, 128, 0.15);
   margin-bottom: 24px;
 }
 
-.diary-hero-content {
-  flex: 1;
-}
-
-.diary-hero-emoji {
-  font-size: 48px;
-  margin-bottom: 8px;
-}
-
-.diary-hero-title {
+h1 {
+  margin: 0;
   font-size: 28px;
-  font-weight: 800;
+  font-weight: 900;
   color: var(--text);
-  margin-bottom: 4px;
 }
 
-.diary-hero-subtitle {
+.subtitle {
+  margin: 4px 0 0;
   font-size: 14px;
-  color: var(--text2);
-  margin-bottom: 16px;
+  color: var(--text3);
 }
 
-.diary-hero-stats {
-  display: flex;
-  gap: 24px;
-}
-
-.diary-hero-stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.diary-hero-stat-num {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--accent);
-}
-
-.diary-hero-stat-label {
-  font-size: 12px;
-  color: var(--text2);
-}
-
-.btn-write {
+.btn-primary {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 12px 24px;
   background: var(--accent);
-  color: var(--bg);
+  color: white;
   border: none;
-  border-radius: 10px;
-  font-size: 15px;
+  border-radius: 12px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s;
 }
 
-.btn-write:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(74, 222, 128, 0.3);
+.stats-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
-/* 心情分布 */
-.mood-stats-section {
+.stat-card {
+  flex: 1;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 20px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stat-icon { font-size: 24px; }
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text);
+  display: block;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--text3);
+}
+
+.section-title {
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text2);
+}
+
+.mood-distribution, .mood-wall {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
   margin-bottom: 20px;
 }
 
-.mood-distribution {
+.mood-bars {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
-.mood-dist-item {
+.mood-bar-item {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
-.mood-dist-icon {
-  font-size: 20px;
-  width: 32px;
-  text-align: center;
-}
+.mood-bar-icon { font-size: 16px; }
 
-.mood-dist-bar-bg {
+.mood-bar-track {
   flex: 1;
   height: 8px;
-  background: var(--surface3);
+  background: var(--surface2);
   border-radius: 4px;
   overflow: hidden;
 }
 
-.mood-dist-bar-fill {
+.mood-bar-fill {
   height: 100%;
   border-radius: 4px;
   transition: width 0.5s ease;
 }
 
-.mood-dist-count {
-  font-size: 13px;
-  color: var(--text2);
-  width: 24px;
+.mood-bar-count {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 20px;
   text-align: right;
-}
-
-/* 心情墙 */
-.mood-wall-section {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
-}
-
-.mood-wall {
-  overflow-x: auto;
-  padding-bottom: 8px;
 }
 
 .mood-wall-items {
@@ -568,363 +296,57 @@ onMounted(async () => {
 }
 
 .mood-wall-item {
+  flex: 1;
+  background: var(--surface2);
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+}
+
+.mood-wall-icon { font-size: 24px; display: block; }
+.mood-wall-month { font-size: 12px; color: var(--text2); display: block; }
+.mood-wall-count { font-size: 14px; color: var(--text); font-weight: 600; }
+
+.diary-list {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 12px;
-  background: var(--surface2);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.2s;
-  min-width: 60px;
+  gap: 16px;
 }
 
-.mood-wall-item:hover {
-  background: var(--surface3);
+.load-more {
+  text-align: center;
+  margin-top: 24px;
 }
 
-.mood-wall-item.active {
-  background: var(--accent-dim);
-  border: 1px solid var(--accent);
-}
-
-.mood-wall-icon {
-  font-size: 28px;
-}
-
-.mood-wall-date {
-  font-size: 11px;
-  color: var(--text3);
-}
-
-/* 日记列表 */
-.diary-list-section {
+.btn-load {
+  padding: 12px 32px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 20px;
-}
-
-.section-header-with-action {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.diary-filters {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.diary-filter {
-  padding: 6px 14px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text2);
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.diary-filter:hover {
-  background: var(--surface3);
-}
-
-.diary-filter.active {
-  background: var(--accent-dim);
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.diary-card-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.diary-card {
-  padding: 16px;
-  background: var(--surface2);
-  border-radius: 10px;
-  transition: all 0.2s;
-}
-
-.diary-card:hover {
-  background: var(--surface3);
-}
-
-.diary-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.diary-card-mood {
-  font-size: 20px;
-}
-
-.diary-card-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.diary-card-date {
-  font-size: 12px;
-  color: var(--text2);
-}
-
-.diary-action-btn {
-  background: none;
-  border: none;
-  font-size: 14px;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  opacity: 0.6;
-  transition: all 0.2s;
-}
-
-.diary-action-btn:hover {
-  opacity: 1;
-  background: var(--surface3);
-}
-
-.diary-action-btn.delete:hover {
-  background: rgba(248, 113, 113, 0.2);
-}
-
-.diary-card-title {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 6px;
-}
-
-.diary-card-content {
   font-size: 14px;
   color: var(--text2);
-  line-height: 1.6;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.diary-card-tags {
-  display: flex;
-  gap: 6px;
-  margin-top: 10px;
-  flex-wrap: wrap;
-}
-
-.diary-tag {
-  font-size: 11px;
-  padding: 2px 8px;
-  background: var(--surface3);
-  border-radius: 4px;
-  color: var(--text2);
-}
-
-/* 加载更多 */
-.load-more {
-  text-align: center;
-  padding: 20px 0 10px;
-}
-
-.btn-load-more {
-  padding: 10px 24px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text2);
-  font-size: 14px;
   cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-load-more:hover {
-  background: var(--surface3);
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-/* 弹窗 */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 200;
-  padding: 20px;
-}
-
-.modal-content {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  width: 100%;
-  max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--border);
-}
-
-.modal-header h3 {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text);
-  margin: 0;
-}
-
-.modal-close {
-  background: none;
-  border: none;
-  color: var(--text2);
-  font-size: 18px;
-  cursor: pointer;
-  padding: 4px;
-}
-
-.modal-body {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  padding: 16px 20px;
-  border-top: 1px solid var(--border);
-}
-
-.mood-selector {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.mood-option {
-  font-size: 28px;
-  padding: 8px;
-  background: var(--surface2);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.mood-option:hover {
-  background: var(--surface3);
-}
-
-.mood-option.selected {
-  background: var(--accent-dim);
-  border: 2px solid var(--accent);
-}
-
-.input, .textarea {
-  padding: 10px 14px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text);
-  font-size: 14px;
-  outline: none;
-  transition: all 0.2s;
-}
-
-.input:focus, .textarea:focus {
-  border-color: var(--accent);
-}
-
-.textarea {
-  resize: vertical;
-  min-height: 120px;
-}
-
-.btn {
-  padding: 8px 16px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text);
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn:hover {
-  background: var(--surface3);
-}
-
-.btn-primary {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--bg);
-  font-weight: 600;
-}
-
-.btn-primary:hover {
-  background: var(--accent-light);
-}
-
-/* 通用 */
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.section-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text);
-  margin: 0;
-}
-
-.section-subtitle {
-  font-size: 12px;
-  color: var(--text2);
 }
 
 .empty-state {
   text-align: center;
-  padding: 40px;
+  padding: 60px 20px;
+}
+
+.empty-icon {
+  font-size: 64px;
+  display: block;
+  margin-bottom: 16px;
+  opacity: 0.3;
+}
+
+.empty-state p {
   color: var(--text3);
-  font-size: 14px;
+  margin: 0 0 24px;
 }
 
 @media (max-width: 768px) {
-  .diary-hero {
-    flex-direction: column;
-    gap: 20px;
-    text-align: center;
-  }
-  .diary-hero-stats {
-    justify-content: center;
-  }
-  .section-header-with-action {
-    flex-direction: column;
-  }
+  .stats-row { flex-direction: column; }
+  .mood-wall-items { flex-direction: column; }
 }
 </style>
