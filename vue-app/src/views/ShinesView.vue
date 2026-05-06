@@ -237,9 +237,9 @@ onMounted(() => {
 }
 
 .filter-btn.active {
-  background: var(--accent);
+  background: var(--accent-dim);
   border-color: var(--accent);
-  color: white;
+  color: var(--accent);
 }
 
 .filter-btn:hover:not(.active) {

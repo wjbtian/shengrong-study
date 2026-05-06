@@ -31,7 +31,7 @@
       </span>
     </div>
 
-    <!-- 操作 -->
+    <!-- 操作（右上角浮动） -->
     <div class="shine-actions" @click.stop>
       <button class="shine-fav" :class="{ active: shine.fav }" @click="$emit('fav')">
         {{ shine.fav ? '⭐' : '☆' }}
@@ -68,23 +68,23 @@ const photos = computed(() => {
 .shine-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 12px;
   overflow: hidden;
-  cursor: pointer;
   transition: all 0.2s;
+  position: relative;
 }
 
 .shine-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
 }
 
 .shine-photo {
   aspect-ratio: 4/3;
-  background: var(--surface2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: linear-gradient(135deg, var(--surface2), var(--surface3));
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
 }
 
 .photo-grid {
@@ -96,55 +96,71 @@ const photos = computed(() => {
 
 .grid-1 { grid-template-columns: 1fr; }
 .grid-2 { grid-template-columns: 1fr 1fr; }
-.grid-3 { grid-template-columns: 2fr 1fr; grid-template-rows: 1fr 1fr; }
-.grid-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+.grid-3 {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+.grid-3 .photo-img:first-child {
+  grid-column: 1 / -1;
+}
+.grid-4 {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
 
 .photo-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.shine-card:hover .photo-img {
+  transform: scale(1.05);
 }
 
 .photo-more {
   position: absolute;
-  inset: 0;
+  bottom: 8px;
+  right: 8px;
   background: rgba(0, 0, 0, 0.6);
   color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  font-weight: 700;
-  grid-column: 2;
-  grid-row: 2;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 6px;
 }
 
 .photo-icon {
   font-size: 48px;
-  opacity: 0.3;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .shine-info {
-  padding: 12px;
+  padding: 14px;
+  cursor: pointer;
 }
 
 .shine-title {
   margin: 0 0 4px;
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--text);
 }
 
 .shine-date {
-  margin: 0;
+  margin: 0 0 6px;
   font-size: 12px;
-  color: var(--text3);
+  color: var(--text2);
 }
 
 .shine-desc {
-  margin: 8px 0 0;
+  margin: 0 0 4px;
   font-size: 13px;
   color: var(--text2);
+  line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -153,32 +169,48 @@ const photos = computed(() => {
 
 .photo-count {
   display: inline-block;
-  margin-top: 8px;
   font-size: 12px;
   color: var(--text3);
+  margin-top: 4px;
 }
 
 .shine-actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
   display: flex;
-  gap: 4px;
-  padding: 0 12px 12px;
+  gap: 6px;
 }
 
 .shine-actions button {
-  padding: 6px 10px;
-  background: var(--surface2);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
   border: none;
-  border-radius: 8px;
+  border-radius: 50%;
   font-size: 14px;
   cursor: pointer;
   transition: all 0.2s;
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.shine-card:hover .shine-actions button {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .shine-actions button:hover {
-  background: var(--accent-dim);
+  background: rgba(0, 0, 0, 0.6);
+  transform: scale(1.1);
 }
 
 .shine-fav.active {
-  color: #fbbf24;
+  opacity: 1 !important;
+  transform: scale(1) !important;
 }
 </style>

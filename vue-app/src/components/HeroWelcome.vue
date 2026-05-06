@@ -6,6 +6,7 @@
       <div class="daily-quote" v-if="dailyQuote">
         <span class="quote-mark">"</span>
         <span class="quote-text">{{ dailyQuote.text }}</span>
+        <span class="quote-mark">"</span>
         <span class="quote-author">—— {{ dailyQuote.author }}</span>
       </div>
     </div>

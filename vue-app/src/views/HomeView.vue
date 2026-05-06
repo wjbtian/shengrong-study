@@ -50,7 +50,7 @@ import PhotoModal from '../components/PhotoModal.vue'
 
 import { useBadges } from '../composables/useBadges.js'
 import { useTasks } from '../composables/useTasks.js'
-import { useHomeData } from '../composables/useHomeData.js'
+import { useHomeData, useGreeting } from '../composables/useHomeData.js'
 
 // 数据
 const diary = ref([])
@@ -70,6 +70,7 @@ const { stats, subjects } = useHomeData(diary, shines, guitar, progress)
 
 // 问候语
 const { greeting, todayDate, dailyQuote } = useGreeting()
+
 
 // 最新吉他视频
 const latestGuitarVideo = computed(() => {
