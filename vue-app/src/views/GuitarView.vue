@@ -16,22 +16,22 @@
       <div class="stat-card">
         <span class="stat-icon">🎵</span>
         <span class="stat-value">{{ stats.total }}</span>
-        <span class="stat-label">练习次数</span>
+        <span class="stat-label" style="margin-left: 8px;">练习次数</span>
       </div>
       <div class="stat-card">
         <span class="stat-icon">⏱️</span>
         <span class="stat-value">{{ stats.duration }}</span>
-        <span class="stat-label">总时长(分钟)</span>
+        <span class="stat-label" style="margin-left: 8px;">总时长(分钟)</span>
       </div>
       <div class="stat-card">
         <span class="stat-icon">🎼</span>
         <span class="stat-value">{{ stats.songs }}</span>
-        <span class="stat-label">学会曲目</span>
+        <span class="stat-label" style="margin-left: 8px;">学会曲目</span>
       </div>
       <div class="stat-card">
         <span class="stat-icon">📅</span>
         <span class="stat-value">{{ stats.streak }}</span>
-        <span class="stat-label">连续练习(天)</span>
+        <span class="stat-label" style="margin-left: 8px;">连续练习(天)</span>
       </div>
     </div>
 
@@ -311,9 +311,9 @@ onMounted(async () => {
 }
 
 .stat-label {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text2);
-  margin-top: 4px;
+  margin-left: 8px;
 }
 
 /* 目标 */

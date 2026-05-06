@@ -5,8 +5,8 @@ export const useUserStore = defineStore('user', () => {
   // State
   const user = ref({
     name: '永远的神',
-    title: '四年级小学生',
-    avatar: '🌱',
+    title: '学习探索者',
+    avatar: '🚀',
     streak: 0,
     totalPoints: 0
   })

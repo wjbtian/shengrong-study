@@ -16,17 +16,17 @@
       <div class="stat-card">
         <span class="stat-icon">🏆</span>
         <span class="stat-value">{{ shines.length }}</span>
-        <span class="stat-label">闪光时刻</span>
+        <span class="stat-label" style="margin-left: 8px;">闪光时刻</span>
       </div>
       <div class="stat-card">
         <span class="stat-icon">🔥</span>
         <span class="stat-value">{{ streak }}</span>
-        <span class="stat-label">连续记录(天)</span>
+        <span class="stat-label" style="margin-left: 8px;">连续记录(天)</span>
       </div>
       <div class="stat-card">
         <span class="stat-icon">⭐</span>
         <span class="stat-value">{{ favCount }}</span>
-        <span class="stat-label">精选时刻</span>
+        <span class="stat-label" style="margin-left: 8px;">精选时刻</span>
       </div>
     </div>
 
@@ -581,9 +581,9 @@ onMounted(async () => {
 }
 
 .stat-label {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text2);
-  margin-top: 4px;
+  margin-left: 8px;
 }
 
 .filter-bar {

@@ -30,7 +30,7 @@
     <div class="stats-row" v-if="stats.length">
       <div v-for="(stat, idx) in stats" :key="idx" class="stat-card">
         <span class="stat-value" :style="{ color }">{{ stat.value }}</span>
-        <span class="stat-label">{{ stat.label }}</span>
+        <span class="stat-label" style="margin-left: 8px;">{{ stat.label }}</span>
       </div>
     </div>
 
@@ -158,9 +158,9 @@ defineProps({
 }
 
 .stat-label {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text2);
-  margin-top: 4px;
+  margin-left: 8px;
 }
 
 @media (max-width: 768px) {

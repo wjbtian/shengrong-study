@@ -30,6 +30,7 @@
         v-for="item in filteredTech"
         :key="item.id"
         class="tech-card"
+        @click="showDetail(item)"
       >
         <div class="tech-card-header">
           <span class="tech-category">{{ item.category }}</span>
@@ -46,6 +47,27 @@
 
     <div v-if="filteredTech.length === 0" class="empty-state">
       暂无科技新闻
+    </div>
+
+    <!-- 详情弹窗 -->
+    <div v-if="showDetailModal" class="modal" @click.self="showDetailModal = false">
+      <div class="modal-content modal-detail">
+        <div class="modal-header">
+          <h3>{{ selectedItem.category }} {{ selectedItem.title }}</h3>
+          <button class="modal-close" @click="showDetailModal = false">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="detail-date">{{ selectedItem.date }}</div>
+          <div class="detail-summary">{{ selectedItem.summary }}</div>
+          <div v-if="selectedItem.source" class="detail-source">
+            <span class="source-icon">📰</span>
+            <span>{{ selectedItem.source }}</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" @click="showDetailModal = false">关闭</button>
+        </div>
+      </div>
     </div>
 
     <!-- 添加弹窗 -->
@@ -78,6 +100,8 @@ import { getTech, postTech } from '../utils/api.js'
 
 const tech = ref([])
 const showAddModal = ref(false)
+const showDetailModal = ref(false)
+const selectedItem = ref({})
 const currentFilter = ref('all')
 
 const categories = ['🔬 科学', '🤖 AI', '🚀 航天', '💻 编程', '🔋 能源']
@@ -86,7 +110,7 @@ const filters = [
   { value: 'all', label: '全部' },
   { value: '🔬 科学', label: '🔬 科学' },
   { value: '🤖 AI', label: '🤖 AI' },
-  { value: '🚀 航天', label: '🚀 航天' },
+  { value: '🚀 太空', label: '🚀 太空' },
   { value: '💻 编程', label: '💻 编程' },
   { value: '🔋 能源', label: '🔋 能源' },
 ]
@@ -102,6 +126,11 @@ const filteredTech = computed(() => {
   if (currentFilter.value === 'all') return tech.value
   return tech.value.filter(t => t.category === currentFilter.value)
 })
+
+function showDetail(item) {
+  selectedItem.value = item
+  showDetailModal.value = true
+}
 
 async function saveTech() {
   if (!newTech.value.title.trim() || !newTech.value.summary.trim()) return
@@ -227,6 +256,7 @@ onMounted(async () => {
 .tech-card:hover {
   background: var(--surface2);
   transform: translateY(-2px);
+  cursor: pointer;
 }
 
 .tech-card-header {
@@ -294,6 +324,33 @@ onMounted(async () => {
   border-radius: 16px;
   width: 100%;
   max-width: 500px;
+}
+
+.modal-detail .modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detail-date {
+  font-size: 13px;
+  color: var(--text3);
+}
+
+.detail-summary {
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.8;
+}
+
+.detail-source {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text3);
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
 }
 
 .modal-header {
