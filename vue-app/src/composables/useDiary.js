@@ -12,6 +12,22 @@ export const moodConfig = {
   angry: { icon: '😤', label: '生气', color: '#ef4444', bg: 'rgba(239, 68, 68, 0.15)' },
 }
 
+// 旧数据emoji到新key的映射
+const emojiToMoodKey = {
+  '😊': 'happy', '🤩': 'excited', '😌': 'calm',
+  '😟': 'worried', '😢': 'sad', '😤': 'angry',
+  '😄': 'happy', '😁': 'happy', '😎': 'calm',
+  '🥳': 'excited', '😋': 'happy', '🤗': 'happy',
+  '😔': 'sad', '😭': 'sad', '😡': 'angry',
+  '😰': 'worried', '😥': 'sad', '😐': 'calm'
+}
+
+function normalizeMood(mood) {
+  if (!mood) return 'happy'
+  if (moodConfig[mood]) return mood
+  return emojiToMoodKey[mood] || 'happy'
+}
+
 export const moodKeys = Object.keys(moodConfig)
 
 export function useDiary() {
@@ -125,7 +141,8 @@ export function useDiary() {
   async function load() {
     loading.value = true
     try {
-      diary.value = await getDiary()
+      const data = await getDiary()
+      diary.value = data.map(d => ({ ...d, mood: normalizeMood(d.mood) }))
     } catch (e) {
       console.error('加载日记失败:', e)
     } finally {
@@ -173,6 +190,7 @@ export function useDiary() {
     filters,
     moodConfig,
     selectMood,
+    normalizeMood,
     getMoodStyle,
     getMoodIcon,
     getMoodColor,

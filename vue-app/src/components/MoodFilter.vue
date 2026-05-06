@@ -17,7 +17,7 @@
 <script setup>
 defineProps({
   filters: Array,
-  current: String
+  current: [String, null]
 })
 defineEmits(['change'])
 </script>
