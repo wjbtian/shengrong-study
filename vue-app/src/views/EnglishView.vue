@@ -120,17 +120,6 @@ const { doneCount, progressPercent } = useSubjectProgress('english_', 8)
 
 const currentUnit = ref(-1)
 
-const allWordsCount = computed(() => {
-  return vocabUnits.value.reduce((sum, unit) => sum + unit.words.length, 0)
-})
-
-const currentWords = computed(() => {
-  if (currentUnit.value === -1) {
-    return vocabUnits.value.flatMap(unit => unit.words)
-  }
-  return vocabUnits.value[currentUnit.value].words
-})
-
 const vocabUnits = ref([
   {
     icon: '🏫',
@@ -421,6 +410,17 @@ const vocabUnits = ref([
     ]
   },
 ])
+
+const allWordsCount = computed(() => {
+  return vocabUnits.value.reduce((sum, unit) => sum + unit.words.length, 0)
+})
+
+const currentWords = computed(() => {
+  if (currentUnit.value === -1) {
+    return vocabUnits.value.flatMap(unit => unit.words)
+  }
+  return vocabUnits.value[currentUnit.value].words
+})
 
 function speak(text) {
   if ('speechSynthesis' in window) {

@@ -6,493 +6,162 @@
         <h1 class="page-title">✨ 闪光时刻</h1>
         <p class="page-subtitle">记录成长中的每一个精彩瞬间</p>
       </div>
-      <button class="btn-primary" @click="showAddModal = true">
+      <button class="btn-primary" @click="openAddModal">
         <span>📸</span> 记录闪光
       </button>
     </section>
 
     <!-- 统计 -->
-    <div class="stats-row">
-      <div class="stat-card">
-        <span class="stat-icon">🏆</span>
-        <span class="stat-value">{{ shines.length }}</span>
-        <span class="stat-label" style="margin-left: 8px;">闪光时刻</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-icon">🔥</span>
-        <span class="stat-value">{{ streak }}</span>
-        <span class="stat-label" style="margin-left: 8px;">连续记录(天)</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-icon">⭐</span>
-        <span class="stat-value">{{ favCount }}</span>
-        <span class="stat-label" style="margin-left: 8px;">精选时刻</span>
-      </div>
-    </div>
+    <ShineStats :total="shines.length" :streak="streak" :favCount="favCount" />
 
     <!-- 分类筛选 -->
     <div class="filter-bar">
       <button
-        v-for="filter in filters"
-        :key="filter.value"
+        v-for="f in filters"
+        :key="f.value"
         class="filter-btn"
-        :class="{ active: currentFilter === filter.value }"
-        @click="currentFilter = filter.value"
+        :class="{ active: currentFilter === f.value }"
+        @click="currentFilter = f.value"
       >
-        {{ filter.label }}
+        {{ f.label }}
       </button>
     </div>
 
     <!-- 照片墙 -->
     <div class="photo-wall">
-      <div
+      <ShineCard
         v-for="item in filteredShines"
         :key="item.id"
-        class="photo-card"
-      >
-        <!-- 多图网格 -->
-        <div class="photo-placeholder" @click="openLightbox(item)">
-          <div v-if="item.photos && item.photos.length > 0" class="photo-grid" :class="'grid-' + Math.min(item.photos.length, 4)">
-            <img
-              v-for="(url, idx) in item.photos.slice(0, 4)"
-              :key="idx"
-              :src="url"
-              class="photo-img"
-              :alt="'photo ' + (idx + 1)"
-            >
-            <div v-if="item.photos.length > 4" class="photo-more">
-              +{{ item.photos.length - 4 }}
-            </div>
-          </div>
-          <span v-else class="photo-icon">{{ categoryIcon(item.category) }}</span>
-        </div>
-
-        <div class="photo-info" @click="openLightbox(item)">
-          <h4 class="photo-title">{{ item.title }}</h4>
-          <p class="photo-date">{{ item.date }}</p>
-          <p v-if="item.desc" class="photo-desc">{{ item.desc }}</p>
-          <span class="photo-count" v-if="item.photos && item.photos.length > 1">
-            📷 {{ item.photos.length }}张
-          </span>
-        </div>
-        <div class="photo-actions">
-          <button
-            class="photo-fav"
-            :class="{ active: item.fav }"
-            @click.prevent="toggleFav(item)"
-          >
-            {{ item.fav ? '⭐' : '☆' }}
-          </button>
-          <button
-            class="photo-edit"
-            @click.prevent="openEditModal(item)"
-          >
-            ✏️
-          </button>
-          <button
-            class="photo-delete"
-            @click.prevent="confirmDelete(item)"
-          >
-            🗑️
-          </button>
-        </div>
-      </div>
+        :shine="item"
+        :icon="categoryIcon(item.category)"
+        @open="openLightbox"
+        @fav="toggleFav(item)"
+        @edit="openEditModal(item)"
+        @delete="confirmDelete(item)"
+      />
     </div>
 
-    <div v-if="filteredShines.length === 0" class="empty-state">
-      还没有闪光时刻，记录你的第一个吧！
+    <!-- 空状态 -->
+    <div v-if="filteredShines.length === 0 && !loading" class="empty-state">
+      <span class="empty-icon">✨</span>
+      <p>还没有闪光时刻</p>
+      <button class="btn-primary" @click="openAddModal">记录第一个闪光</button>
     </div>
 
-    <!-- 添加弹窗 -->
-    <div v-if="showAddModal" class="modal" @click.self="showAddModal = false">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>📸 记录闪光时刻</h3>
-          <button class="modal-close" @click="showAddModal = false">✕</button>
-        </div>
-        <div class="modal-body">
-          <input v-model="newShine.title" class="input" placeholder="标题 *">
-          <select v-model="newShine.category" class="input">
-            <option v-for="cat in categories" :key="cat.value" :value="cat.value">{{ cat.label }}</option>
-          </select>
-          <textarea v-model="newShine.desc" class="textarea" rows="3" placeholder="描述（可选）"></textarea>
-
-          <!-- 多图上传 -->
-          <div class="photo-upload-area">
-            <div class="uploaded-previews">
-              <div v-for="(url, idx) in newShine.photoUrls" :key="idx" class="preview-item">
-                <img :src="url" class="preview-img">
-                <button class="preview-remove" @click="removeNewPhoto(idx)">✕</button>
-              </div>
-            </div>
-            <label class="upload-btn">
-              <span>➕ 添加照片</span>
-              <input type="file" accept="image/*" multiple @change="onPhotoChange" style="display:none">
-            </label>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn" @click="showAddModal = false">取消</button>
-          <button class="btn btn-primary" @click="saveShine" :disabled="saving">
-            {{ saving ? '上传中...' : '保存' }}
-          </button>
-        </div>
-      </div>
+    <!-- 加载状态 -->
+    <div v-if="loading" class="loading-state">
+      <div class="spinner"></div>
+      <p>加载中...</p>
     </div>
+
+    <!-- 添加/编辑弹窗 -->
+    <ShineModal
+      :show="showModal"
+      :edit="editingShine"
+      @close="closeModal"
+      @save="handleSave"
+    />
 
     <!-- 灯箱 -->
-    <div v-if="lightboxItem" class="lightbox" @click.self="lightboxItem = null">
-      <button class="lightbox-close" @click="lightboxItem = null">✕</button>
+    <PhotoLightbox
+      :item="lightboxItem"
+      @close="lightboxItem = null"
+    />
 
-      <!-- 上一张 -->
-      <button v-if="lightboxIndex > 0" class="lightbox-nav lightbox-prev" @click="lightboxIndex--">
-        ‹
-      </button>
-
-      <div class="lightbox-content" @click.stop>
-        <div class="lightbox-photo">
-          <img
-            v-if="lightboxPhotos[lightboxIndex]"
-            :src="lightboxPhotos[lightboxIndex]"
-            class="lightbox-img"
-            alt=""
-          >
-        </div>
-        <div class="lightbox-info">
-          <h3>{{ lightboxItem.title }}</h3>
-          <p>{{ lightboxItem.date }}</p>
-          <p v-if="lightboxItem.desc">{{ lightboxItem.desc }}</p>
-        </div>
-        <!-- 缩略图导航 -->
-        <div class="lightbox-thumbs" v-if="lightboxPhotos.length > 1">
-          <img
-            v-for="(url, idx) in lightboxPhotos"
-            :key="idx"
-            :src="url"
-            class="lightbox-thumb"
-            :class="{ active: idx === lightboxIndex }"
-            @click="lightboxIndex = idx"
-          >
-        </div>
-        <!-- 计数器 -->
-        <p class="lightbox-counter" v-if="lightboxPhotos.length > 1">
-          {{ lightboxIndex + 1 }} / {{ lightboxPhotos.length }}
-        </p>
-      </div>
-
-      <!-- 下一张 -->
-      <button v-if="lightboxIndex < lightboxPhotos.length - 1" class="lightbox-nav lightbox-next" @click="lightboxIndex++">
-        ›
-      </button>
-    </div>
-
-    <!-- 编辑弹窗 -->
-    <div v-if="showEditModal" class="modal" @click.self="showEditModal = false">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>✏️ 编辑闪光时刻</h3>
-          <button class="modal-close" @click="showEditModal = false">✕</button>
-        </div>
-        <div class="modal-body">
-          <input v-model="editShine.title" class="input" placeholder="标题 *">
-          <select v-model="editShine.category" class="input">
-            <option v-for="cat in categories" :key="cat.value" :value="cat.value">{{ cat.label }}</option>
-          </select>
-          <textarea v-model="editShine.desc" class="textarea" rows="3" placeholder="描述（可选）"></textarea>
-
-          <!-- 已有的照片 -->
-          <div class="photo-upload-area">
-            <div class="uploaded-previews">
-              <div v-for="(url, idx) in editShine.photoUrls" :key="'ex-' + idx" class="preview-item">
-                <img :src="url" class="preview-img">
-                <button class="preview-remove" @click="removeEditPhoto(idx)">✕</button>
-              </div>
-              <!-- 新增的照片 -->
-              <div v-for="(url, idx) in editShine.newPhotoUrls" :key="'new-' + idx" class="preview-item new">
-                <img :src="url" class="preview-img">
-                <button class="preview-remove" @click="removeNewEditPhoto(idx)">✕</button>
-              </div>
-            </div>
-            <label class="upload-btn">
-              <span>➕ 添加照片</span>
-              <input type="file" accept="image/*" multiple @change="onEditPhotoChange" style="display:none">
-            </label>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn" @click="showEditModal = false">取消</button>
-          <button class="btn btn-primary" @click="saveEdit" :disabled="saving">
-            {{ saving ? '保存中...' : '保存' }}
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- 删除确认弹窗 -->
-    <div v-if="showDeleteModal" class="modal" @click.self="showDeleteModal = false">
-      <div class="modal-content modal-sm">
-        <div class="modal-header">
-          <h3>🗑️ 确认删除</h3>
-          <button class="modal-close" @click="showDeleteModal = false">✕</button>
-        </div>
-        <div class="modal-body">
-          <p>确定要删除「{{ deleteTarget?.title }}」吗？此操作不可恢复。</p>
-        </div>
-        <div class="modal-footer">
-          <button class="btn" @click="showDeleteModal = false">取消</button>
-          <button class="btn btn-danger" @click="doDelete">删除</button>
-        </div>
-      </div>
-    </div>
+    <!-- 删除确认 -->
+    <ConfirmDialog
+      v-if="deleteTarget"
+      :show="!!deleteTarget"
+      title="删除确认"
+      :message="`确定要删除「${deleteTarget.title}」吗？`"
+      confirm-text="删除"
+      @confirm="doDelete"
+      @cancel="deleteTarget = null"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { getShines, postShine, deleteShine, updateShine, uploadFile } from '../utils/api.js'
+import { ref, onMounted } from 'vue'
+import { useShines } from '../composables/useShines.js'
+import ShineCard from '../components/ShineCard.vue'
+import ShineStats from '../components/ShineStats.vue'
+import ShineModal from '../components/ShineModal.vue'
+import PhotoLightbox from '../components/PhotoLightbox.vue'
+import ConfirmDialog from '../components/ConfirmDialog.vue'
 
-const shines = ref([])
-const showAddModal = ref(false)
-const showEditModal = ref(false)
-const showDeleteModal = ref(false)
-const currentFilter = ref('all')
+const {
+  shines,
+  loading,
+  currentFilter,
+  filteredShines,
+  favCount,
+  streak,
+  categoryIcon,
+  filters,
+  load,
+  saveShine,
+  update,
+  remove,
+  toggleFav
+} = useShines()
+
+const showModal = ref(false)
+const editingShine = ref(null)
 const lightboxItem = ref(null)
-const lightboxIndex = ref(0)
 const deleteTarget = ref(null)
-const saving = ref(false)
 
-const categories = [
-  { value: 'award', label: '🏆 获奖' },
-  { value: 'sport', label: '⚽ 运动' },
-  { value: 'art', label: '🎨 创意' },
-  { value: 'talent', label: '🎸 才艺' },
-  { value: 'progress', label: '📈 进步' },
-  { value: 'other', label: '💫 其他' },
-]
-
-const filters = [
-  { value: 'all', label: '全部' },
-  { value: 'award', label: '🏆 获奖' },
-  { value: 'sport', label: '⚽ 运动' },
-  { value: 'art', label: '🎨 创意' },
-  { value: 'talent', label: '🎸 才艺' },
-  { value: 'progress', label: '📈 进步' },
-  { value: 'other', label: '💫 其他' },
-]
-
-// 新增弹窗数据
-const newShine = ref({
-  title: '',
-  category: 'other',
-  desc: '',
-  photos: [],
-  photoUrls: []
-})
-
-// 编辑弹窗数据
-const editShine = ref({
-  id: null,
-  title: '',
-  category: 'other',
-  desc: '',
-  photoUrls: [],
-  newPhotos: [],
-  newPhotoUrls: []
-})
-
-// 灯箱照片列表（计算属性）
-const lightboxPhotos = computed(() => {
-  if (!lightboxItem.value) return []
-  return lightboxItem.value.photos || []
-})
-
-const filteredShines = computed(() => {
-  if (currentFilter.value === 'all') return shines.value
-  return shines.value.filter(s => s.category === currentFilter.value)
-})
-
-const favCount = computed(() => shines.value.filter(s => s.fav).length)
-
-const streak = computed(() => {
-  const dates = [...new Set(shines.value.map(s => s.date))].sort().reverse()
-  if (!dates.length) return 0
-  let count = 1
-  for (let i = 1; i < dates.length; i++) {
-    const prev = new Date(dates[i - 1])
-    const curr = new Date(dates[i])
-    if ((prev - curr) / 86400000 === 1) count++
-    else break
-  }
-  return count
-})
-
-function categoryIcon(category) {
-  const map = { award: '🏆', sport: '⚽', art: '🎨', talent: '🎸', progress: '📈', other: '💫' }
-  return map[category] || '✨'
+// 打开添加弹窗
+function openAddModal() {
+  editingShine.value = null
+  showModal.value = true
 }
 
-// 添加弹窗 - 选择照片
-function onPhotoChange(e) {
-  const files = Array.from(e.target.files || [])
-  if (!files.length) return
-  files.forEach(file => {
-    const url = URL.createObjectURL(file)
-    newShine.value.photos.push(file)
-    newShine.value.photoUrls.push(url)
-  })
-  e.target.value = ''
-}
-
-// 添加弹窗 - 移除照片
-function removeNewPhoto(idx) {
-  newShine.value.photos.splice(idx, 1)
-  newShine.value.photoUrls.splice(idx, 1)
-}
-
-// 编辑弹窗 - 选择照片
-function onEditPhotoChange(e) {
-  const files = Array.from(e.target.files || [])
-  if (!files.length) return
-  files.forEach(file => {
-    const url = URL.createObjectURL(file)
-    editShine.value.newPhotos.push(file)
-    editShine.value.newPhotoUrls.push(url)
-  })
-  e.target.value = ''
-}
-
-// 编辑弹窗 - 移除已有照片
-function removeEditPhoto(idx) {
-  editShine.value.photoUrls.splice(idx, 1)
-}
-
-// 编辑弹窗 - 移除新增照片
-function removeNewEditPhoto(idx) {
-  editShine.value.newPhotos.splice(idx, 1)
-  editShine.value.newPhotoUrls.splice(idx, 1)
-}
-
+// 打开编辑弹窗
 function openEditModal(item) {
-  editShine.value = {
-    id: item.id,
-    title: item.title,
-    category: item.category,
-    desc: item.desc || '',
-    photoUrls: [...(item.photos || [])],
-    newPhotos: [],
-    newPhotoUrls: []
-  }
-  showEditModal.value = true
+  editingShine.value = item
+  showModal.value = true
 }
 
-async function saveEdit() {
-  if (!editShine.value.title.trim()) return
-  saving.value = true
-  try {
-    const allUrls = [...editShine.value.photoUrls]
-    for (const file of editShine.value.newPhotos) {
-      const url = await uploadFile(file, 'image')
-      if (url) allUrls.push(url)
-    }
-    await updateShine(editShine.value.id, {
-      title: editShine.value.title,
-      category: editShine.value.category,
-      desc: editShine.value.desc,
-      photos: allUrls
-    })
-    const idx = shines.value.findIndex(s => s.id === editShine.value.id)
-    if (idx !== -1) {
-      shines.value[idx] = {
-        ...shines.value[idx],
-        title: editShine.value.title,
-        category: editShine.value.category,
-        desc: editShine.value.desc,
-        photos: allUrls,
-        photoUrl: allUrls[0] || ''
-      }
-    }
-    showEditModal.value = false
-    editShine.value = { id: null, title: '', category: 'other', desc: '', photoUrls: [], newPhotos: [], newPhotoUrls: [] }
-  } catch (e) {
-    console.error('编辑失败:', e)
-    alert('编辑失败，请重试')
-  } finally {
-    saving.value = false
-  }
+// 关闭弹窗
+function closeModal() {
+  showModal.value = false
+  editingShine.value = null
 }
 
-async function saveShine() {
-  if (!newShine.value.title.trim()) return
-  saving.value = true
-  try {
-    const photoUrls = []
-    for (const file of newShine.value.photos) {
-      const url = await uploadFile(file, 'image')
-      if (url) photoUrls.push(url)
-    }
-    const data = {
-      title: newShine.value.title,
-      category: newShine.value.category,
-      desc: newShine.value.desc,
-      photos: photoUrls,
-      date: new Date().toISOString().split('T')[0],
-      fav: false
-    }
-    const result = await postShine(data)
-    shines.value.unshift({
-      ...data,
-      id: result.id || Date.now(),
-      photoUrl: photoUrls[0] || ''
-    })
-    showAddModal.value = false
-    newShine.value = { title: '', category: 'other', desc: '', photos: [], photoUrls: [] }
-  } catch (e) {
-    console.error('保存失败:', e)
-    alert('保存失败，请重试')
-  } finally {
-    saving.value = false
-  }
-}
-
-async function toggleFav(item) {
-  const newFav = !item.fav
-  try {
-    await updateShine(item.id, { fav: newFav })
-    item.fav = newFav
-  } catch (e) {
-    console.error('更新收藏失败:', e)
-  }
-}
-
+// 打开灯箱
 function openLightbox(item) {
   lightboxItem.value = item
-  lightboxIndex.value = 0
 }
 
+// 保存（新增/编辑）
+async function handleSave(data) {
+  if (data.id) {
+    // 编辑
+    const idx = shines.value.findIndex(s => s.id === data.id)
+    if (idx !== -1) shines.value[idx] = data
+  } else {
+    // 新增
+    shines.value.unshift(data)
+  }
+  closeModal()
+}
+
+// 确认删除
 function confirmDelete(item) {
   deleteTarget.value = item
-  showDeleteModal.value = true
 }
 
+// 执行删除
 async function doDelete() {
-  if (!deleteTarget.value) return
-  try {
-    await deleteShine(deleteTarget.value.id)
-    shines.value = shines.value.filter(s => s.id !== deleteTarget.value.id)
-    showDeleteModal.value = false
+  if (deleteTarget.value) {
+    await remove(deleteTarget.value.id)
     deleteTarget.value = null
-  } catch (e) {
-    console.error('删除失败:', e)
-    alert('删除失败，请重试')
   }
 }
 
-onMounted(async () => {
-  try {
-    shines.value = await getShines().catch(() => [])
-  } catch (e) {
-    console.error('加载闪光时刻失败:', e)
-  }
+onMounted(() => {
+  load()
 })
 </script>
 
@@ -500,46 +169,47 @@ onMounted(async () => {
 .shines-view {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 50px 12px 0;
-  box-sizing: border-box;
+  padding: 60px 20px 40px;
 }
 
+/* 顶部 */
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
-  padding: 24px;
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.08) 0%, rgba(244, 114, 182, 0.05) 100%);
-  border-radius: 16px;
-  border: 1px solid rgba(251, 191, 36, 0.15);
+}
+
+.page-header-content {
+  flex: 1;
 }
 
 .page-title {
+  margin: 0;
   font-size: 28px;
-  font-weight: 800;
+  font-weight: 900;
   color: var(--text);
-  margin-bottom: 4px;
 }
 
 .page-subtitle {
+  margin: 4px 0 0;
   font-size: 14px;
-  color: var(--text2);
+  color: var(--text3);
 }
 
 .btn-primary {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 20px;
+  padding: 12px 24px;
   background: var(--accent);
-  color: var(--bg);
+  color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.2s;
 }
 
 .btn-primary:hover {
@@ -547,49 +217,11 @@ onMounted(async () => {
   box-shadow: 0 8px 24px rgba(74, 222, 128, 0.3);
 }
 
-.btn-primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.stat-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px;
-  text-align: center;
-}
-
-.stat-icon {
-  font-size: 28px;
-  margin-bottom: 8px;
-  display: block;
-}
-
-.stat-value {
-  font-size: 28px;
-  font-weight: 700;
-  color: #fbbf24;
-}
-
-.stat-label {
-  font-size: 13px;
-  color: var(--text2);
-  margin-left: 8px;
-}
-
+/* 筛选栏 */
 .filter-bar {
   display: flex;
   gap: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   flex-wrap: wrap;
 }
 
@@ -597,517 +229,81 @@ onMounted(async () => {
   padding: 8px 16px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text2);
+  border-radius: 20px;
   font-size: 13px;
+  color: var(--text2);
   cursor: pointer;
   transition: all 0.2s;
-}
-
-.filter-btn:hover {
-  background: var(--surface2);
 }
 
 .filter-btn.active {
-  background: var(--accent-dim);
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.filter-btn:hover:not(.active) {
   border-color: var(--accent);
   color: var(--accent);
 }
 
+/* 照片墙 */
 .photo-wall {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
+  gap: 20px;
 }
 
-.photo-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-  transition: all 0.2s;
-  position: relative;
-}
-
-.photo-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-}
-
-.photo-placeholder {
-  aspect-ratio: 4/3;
-  background: linear-gradient(135deg, var(--surface2), var(--surface3));
-  overflow: hidden;
-  cursor: pointer;
-  position: relative;
-}
-
-.photo-grid {
-  width: 100%;
-  height: 100%;
-  display: grid;
-  gap: 2px;
-}
-
-.photo-grid.grid-1 {
-  grid-template-columns: 1fr;
-}
-
-.photo-grid.grid-2 {
-  grid-template-columns: 1fr 1fr;
-}
-
-.photo-grid.grid-3 {
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-}
-
-.photo-grid.grid-3 .photo-img:first-child {
-  grid-column: 1 / -1;
-}
-
-.photo-grid.grid-4 {
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-}
-
-.photo-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s;
-}
-
-.photo-card:hover .photo-img {
-  transform: scale(1.05);
-}
-
-.photo-more {
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
-  background: rgba(0, 0, 0, 0.6);
-  color: white;
-  font-size: 12px;
-  padding: 2px 8px;
-  border-radius: 6px;
-}
-
-.photo-icon {
-  font-size: 48px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.photo-info {
-  padding: 14px;
-  cursor: pointer;
-}
-
-.photo-title {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 4px;
-}
-
-.photo-date {
-  font-size: 12px;
-  color: var(--text2);
-  margin-bottom: 6px;
-}
-
-.photo-desc {
-  font-size: 13px;
-  color: var(--text2);
-  line-height: 1.5;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.photo-count {
-  font-size: 12px;
-  color: var(--text3);
-  margin-top: 4px;
-  display: inline-block;
-}
-
-.photo-actions {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  display: flex;
-  gap: 6px;
-}
-
-.photo-fav,
-.photo-edit,
-.photo-delete {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.5);
-  border: none;
-  color: var(--text);
-  font-size: 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-}
-
-.photo-fav:hover,
-.photo-edit:hover,
-.photo-delete:hover {
-  background: rgba(0, 0, 0, 0.7);
-  transform: scale(1.1);
-}
-
-.photo-fav.active {
-  color: #fbbf24;
-}
-
-.photo-edit:hover {
-  background: rgba(96, 165, 250, 0.8);
-}
-
-.photo-delete:hover {
-  background: rgba(239, 68, 68, 0.8);
-}
-
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 200;
-  padding: 20px;
-}
-
-.modal-content {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  width: 100%;
-  max-width: 560px;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--border);
-}
-
-.modal-header h3 {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text);
-  margin: 0;
-}
-
-.modal-close {
-  background: none;
-  border: none;
-  color: var(--text2);
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.modal-body {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  padding: 16px 20px;
-  border-top: 1px solid var(--border);
-}
-
-.photo-upload-area {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.uploaded-previews {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.preview-item {
-  position: relative;
-  width: 80px;
-  height: 80px;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 2px solid var(--border);
-}
-
-.preview-item.new {
-  border-color: var(--accent);
-}
-
-.preview-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.preview-remove {
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.6);
-  border: none;
-  color: white;
-  font-size: 10px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.upload-btn {
-  display: inline-flex;
-  align-items: center;
-  padding: 10px 20px;
-  background: var(--surface2);
-  border: 1px dashed var(--border);
-  border-radius: 8px;
-  color: var(--text2);
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.upload-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.input, .textarea, select.input {
-  padding: 10px 14px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text);
-  font-size: 14px;
-  outline: none;
-}
-
-.textarea {
-  resize: vertical;
-  min-height: 80px;
-}
-
-.btn {
-  padding: 8px 16px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text);
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.btn-primary {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--bg);
-  font-weight: 600;
-}
-
-.btn-danger {
-  background: #ef4444;
-  border-color: #ef4444;
-  color: white;
-  font-weight: 600;
-}
-
-.btn-danger:hover {
-  background: #dc2626;
-}
-
-.modal-sm {
-  max-width: 400px;
-}
-
-.lightbox {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.92);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 300;
-}
-
-.lightbox-content {
-  text-align: center;
-  max-width: 90vw;
-  max-height: 90vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.lightbox-close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: none;
-  border: none;
-  color: white;
-  font-size: 28px;
-  cursor: pointer;
-  z-index: 10;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.lightbox-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.15);
-  border: none;
-  color: white;
-  font-size: 36px;
-  width: 50px;
-  height: 80px;
-  cursor: pointer;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  transition: background 0.2s;
-}
-
-.lightbox-nav:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.lightbox-prev {
-  left: 20px;
-}
-
-.lightbox-next {
-  right: 20px;
-}
-
-.lightbox-photo {
-  max-width: 80vw;
-  max-height: 60vh;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.lightbox-img {
-  max-width: 100%;
-  max-height: 60vh;
-  object-fit: contain;
-  border-radius: 12px;
-}
-
-.lightbox-info {
-  color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 12px;
-}
-
-.lightbox-info h3 {
-  font-size: 18px;
-  margin: 0 0 6px;
-}
-
-.lightbox-info p {
-  font-size: 14px;
-  margin: 4px 0;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.lightbox-thumbs {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 12px;
-}
-
-.lightbox-thumb {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-  border-radius: 6px;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: all 0.2s;
-  opacity: 0.6;
-}
-
-.lightbox-thumb:hover {
-  opacity: 0.9;
-}
-
-.lightbox-thumb.active {
-  border-color: white;
-  opacity: 1;
-}
-
-.lightbox-counter {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 13px;
-  margin-top: 8px;
-}
-
+/* 空状态 */
 .empty-state {
   text-align: center;
-  padding: 60px 40px;
+  padding: 60px 20px;
+}
+
+.empty-icon {
+  font-size: 64px;
+  display: block;
+  margin-bottom: 16px;
+  opacity: 0.3;
+}
+
+.empty-state p {
   color: var(--text3);
   font-size: 16px;
+  margin: 0 0 24px;
+}
+
+/* 加载 */
+.loading-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text3);
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 @media (max-width: 768px) {
-  .stats-row {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  .photo-wall {
-    grid-template-columns: 1fr;
-  }
   .page-header {
     flex-direction: column;
+    align-items: flex-start;
     gap: 16px;
-    text-align: center;
   }
-  .lightbox-nav {
-    width: 36px;
-    height: 60px;
-    font-size: 28px;
+
+  .photo-wall {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
   }
 }
 </style>
