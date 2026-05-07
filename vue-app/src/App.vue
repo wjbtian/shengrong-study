@@ -1,9 +1,6 @@
 <template>
   <div class="app-container">
-    <!-- 3D 欢迎动画 -->
-    <Welcome3D v-if="showWelcome" @skip="skipWelcome" />
-    <!-- 科技感背景 -->
-    <canvas ref="bgCanvas" class="tech-bg"></canvas>
+
     <TopNav />
     <main class="main-content">
       <router-view v-slot="{ Component }">
@@ -16,109 +13,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import TopNav from './components/TopNav.vue'
-import Welcome3D from './components/Welcome3D.vue'
-
-const showWelcome = ref(false)
-
-function shouldShowWelcome() {
-  const lastShow = localStorage.getItem('welcomeLastShow')
-  if (!lastShow) return true
-  const hoursSince = (Date.now() - parseInt(lastShow)) / (1000 * 60 * 60)
-  return hoursSince >= 1
-}
-
-function skipWelcome() {
-  showWelcome.value = false
-  localStorage.setItem('welcomeLastShow', Date.now().toString())
-}
-
-onMounted(() => {
-  if (shouldShowWelcome()) {
-    showWelcome.value = true
-  }
-})
-
-const bgCanvas = ref(null)
-let animFrame = null
-
-onMounted(() => {
-  const canvas = bgCanvas.value
-  if (!canvas) return
-
-  const ctx = canvas.getContext('2d')
-  let particles = []
-
-  function resize() {
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
-  }
-
-  function createParticles() {
-    particles = []
-    const count = Math.min(80, Math.floor(window.innerWidth / 20))
-    for (let i = 0; i < count; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        radius: Math.random() * 2 + 1,
-        opacity: Math.random() * 0.5 + 0.2
-      })
-    }
-  }
-
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-    particles.forEach(p => {
-      ctx.beginPath()
-      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2)
-      ctx.fillStyle = `rgba(74, 222, 128, ${p.opacity})`
-      ctx.fill()
-
-      p.x += p.vx
-      p.y += p.vy
-
-      if (p.x < 0 || p.x > canvas.width) p.vx *= -1
-      if (p.y < 0 || p.y > canvas.height) p.vy *= -1
-    })
-
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x
-        const dy = particles[i].y - particles[j].y
-        const dist = Math.sqrt(dx * dx + dy * dy)
-
-        if (dist < 150) {
-          ctx.beginPath()
-          ctx.moveTo(particles[i].x, particles[i].y)
-          ctx.lineTo(particles[j].x, particles[j].y)
-          ctx.strokeStyle = `rgba(74, 222, 128, ${0.15 * (1 - dist / 150)})`
-          ctx.lineWidth = 0.5
-          ctx.stroke()
-        }
-      }
-    }
-
-    animFrame = requestAnimationFrame(draw)
-  }
-
-  resize()
-  createParticles()
-  draw()
-
-  window.addEventListener('resize', () => {
-    resize()
-    createParticles()
-  })
-})
-
-onUnmounted(() => {
-  if (animFrame) cancelAnimationFrame(animFrame)
-})
 </script>
 
 <style>
@@ -126,18 +22,6 @@ onUnmounted(() => {
   min-height: 100vh;
   position: relative;
   background: #080810;
-}
-
-/* 科技感背景画布 */
-.tech-bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.7;
 }
 
 /* 渐变遮罩 */
