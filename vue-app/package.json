@@ -12,6 +12,7 @@
     "@element-plus/icons-vue": "^2.3.2",
     "@types/three": "^0.184.0",
     "element-plus": "^2.13.7",
+    "hanzi-writer": "^3.7.3",
     "pinia": "^2.1.7",
     "three": "^0.184.0",
     "vue": "^3.4.21",

@@ -66,11 +66,20 @@ export const getGuitar = () => request('GET', '/guitar')
 export const postGuitar = (data) => request('POST', '/guitar', data)
 
 export const getProgress = () => request('GET', '/progress')
-export const postProgress = (data) => request('POST', '/progress', data)
+export const markProgress = (subject, unit) => request('POST', `/progress/${subject}/${unit}`)
+export const unmarkProgress = (subject, unit) => request('DELETE', `/progress/${subject}/${unit}`)
 
 // 照片墙配置
 export const getPhotoWall = () => request('GET', '/photo-wall')
 export const savePhotoWall = (config) => request('POST', '/photo-wall', { config })
+
+// 每日五字
+export const getChineseDaily = () => request('GET', '/chinese/daily')
+export const checkinChar = (char_id, practiced) => request('POST', '/chinese/checkin', { char_id, practiced })
+export const getChineseProgress = () => request('GET', '/chinese/progress')
+export const getChineseDifficult = () => request('GET', '/chinese/difficult')
+export const setCharDifficult = (id, is_difficult) => request('POST', `/chinese/char/${id}/difficult`, { is_difficult })
+export const getChineseHistory = (days = 7) => request('GET', `/chinese/history?days=${days}`)
 
 // 上传文件
 export const uploadFile = async (file, type = 'image') => {

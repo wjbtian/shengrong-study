@@ -23,7 +23,10 @@ const storage = multer.diskStorage({
 const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
 
 function today() {
-  return new Date().toISOString().slice(0, 10);
+  // 返回北京时间 (UTC+8) 的日期
+  const now = new Date();
+  const beijing = new Date(now.getTime() + 8 * 60 * 60 * 1000);
+  return beijing.toISOString().slice(0, 10);
 }
 
 // 初始化示例数据
@@ -283,8 +286,9 @@ function startServer() {
       const result = { doneUnits: [], doneOM: [] };
       rows.forEach(r => {
         if (r.completed) {
-          if (r.subject === 'olympiad') result.doneOM.push(r.unit);
-          else result.doneUnits.push(r.unit);
+          const fullId = `${r.subject}_${r.unit}`;
+          if (r.subject === 'olympiad') result.doneOM.push(fullId);
+          else result.doneUnits.push(fullId);
         }
       });
       res.json(result);
@@ -297,7 +301,7 @@ function startServer() {
     try {
       const { subject, unit } = req.params;
       db.prepare(
-        'INSERT OR REPLACE INTO progress (subject, unit, completed, completed_at) VALUES (?, ?, 1, datetime("now","localtime"))'
+        "INSERT OR REPLACE INTO progress (subject, unit, completed, completed_at) VALUES (?, ?, 1, datetime('now','localtime'))"
       ).run(subject, unit);
       res.json({ ok: true });
     } catch (e) {
@@ -508,6 +512,142 @@ function startServer() {
         db.prepare('INSERT INTO photo_wall (id, config) VALUES (1, ?)').run(JSON.stringify(config));
       }
       res.json({ ok: true });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  // ===== 每日五字 API =====
+  app.get('/api/chinese/daily', (req, res) => {
+    try {
+      const dateStr = today(); // 2026-05-12
+      const total = db.prepare('SELECT COUNT(*) as c FROM chinese_chars').get().c;
+      
+      // 使用日期散列生成起始索引，避免相邻日期重复
+      let hash = 0;
+      for (let i = 0; i < dateStr.length; i++) {
+        hash = (hash * 31 + dateStr.charCodeAt(i)) & 0x7fffffff;
+      }
+      const baseIdx = hash % total;
+      const step = Math.floor(total / 5) || 44;
+      const dailyChars = [];
+      for (let i = 0; i < 5 && i < total; i++) {
+        const idx = (baseIdx + i * step) % total;
+        const c = db.prepare('SELECT * FROM chinese_chars LIMIT 1 OFFSET ?').get(idx);
+        if (c) {
+          // 解析 words JSON
+          try { c.words = JSON.parse(c.words); } catch (e) { c.words = []; }
+          dailyChars.push(c);
+        }
+      }
+      
+      // 获取今天已打卡的
+      const checkins = db.prepare('SELECT char_id FROM char_checkins WHERE date = ? AND practiced = 1').all(dateStr);
+      const practicedIds = new Set(checkins.map(c => c.char_id));
+      dailyChars.forEach(c => { c.practiced = practicedIds.has(c.id); });
+      
+      res.json({ chars: dailyChars, date: dateStr });
+    } catch (e) {
+      console.error('/api/chinese/daily error:', e);
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  app.post('/api/chinese/checkin', (req, res) => {
+    try {
+      const { char_id, practiced } = req.body;
+      const dateStr = today();
+      const exists = db.prepare('SELECT id FROM char_checkins WHERE char_id = ? AND date = ?').get(char_id, dateStr);
+      if (exists) {
+        db.prepare('UPDATE char_checkins SET practiced = ? WHERE char_id = ? AND date = ?').run(practiced ? 1 : 0, char_id, dateStr);
+      } else {
+        db.prepare('INSERT INTO char_checkins (char_id, date, practiced) VALUES (?, ?, ?)').run(char_id, dateStr, practiced ? 1 : 0);
+      }
+      res.json({ ok: true });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  app.get('/api/chinese/progress', (req, res) => {
+    try {
+      const total = db.prepare('SELECT COUNT(*) as c FROM chinese_chars').get().c;
+      const practiced = db.prepare('SELECT COUNT(DISTINCT char_id) as c FROM char_checkins WHERE practiced = 1').get().c;
+      res.json({ total, practiced, percent: total > 0 ? Math.round(practiced / total * 100) : 0 });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  // 获取错字难字
+  app.get('/api/chinese/difficult', (req, res) => {
+    try {
+      const chars = db.prepare('SELECT * FROM chinese_chars WHERE is_difficult = 1').all();
+      chars.forEach(c => {
+        try { c.words = JSON.parse(c.words); } catch (e) { c.words = []; }
+      });
+      res.json({ chars });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  // 标记/取消标记错字难字
+  app.post('/api/chinese/char/:id/difficult', (req, res) => {
+    try {
+      const { id } = req.params;
+      const { is_difficult } = req.body;
+      db.prepare('UPDATE chinese_chars SET is_difficult = ? WHERE id = ?').run(is_difficult ? 1 : 0, id);
+      res.json({ ok: true });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  // 获取练字历史（最近N天）
+  app.get('/api/chinese/history', (req, res) => {
+    try {
+      const days = parseInt(req.query.days) || 7;
+      const history = [];
+      const todayStr = today();
+      const total = db.prepare('SELECT COUNT(*) as c FROM chinese_chars').get().c;
+      const step = Math.floor(total / 5) || 44;
+      
+      for (let d = 0; d < days; d++) {
+        const date = new Date();
+        date.setDate(date.getDate() - d);
+        // 使用北京时间计算
+        const beijing = new Date(date.getTime() + 8 * 60 * 60 * 1000);
+        const dateStr = beijing.toISOString().slice(0, 10);
+        
+        // 使用日期散列（与 /api/chinese/daily 相同）
+        let hash = 0;
+        for (let i = 0; i < dateStr.length; i++) {
+          hash = (hash * 31 + dateStr.charCodeAt(i)) & 0x7fffffff;
+        }
+        const baseIdx = hash % total;
+        const dailyChars = [];
+        
+        for (let i = 0; i < 5 && i < total; i++) {
+          const idx = (baseIdx + i * step) % total;
+          const c = db.prepare('SELECT * FROM chinese_chars LIMIT 1 OFFSET ?').get(idx);
+          if (c) {
+            try { c.words = JSON.parse(c.words); } catch (e) { c.words = []; }
+            dailyChars.push(c);
+          }
+        }
+        
+        // 获取该天打卡状态
+        const checkins = db.prepare('SELECT char_id FROM char_checkins WHERE date = ? AND practiced = 1').all(dateStr);
+        const practicedIds = new Set(checkins.map(c => c.char_id));
+        dailyChars.forEach(c => { c.practiced = practicedIds.has(c.id); });
+        
+        if (dailyChars.length > 0) {
+          history.push({ date: dateStr, chars: dailyChars });
+        }
+      }
+      
+      res.json({ history });
     } catch (e) {
       res.status(500).json({ error: e.message });
     }

@@ -10,15 +10,42 @@
     unitLabel="单元"
     :stats="[{ value: 64, label: '单词' }, { value: 16, label: '对话' }, { value: 0, label: '听力' }]"
   >
+    <!-- 单元列表 -->
+    <section class="units-section">
+      <div class="section-header">
+        <h2 class="section-title">📖 学习路线图</h2>
+        <span class="section-subtitle">点击单元标记完成</span>
+      </div>
+      <div class="units-grid">
+        <div
+          v-for="(unit, idx) in units"
+          :key="unit.id"
+          class="unit-card"
+          :class="{ completed: unit.completed }"
+          @click="toggleUnitComplete(unit, idx)"
+        >
+          <div class="unit-number">{{ idx + 1 }}</div>
+          <div class="unit-info">
+            <h3 class="unit-title">{{ unit.title }}</h3>
+            <p class="unit-desc">{{ unit.desc }}</p>
+          </div>
+          <div class="unit-status">
+            <span v-if="unit.completed" class="unit-check">✓</span>
+            <span v-else class="unit-lock">🔒</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- 单词卡片 -->
     <section class="vocab-section">
       <SectionHeader icon="🎴" title="单词卡片" subtitle="点击翻转查看释义，🔊 点击发音" />
-      
+
       <!-- 单元选择器 -->
       <UnitSelector v-model="currentUnit" :units="vocabUnits" />
-      
+
       <!-- 当前单元信息 -->
-      <div class="unit-info">
+      <div class="unit-info-bar">
         <template v-if="currentUnit === -1">
           <span class="unit-info-title">📚 全部单词</span>
           <span class="unit-info-desc">8个单元 · 共 {{ allWordsCount }} 个单词</span>
@@ -29,7 +56,7 @@
           <span class="unit-info-words">{{ vocabUnits[currentUnit].words.length }} 个单词 · {{ vocabUnits[currentUnit].dialogues.length }} 组对话</span>
         </template>
       </div>
-      
+
       <!-- 单词网格 -->
       <div class="vocab-grid">
         <VocabCard
@@ -65,7 +92,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import SubjectLayout from '../components/SubjectLayout.vue'
 import SectionHeader from '../components/SectionHeader.vue'
 import UnitSelector from '../components/UnitSelector.vue'
@@ -73,12 +100,135 @@ import VocabCard from '../components/VocabCard.vue'
 import DialogueCard from '../components/DialogueCard.vue'
 import { useSubjectProgress } from '../composables/useSubjectProgress.js'
 import { useVocabData } from '../composables/useVocabData.js'
+import { getProgress, markProgress, unmarkProgress } from '../utils/api.js'
 
-const { doneCount, progressPercent } = useSubjectProgress('english_', 8)
+const { units, doneCount, progressPercent } = useSubjectProgress('english_', 8)
 const { currentUnit, vocabUnits, allWordsCount, currentWords } = useVocabData()
+
+// 初始化单元数据
+units.value = [
+  { id: 'english_1', title: 'Our School Subjects', desc: '谈论学校课程', completed: false },
+  { id: 'english_2', title: 'After School', desc: '课后活动安排', completed: false },
+  { id: 'english_3', title: "What's the Matter?", desc: '询问身体状况', completed: false },
+  { id: 'english_4', title: 'Drawing in the Park', desc: '公园里画画', completed: false },
+  { id: 'english_5', title: 'Seasons', desc: '季节与天气', completed: false },
+  { id: 'english_6', title: 'Whose Dress is This?', desc: '物品归属', completed: false },
+  { id: 'english_7', title: 'Summer Holiday Plans', desc: '暑假计划', completed: false },
+  { id: 'english_8', title: 'How Are You?', desc: '问候与健康', completed: false },
+]
+
+async function toggleUnitComplete(unit, idx) {
+  try {
+    const unitNum = idx + 1
+    if (unit.completed) {
+      await unmarkProgress('english', unitNum)
+      unit.completed = false
+    } else {
+      await markProgress('english', unitNum)
+      unit.completed = true
+    }
+  } catch (e) {
+    console.error('标记单元完成失败:', e)
+  }
+}
+
+onMounted(async () => {
+  try {
+    const data = await getProgress()
+    const doneUnits = data.doneUnits || []
+    units.value.forEach(unit => {
+      unit.completed = doneUnits.includes(unit.id)
+    })
+  } catch (e) {
+    console.error('加载进度失败:', e)
+  }
+})
 </script>
 
 <style scoped>
+/* 单元列表 */
+.units-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.units-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.unit-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: var(--surface2);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.unit-card:hover {
+  background: var(--surface3);
+  transform: translateY(-2px);
+}
+
+.unit-card.completed {
+  border-color: #f472b6;
+}
+
+.unit-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(244, 114, 182, 0.2);
+  color: #f472b6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.unit-card.completed .unit-number {
+  background: rgba(244, 114, 182, 0.3);
+}
+
+.unit-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.unit-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.unit-desc {
+  font-size: 12px;
+  color: var(--text2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.unit-status {
+  font-size: 18px;
+}
+
+.unit-check {
+  color: #f472b6;
+}
+
+/* 单词 */
 .vocab-section {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -87,7 +237,7 @@ const { currentUnit, vocabUnits, allWordsCount, currentWords } = useVocabData()
   margin-bottom: 24px;
 }
 
-.unit-info {
+.unit-info-bar {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -166,6 +316,9 @@ const { currentUnit, vocabUnits, allWordsCount, currentWords } = useVocabData()
 }
 
 @media (max-width: 768px) {
+  .units-grid {
+    grid-template-columns: 1fr;
+  }
   .vocab-grid {
     grid-template-columns: 1fr;
   }

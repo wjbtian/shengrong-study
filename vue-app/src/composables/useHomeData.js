@@ -17,8 +17,8 @@ export function useHomeData(diary, shines, guitar, progress) {
 
     return [
       { key: 'chinese', name: '语文', icon: '📖', color: '#4ade80', completed: getDone('chinese_'), total: 8 },
-      { key: 'math', name: '数学', icon: '🔢', color: '#60a5fa', completed: getDone('math_'), total: 6 },
-      { key: 'english', name: '英语', icon: '🔤', color: '#f472b6', completed: getDone('english_'), total: 6 },
+      { key: 'math', name: '数学', icon: '🔢', color: '#60a5fa', completed: getDone('math_'), total: 8 },
+      { key: 'english', name: '英语', icon: '🔤', color: '#f472b6', completed: getDone('english_'), total: 8 },
       { key: 'olympiad', name: '奥数', icon: '🧩', color: '#fbbf24', completed: doneOM.length, total: 20 },
     ].map(s => ({ ...s, percent: Math.round((s.completed / s.total) * 100) }))
   })

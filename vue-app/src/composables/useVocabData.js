@@ -291,7 +291,7 @@ export function useVocabData() {
           ]
         },
       ]
-    },
+    }
   ])
 
   const allWordsCount = computed(() => {

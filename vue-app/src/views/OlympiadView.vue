@@ -126,6 +126,17 @@
               </p>
             </div>
           </div>
+
+          <!-- 完成/取消完成按钮 -->
+          <div class="detail-section complete-action">
+            <button 
+              class="btn-complete" 
+              :class="{ done: selectedTopic.completed }"
+              @click="toggleComplete(selectedTopic)"
+            >
+              {{ selectedTopic.completed ? '✅ 已完成 · 点击取消' : '🎯 标记为已完成' }}
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -134,7 +145,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { getProgress } from '../utils/api.js'
+import { getProgress, markProgress, unmarkProgress } from '../utils/api.js'
 
 const progress = ref({})
 const selectedTopic = ref(null)
@@ -427,6 +438,20 @@ function openTopic(topic) {
   showAnswer.value = false
 }
 
+async function toggleComplete(topic) {
+  try {
+    if (topic.completed) {
+      await unmarkProgress('olympiad', topic.id)
+      topic.completed = false
+    } else {
+      await markProgress('olympiad', topic.id)
+      topic.completed = true
+    }
+  } catch (e) {
+    console.error('进度更新失败', e)
+  }
+}
+
 function closeModal() {
   showModal.value = false
   selectedTopic.value = null
@@ -439,7 +464,7 @@ onMounted(async () => {
     const p = await getProgress()
     if (p?.doneOM) {
       topics.value.forEach(t => {
-        t.completed = p.doneOM.includes(t.id)
+        t.completed = p.doneOM.includes(`olympiad_${t.id}`)
       })
     }
   } catch (e) {
@@ -860,6 +885,41 @@ onMounted(async () => {
   padding-top: 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   color: rgba(255, 255, 255, 0.8);
+}
+
+/* 完成按钮 */
+.complete-action {
+  text-align: center;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.btn-complete {
+  width: 100%;
+  padding: 14px 24px;
+  border-radius: 12px;
+  border: 2px solid rgba(74, 222, 128, 0.5);
+  background: rgba(74, 222, 128, 0.1);
+  color: #4ade80;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-complete:hover {
+  background: rgba(74, 222, 128, 0.2);
+  border-color: rgba(74, 222, 128, 0.7);
+}
+
+.btn-complete.done {
+  border-color: rgba(251, 191, 36, 0.5);
+  background: rgba(251, 191, 36, 0.1);
+  color: #fbbf24;
+}
+
+.btn-complete.done:hover {
+  background: rgba(251, 191, 36, 0.2);
 }
 
 /* 响应式 */
