@@ -172,3 +172,5 @@ cd server && npm start
 # 终端2：前端（端口5173）
 cd vue-app && npm run dev
 ```
+
+> 最后更新: 2026-07-15
