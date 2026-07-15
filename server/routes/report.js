@@ -1,0 +1,11 @@
+const express = require('express');
+const router = express.Router();
+const c = require('../controllers/reportController');
+router.get('/errors', c.getErrors);
+router.get('/errors/stats', c.getErrorStats);
+router.get('/errors/print', c.getErrorsForPrint);
+router.post('/errors', c.addError);
+router.delete('/errors/:id', c.deleteError);
+router.get('/reports', c.getReports);
+router.post('/reports', c.addReport);
+module.exports = router;

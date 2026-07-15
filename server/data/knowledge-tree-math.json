@@ -1,0 +1,122 @@
+{
+  "subject": "数学",
+  "grade": 5,
+  "semester": 1,
+  "title": "苏教版五年级数学上册",
+  "publisher": "江苏教育出版社",
+  "note": "2026年秋学期起使用新教材（2022版课标）",
+  "units": [
+    {
+      "id": "M1",
+      "title": "负数的初步认识",
+      "subtitle": "温度、海拔、方向——世界有正有反",
+      "objectives": ["结合具体情境理解负数的意义", "能在数轴上表示正负数", "能用正负数描述相反意义的量"],
+      "core_concepts": ["负数的意义", "数轴", "相反意义的量"],
+      "topics": [
+        { "id": "M1-1", "name": "正数和负数的意义", "type": "概念理解", "level": "理解", "common_mistakes": ["认为0既不是正数也不是负数但说不清为什么", "把负号当成减号"], "prerequisites": ["100以内数的认识"] },
+        { "id": "M1-2", "name": "正负数的读写", "type": "技能", "level": "掌握", "common_mistakes": ["读'-5'读成'减5'而非'负5'"], "prerequisites": [] },
+        { "id": "M1-3", "name": "用正负数表示温度", "type": "应用", "level": "掌握", "common_mistakes": ["零下3℃写成-3℃但不会比较-5℃和-3℃的大小"], "prerequisites": ["正负数的意义"] },
+        { "id": "M1-4", "name": "用正负数表示海拔", "type": "应用", "level": "理解", "common_mistakes": ["海平面以下多少米和以上多少米的转化"], "prerequisites": ["正负数的意义"] },
+        { "id": "M1-5", "name": "数轴上的正负数", "type": "技能", "level": "理解", "common_mistakes": ["从0往左数越来越小这个方向感"], "prerequisites": ["数轴的认识"] }
+      ]
+    },
+    {
+      "id": "M2",
+      "title": "多边形的面积",
+      "subtitle": "从直线到平面，丈量世界",
+      "objectives": ["探索并掌握平行四边形、三角形、梯形的面积公式", "理解等积变形、转化的数学思想", "能解决实际问题"],
+      "core_concepts": ["转化思想", "底和高", "等积变形", "面积公式推导"],
+      "topics": [
+        { "id": "M2-1", "name": "平行四边形的面积", "type": "公式推导", "level": "掌握", "common_mistakes": ["高和底的对应关系搞错", "面积=底×高，但不知道'高必须是垂直距离'"], "prerequisites": ["长方形面积", "垂直与平行"] },
+        { "id": "M2-2", "name": "三角形的面积", "type": "公式推导", "level": "掌握", "common_mistakes": ["忘记除以2", "底和高不对应"], "prerequisites": ["平行四边形面积"] },
+        { "id": "M2-3", "name": "梯形的面积", "type": "公式推导", "level": "掌握", "common_mistakes": ["(上底+下底)×高÷2中忘记除以2", "上底和下底的概念混淆"], "prerequisites": ["三角形面积"] },
+        { "id": "M2-4", "name": "公顷和平方千米", "type": "概念理解", "level": "理解", "common_mistakes": ["1公顷=10000平方米这个进率记不住", "1平方千米=100公顷的换算"], "prerequisites": ["面积单位"] },
+        { "id": "M2-5", "name": "不规则图形的面积", "type": "方法", "level": "了解", "common_mistakes": ["数格子时满格和不满格的计数规则"], "prerequisites": ["面积单位"] },
+        { "id": "M2-6", "name": "组合图形的面积", "type": "综合应用", "level": "掌握", "common_mistakes": ["分割或添补的方法选择不当", "计算时遗漏部分"], "prerequisites": ["平行四边形面积", "三角形面积", "梯形面积"] }
+      ]
+    },
+    {
+      "id": "M3",
+      "title": "小数的意义和性质",
+      "subtitle": "比整数更精细的世界",
+      "objectives": ["理解小数的意义", "掌握小数的性质", "会比较小数大小", "了解小数的近似数"],
+      "core_concepts": ["十进制计数法的扩展", "小数的数位", "小数的性质"],
+      "topics": [
+        { "id": "M3-1", "name": "小数的意义", "type": "概念理解", "level": "理解", "common_mistakes": ["0.1和0.10大小相等但意义不同说不清楚", "分不清十分位百分位"], "prerequisites": ["分数的初步认识"] },
+        { "id": "M3-2", "name": "小数的数位顺序", "type": "概念理解", "level": "掌握", "common_mistakes": ["小数点右边第一位是十分位不是百分位"], "prerequisites": ["整数的数位"] },
+        { "id": "M3-3", "name": "小数的性质", "type": "概念理解", "level": "掌握", "common_mistakes": ["小数末尾加0和去掉0大小不变，但误认为小数点后面加0也不变"], "prerequisites": ["小数的意义"] },
+        { "id": "M3-4", "name": "小数的大小比较", "type": "技能", "level": "掌握", "common_mistakes": ["3.15 < 3.2 以为3.2小因为2<15", "先比整数部分再比的规则不熟"], "prerequisites": ["小数的意义"] },
+        { "id": "M3-5", "name": "求小数的近似数", "type": "技能", "level": "掌握", "common_mistakes": ["四舍五入时进位容易错", "保留几位小数末尾的0不能去掉"], "prerequisites": ["小数的性质", "整数四舍五入"] }
+      ]
+    },
+    {
+      "id": "M4",
+      "title": "小数的加法和减法",
+      "subtitle": "对齐小数点，精准计算",
+      "objectives": ["掌握小数加减法的计算方法", "能解决实际生活中的小数加减问题"],
+      "core_concepts": ["数位对齐", "小数点对齐", "退位补0"],
+      "topics": [
+        { "id": "M4-1", "name": "小数加法的竖式计算", "type": "技能", "level": "掌握", "common_mistakes": ["小数点不对齐", "末尾补0的必要性不理解"], "prerequisites": ["整数加法竖式"] },
+        { "id": "M4-2", "name": "小数减法的竖式计算", "type": "技能", "level": "掌握", "common_mistakes": ["被减数位数不够时忘记补0", "退位时出错"], "prerequisites": ["整数减法竖式"] },
+        { "id": "M4-3", "name": "小数加减法的实际应用", "type": "应用", "level": "掌握", "common_mistakes": ["审题不清，单位不统一时直接加减"], "prerequisites": ["小数加减法"] }
+      ]
+    },
+    {
+      "id": "M5",
+      "title": "小数的乘法和除法",
+      "subtitle": "小数的进阶运算",
+      "objectives": ["掌握小数乘除法的计算方法", "能用四舍五入求积和商的近似值", "理解小数运算中的规律"],
+      "core_concepts": ["积的变化规律", "商不变的规律", "小数点移动规律"],
+      "topics": [
+        { "id": "M5-1", "name": "小数乘以整数", "type": "技能", "level": "掌握", "common_mistakes": ["积的小数位数定位错误"], "prerequisites": ["整数乘法"] },
+        { "id": "M5-2", "name": "小数乘以小数", "type": "技能", "level": "掌握", "common_mistakes": ["末尾0的处理", "积的位数不够时忘记补0"], "prerequisites": ["小数乘以整数"] },
+        { "id": "M5-3", "name": "积的近似数", "type": "技能", "level": "掌握", "common_mistakes": ["四舍五入的时机"], "prerequisites": ["小数的近似数"] },
+        { "id": "M5-4", "name": "小数除以整数", "type": "技能", "level": "掌握", "common_mistakes": ["商的小数点与被除数对齐", "除到末尾有余数时补0继续除"], "prerequisites": ["整数除法"] },
+        { "id": "M5-5", "name": "小数除以小数", "type": "技能", "level": "掌握", "common_mistakes": ["除数转化为整数时被除数位数不够", "商不变规律的应用"], "prerequisites": ["小数除以整数", "商不变规律"] },
+        { "id": "M5-6", "name": "商的近似数", "type": "技能", "level": "掌握", "common_mistakes": ["除不尽时保留几位小数的操作"], "prerequisites": ["小数除法"] },
+        { "id": "M5-7", "name": "循环小数", "type": "概念理解", "level": "了解", "common_mistakes": ["循环节的表示方法", "循环节的概念"], "prerequisites": ["小数的意义"] }
+      ]
+    },
+    {
+      "id": "M6",
+      "title": "统计表和条形统计图（二）",
+      "subtitle": "让数据说话",
+      "objectives": ["认识复式统计表和复式条形统计图", "能根据数据绘制并分析统计图表"],
+      "core_concepts": ["数据分类", "复式统计", "数据分析"],
+      "topics": [
+        { "id": "M6-1", "name": "复式统计表", "type": "技能", "level": "掌握", "common_mistakes": ["表头设计不合理", "合计与分类混淆"], "prerequisites": ["单式统计表"] },
+        { "id": "M6-2", "name": "复式条形统计图", "type": "技能", "level": "掌握", "common_mistakes": ["图例对应", "直条宽窄不一致"], "prerequisites": ["单式条形统计图"] },
+        { "id": "M6-3", "name": "统计图表的分析与应用", "type": "应用", "level": "理解", "common_mistakes": ["从图表中获取信息不完整"], "prerequisites": ["复式统计表", "复式条形统计图"] }
+      ]
+    },
+    {
+      "id": "M7",
+      "title": "解决问题的策略",
+      "subtitle": "有序思考，不重不漏",
+      "objectives": ["学会用列举的策略解决问题", "培养有序思考的习惯"],
+      "core_concepts": ["列举法", "有序思考", "分类讨论"],
+      "topics": [
+        { "id": "M7-1", "name": "一一列举", "type": "方法", "level": "掌握", "common_mistakes": ["列举时遗漏或重复", "没有按一定顺序列举"], "prerequisites": [] },
+        { "id": "M7-2", "name": "用列举法解决实际问题", "type": "综合应用", "level": "掌握", "common_mistakes": ["问题理解错误导致列举方向不对", "列举结果与问题要求不符"], "prerequisites": ["一一列举"] }
+      ]
+    },
+    {
+      "id": "M8",
+      "title": "用字母表示数",
+      "subtitle": "从具体到抽象，数学的魔法",
+      "objectives": ["理解用字母表示数的意义", "掌握含字母式子的书写规则", "能求含字母式子的值"],
+      "core_concepts": ["代数思维入门", "字母的抽象性", "含字母的式子"],
+      "topics": [
+        { "id": "M8-1", "name": "用字母表示数量关系", "type": "概念理解", "level": "理解", "common_mistakes": ["a×3写成a3而不是3a", "不理解字母可以代表任何数"], "prerequisites": ["乘法的简写"] },
+        { "id": "M8-2", "name": "含字母式子的书写规则", "type": "技能", "level": "掌握", "common_mistakes": ["1×a写成1a而不是a", "乘号省略的规则混淆"], "prerequisites": [] },
+        { "id": "M8-3", "name": "代入求值", "type": "技能", "level": "掌握", "common_mistakes": ["代入时代数格式错误", "计算顺序出错"], "prerequisites": ["四则运算"] },
+        { "id": "M8-4", "name": "用字母表示公式", "type": "应用", "level": "掌握", "common_mistakes": ["面积公式中字母的意义混淆"], "prerequisites": ["多边形面积公式"] }
+      ]
+    }
+  ],
+  "cross_unit_connections": [
+    "M2(转化思想) → M5(小数乘除法中的转化)",
+    "M3(小数的数位) → M4(小数加减法数位对齐)",
+    "M7(有序思考) → 各单元应用题"
+  ]
+}

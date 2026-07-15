@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+vue-app/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output
+client/dist/
+vue-app/dist/
+dist/
+
+# Database
+server/db/*.db-shm
+server/db/*.db-wal
+server/db/*.sqlite
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+logs/
+*.log
+
+# Uploads
+uploads/
+
+# Backups
+*.bak
+*.bakup

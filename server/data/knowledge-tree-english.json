@@ -1,0 +1,264 @@
+{
+  "subject": "英语",
+  "grade": 5,
+  "semester": 1,
+  "title": "译林版五年级英语上册",
+  "publisher": "译林出版社",
+  "units": [
+    {
+      "id": "E1",
+      "title": "Goldilocks and the three bears",
+      "subtitle": "金发女孩和三只熊",
+      "objectives": ["能听懂、会读、会讲Goldilocks的故事", "掌握There be句型", "掌握方位介词"],
+      "core_concepts": ["There be句型", "方位介词", "故事复述"],
+      "vocabulary": [
+        {"word": "bear", "meaning": "熊", "type": "名词"},
+        {"word": "forest", "meaning": "森林", "type": "名词"},
+        {"word": "house", "meaning": "房子", "type": "名词"},
+        {"word": "soup", "meaning": "汤", "type": "名词"},
+        {"word": "hard", "meaning": "硬的", "type": "形容词"},
+        {"word": "soft", "meaning": "软的", "type": "形容词"},
+        {"word": "afraid", "meaning": "害怕的", "type": "形容词"},
+        {"word": "in front of", "meaning": "在……前面", "type": "介词短语"},
+        {"word": "between", "meaning": "在……之间", "type": "介词"}
+      ],
+      "grammar": [
+        {"name": "There be句型(单数)", "pattern": "There is + a/an + 名词", "example": "There is a house in the forest."},
+        {"name": "There be句型(复数)", "pattern": "There are + 复数名词", "example": "There are three bears."},
+        {"name": "方位介词", "pattern": "on/in/beside/between/in front of", "example": "The soup is on the table."}
+      ],
+      "topics": [
+        {"id": "E1-1", "name": "故事理解与朗读", "type": "语言技能", "level": "掌握"},
+        {"id": "E1-2", "name": "核心词汇", "type": "词汇", "level": "掌握"},
+        {"id": "E1-3", "name": "There be句型", "type": "语法", "level": "掌握"},
+        {"id": "E1-4", "name": "方位介词的用法", "type": "语法", "level": "理解"},
+        {"id": "E1-5", "name": "角色扮演与故事复述", "type": "语言技能", "level": "理解"}
+      ]
+    },
+    {
+      "id": "E2",
+      "title": "A new student",
+      "subtitle": "新同学",
+      "objectives": ["能用There be句型描述学校设施", "掌握How many...? 的提问和回答", "掌握序数词first, second, third"],
+      "core_concepts": ["校园场景表达", "How many句型", "序数词"],
+      "vocabulary": [
+        {"word": "classroom", "meaning": "教室", "type": "名词"},
+        {"word": "library", "meaning": "图书馆", "type": "名词"},
+        {"word": "playground", "meaning": "操场", "type": "名词"},
+        {"word": "computer room", "meaning": "电脑室", "type": "名词"},
+        {"word": "music room", "meaning": "音乐室", "type": "名词"},
+        {"word": "table tennis room", "meaning": "乒乓球室", "type": "名词"},
+        {"word": "first", "meaning": "第一", "type": "序数词"},
+        {"word": "second", "meaning": "第二", "type": "序数词"},
+        {"word": "third", "meaning": "第三", "type": "序数词"},
+        {"word": "floor", "meaning": "楼层", "type": "名词"}
+      ],
+      "grammar": [
+        {"name": "How many提问", "pattern": "How many + 复数名词 + are there?", "example": "How many classrooms are there?"},
+        {"name": "序数词用法", "pattern": "on the + 序数词 + floor", "example": "The library is on the second floor."},
+        {"name": "There be否定句", "pattern": "There isn't/aren't...", "example": "There aren't any computer rooms."}
+      ],
+      "topics": [
+        {"id": "E2-1", "name": "学校设施词汇", "type": "词汇", "level": "掌握"},
+        {"id": "E2-2", "name": "序数词first/second/third", "type": "语法", "level": "掌握"},
+        {"id": "E2-3", "name": "How many句型", "type": "语法", "level": "掌握"},
+        {"id": "E2-4", "name": "楼层表达", "type": "应用", "level": "掌握"}
+      ]
+    },
+    {
+      "id": "E3",
+      "title": "Our animal friends",
+      "subtitle": "我们的动物朋友",
+      "objectives": ["能用have/has描述动物特征", "掌握身体部位的词汇", "能进行简单的动物描述"],
+      "core_concepts": ["have/has用法", "动物特征描述", "身体部位词汇"],
+      "vocabulary": [
+        {"word": "body", "meaning": "身体", "type": "名词"},
+        {"word": "wing", "meaning": "翅膀", "type": "名词"},
+        {"word": "foot-feet", "meaning": "脚(复数)", "type": "名词"},
+        {"word": "tail", "meaning": "尾巴", "type": "名词"},
+        {"word": "arm", "meaning": "手臂", "type": "名词"},
+        {"word": "leg", "meaning": "腿", "type": "名词"},
+        {"word": "rabbit", "meaning": "兔子", "type": "名词"},
+        {"word": "fish", "meaning": "鱼", "type": "名词"},
+        {"word": "dog", "meaning": "狗", "type": "名词"},
+        {"word": "parrot", "meaning": "鹦鹉", "type": "名词"}
+      ],
+      "grammar": [
+        {"name": "have/has用法", "pattern": "主语+have/has+名词", "example": "It has four legs. / They have big eyes."},
+        {"name": "形容词性物主代词", "pattern": "my/your/his/her/its/our/their", "example": "Its body is white."},
+        {"name": "Can句型", "pattern": "主语+can+动词原形", "example": "It can fly."}
+      ],
+      "topics": [
+        {"id": "E3-1", "name": "动物和身体部位词汇", "type": "词汇", "level": "掌握"},
+        {"id": "E3-2", "name": "have/has的用法", "type": "语法", "level": "掌握"},
+        {"id": "E3-3", "name": "can + 动词原形", "type": "语法", "level": "掌握"},
+        {"id": "E3-4", "name": "动物特征写作", "type": "应用", "level": "理解"}
+      ]
+    },
+    {
+      "id": "E4",
+      "title": "Hobbies",
+      "subtitle": "兴趣爱好",
+      "objectives": ["能用like + doing表达爱好", "掌握动名词的构成", "能用第三人称描述他人的爱好"],
+      "core_concepts": ["like + doing", "动名词", "第三人称单数"],
+      "vocabulary": [
+        {"word": "hobby", "meaning": "爱好", "type": "名词"},
+        {"word": "dance-dancing", "meaning": "跳舞", "type": "动词-动名词"},
+        {"word": "swim-swimming", "meaning": "游泳", "type": "动词-动名词"},
+        {"word": "skate-skating", "meaning": "溜冰", "type": "动词-动名词"},
+        {"word": "draw-drawing", "meaning": "画画", "type": "动词-动名词"},
+        {"word": "read-reading", "meaning": "阅读", "type": "动词-动名词"},
+        {"word": "play the piano", "meaning": "弹钢琴", "type": "短语"},
+        {"word": "watch films", "meaning": "看电影", "type": "短语"},
+        {"word": "also", "meaning": "也", "type": "副词"}
+      ],
+      "grammar": [
+        {"name": "like + doing", "pattern": "主语+like/likes+动名词", "example": "I like swimming. / He likes drawing."},
+        {"name": "be good at", "pattern": "be good at + 动名词", "example": "She is good at skating."},
+        {"name": "also的位置", "pattern": "主语+also+动词", "example": "I also like reading."}
+      ],
+      "topics": [
+        {"id": "E4-1", "name": "爱好类词汇", "type": "词汇", "level": "掌握"},
+        {"id": "E4-2", "name": "like + doing 动名词", "type": "语法", "level": "掌握"},
+        {"id": "E4-3", "name": "动名词的拼写规则", "type": "语法", "level": "理解"},
+        {"id": "E4-4", "name": "介绍自己和他人爱好", "type": "应用", "level": "掌握"}
+      ]
+    },
+    {
+      "id": "E5",
+      "title": "What do they do?",
+      "subtitle": "他们的职业是什么？",
+      "objectives": ["掌握常见职业词汇", "能用一般现在时询问和描述职业", "掌握第三人称单数动词变化"],
+      "core_concepts": ["职业词汇", "一般现在时(三单)", "特殊疑问句"],
+      "vocabulary": [
+        {"word": "teacher", "meaning": "老师", "type": "名词"},
+        {"word": "doctor", "meaning": "医生", "type": "名词"},
+        {"word": "nurse", "meaning": "护士", "type": "名词"},
+        {"word": "cook", "meaning": "厨师", "type": "名词"},
+        {"word": "driver", "meaning": "司机", "type": "名词"},
+        {"word": "farmer", "meaning": "农民", "type": "名词"},
+        {"word": "policeman", "meaning": "警察", "type": "名词"},
+        {"word": "worker", "meaning": "工人", "type": "名词"},
+        {"word": "write-writes", "meaning": "写", "type": "动词"},
+        {"word": "help-helps", "meaning": "帮助", "type": "动词"}
+      ],
+      "grammar": [
+        {"name": "What do/does...do?", "pattern": "What do/does+主语+do?", "example": "What does your father do?"},
+        {"name": "一般现在时三单", "pattern": "主语(三单)+动词-s/es", "example": "He teaches English. / She helps sick people."},
+        {"name": "动词三单变化规则", "pattern": "一般+s, 以s/x/sh/ch/o+es, 辅音+y→ies", "example": "teach→teaches, fly→flies"}
+      ],
+      "topics": [
+        {"id": "E5-1", "name": "职业类词汇", "type": "词汇", "level": "掌握"},
+        {"id": "E5-2", "name": "What do/does...do? 句型", "type": "语法", "level": "掌握"},
+        {"id": "E5-3", "name": "动词第三人称单数变化", "type": "语法", "level": "掌握"},
+        {"id": "E5-4", "name": "He/She works in/at... 地点表达", "type": "应用", "level": "理解"}
+      ]
+    },
+    {
+      "id": "E6",
+      "title": "My e-friend",
+      "subtitle": "我的网友",
+      "objectives": ["能用一般现在时描述人物信息", "掌握Does引导的一般疑问句", "掌握国家、语言类词汇"],
+      "core_concepts": ["一般现在时疑问句", "国家与语言", "人物信息描述"],
+      "vocabulary": [
+        {"word": "e-friend", "meaning": "网友", "type": "名词"},
+        {"word": "country", "meaning": "国家", "type": "名词"},
+        {"word": "UK", "meaning": "英国", "type": "名词"},
+        {"word": "US", "meaning": "美国", "type": "名词"},
+        {"word": "Australia", "meaning": "澳大利亚", "type": "名词"},
+        {"word": "Canada", "meaning": "加拿大", "type": "名词"},
+        {"word": "Chinese", "meaning": "中文/中国人", "type": "名词/形容词"},
+        {"word": "English", "meaning": "英语/英国人", "type": "名词/形容词"},
+        {"word": "age", "meaning": "年龄", "type": "名词"},
+        {"word": "email", "meaning": "电子邮件", "type": "名词"}
+      ],
+      "grammar": [
+        {"name": "Does引导的一般疑问句", "pattern": "Does+主语+动词原形?", "example": "Does he have Chinese lessons?"},
+        {"name": "一般现在时的否定句", "pattern": "主语+don't/doesn't+动词原形", "example": "He doesn't have Chinese lessons."},
+        {"name": "国家与语言的对应", "pattern": "Country→Language", "example": "China→Chinese, UK→English"}
+      ],
+      "topics": [
+        {"id": "E6-1", "name": "国家和语言词汇", "type": "词汇", "level": "掌握"},
+        {"id": "E6-2", "name": "一般现在时的一般疑问句(Does)", "type": "语法", "level": "掌握"},
+        {"id": "E6-3", "name": "一般现在时的否定句", "type": "语法", "level": "掌握"},
+        {"id": "E6-4", "name": "人物信息综合描述", "type": "应用", "level": "掌握"}
+      ]
+    },
+    {
+      "id": "E7",
+      "title": "At weekends",
+      "subtitle": "周末时光",
+      "objectives": ["掌握频率副词的用法", "能用一般现在时描述周末活动", "能询问和回答周末安排"],
+      "core_concepts": ["频率副词", "周末活动表达", "一般现在时综合运用"],
+      "vocabulary": [
+        {"word": "weekend", "meaning": "周末", "type": "名词"},
+        {"word": "always", "meaning": "总是", "type": "频率副词"},
+        {"word": "usually", "meaning": "通常", "type": "频率副词"},
+        {"word": "often", "meaning": "经常", "type": "频率副词"},
+        {"word": "sometimes", "meaning": "有时", "type": "频率副词"},
+        {"word": "visit", "meaning": "拜访", "type": "动词"},
+        {"word": "chat", "meaning": "聊天", "type": "动词"},
+        {"word": "Internet", "meaning": "互联网", "type": "名词"},
+        {"word": "grandparent", "meaning": "祖父母", "type": "名词"},
+        {"word": "play with", "meaning": "和……玩", "type": "短语"}
+      ],
+      "grammar": [
+        {"name": "频率副词的位置", "pattern": "主语+频率副词+动词", "example": "I always visit my grandparents."},
+        {"name": "What do/does...do at weekends?", "pattern": "What do/does+主语+do at weekends?", "example": "What does she do at weekends?"},
+        {"name": "频率副词含义对比", "pattern": "always>usually>often>sometimes", "example": "频度由高到低排序"}
+      ],
+      "topics": [
+        {"id": "E7-1", "name": "周末活动词汇", "type": "词汇", "level": "掌握"},
+        {"id": "E7-2", "name": "频率副词用法", "type": "语法", "level": "掌握"},
+        {"id": "E7-3", "name": "周末活动的问答", "type": "应用", "level": "掌握"},
+        {"id": "E7-4", "name": "一般现在时的综合运用", "type": "语法", "level": "掌握"}
+      ]
+    },
+    {
+      "id": "E8",
+      "title": "At Christmas",
+      "subtitle": "圣诞节",
+      "objectives": ["了解西方圣诞节文化", "掌握first/next/then/finally的叙述顺序", "能用时间顺序描述节日活动"],
+      "core_concepts": ["节假日文化", "叙述顺序词", "节日活动表达"],
+      "vocabulary": [
+        {"word": "Christmas", "meaning": "圣诞节", "type": "名词"},
+        {"word": "present", "meaning": "礼物", "type": "名词"},
+        {"word": "stocking", "meaning": "长袜", "type": "名词"},
+        {"word": "turkey", "meaning": "火鸡", "type": "名词"},
+        {"word": "Christmas tree", "meaning": "圣诞树", "type": "名词"},
+        {"word": "Father Christmas", "meaning": "圣诞老人", "type": "名词"},
+        {"word": "card", "meaning": "卡片", "type": "名词"},
+        {"word": "first", "meaning": "首先", "type": "顺序词"},
+        {"word": "next", "meaning": "接着", "type": "顺序词"},
+        {"word": "then", "meaning": "然后", "type": "顺序词"},
+        {"word": "finally", "meaning": "最后", "type": "顺序词"}
+      ],
+      "grammar": [
+        {"name": "First/Next/Then/Finally顺序", "pattern": "First,..., Next,..., Then,..., Finally,...", "example": "First, we buy a Christmas tree."},
+        {"name": "一般现在时叙述习惯", "pattern": "主语+一般现在时", "example": "We put presents under the tree."},
+        {"name": "We的用法", "pattern": "We + 动词原形", "example": "We have a big dinner."}
+      ],
+      "topics": [
+        {"id": "E8-1", "name": "圣诞节相关词汇", "type": "词汇", "level": "掌握"},
+        {"id": "E8-2", "name": "First/Next/Then/Finally叙事顺序", "type": "语法", "level": "掌握"},
+        {"id": "E8-3", "name": "节日活动描述", "type": "应用", "level": "掌握"},
+        {"id": "E8-4", "name": "中西文化对比", "type": "文化", "level": "了解"}
+      ]
+    }
+  ],
+  "grammar_summary": [
+    {"name": "There be句型", "units": "U1,U2", "importance": "极高"},
+    {"name": "have/has的用法", "units": "U3", "importance": "极高"},
+    {"name": "like + doing", "units": "U4", "importance": "高"},
+    {"name": "一般现在时(三单)", "units": "U5,U6,U7", "importance": "极高"},
+    {"name": "Does疑问句", "units": "U6", "importance": "高"},
+    {"name": "频率副词", "units": "U7", "importance": "中"},
+    {"name": "叙事顺序词", "units": "U8", "importance": "中"}
+  ],
+  "cross_unit_connections": [
+    "U1(There be) → U2(描述学校设施也用There be)",
+    "U3(have/has) → U5(三单have→has)",
+    "U4(like+doing) → U7(频率副词+周末活动)",
+    "U5(三单规则) → U6(Does还原动词原形)"
+  ]
+}
